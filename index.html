@@ -3,101 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tran Hoa Computer - Sửa Chữa Máy Tính Uy Tín Tại Phú Thịnh-Thái Nguyên</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+    <title>Tran Hoa Computer - Sửa Chữa Máy Tính Uy Tín</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
-        body { background-color: #f4f6f9; color: #333; line-height: 1.6; }
-        
-        /* Thanh top-bar */
-        .top-bar { background-color: #000c20; color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 500; }
-        .top-bar .time { color: #4da3ff; }
-        .top-bar .phone { color: #ffcc00; text-decoration: none; font-weight: bold; }
-
-        /* Bảng giá responsive */
-        .table-responsive { width: 100%; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid #e8e8e8; overflow: hidden; }
-        
-        @media (max-width: 767px) {
-            table thead { display: none; }
-            table, table tbody, table tr, table td { display: block; width: 100%; }
-            table tr { border-bottom: 3px solid #f0f2f5; padding: 15px 12px; background: #fff; }
-            table td { border: none !important; padding: 8px 0 !important; font-size: 14px !important; text-align: left !important; }
-            .mobile-row { display: flex; align-items: flex-start; }
-            .mobile-label { display: inline-block; width: 110px; font-weight: 700; color: #555; font-size: 12px; text-transform: uppercase; flex-shrink: 0; }
-            .highlight-price { color: #cc0000; font-weight: 700; }
-        }
-        
-        @media (min-width: 768px) {
-            .mobile-label { display: none; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { border: 1px solid #eee; padding: 14px 12px; font-size: 14px; }
-            th { background-color: #f8f9fa; text-transform: uppercase; font-size: 13px; text-align: center; }
-        }
-
-        .booking-form { background-color: #fff; padding: 30px 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); margin-top: -40px; position: relative; z-index: 10; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; }
-        .btn-submit { width: 100%; background-color: #0066ff; color: #fff; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        
-        /* Animation */
-        .logo-animation { background: linear-gradient(to right, #001233 0%, #0066ff 50%, #001233 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shineText 3s linear infinite; }
-        @keyframes shineText { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-        
-        /* Nút nổi */
-        .zalo-floating-btn { position: fixed; bottom: 95px; left: 20px; background-color: #0068ff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 9999; animation: zaloZoom 2s infinite ease-in-out; text-decoration: none; }
-        @keyframes zaloZoom { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; }
+        .btn-submit { width: 100%; background-color: #2563eb; color: #fff; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 p-4">
 
-    <div class="top-bar">
-        <div class="time">🕒 Giờ làm việc: 07:00 - 22:00</div>
-        <div>📞 Hotline: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
+    <div class="max-w-xl mx-auto bg-white p-6 rounded-2xl shadow-lg">
+        <h2 class="text-2xl font-bold text-center mb-6 text-blue-700">📝 ĐẶT LỊCH SỬA MÁY</h2>
+        
+        <form action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST">
+            
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="https://tranhoacomputer.github.io">
+            <input type="hidden" name="_subject" value="Đơn đặt lịch sửa máy mới từ Website!">
+
+            <label class="block mb-2 font-medium">Họ và tên *</label>
+            <input type="text" name="fullname" required class="form-control">
+
+            <label class="block mb-2 font-medium">Số điện thoại *</label>
+            <input type="tel" name="phone" required class="form-control">
+
+            <label class="block mb-2 font-medium">Chọn ngày</label>
+            <input type="date" name="date" class="form-control">
+
+            <label class="block mb-2 font-medium">Tình trạng máy</label>
+            <textarea name="note" class="form-control"></textarea>
+
+            <button type="submit" class="btn-submit hover:bg-blue-800">GỬI YÊU CẦU ĐẶT LỊCH</button>
+        </form>
     </div>
-
-    <div style="background: #fff; padding: 15px 20px; position: sticky; top: 0; z-index: 999; border-bottom: 1px solid #e2e8f0;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h1 class="logo-animation font-black text-xl">Tran Hoa Computer</h1>
-                <p class="text-[11px] font-bold text-orange-500 uppercase">Uy Tín Tạo Niềm Tin</p>
-            </div>
-            <a href="#datlich-sua-chua" class="bg-blue-600 text-white px-5 py-2 rounded-full font-bold text-sm">Đặt Lịch</a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div id="datlich-sua-chua" class="booking-form">
-            <h2 class="text-blue-700 font-bold mb-4">📝 ĐẶT LỊCH SỬA MÁY</h2>
-            <form name="dat-lich-sua-chua" method="POST" data-netlify="true">
-                <input type="text" name="fullname" placeholder="Họ và tên" required class="form-control">
-                <input type="tel" name="phone" placeholder="Số điện thoại" required class="form-control">
-                <div class="flex gap-2">
-                    <input type="date" name="date" class="form-control">
-                    <select name="time-slot" class="form-control"><option>7:00 - 9:00</option><option>14:00 - 17:00</option></select>
-                </div>
-                <textarea name="note" placeholder="Tình trạng máy..." class="form-control"></textarea>
-                <button type="submit" class="btn-submit">GỬI YÊU CẦU</button>
-            </form>
-        </div>
-
-        <div class="table-responsive mt-10">
-            <table>
-                <thead><tr><th>STT</th><th>LỖI</th><th>CHI TIẾT</th><th>GIÁ</th></tr></thead>
-                <tbody>
-                    <tr><td>1</td><td>LỖI NGUỒN</td><td>Thay jack, IC nguồn...</td><td class="highlight-price">200.000 - 900.000 đ</td></tr>
-                    <tr><td>2</td><td>VỆ SINH</td><td>Tra keo tản nhiệt...</td><td class="highlight-price">150.000 đ</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" class="zalo-floating-btn"><span style="color:white; font-weight:bold;">Zalo</span></a>
-    <a href="tel:0963284044" style="position:fixed; bottom:24px; left:24px; width:56px; height:56px; background:#facc15; border-radius:50%; display:flex; align-items:center; justify-content:center; z-index:9999;">📞</a>
 
 </body>
 </html>
