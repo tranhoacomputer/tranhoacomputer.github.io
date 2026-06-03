@@ -3,70 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tran Hoa Computer - Sửa Chữa Máy Tính Uy Tín</title>
+    <title>Tran Hoa Computer - Dịch vụ sửa chữa uy tín</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .mobile-row { display: flex; justify-content: space-between; padding: 5px 0; }
-        .mobile-label { font-weight: bold; color: #64748b; font-size: 12px; text-transform: uppercase; }
-        .highlight-price { color: #dc2626; font-weight: bold; }
-        @media (min-width: 768px) { .mobile-label { display: none; } }
+        .hover-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        .sticky-btn { position: fixed; bottom: 20px; right: 20px; z-index: 99; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 pb-20">
+<body class="bg-slate-50 text-slate-800">
 
-<div class="max-width: 850px mx-auto px-4 py-8">
-    <div class="bg-slate-900 text-white p-6 rounded-2xl text-center mb-8">
-        <h1 class="text-3xl font-bold">TRAN HOA COMPUTER</h1>
-        <p class="text-gray-400">Uy Tín - Chuyên Nghiệp - Lấy Ngay</p>
-    </div>
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+            <h1 class="font-black text-blue-700 text-xl">TRAN HOA COMPUTER</h1>
+            <a href="tel:0963284044" class="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm">📞 0963.284.044</a>
+        </div>
+    </header>
 
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 mb-8 shadow-sm">
-        <h2 class="text-center text-xl font-bold mb-6 text-blue-700 uppercase">📝 Đặt Lịch Sửa Máy</h2>
-        <form action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://tranhoacomputer.github.io">
-            <div class="space-y-4">
-                <input type="text" name="name" placeholder="Họ và tên khách hàng" required class="w-full p-3 border rounded-lg">
-                <input type="tel" name="phone" placeholder="Số điện thoại" required class="w-full p-3 border rounded-lg">
-                <select name="service" class="w-full p-3 border rounded-lg">
-                    <option>Sửa phần cứng</option>
-                    <option>Cài đặt phần mềm</option>
-                    <option>Vệ sinh máy</option>
-                </select>
-                <textarea name="note" placeholder="Tình trạng máy / Ghi chú..." class="w-full p-3 border rounded-lg h-24"></textarea>
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold uppercase hover:bg-blue-700">Gửi Yêu Cầu Đặt Lịch</button>
+    <main class="max-w-4xl mx-auto p-4 space-y-8">
+        <section class="bg-blue-900 text-white p-8 rounded-3xl text-center">
+            <h2 class="text-3xl font-bold mb-2">Sửa máy tính tận tâm</h2>
+            <p class="text-blue-200">Uy tín tại Phú Thịnh - Thái Nguyên</p>
+        </section>
+
+        <section class="bg-white p-6 rounded-3xl shadow-lg border border-slate-100">
+            <h3 class="text-xl font-bold mb-6 text-center">📝 Đặt lịch sửa máy</h3>
+            <form action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST" class="space-y-4">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://tranhoacomputer.github.io">
+                
+                <input type="text" name="name" placeholder="Họ và tên" required class="w-full p-4 bg-slate-50 border rounded-xl outline-blue-500">
+                <input type="tel" name="phone" placeholder="Số điện thoại" required class="w-full p-4 bg-slate-50 border rounded-xl outline-blue-500">
+                <textarea name="note" placeholder="Mô tả tình trạng máy..." class="w-full p-4 bg-slate-50 border rounded-xl outline-blue-500 h-28"></textarea>
+                <button type="submit" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700">GỬI YÊU CẦU</button>
+            </form>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border hover-card">
+                <h4 class="font-bold text-lg text-blue-600 mb-2">💻 Phần cứng</h4>
+                <p class="text-sm text-slate-600">Thay thế linh kiện, vệ sinh, sửa nguồn chuyên nghiệp.</p>
             </div>
-        </form>
-    </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border hover-card">
+                <h4 class="font-bold text-lg text-blue-600 mb-2">⚙️ Phần mềm</h4>
+                <p class="text-sm text-slate-600">Cài Windows, Office, khử virus, tối ưu hệ thống.</p>
+            </div>
+        </section>
+    </main>
 
-    <h2 class="text-center text-blue-600 font-bold uppercase mb-6">Bảng Giá Dịch Vụ</h2>
-    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <table class="w-full text-left">
-            <thead class="bg-gray-100 hidden md:table-header-group">
-                <tr><th class="p-4">STT</th><th class="p-4">HẠNG MỤC</th><th class="p-4">CHI TIẾT</th><th class="p-4">GIÁ</th></tr>
-            </thead>
-            <tbody>
-                <tr class="border-b p-4 block md:table-row">
-                    <td><div class="mobile-row"><span class="mobile-label">STT:</span>1</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Hạng mục:</span>Windows</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span>Cài đặt W10, W11</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="highlight-price">100.000đ</span></div></td>
-                </tr>
-                <tr class="border-b p-4 block md:table-row">
-                    <td><div class="mobile-row"><span class="mobile-label">STT:</span>2</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Hạng mục:</span>Phần mềm</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span>Office, AutoCad</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="highlight-price">50.000đ</span></div></td>
-                </tr>
-                <tr class="border-b p-4 block md:table-row">
-                    <td><div class="mobile-row"><span class="mobile-label">STT:</span>3</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Hạng mục:</span>Vệ sinh</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span>Tra keo tản nhiệt</div></td>
-                    <td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="highlight-price">150.000đ</span></div></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+    <a href="tel:0963284044" class="sticky-btn bg-green-500 text-white p-4 rounded-full shadow-lg">📞</a>
 </body>
 </html>
