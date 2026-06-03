@@ -17,13 +17,50 @@
         .top-bar .phone { color: #facc15; text-decoration: none; font-weight: bold; }
         /* Header & Logo */
                 .main-header { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
-            padding: 15px 20px; 
+            background: #0f172a; /* Nền xanh đen sâu tối giản */
+            padding: 16px 20px; 
             border-bottom: 2px solid #2563eb; 
-            position: sticky; 
-            top: 0; 
-            z-index: 9999; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative; /* Đổi sticky thành relative để không bị đè chữ khi cuộn */
+            z-index: 999; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .header-container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            width: 100%; 
+            max-width: 1152px;
+            margin: 0 auto;
+        }
+        .logo-animation { 
+            font-size: 24px; 
+            font-weight: 900; 
+            margin: 0; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            background: linear-gradient(to right, #3b82f6, #10b981, #6366f1); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            display: block;
+        }
+        .slogan-animation { 
+            display: inline-block;
+            font-size: 11px; 
+            margin-top: 6px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: 700; 
+            color: #38bdf8; /* Đổi sang màu xanh bầu trời công nghệ cực rõ */
+            background: rgba(56, 189, 248, 0.1); /* Hộp nền mờ nhẹ đồng điệu */
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            color: #ffffff !important; /* Ép nút 3 gạch bắt buộc phải hiển thị màu trắng rõ ràng */
         }
         .header-container { 
             display: flex; 
@@ -64,51 +101,6 @@
             100% { background-position: 200% center; }
         }
         
-            border-bottom: 2px solid #2563eb; /* Đường chỉ xanh công nghệ */
-            position: sticky; 
-            top: 0; 
-            z-index: 9999; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        .header-container { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            width: 100%; 
-            position: relative; 
-            max-width: 1152px;
-            margin: 0 auto;
-        }
-
-        /* Tên thương hiệu đổ màu Neon phát sáng */
-        .logo-animation { 
-            font-size: 22px; 
-            font-weight: 900; 
-            margin: 0; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            background: linear-gradient(to right, #3b82f6, #10b981, #3b82f6); 
-            background-size: 200% auto; 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: shineText 3s linear infinite; 
-        }
-
-        /* Khung Slogan hiệu ứng kính mờ nghệ thuật */
-        .slogan-animation { 
-            display: inline-block;
-            font-size: 11px; 
-            margin: 4px 0 0 0; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-weight: bold; 
-            color: #cbd5e1;
-            background: rgba(255, 255, 255, 0.07);
-            padding: 2px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
         /* Hero Section */
         .hero-section { background-color: #0f172a; color: #fff; text-align: center; padding: 60px 20px 80px 20px; }
         .hero-tag { background-color: #1e293b; color: #38bdf8; display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 18px; font-weight: bold; border: 1px solid #334155; }
@@ -124,8 +116,7 @@
         /* Menu Điều Hướng Desktop */
         .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: #ffffff; padding: 4px; }
         .nav-menu { display: flex; gap: 20px; align-items: center; }
-        .nav-menu a { color: #cbd5e1;text-decoration: none; font-size: 14px; font-weight: bold; transition: color 0.2s; }
-        .nav-menu a:hover { color: #2563eb; }
+        .nav-menu a { color: #ffffff !important; font-weight: bold; text-decoration: none; }
 
         /* Form Đặt Lịch */
         .booking-form { background-color: #fff; padding: 35px 25px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); margin-top: -50px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
