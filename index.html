@@ -9,7 +9,7 @@
     <link href=\"https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap\" rel=\"stylesheet\">
     <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
         body { background-color: #f8fafc; color: #1e293b; line-height: 1.6; }
         
         /* Thanh thông báo trên cùng */
@@ -57,13 +57,36 @@
             padding: 3px 10px;
             border-radius: 6px;
         }
+        
+        /* Menu Điều Hướng và Nút 3 Gạch */
         .menu-toggle {
             background: none;
             border: none;
             font-size: 26px;
             cursor: pointer;
             color: #ffffff !important;
+            display: none; /* Mặc định ẩn trên máy tính */
         }
+        .nav-menu { display: flex; gap: 20px; align-items: center; }
+        .nav-menu a { color: #ffffff !important; font-weight: bold; text-decoration: none; font-size: 15px; }
+
+        /* Cấu trúc hiển thị riêng trên Điện Thoại (Responsive) */
+        @media (max-width: 767px) {
+            .menu-toggle { display: block; } /* Hiện nút 3 gạch trên mobile */
+            .nav-menu {
+                display: none; /* Ẩn menu chữ ngang tránh đè logo */
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #0f172a;
+                padding: 15px;
+                border-bottom: 2px solid #2563eb;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .nav-menu.show { display: flex; } /* Hiện lại menu khi bấm nút 3 gạch */
         /* Hero Section */
         .hero-section { background-color: #0f172a; color: #fff; text-align: center; padding: 60px 20px 80px 20px; }
         .hero-tag { background-color: #1e293b; color: #38bdf8; display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 13px; margin-bottom: 18px; font-weight: bold; border: 1px solid #334155; }
@@ -75,44 +98,6 @@
         
         /* Bảng hiển thị dịch vụ */
         .table-responsive { width: 100%; background-color: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 35px; border: 1px solid #e2e8f0; overflow: hidden; }
-        
-        /* Menu Điều Hướng Desktop */
-        .menu-toggle { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: #ffffff; padding: 4px; }
-        .nav-menu { display: flex; gap: 20px; align-items: center; }
-        .nav-menu a { color: #ffffff !important; font-weight: bold; text-decoration: none; }
-
-        /* Form Đặt Lịch */
-        .booking-form { background-color: #fff; padding: 35px 25px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.06); margin-top: -50px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
-        .form-title { font-size: 20px; font-weight: bold; color: #1e40af; margin-bottom: 12px; text-align: center; }
-        .form-desc { font-size: 13px; color: #64748b; margin-bottom: 25px; font-weight: 300; text-align: center; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 8px; color: #334155; }
-        .form-control { width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: #f8fafc; transition: all 0.2s; }
-        .form-control:focus { outline: none; border-color: #2563eb; background-color: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .form-row { display: flex; gap: 15px; }
-        .form-row .form-group { flex: 1; }
-        
-        .btn-submit { width: 100%; background-color: #2563eb; color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 5px; margin-bottom: 10px; text-transform: uppercase; transition: all 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-        .btn-submit:hover { background-color: #1d4ed8; box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3); }
-        
-        /* Cam kết dịch vụ */
-        .commit-list { background-color: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 20px; border: 1px solid #e2e8f0; }
-        .commit-list ul { padding-left: 0; }
-        .commit-list li { position: relative; padding-left: 26px; margin-bottom: 14px; font-size: 14px; color: #475569; text-align: justify; list-style: none; }
-        .commit-list li::before { content: "✓"; color: #10b981; font-weight: bold; font-size: 16px; position: absolute; left: 0; top: 0; }
-        
-        /* Hiệu ứng chữ Logo & Slogan */
-        .logo-animation { font-size: 20px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; background: linear-gradient(to right, #0f172a 0%, #2563eb 50%, #0f172a 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shineText 3s linear infinite; }
-        .slogan-animation { font-size: 11px; margin: 2px 0 0 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; background: linear-gradient(to right, #ea580c 0%, #facc15 50%, #ea580c 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shineText 4s linear infinite; }
-        @keyframes shineText { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-        
-        /* Thanh Menu Điều Hướng Cuối Trang Mobile */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: space-around; align-items: center; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08); z-index: 99999; border-top: 1px solid #e2e8f0; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: #64748b; font-size: 11px; font-weight: 500; flex: 1; gap: 4px; }
-        .nav-item.active-booking { color: #2563eb; font-weight: bold; }
-        .booking-icon-wrapper { background-color: #2563eb; color: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); margin-top: -24px; border: 4px solid #fff; animation: bounceLight 2s infinite; }
-        @keyframes bounceLight { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-        
         /* Cấu trúc Grid cho khối chính */
         .grid-blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
 
