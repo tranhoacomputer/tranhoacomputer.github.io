@@ -3,39 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tran Hoa Computer - Sửa Chữa Máy Tính Uy Tín</title>
+    <title>Tran Hoa Computer - Sửa Chữa Máy Tính Uy Tín Tại Phú Thịnh-Thái Nguyên</title>
+    <!-- [Các thẻ link, style, script giữ nguyên như code bạn đã gửi] -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; }
-        .btn-submit { width: 100%; background-color: #2563eb; color: #fff; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        /* [Giữ nguyên toàn bộ CSS của bạn ở đây] */
     </style>
 </head>
-<body class="bg-gray-100 p-4">
+<body>
+    <!-- [Toàn bộ phần Header, Hero, Nội dung giữ nguyên như code bạn gửi] -->
 
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-2xl shadow-lg">
-        <h2 class="text-2xl font-bold text-center mb-6 text-blue-700">📝 ĐẶT LỊCH SỬA MÁY</h2>
+    <!-- PHẦN FORM CẦN SỬA ĐỂ GỬI VỀ GMAIL -->
+    <div id="datlich-sua-chua" class="booking-form">
+        <div class="form-title">📝 ĐẶT LỊCH SỬA MÁY TÍNH</div>
+        <div class="form-desc">Quý khách vui lòng để lại thông tin đầy đủ dưới đây.</div>
         
+        <!-- THAY ĐỔI ACTION VÀ LOẠI BỎ DATA-NETLIFY -->
         <form action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST">
             
+            <!-- CẤU HÌNH GỬI MAIL -->
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://tranhoacomputer.github.io">
-            <input type="hidden" name="_subject" value="Đơn đặt lịch sửa máy mới từ Website!">
+            <input type="hidden" name="_next" value="https://tranhoacomputer.github.io/">
+            <input type="hidden" name="_subject" value="Đơn đặt lịch sửa máy mới!">
 
-            <label class="block mb-2 font-medium">Họ và tên *</label>
-            <input type="text" name="fullname" required class="form-control">
-
-            <label class="block mb-2 font-medium">Số điện thoại *</label>
-            <input type="tel" name="phone" required class="form-control">
-
-            <label class="block mb-2 font-medium">Chọn ngày</label>
-            <input type="date" name="date" class="form-control">
-
-            <label class="block mb-2 font-medium">Tình trạng máy</label>
-            <textarea name="note" class="form-control"></textarea>
-
-            <button type="submit" class="btn-submit hover:bg-blue-800">GỬI YÊU CẦU ĐẶT LỊCH</button>
+            <div class="form-group">
+                <label>Họ và tên khách hàng *</label>
+                <input type="text" name="fullname" class="form-control" placeholder="Nhập họ và tên của bạn" required>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại liên hệ *</label>
+                <input type="tel" name="phone" class="form-control" placeholder="Nhập số điện thoại di động" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Chọn ngày sửa *</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Chọn khung giờ *</label>
+                    <select name="time-slot" class="form-control" required>
+                        <option value="">-- Chọn khung giờ --</option>
+                        <option value="7:00 - 9:00">7:00 - 9:00</option>
+                        <option value="17:00 - 22:00">17:00 - 22:00</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tình trạng máy</label>
+                <input type="text" name="note" class="form-control" placeholder="Mô tả lỗi...">
+            </div>
+            <button type="submit" class="btn-submit">GỬI YÊU CẦU ĐẶT LỊCH</button>
         </form>
     </div>
 
+    <!-- [Phần nội dung Bảng giá, Footer, Script phía dưới giữ nguyên] -->
 </body>
 </html>
