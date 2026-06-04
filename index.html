@@ -516,32 +516,41 @@
                 const obj = {};
                 fData.forEach((val, key) => { obj[key] = val; });
 
-                // Gửi trực tiếp dữ liệu sang Google Sheets của bạn
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors", // Ép chế độ bỏ qua CORS để chạy mượt mà trên mọi trình duyệt di động
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(obj)
-                })
-                .then(() => {
-                    form.reset();
-                    openModal();
-                    
-                    // Tự cộng thêm 1 lượt hiển thị tạm thời trên màn hình sau khi đặt thành công
-                    const counterEl = document.getElementById('liveCounter');
-                    if(counterEl && !isNaN(counterEl.innerText)) {
-                        counterEl.innerText = parseInt(counterEl.innerText) + 1;
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert("Có lỗi mạng kết nối, vui lòng thử lại hoặc gọi Hotline!");
-                })
-                .finally(() => {
-                    sBtn.disabled = false;
-                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch Hẹn";
-                    bSpin.style.display = "none";
-                });
+                // Gửi dữ liệu ngầm (AJAX) sang FormSubmit.co
+                    fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
+                        method: "POST",
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(obj)
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        // Kiểm tra phản hồi thành công từ FormSubmit
+                        if (result.status === "success" || result.success === "true" || result.success === true) {
+                            form.reset(); 
+                            openModal(); // Mở pop-up thông báo thành công của bạn
+                            
+                            // Tự cộng thêm 1 lượt hiển thị trên web
+                            const counterEl = document.getElementById("count");
+                            if(counterEl && !isNaN(counterEl.innerText)) {
+                                counterEl.innerText = parseInt(counterEl.innerText) + 1;
+                            }
+                        } else {
+                            alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
+                    })
+                    .finally(() => {
+                        // Trả nút bấm về trạng thái ban đầu
+                        sBtn.disabled = false;
+                        bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
+                        bSpin.style.display = "none";
+                    });
             });
         }
     });
