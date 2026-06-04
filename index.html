@@ -29,13 +29,10 @@
             --accent-green: #10b981;
             --danger: #ef4444;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif !important; }
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
         a, button, input, select { transition: all 0.3s ease; }
-        
-        /* THANH TOPBAR & NAVBAR */
-        .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
+                .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
         .top-bar .time { color: #38bdf8; }
         .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; }
         
@@ -49,7 +46,6 @@
         .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--primary); transition: width 0.3s; }
         .nav-menu a:hover::after { width: 100%; }
 
-        /* HERO SECTION */
         .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 100px 20px; position: relative; }
         .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 20px 20px; }
         .hero-tag { background-color: rgba(255,255,255,0.1); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; }
@@ -58,7 +54,7 @@
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
         .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; }
         .section-title::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
-                /* FORM ĐẶT LỊCH HẸN CHUẨN THẬT */
+        
         .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
         .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
         .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
@@ -77,7 +73,6 @@
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* TAB BẢNG GIÁ */
         .tab-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
         .tab-btn { padding: 12px 24px; border-radius: 30px; border: 1.5px solid var(--border-color); background: #fff; font-weight: 700; font-size: 14px; color: var(--text-light); cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 14px rgba(37,99,235,0.25); }
@@ -85,7 +80,6 @@
         .price-table-section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* BẢNG GIÁ */
         .table-responsive { width: 100%; background-color: var(--bg-card); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border-color); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         th, td { border: 1px solid #f1f5f9; padding: 16px 14px; font-size: 14px; }
@@ -101,7 +95,6 @@
             tr:hover { background-color: #f1f5f9; }
         }
 
-        /* CAM KẾT VÀNG TONE MÀU HỔ PHÁCH */
         .commit-list { background-color: #fffbeb; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(245,158,11,0.05); border: 1px solid #fef3c7; margin-bottom: 40px; }
         .commit-list li { position: relative; padding-left: 32px; margin-bottom: 16px; font-size: 14.5px; list-style: none; text-align: justify; color: #451a03; font-weight: 500; }
         .commit-list li::before { content: "✓"; color: #d97706; background: #fffbeb; border: 1px solid #fde68a; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; font-size: 12px; position: absolute; left: 0; top: 2px; }
@@ -110,7 +103,6 @@
         .policy-card { background: var(--bg-body); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); }
         .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.01); }
 
-        /* FAQ */
         .faq-item { border-bottom: 1px solid var(--border-color); }
         .faq-question { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--dark); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .faq-icon { font-size: 16px; transition: transform 0.3s; color: var(--primary); }
@@ -139,18 +131,13 @@
         #backToTop { position: fixed; bottom: 95px; left: 20px; background: var(--dark); color: #fff; width: 42px; height: 42px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 8000; }
         #backToTop.visible { opacity: 1; visibility: visible; }
 
-
-        /* HERO STATS BAR */
         .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 32px; flex-wrap: wrap; }
         .hero-stat { text-align: center; }
         .hero-stat .stat-num { font-size: 28px; font-weight: 900; color: #38bdf8; line-height: 1; }
         .hero-stat .stat-label { font-size: 12px; color: #cbd5e1; margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        /* COUNTER ANIMATION */
         @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .counter-updated { animation: countUp 0.4s ease; }
         
-        /* GOOGLE MAP */
         .map-wrapper { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-top: 16px; }
         .map-wrapper iframe { display: block; width: 100%; height: 200px; border: 0; }
         .menu-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--dark); }
@@ -166,15 +153,12 @@
             .booking-form { padding: 30px 20px; }
             .form-row { flex-direction: column; gap: 0; }
             .pc-floating-contact { display: none; }
-            
             .menu-toggle { display: block; }
             .nav-menu { display: flex; width: 100%; flex-direction: column; gap: 0; background-color: #fff; position: absolute; top: 100%; left: 0; border-bottom: 1px solid var(--border-color); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
             .nav-menu.show { max-height: 350px; }
             .nav-menu a { width: 100%; padding: 14px 20px; border-bottom: 1px solid #f1f5f9; }
             .nav-menu a::after { display: none; }
-            
             .bottom-nav { display: flex !important; }
-            
             table thead { display: none; }
             table, table tbody, table tr, table td { display: block; width: 100%; }
             table tr { border-bottom: 5px solid var(--bg-body); padding: 15px; background: #fff; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
@@ -190,7 +174,7 @@
     </style>
 </head>
 <body>
-        <div id="toast-container"></div>
+    <div id="toast-container"></div>
 
     <div class="modal-overlay" id="successModal">
         <div class="modal-card">
@@ -233,13 +217,14 @@
         <p>Chuyên gia cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Đại Từ, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối. CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</p>
     
         <div class="hero-stats">
-            <div class="hero-stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Khách hàng</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Ngày Kinh Nghiệm</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="99">0</div><div class="stat-label">% Hài lòng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="500">0</div><div class="stat-label">Khách hàng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Năm kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="98">0</div><div class="stat-label">% Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
         </div>
     </div>
-        <div class="container">
+    
+    <div class="container">
         <div id="datlich-sua-chua" class="booking-form reveal active">
             <div class="form-title">📝 ĐẶT LỊCH SỬA MÁY TÍNH</div>
             <div class="form-desc">Vui lòng để lại thông tin đặt lịch hẹn trước dưới đây để không phải xếp hàng chờ đợi lâu khi mang máy tới tiệm.</div>
@@ -313,7 +298,8 @@
                 </table>
             </div>
         </div>
-                <div id="tab-software" class="price-table-section reveal">
+
+        <div id="tab-software" class="price-table-section reveal">
             <div class="table-responsive">
                 <table>
                     <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ CÀI ĐẶT TRỌN GÓI</th></tr></thead>
@@ -404,7 +390,6 @@
                 <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Vừa nâng ổ cứng SSD với thổi bụi bảo dưỡng tra keo tản nhiệt ở đây. Máy mát rượi chạy nhanh vèo vèo, anh chủ thợ tận tâm vui tính!"</p>
                 <div style="font-weight:700; font-size:13px;">Chị Minh Thủy <span style="font-weight:400; color:var(--text-light);">(Phú Thịnh, Đại Từ)</span></div>
             </div>
-        
             <div class="review-card">
                 <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
                 <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Cài lại Win cho cái máy bàn gia đình, xong trong hơn 30 phút, driver đủ hết, máy mượt hơn hẳn. Giá chỉ 100k, quá hời!"</p>
@@ -436,7 +421,6 @@
                 <h3 style="font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom:12px;">TRAN HOA COMPUTER</h3>
                 <p>Chuyên gia sửa chữa, bảo dưỡng linh kiện, lắp đặt trọn gói hệ thống máy tính Văn Phòng - Gamming tại Đại Từ, Thái Nguyên.</p>
             </div>
-
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">📍 BẢN ĐỒ CỬA HÀNG</h4>
                 <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
@@ -448,28 +432,26 @@
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">➔ THÔNG TIN CHI TIẾT</h4>
                 <p style="margin-bottom:6px;">📍 Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">📞 Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
-                <p style="margin-bottom:6px;">✉️ Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></span></div>
+                <p style="margin-bottom:6px;">✉️ Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></p>
             </div>
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p></div>
     </footer>
-        <div class="bottom-nav">
+    <div class="bottom-nav">
         <a href="#" class="nav-item"><span>🏠</span><span>Trang chủ</span></a>
         <a href="tel:0963284044" class="nav-item" style="color: var(--accent-orange);"><span>📞</span><span>Gọi điện</span></a>
         <a href="#datlich-sua-chua" class="nav-item active-booking"><div class="booking-icon-wrapper">📅</div><span style="margin-top:-5px;">Đặt lịch</span></a>
         <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item" style="color: #0068ff;"><span>💬</span><span>Zalo</span></a>
         <a href="#muc-bang-gia" class="nav-item"><span>💰</span><span>Bảng giá</span></a>
     </div>
-
     <button id="backToTop">↑</button>
         <script>
-    // 🔗 ĐƯỜNG LINK GOOGLE APPS SCRIPT CHUẨN XÁC CỦA BẠN ĐÃ ĐƯỢC TÍCH HỢP HOÀN TOÀN:
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxeDghCCgEAfH4QEiRtgOxme90p710JgJtgPXB8G4Js5XfNgAGc1aryX1tgfY1PadtCw/exec";
 
     function fillDemoData() {
         document.getElementById('inputFullname').value = "Trần Văn A";
         document.getElementById('inputPhone').value = "0987654321";
-        document.getElementById('selectTime').value = "14:00 - 17:00";  // Khớp với option value
+        document.getElementById('selectTime').value = "14:00 - 17:00";
         document.getElementById('inputNote').value = "Máy tính bàn dùng tầm 15 phút là bị sập nguồn ngắt hẳn, quạt không quay.";
         showToast("Đã tự động điền thông tin mẫu!");
     }
@@ -477,7 +459,6 @@
     function switchTab(tabId) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.price-table-section').forEach(sec => sec.classList.remove('active'));
-        
         event.currentTarget.classList.add('active');
         document.getElementById('tab-' + tabId).classList.add('active');
     }
@@ -496,7 +477,6 @@
         }, 20);
     }
 
-    // Animate hero stats numbers
     function animateHeroStats() {
         document.querySelectorAll('.hero-stat .stat-num[data-target]').forEach(el => {
             const target = parseInt(el.dataset.target);
@@ -517,14 +497,12 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-
-        // Load counter từ counterapi.dev với hiệu ứng count-up
-        fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/get")
+        fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/")
         .then(res => res.json())
         .then(data => {
             const counterEl = document.getElementById('liveCounter');
             if (counterEl) {
-                const target = 10 + (data.value || 0);
+                const target = 10 + (data.count || 0);
                 animateCounter(counterEl, target);
             }
         })
@@ -571,7 +549,6 @@
         if (form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
                 sBtn.disabled = true;
                 bTxt.innerText = "Đang kết nối hệ thống...";
                 bSpin.style.display = "inline-block";
@@ -579,56 +556,51 @@
                 const fData = new FormData(form);
                 const obj = {};
                 fData.forEach((val, key) => { obj[key] = val; });
-                                    // Gửi dữ liệu thông báo về Gmail qua FormSubmit.co
-                    fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
-                        method: "POST",
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify(obj)
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.status === "success" || result.success === "true" || result.success === true) {
-                            form.reset(); 
-                            openModal(); // Hiện popup báo thành công trên web
-                            
-                            // KÍCH HOẠT BỘ ĐẾM: Tăng số lượng vĩnh viễn khi gửi thành công
-                            fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/hit")
-                            .then(res => res.json())
-                            .then(data => {
-                                const liveCounter = document.getElementById("liveCounter");
-                                if (liveCounter && data.value) {
-                                    // Cộng thêm số 10 mặc định ban đầu của bạn + số lượt tăng thực tế
-                                    liveCounter.innerText = 10 + data.value;
-                                }
-                            })
-                            .catch(err => {
-                                // Nếu bộ đếm lỗi mạng, vẫn tự tăng tạm thời trên màn hình để khách xem
-                                const liveCounter = document.getElementById("liveCounter");
-                                if (liveCounter) {
-                                    const current = parseInt(liveCounter.innerText) || 10;
-                                    liveCounter.innerText = current + 1;
-                                }
-                            });
 
-                        } else {
-                            alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
-                    })
-                    .finally(() => {
-                        sBtn.disabled = false;
-                        bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
-                        bSpin.style.display = "none";
-                    });
+                fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
+                    method: "POST",
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(obj)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === "success" || result.success === "true" || result.success === true) {
+                        form.reset(); 
+                        openModal();
+                        
+                        fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
+                        .then(res => res.json())
+                        .then(data => {
+                            const liveCounter = document.getElementById("liveCounter");
+                            if (liveCounter && data.count !== undefined) {
+                                liveCounter.innerText = 10 + data.count;
+                            }
+                        })
+                        .catch(err => {
+                            const liveCounter = document.getElementById("liveCounter");
+                            if (liveCounter) {
+                                const current = parseInt(liveCounter.innerText) || 10;
+                                liveCounter.innerText = current + 1;
+                            }
+                        });
+                    } else {
+                        alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
+                })
+                .finally(() => {
+                    sBtn.disabled = false;
+                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
+                    bSpin.style.display = "none";
+                });
             });
         }
     });
     </script>
 </body>
 </html>
+
+        
