@@ -515,8 +515,7 @@
                 const fData = new FormData(form);
                 const obj = {};
                 fData.forEach((val, key) => { obj[key] = val; });
-
-                     // Gửi dữ liệu ngầm (AJAX) sang FormSubmit.co
+                                    // Gửi dữ liệu thông báo về Gmail qua FormSubmit.co
                     fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                         method: "POST",
                         headers: { 
@@ -527,15 +526,28 @@
                     })
                     .then(response => response.json())
                     .then(result => {
-                        // Kiểm tra phản hồi thành công từ FormSubmit
                         if (result.status === "success" || result.success === "true" || result.success === true) {
                             form.reset(); 
-                            openModal(); // Mở pop-up thông báo thành công của bạn
-                         // Tự cộng thêm 1 lượt hiển thị trên web
-                            const liveCounter = document.getElementById("liveCounter");
-                            if (liveCounter && !isNaN(liveCounter.innerText)) {
-                                liveCounter.innerText = parseInt(liveCounter.innerText) + 1;
-                            } 
+                            openModal(); // Hiện popup báo thành công trên web
+                            
+                            // KÍCH HOẠT BỘ ĐẾM: Tăng số lượng vĩnh viễn khi gửi thành công
+                            fetch("https://api.countapi.xyz/hit/tranhoacomputer/bookingCounter")
+                            .then(res => res.json())
+                            .then(data => {
+                                const liveCounter = document.getElementById("liveCounter");
+                                if (liveCounter && data.value) {
+                                    // Cộng thêm số 8 mặc định ban đầu của bạn + số lượt tăng thực tế
+                                    liveCounter.innerText = 8 + data.value;
+                                }
+                            })
+                            .catch(err => {
+                                // Nếu bộ đếm lỗi mạng, vẫn tự tăng tạm thời trên màn hình để khách xem
+                                const liveCounter = document.getElementById("liveCounter");
+                                if (liveCounter) {
+                                    liveCounter.innerText = parseInt(liveCounter.innerText) + 1;
+                                }
+                            });
+
                         } else {
                             alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
                         }
@@ -545,7 +557,6 @@
                         alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
                     })
                     .finally(() => {
-                        // Trả nút bấm về trạng thái ban đầu
                         sBtn.disabled = false;
                         bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
                         bSpin.style.display = "none";
@@ -553,6 +564,18 @@
             });
         }
     });
+        // Tự động tải số lượt đặt lịch thực tế từ máy chủ khi vừa mở hoặc load lại trang
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("https://api.countapi.xyz/get/tranhoacomputer/bookingCounter")
+            .then(res => res.json())
+            .then(data => {
+                const liveCounter = document.getElementById("liveCounter");
+                if (liveCounter && data.value) {
+                    liveCounter.innerText = 8 + data.value;
+                }
+            })
+            .catch(err => console.log("Khởi tạo bộ đếm mới hoặc lỗi kết nối."));
+        });
     </script>
 </body>
 </html>
