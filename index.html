@@ -516,7 +516,7 @@
                 const obj = {};
                 fData.forEach((val, key) => { obj[key] = val; });
 
-                                    // Gửi dữ liệu ngầm (AJAX) sang FormSubmit.co
+                     // Gửi dữ liệu ngầm (AJAX) sang FormSubmit.co
                     fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                         method: "POST",
                         headers: { 
@@ -531,12 +531,11 @@
                         if (result.status === "success" || result.success === "true" || result.success === true) {
                             form.reset(); 
                             openModal(); // Mở pop-up thông báo thành công của bạn
-                            
-                            // Tự cộng thêm 1 lượt hiển thị trên web
-                            const counterEl = document.getElementById("counter");
-                            if (counterEl && !isNaN(counterEl.innerText)) {
-                                counterEl.innerText = parseInt(counterEl.innerText) + 1;
-                            }
+                         // Tự cộng thêm 1 lượt hiển thị trên web
+                            const liveCounter = document.getElementById("liveCounter");
+                            if (liveCounter && !isNaN(liveCounter.innerText)) {
+                                liveCounter.innerText = parseInt(liveCounter.innerText) + 1;
+                            } 
                         } else {
                             alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
                         }
