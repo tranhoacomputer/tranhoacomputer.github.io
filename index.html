@@ -7,6 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Tran Hoa Computer - Trung tâm sửa chữa máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên. Chuyên laptop, PC, cài Windows, cứu dữ liệu. Giá tốt, lấy ngay, bảo hành dài hạn.">
+    <meta property="og:title" content="Tran Hoa Computer - Sửa Máy Tính Uy Tín Thái Nguyên">
+    <meta property="og:description" content="Sửa chữa laptop, PC, cài Windows nhanh chóng tại Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tranhoacomputer.github.io/">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         :root {
@@ -51,8 +58,7 @@
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
         .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; }
         .section-title::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
-        
-        /* FORM ĐẶT LỊCH HẸN CHUẨN THẬT */
+                /* FORM ĐẶT LỊCH HẸN CHUẨN THẬT */
         .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
         .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
         .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
@@ -133,6 +139,20 @@
         #backToTop { position: fixed; bottom: 95px; left: 20px; background: var(--dark); color: #fff; width: 42px; height: 42px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 8000; }
         #backToTop.visible { opacity: 1; visibility: visible; }
 
+
+        /* HERO STATS BAR */
+        .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 32px; flex-wrap: wrap; }
+        .hero-stat { text-align: center; }
+        .hero-stat .stat-num { font-size: 28px; font-weight: 900; color: #38bdf8; line-height: 1; }
+        .hero-stat .stat-label { font-size: 12px; color: #cbd5e1; margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* COUNTER ANIMATION */
+        @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .counter-updated { animation: countUp 0.4s ease; }
+        
+        /* GOOGLE MAP */
+        .map-wrapper { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-top: 16px; }
+        .map-wrapper iframe { display: block; width: 100%; height: 200px; border: 0; }
         .menu-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--dark); }
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); display: flex; justify-content: space-around; align-items: center; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.05); z-index: 9999; border-top: 1px solid var(--border-color); display: none; }
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-light); font-size: 11px; font-weight: 600; flex: 1; gap: 4px; }
@@ -211,9 +231,15 @@
         <div class="hero-tag">🛠️ Hệ Thống Sửa Chữa Máy Tính Lấy Ngay Uy Tín Hàng Đầu Tại Thái Nguyên</div>
         <h2>TRAN HOA COMPUTER</h2>
         <p>Chuyên gia cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Đại Từ, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối. CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</p>
-    </div>
     
-    <div class="container">
+        <div class="hero-stats">
+            <div class="hero-stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Khách hàng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Ngày Kinh Nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="99">0</div><div class="stat-label">% Hài lòng</div></div>
+            <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
+        </div>
+    </div>
+        <div class="container">
         <div id="datlich-sua-chua" class="booking-form reveal active">
             <div class="form-title">📝 ĐẶT LỊCH SỬA MÁY TÍNH</div>
             <div class="form-desc">Vui lòng để lại thông tin đặt lịch hẹn trước dưới đây để không phải xếp hàng chờ đợi lâu khi mang máy tới tiệm.</div>
@@ -240,7 +266,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Chọn ngày hẹn sửa *</label>
-                        <input type="date" name="date" id="dateInput" class="form-control" required>
+                        <input type="date" name="date" id="dateInput" class="form-control" required title="Chọn ngày hẹn sửa máy">
                     </div>
                     <div class="form-group">
                         <label>Chọn khung giờ thích hợp *</label>
@@ -287,8 +313,7 @@
                 </table>
             </div>
         </div>
-
-        <div id="tab-software" class="price-table-section reveal">
+                <div id="tab-software" class="price-table-section reveal">
             <div class="table-responsive">
                 <table>
                     <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ CÀI ĐẶT TRỌN GÓI</th></tr></thead>
@@ -379,6 +404,17 @@
                 <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Vừa nâng ổ cứng SSD với thổi bụi bảo dưỡng tra keo tản nhiệt ở đây. Máy mát rượi chạy nhanh vèo vèo, anh chủ thợ tận tâm vui tính!"</p>
                 <div style="font-weight:700; font-size:13px;">Chị Minh Thủy <span style="font-weight:400; color:var(--text-light);">(Phú Thịnh, Đại Từ)</span></div>
             </div>
+        
+            <div class="review-card">
+                <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+                <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Cài lại Win cho cái máy bàn gia đình, xong trong hơn 30 phút, driver đủ hết, máy mượt hơn hẳn. Giá chỉ 100k, quá hời!"</p>
+                <div style="font-weight:700; font-size:13px;">Anh Tiến Long <span style="font-weight:400; color:var(--text-light);">(TT Đại Từ, Thái Nguyên)</span></div>
+            </div>
+            <div class="review-card">
+                <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+                <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Laptop cứu dữ liệu bị xóa nhầm, tưởng mất hết. Anh Hòa khôi phục được gần hết, siêu tận tâm, giao máy đúng hẹn đúng giờ!"</p>
+                <div style="font-weight:700; font-size:13px;">Chị Thu Hà <span style="font-weight:400; color:var(--text-light);">(Hà Thượng, Đại Từ)</span></div>
+            </div>
         </div>
         
         <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
@@ -400,6 +436,14 @@
                 <h3 style="font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom:12px;">TRAN HOA COMPUTER</h3>
                 <p>Chuyên gia sửa chữa, bảo dưỡng linh kiện, lắp đặt trọn gói hệ thống máy tính Văn Phòng - Gamming tại Đại Từ, Thái Nguyên.</p>
             </div>
+
+            <div>
+                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">📍 BẢN ĐỒ CỬA HÀNG</h4>
+                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <div class="map-wrapper">
+                    <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">➔ THÔNG TIN CHI TIẾT</h4>
                 <p style="margin-bottom:6px;">📍 Phú Thịnh, Đại Từ, Thái Nguyên</p>
@@ -418,15 +462,14 @@
     </div>
 
     <button id="backToTop">↑</button>
-
-    <script>
+        <script>
     // 🔗 ĐƯỜNG LINK GOOGLE APPS SCRIPT CHUẨN XÁC CỦA BẠN ĐÃ ĐƯỢC TÍCH HỢP HOÀN TOÀN:
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxeDghCCgEAfH4QEiRtgOxme90p710JgJtgPXB8G4Js5XfNgAGc1aryX1tgfY1PadtCw/exec";
 
     function fillDemoData() {
         document.getElementById('inputFullname').value = "Trần Văn A";
         document.getElementById('inputPhone').value = "0987654321";
-        document.getElementById('selectTime').value = "14:00 - 17:00";
+        document.getElementById('selectTime').value = "14:00 - 17:00";  // Khớp với option value
         document.getElementById('inputNote').value = "Máy tính bàn dùng tầm 15 phút là bị sập nguồn ngắt hẳn, quạt không quay.";
         showToast("Đã tự động điền thông tin mẫu!");
     }
@@ -442,6 +485,27 @@
     function openModal() { document.getElementById('successModal').classList.add('open'); }
     function closeModal() { document.getElementById('successModal').classList.remove('open'); }
 
+    function animateCounter(el, target) {
+        let start = 0;
+        const step = Math.max(1, Math.ceil(target / 60));
+        el.classList.add('counter-updated');
+        const timer = setInterval(() => {
+            start += step;
+            if (start >= target) { start = target; clearInterval(timer); }
+            el.innerText = start;
+        }, 20);
+    }
+
+    // Animate hero stats numbers
+    function animateHeroStats() {
+        document.querySelectorAll('.hero-stat .stat-num[data-target]').forEach(el => {
+            const target = parseInt(el.dataset.target);
+            animateCounter(el, target);
+            el.removeAttribute('data-target');
+        });
+    }
+    setTimeout(animateHeroStats, 500);
+
     function showToast(msg) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
@@ -453,21 +517,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // TỰ ĐỘNG ĐỌC SỐ LƯỢT ĐẶT LỊCH THẬT TỪ GOOGLE SHEETS RA WEB KHI MỞ TRANG
-        if(GOOGLE_SCRIPT_URL) {
-            fetch(GOOGLE_SCRIPT_URL)
-            .then(res => res.json())
-            .then(data => {
-                const counterEl = document.getElementById('liveCounter');
-                if(counterEl && data.count !== undefined) {
-                    counterEl.innerText = data.count;
-                }
-            })
-            .catch(err => {
-                console.error("Lỗi lấy dữ liệu: ", err);
-                document.getElementById('liveCounter').innerText = "0"; // Mặc định hiển thị số dòng trong bảng
-            });
-        }
+
+        // Load counter từ counterapi.dev với hiệu ứng count-up
+        fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/get")
+        .then(res => res.json())
+        .then(data => {
+            const counterEl = document.getElementById('liveCounter');
+            if (counterEl) {
+                const target = 10 + (data.value || 0);
+                animateCounter(counterEl, target);
+            }
+        })
+        .catch(() => {
+            const counterEl = document.getElementById('liveCounter');
+            if (counterEl) counterEl.innerText = "10+";
+        });
 
         const dateIn = document.getElementById('dateInput');
         if(dateIn) dateIn.setAttribute('min', new Date().toISOString().split('T')[0]);
@@ -531,7 +595,7 @@
                             openModal(); // Hiện popup báo thành công trên web
                             
                             // KÍCH HOẠT BỘ ĐẾM: Tăng số lượng vĩnh viễn khi gửi thành công
-                            fetch("https://api.countapi.xyz/hit/tranhoacomputer/bookingCounter")
+                            fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/hit")
                             .then(res => res.json())
                             .then(data => {
                                 const liveCounter = document.getElementById("liveCounter");
@@ -544,7 +608,8 @@
                                 // Nếu bộ đếm lỗi mạng, vẫn tự tăng tạm thời trên màn hình để khách xem
                                 const liveCounter = document.getElementById("liveCounter");
                                 if (liveCounter) {
-                                    liveCounter.innerText = parseInt(liveCounter.innerText) + 1;
+                                    const current = parseInt(liveCounter.innerText) || 10;
+                                    liveCounter.innerText = current + 1;
                                 }
                             });
 
@@ -564,18 +629,6 @@
             });
         }
     });
-        // Tự động tải số lượt đặt lịch thực tế từ máy chủ khi vừa mở hoặc load lại trang
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("https://api.countapi.xyz/get/tranhoacomputer/bookingCounter")
-            .then(res => res.json())
-            .then(data => {
-                const liveCounter = document.getElementById("liveCounter");
-                if (liveCounter && data.value) {
-                    liveCounter.innerText = 10 + data.value;
-                }
-            })
-            .catch(err => console.log("Khởi tạo bộ đếm mới hoặc lỗi kết nối."));
-        });
     </script>
 </body>
 </html>
