@@ -9,12 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        /* ================= CƠ BẢN & MÀU SẮC ================= */
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
             --dark: #0f172a;
-            --text-main: #334155;
+            --text-main: #1e293b;
             --text-light: #64748b;
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
@@ -26,523 +25,514 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
-        
-        /* Hiệu ứng mượt mà cho mọi thẻ */
         a, button, input, select { transition: all 0.3s ease; }
-
-        /* ================= THANH THÔNG BÁO & NAVBAR ================= */
+        
+        /* THANH TOPBAR & NAVBAR */
         .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
         .top-bar .time { color: #38bdf8; }
-        .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; letter-spacing: 0.5px; }
-        .top-bar .phone:hover { color: #fff; }
+        .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; }
         
-        .header-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; transition: box-shadow 0.3s ease; }
-        .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); border-bottom: transparent; }
-        
-        .logo-animation { font-size: 22px; font-weight: 900; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; background: linear-gradient(to right, var(--dark) 0%, var(--primary) 50%, var(--dark) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shineText 3s linear infinite; }
-        .slogan-animation { font-size: 11px; margin: 2px 0 0 0; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; background: linear-gradient(to right, var(--accent-orange) 0%, #facc15 50%, var(--accent-orange) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shineText 4s linear infinite; }
-        @keyframes shineText { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+        .header-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
+        .logo-animation { font-size: 22px; font-weight: 900; text-transform: uppercase; background: linear-gradient(to right, var(--dark), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .slogan-animation { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; color: var(--accent-orange); }
         
         .nav-menu { display: flex; gap: 24px; align-items: center; }
         .nav-menu a { color: var(--dark); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; }
         .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--primary); transition: width 0.3s; }
-        .nav-menu a:hover { color: var(--primary); }
         .nav-menu a:hover::after { width: 100%; }
 
-        /* ================= HERO SECTION (Làm mới nền) ================= */
-        .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; color: #fff; text-align: center; padding: 70px 20px 100px 20px; overflow: hidden; }
-        /* Họa tiết lưới mờ phía sau */
-        .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px); background-size: 20px 20px; opacity: 0.5; z-index: 1; }
-        .hero-content { position: relative; z-index: 2; }
-        .hero-tag { background-color: rgba(30, 41, 59, 0.8); backdrop-filter: blur(5px); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .hero-section h2 { font-size: 38px; margin-bottom: 15px; letter-spacing: 0.5px; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .hero-section p { font-size: 15px; color: #cbd5e1; max-width: 650px; margin: 0 auto; font-weight: 400; line-height: 1.7; }
+        /* HERO SECTION */
+        .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 100px 20px; position: relative; }
+        .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 20px 20px; }
+        .hero-tag { background-color: rgba(255,255,255,0.1); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; }
+        .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
         
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
-        .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; position: relative; }
-        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
+        .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; }
+        .section-title::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
         
-        /* ================= HIỆU ỨNG CUỘN TRANG (SCROLL REVEAL) ================= */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* ================= FORM ĐẶT LỊCH ================= */
-        .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 20px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
-        .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 10px; text-align: center; }
-        .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 30px; font-weight: 400; text-align: center; line-height: 1.5; }
-        .form-group { margin-bottom: 20px; text-align: left; }
+        /* FORM ĐẶT LỊCH CHUYÊN NGHIỆP */
+        .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
+        .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
+        .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 25px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
-        .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: var(--bg-body); color: var(--dark); outline: none; }
+        .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: var(--bg-body); outline: none; }
         .form-control:focus { border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
         .form-row { display: flex; gap: 20px; }
         .form-row .form-group { flex: 1; }
-        
-        .btn-submit { width: 100%; background-color: var(--primary); color: #fff; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; text-transform: uppercase; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4); }
-        .btn-submit:active:not(:disabled) { transform: translateY(0); }
-        .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; box-shadow: none; }
-        
-        /* Loading Spinner trong nút Submit */
-        .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
+        .btn-submit { width: 100%; background-color: var(--primary); color: #fff; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ================= BẢNG GIÁ (TABLE) ================= */
-        .table-responsive { width: 100%; background-color: var(--bg-card); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 40px; border: 1px solid var(--border-color); overflow: hidden; }
+        /* TAB SWITCHER BẢNG GIÁ */
+        .tab-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
+        .tab-btn { padding: 12px 24px; border-radius: 30px; border: 1.5px solid var(--border-color); background: #fff; font-weight: 700; font-size: 14px; color: var(--text-light); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 14px rgba(37,99,235,0.25); }
+        .price-table-section { display: none; }
+        .price-table-section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* BẢNG GIÁ */
+        .table-responsive { width: 100%; background-color: var(--bg-card); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border-color); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th, td { border: 1px solid #f1f5f9; padding: 16px 14px; font-size: 14px; vertical-align: middle; }
-        th { background-color: #f1f5f9; color: var(--dark); font-weight: 700; text-transform: uppercase; font-size: 13px; text-align: center; border-bottom: 2px solid var(--border-color); }
+        th, td { border: 1px solid #f1f5f9; padding: 16px 14px; font-size: 14px; }
+        th { background-color: #f1f5f9; color: var(--dark); font-weight: 700; text-transform: uppercase; font-size: 13px; text-align: center; }
         
         @media (min-width: 768px) {
-            th:nth-child(1), td:nth-child(1) { width: 8%; text-align: center; font-weight: 600; color: var(--text-light); }
+            th:nth-child(1), td:nth-child(1) { width: 8%; text-align: center; }
             th:nth-child(2), td:nth-child(2) { width: 22%; font-weight: 700; color: var(--primary); }
-            th:nth-child(3), td:nth-child(3) { width: 45%; color: var(--text-main); line-height: 1.6; }
-            th:nth-child(4), td:nth-child(4) { width: 25%; text-align: left; color: var(--danger); font-weight: 700; font-size: 15px; }
+            th:nth-child(3), td:nth-child(3) { width: 45%; color: #334155; }
+            th:nth-child(4), td:nth-child(4) { width: 25%; color: var(--danger); font-weight: 700; }
             tr:nth-child(even) { background-color: #f8fafc; }
-            tr:hover { background-color: #f1f5f9; transition: background-color 0.2s; }
+            tr:hover { background-color: #f1f5f9; }
         }
 
-        /* ================= CHÍNH SÁCH & CAM KẾT ================= */
-        .commit-list { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); margin-bottom: 40px; border: 1px solid var(--border-color); }
-        .commit-list ul { padding-left: 0; list-style: none; }
-        .commit-list li { position: relative; padding-left: 32px; margin-bottom: 16px; font-size: 14.5px; color: var(--text-main); text-align: justify; line-height: 1.7; }
+        /* CAM KẾT & CHÍNH SÁCH */
+        .commit-list { background-color: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 40px; }
+        .commit-list li { position: relative; padding-left: 32px; margin-bottom: 16px; font-size: 14.5px; list-style: none; text-align: justify; }
         .commit-list li::before { content: "✓"; color: var(--accent-green); background: #d1fae5; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; font-size: 12px; position: absolute; left: 0; top: 2px; }
         
         .policy-grid, .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .policy-card { background: var(--bg-body); padding: 24px; border-radius: 16px; transition: transform 0.3s; border: 1px solid var(--border-color); }
-        .policy-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        
-        .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
-        
-        /* ================= FAQ SECTION (TÍNH NĂNG MỚI) ================= */
+        .policy-card { background: var(--bg-body); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); }
+        .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.01); }
+
+        /* FAQ ACCORDION */
         .faq-item { border-bottom: 1px solid var(--border-color); }
-        .faq-item:last-child { border-bottom: none; }
         .faq-question { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--dark); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .faq-question:hover { color: var(--primary); }
-        .faq-icon { font-size: 18px; transition: transform 0.3s; color: var(--primary); }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; color: var(--text-light); font-size: 14.5px; line-height: 1.6; }
-        .faq-answer-inner { padding-bottom: 18px; }
+        .faq-icon { font-size: 16px; transition: transform 0.3s; color: var(--primary); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-light); font-size: 14px; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
-        /* ================= TOAST NOTIFICATION (TÍNH NĂNG MỚI) ================= */
+        /* REVEAL ON SCROLL EFFECT */
+        .reveal { opacity: 0; transform: translateY(25px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* TOAST NOTIFICATION */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #fff; border-left: 4px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 16px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); font-size: 14px; font-weight: 500; color: var(--dark); min-width: 280px; }
+        .toast { background: #fff; border-left: 4px solid var(--accent-green); box-shadow: 0 10px 30px rgba(0,0,0,0.12); padding: 16px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform 0.3s ease; font-size: 14px; font-weight: 500; }
         .toast.show { transform: translateX(0); }
-        .toast.success { border-left-color: var(--accent-green); }
-        .toast.error { border-left-color: var(--danger); }
-        .toast-icon { font-size: 20px; }
 
-        /* ================= BACK TO TOP BUTTON (TÍNH NĂNG MỚI) ================= */
-        #backToTop { position: fixed; bottom: 80px; right: 20px; background: var(--primary); color: #fff; width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; box-shadow: 0 5px 15px rgba(37,99,235,0.4); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 9000; }
+        /* MODAL XÁC NHẬN SANG XỊN MỊN */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal-card { background: #fff; padding: 35px 25px; border-radius: 24px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: scale(0.8); transition: transform 0.3s ease; }
+        .modal-overlay.open .modal-card { transform: scale(1); }
+        .modal-success-icon { width: 65px; height: 65px; background: #ecfdf5; color: var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 20px; }
+
+        /* NÚT CALL/ZALO NỔI CHO PC */
+        .pc-floating-contact { position: fixed; bottom: 30px; right: 25px; display: flex; flex-direction: column; gap: 12px; z-index: 9000; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative; }
+        .float-btn.call { background: var(--danger); animation: shake 2s infinite; }
+        .float-btn.zalo { background: #0068ff; }
+        @keyframes shake { 0%, 100% { transform: scale(1); } 10%, 30% { transform: scale(1.05) rotate(3deg); } 20%, 40% { transform: scale(1.05) rotate(-3deg); } }
+
+        /* NÚT BACK TO TOP */
+        #backToTop { position: fixed; bottom: 95px; left: 20px; background: var(--dark); color: #fff; width: 42px; height: 42px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 8000; }
         #backToTop.visible { opacity: 1; visibility: visible; }
-        #backToTop:hover { transform: translateY(-3px); background: var(--primary-hover); }
 
-        /* ================= RESPONSIVE ================= */
-        .menu-toggle { display: none; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--dark); padding: 4px; }
-        .mobile-label { display: none; }
-        
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; justify-content: space-around; align-items: center; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.08); z-index: 99999; border-top: 1px solid var(--border-color); display: none; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: var(--text-light); font-size: 11px; font-weight: 600; flex: 1; gap: 4px; }
+        /* MENU BOTTOM NAV MOBILE */
+        .menu-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--dark); }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); display: flex; justify-content: space-around; align-items: center; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -5px 25px rgba(0,0,0,0.05); z-index: 9999; border-top: 1px solid var(--border-color); display: none; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-light); font-size: 11px; font-weight: 600; flex: 1; gap: 4px; }
         .nav-item.active-booking { color: var(--primary); }
-        .booking-icon-wrapper { background-color: var(--primary); color: white; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); margin-top: -26px; border: 4px solid #fff; font-size: 18px; transition: transform 0.3s; }
-        .nav-item:active .booking-icon-wrapper { transform: scale(0.9); }
+        .booking-icon-wrapper { background-color: var(--primary); color: white; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37,99,235,0.3); margin-top: -26px; border: 4px solid #fff; font-size: 18px; }
 
+        /* MOBILE RESPONSIVE CỦA BẢNG GIÁ */
         @media (max-width: 767px) {
-            body { padding-bottom: 90px !important; }
-            .top-bar { flex-direction: column; gap: 8px; text-align: center; padding: 12px; }
-            .hero-section { padding: 50px 20px 80px; }
-            .hero-section h2 { font-size: 28px; }
+            body { padding-bottom: 85px !important; }
+            .top-bar { flex-direction: column; gap: 6px; text-align: center; }
+            .hero-section h2 { font-size: 26px; }
             .booking-form { padding: 30px 20px; }
             .form-row { flex-direction: column; gap: 0; }
+            .pc-floating-contact { display: none; }
             
             .menu-toggle { display: block; }
-            .nav-menu { display: flex; width: 100%; flex-direction: column; gap: 0; background-color: #ffffff; position: absolute; top: 100%; left: 0; border-bottom: 1px solid var(--border-color); padding: 0; box-shadow: 0 10px 15px rgba(0,0,0,0.05); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; opacity: 0; }
-            .nav-menu.show { max-height: 400px; opacity: 1; padding: 10px 0; }
-            .nav-menu a { width: 100%; padding: 14px 25px; border-bottom: 1px solid #f1f5f9; font-size: 15px; }
+            .nav-menu { display: flex; width: 100%; flex-direction: column; gap: 0; background-color: #fff; position: absolute; top: 100%; left: 0; border-bottom: 1px solid var(--border-color); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+            .nav-menu.show { max-height: 350px; }
+            .nav-menu a { width: 100%; padding: 14px 20px; border-bottom: 1px solid #f1f5f9; }
             .nav-menu a::after { display: none; }
             
             .bottom-nav { display: flex !important; }
-            #backToTop { bottom: 100px; right: 15px; width: 40px; height: 40px; font-size: 18px; }
             
-            /* Cấu trúc Bảng cho Mobile */
             table thead { display: none; }
             table, table tbody, table tr, table td { display: block; width: 100%; }
-            table tr { border-bottom: 4px solid var(--bg-body); padding: 15px; background: #fff; border-radius: 8px; margin-bottom: 10px; }
-            table td { border: none !important; padding: 6px 0 !important; font-size: 14px !important; text-align: left !important; }
-            .mobile-label { display: inline-block; width: 100px; font-weight: 700; color: var(--text-light); font-size: 12px; text-transform: uppercase; flex-shrink: 0; }
+            table tr { border-bottom: 5px solid var(--bg-body); padding: 15px; background: #fff; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
+            table td { border: none !important; padding: 5px 0 !important; font-size: 14px !important; }
+            .mobile-label { display: inline-block; width: 95px; font-weight: 700; color: var(--text-light); font-size: 12px; text-transform: uppercase; }
             .mobile-row { display: flex; align-items: flex-start; }
             .mobile-value { flex: 1; color: var(--text-main); }
             .highlight-error { color: var(--primary); font-weight: 700; }
-            .highlight-price { color: var(--danger); font-weight: 700; font-size: 15px; }
-            .table-responsive { background: transparent; border: none; box-shadow: none; margin-bottom: 20px; }
+            .highlight-price { color: var(--danger); font-weight: 700; }
+            .table-responsive { background: transparent; border: none; box-shadow: none; }
         }
     </style>
 </head>
 <body>
-    <div id="toast-container"></div>
+      <div id="toast-container"></div>
+
+    <!-- MODAL XÁC NHẬN THÀNH CÔNG -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <div class="modal-success-icon">✓</div>
+            <h3 style="font-size: 20px; font-weight: 800; color: var(--dark); margin-bottom: 10px;">ĐẶT LỊCH THÀNH CÔNG!</h3>
+            <p style="font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 24px;">Hệ thống của <strong>Tran Hoa Computer</strong> đã ghi nhận thông tin đặt lịch của bạn. Chúng tôi sẽ nhanh chóng liên hệ lại qua số điện thoại để xác nhận lịch hẹn sớm nhất!</p>
+            <button onclick="closeModal()" style="background: var(--primary); color:#fff; border:none; padding:12px 30px; border-radius:30px; font-weight:700; cursor:pointer; width:100%;">Đồng Ý & Đóng</button>
+        </div>
+    </div>
+
+    <!-- NÚT LIÊN HỆ NỔI BẢN PC -->
+    <div class="pc-floating-contact">
+        <a href="tel:0963284044" class="float-btn call" title="Gọi Ngay Tư Vấn">📞</a>
+        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="float-btn zalo" title="Chat Zalo Kỹ Thuật">💬</a>
+    </div>
 
     <div class="top-bar">
-        <div class="time">🕒 Giờ làm việc: 07:00 - 22:00 (Thứ 2 - Chủ Nhật)</div>
+        <div class="time">🕒 Giờ mở cửa: 07:00 - 22:00 (Thứ 2 - Chủ Nhật)</div>
         <div>📞 Hotline Kỹ Thuật: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
     </div>
     
     <div class="header-nav" id="headerNav">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1152px; margin: 0 auto; position: relative;">
-            <div style="text-align: left; cursor: pointer;" onclick="window.scrollTo(0,0)">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1152px; margin: 0 auto;">
+            <div style="cursor: pointer;" onclick="window.scrollTo(0,0)">
                 <h1 class="logo-animation">Tran Hoa Computer</h1>
                 <p class="slogan-animation">Uy Tín Tạo Niềm Tin</p>
             </div>
-            
             <div class="nav-menu" id="menuNavbar">
                 <a href="#datlich-sua-chua">📅 Đặt lịch</a>
-                <a href="#bang-gia-phan-cung">💻 Sửa Phần cứng</a>
-                <a href="#bang-gia-phan-mem">💿 Cài Phần mềm</a>
+                <a href="#muc-bang-gia">💰 Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">🛡️ Bảo hành</a>
                 <a href="#danh-gia-khach-hang">💬 Đánh giá</a>
             </div>
-
-            <button class="menu-toggle" id="menuBtn" aria-label="Toggle Navigation">☰</button>
+            <button class="menu-toggle" id="menuBtn">☰</button>
         </div>
     </div>
     
+    <!-- HERO SECTION ĐÃ ĐƯỢC CHUỐT LẠI CHỮ THEO THÁI NGUYÊN -->
     <div class="hero-section">
-        <div class="hero-content">
-            <div class="hero-tag">Sửa máy tính lấy ngay tại Phú Thịnh-Thái Nguyên</div>
-            <h2>TRAN HOA COMPUTER</h2>
-            <p>Trung tâm sửa chữa, lắp ráp, nâng cấp Laptop, PC uy tín hàng đầu. Cam kết linh kiện chính hãng, xử lý nhanh chóng, công khai minh bạch và bảo mật dữ liệu tuyệt đối.</p>
-        </div>
+        <div class="hero-tag">🛠️ Hệ Thống Sửa Chữa Máy Tính Lấy Ngay Uy Tín Hàng Đầu Thái Nguyên</div>
+        <h2>TRAN HOA COMPUTER</h2>
+        <p>Chuyên gia cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Đại Từ, Thái Nguyên[span_0](start_span)[span_0](end_span). Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối[span_1](start_span)[span_1](end_span).</p>
     </div>
     
     <div class="container">
-        <div id="datlich-sua-chua" class="booking-form reveal">
+        <!-- FORM ĐẶT LỊCH -->
+        <div id="datlich-sua-chua" class="booking-form reveal active">
             <div class="form-title">📝 ĐẶT LỊCH SỬA MÁY TÍNH</div>
-            <div class="form-desc">Quý khách vui lòng điền thông tin dưới đây. Cửa hàng sẽ chủ động sắp xếp kỹ thuật viên phục vụ bạn chu đáo và nhanh nhất.</div>
+            <div class="form-desc">Vui lòng để lại thông tin đặt lịch hẹn trước dưới đây để không phải xếp hàng chờ đợi lâu khi mang máy tới tiệm.</div>
             
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button type="button" onclick="fillDemoData()" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;">✨ Bấm vào đây để điền mẫu thử nhanh</button>
+            </div>
+
             <form id="bookingForm">
                 <div class="form-group">
                     <label>Họ và tên khách hàng *</label>
-                    <input type="text" name="fullname" class="form-control" placeholder="Nhập họ và tên của bạn" required>
+                    <input type="text" name="fullname" id="inputFullname" class="form-control" placeholder="Nhập họ và tên của bạn" required>
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại liên hệ *</label>
-                    <input type="tel" name="phone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}" title="Vui lòng nhập số điện thoại hợp lệ">
+                    <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Chọn ngày sửa *</label>
+                        <label>Chọn ngày hẹn sửa *</label>
                         <input type="date" name="date" id="dateInput" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Chọn khung giờ *</label>
-                        <select name="time-slot" class="form-control" required>
-                            <option value="">-- Chọn khung giờ thích hợp --</option>
-                            <option value="7:00 - 9:00">07:00 - 09:00 (Sáng sớm)</option>
-                            <option value="9:00 - 12:00">09:00 - 12:00 (Giờ hành chính)</option>
-                            <option value="12:00 - 14:00">12:00 - 14:00 (Giờ nghỉ trưa)</option>
+                        <label>Chọn khung giờ thích hợp *</label>
+                        <select name="time-slot" id="selectTime" class="form-control" required>
+                            <option value="">-- Khung giờ --</option>
+                            <option value="7:00 - 9:00">7:00 - 9:00 (Sáng)</option>
+                            <option value="9:00 - 12:00">9:00 - 12:00 (Sáng)</option>
+                            <option value="12:00 - 14:00">12:00 - 14:00 (Trưa)</option>
                             <option value="14:00 - 17:00">14:00 - 17:00 (Chiều)</option>
-                            <option value="17:00 - 22:00">17:00 - 22:00 (Ngoài giờ/Tối)</option>
+                            <option value="17:00 - 22:00">17:00 - 22:00 (Tối)</option>
                         </select>
-      </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Tình trạng máy / Yêu cầu chi tiết</label>
-                    <input type="text" name="note" class="form-control" placeholder="Ví dụ: Máy bật không lên nguồn, Laptop cần vệ sinh tra keo...">
+                    <input type="text" name="note" id="inputNote" class="form-control" placeholder="Ví dụ: Laptop lỗi Win bật không lên, cần tra keo tản nhiệt...">
                 </div>
                 <button type="submit" id="submitBtn" class="btn-submit">
                     <span class="spinner" id="btnSpinner"></span>
-                    <span id="btnText">Gửi Yêu Cầu Đặt Lịch</span>
+                    <span id="btnText">Gửi Yêu Cầu Đặt Lịch Hẹn</span>
                 </button>
             </form>
         </div>
-
-        <div id="bang-gia-phan-cung" class="section-title reveal">BÁO GIÁ SỬA CHỮA PHẦN CỨNG</div>
-        <div class="table-responsive reveal">
-            <table>
-                <thead><tr><th>STT</th><th>LỖI</th><th>CHI TIẾT DỊCH VỤ</th><th>KHOẢNG GIÁ ĐỒNG</th></tr></thead>
-                <tbody>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn<br>Thay IC nguồn + Fet nguồn<br>Thay chipset, IO, ROM<br>Thay IC charge<br><strong>Thay Nguồn PC mới</strong></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hoặc thay thế linh kiện mới)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300K – 600K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">PASS BIOS</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Phá mật mã (pass) các dòng máy tính thông dụng hiện nay</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K - 400K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">MAIN BOARD</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa VGA / Thay VGA mới hoàn toàn<br>Thay thế IO cũ hoặc thực hiện thay mới<br>Thay CHIP sound xử lý âm thanh<br>Sửa chữa linh kiện hoặc thay thế chip LAN mạng</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">400K – 1.600K<br>500K – 900K<br>400K – 600K<br>400K – 600K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">VỆ SINH MÁY</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Làm sạch hệ thống làm mát, bôi keo tản nhiệt cao cấp cho CPU/VGA, vệ sinh vỏ, phím</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">150.000 đ</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">BO CAO ÁP</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Căn chỉnh sửa chữa hoặc thay thế vỉ cao áp màn hình</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300K – 800K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">BẢN LỀ LAPTOP</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa chữa, gia cố cơ cấu gập mở cơ học cứng cáp, phục hồi vỏ nứt</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K / 1 bên</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">8</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">QUẠT CPU</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa lỗi kẹt, kêu to, tản nhiệt kém hoặc thay thế quạt mới</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300K – 600K</span></div></td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div id="bang-gia-phan-mem" class="section-title reveal">CÀI ĐẶT ỨNG DỤNG & PHẦN MỀM</div>
-        <div class="table-responsive reveal">
-            <table>
-                <thead><tr><th>STT</th><th>THIẾT BỊ/LỖI</th><th>HẠNG MỤC CHI TIẾT</th><th>GIÁ CÀI ĐẶT</th></tr></thead>
-                <tbody>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">PC (Máy bàn)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài hệ điều hành Windows 7, 8, 10, 11 (Tặng kèm ứng dụng cơ bản) + Vệ sinh thổi bụi nhanh</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100K – 120K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Laptop</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài Windows mượt mà, tối ưu hóa SSD/HDD. Khôi phục (Recover) Windows bản quyền gốc</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100K – 150K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Phần mềm lẻ</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Office, Unikey, PDF, Font... Hoặc phần mềm đồ họa nặng (AutoCad, PTS, Corel)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">50K - 100K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Diệt Virus</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt Kaspersky, BKAV Pro, quét sạch mã độc hại tống tiền</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">70K / Lần</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Cứu dữ liệu</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Khôi phục dữ liệu quý giá do lỡ tay xóa, format nhầm, ghost đè partition</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">Từ 300K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Mạng & Wifi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cấu hình đồng bộ thông số kĩ thuật Router phát sóng Wifi gia đình, công ty</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80K - 150K</span></div></td></tr>
-                    <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value" style="color: #10b981; font-weight: 700;">Hỗ trợ từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Xử lý nhanh lỗi phần mềm nhỏ, máy in qua UltraViewer / Teamviewer</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value" style="color: #10b981; font-weight: 800; background: #ecfdf5; padding: 4px 8px; border-radius: 4px;">MIỄN PHÍ</span></div></td></tr>
-                </tbody>
-            </table>
+                <!-- TAB CHUYỂN BẢNG GIÁ ĐỠ RỐI MÀU -->
+        <div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div>
+        <div class="tab-container reveal">
+            <button class="tab-btn active" onclick="switchTab('hardware')">💻 Sửa Phần Cứng</button>
+            <button class="tab-btn" onclick="switchTab('software')">💿 Cài Phần Mềm</button>
         </div>
 
-        <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG DỊCH VỤ</div>
+        <!-- TAB PHẦN CỨNG -->
+        <div id="tab-hardware" class="price-table-section active reveal">
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>KHOẢNG GIÁ ĐỒNG</th></tr></thead>
+                    <tbody>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; <strong>Thay Nguồn mới</strong></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">PASS BIOS</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Phá mật mã bảo mật (pass) dòng máy tính thông dụng hiện nay trên thị trường</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200.000 - 400.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">MAIN BOARD</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa VGA / Thay VGA mới; Thay thế thanh chip IO cũ; Thay CHIP sound xử lý âm thanh công suất máy; Sửa linh kiện chip LAN mạng từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">400K – 600K / 1.100K – 1.600K<br>500K – 900K<br>400K – 600K</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Vệ sinh máy</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Làm sạch sâu hệ thống quạt hút gió làm mát, bôi keo tản nhiệt gốm cao cấp cho vi xử lý CPU, vệ sinh bàn phím màn hình sạch bóng</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">150.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Bo cao áp</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Căn chỉnh sửa chữa vi mạch cao áp màn hình điện tử hiển thị</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 800.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Bản lề</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Gia cố cơ cấu trục gập mở cơ học cứng cáp, đổ keo chuyên dụng phục hồi vỏ laptop nhựa nứt vỡ văng góc</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200.000 đ / 1 bên bản lề</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">8</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Quạt CPU</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa lỗi kẹt trục, chạy phát tiếng ồn rồ to khó chịu hoặc tiến hành thay mới cụm quạt tản nhiệt</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB PHẦN MỀM -->
+        <div id="tab-software" class="price-table-section reveal">
+            <div class="table-responsive">
+                <table>
+                    <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦN MỀM CÀI ĐẶT</th><th>GIÁ CÀI ĐẶT TRỌN GÓI</th></tr></thead>
+                    <tbody>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">PC (Máy bàn)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt mới Windows 7, 8, 10, 11 Pro kích hoạt đầy đủ Driver chuẩn + bộ Office cơ bản mượt mà + Vệ sinh bụi linh kiện nhanh</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 120.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Laptop</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài hệ điều hành tối ưu chạy siêu mượt cho dòng Laptop văn phòng, đồ họa, Gaming. Khôi phục Recovery bản quyền gốc nhà sản xuất</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 150.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Phần mềm lẻ</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt ứng dụng Văn phòng bộ Office lẻ, gõ tiếng Việt Unikey, đọc PDF, font thiết kế. Ứng dụng kỹ thuật nặng đồ họa AutoCad, Photoshop...</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">50.000 – 100.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Diệt Virus</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt, cấu hình chuẩn ứng dụng quét diệt virus chuyên nghiệp hàng đầu bảo vệ tài khoản ngân hàng</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">70.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Cứu dữ liệu</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Khôi phục tệp tin tài liệu dữ liệu quý giá bị format nhầm ổ, xóa vĩnh viễn trong sọt rác, phân vùng ghost lỗi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">Từ 300.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Mạng & Wifi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cấu hình đồng bộ thông số kĩ thuật cục phát Router Modem phát sóng mạng Wifi gia đình ổn định không chập chờn</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80.000 - 150.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value" style="color:#10b981; font-weight:700;">Hỗ trợ từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Xử lý sửa lỗi vặt ứng dụng văn phòng, kết nối máy in văn phòng qua Teamviewer / UltraViewer cấp tốc</span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value" style="color: #10b981; font-weight: 800; background: #ecfdf5; padding: 4px 8px; border-radius: 4px;">MIỄN PHÍ TRỌN ĐỜI</span></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+                <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG</div>
         <div class="commit-list reveal">
             <ul>
-                <li>Đảm bảo sửa chữa xong thiết bị tối đa 02 ngày kể từ ngày nhận. Nếu cần thêm linh kiện đặc biệt, chúng tôi sẽ gọi điện báo trước rõ ràng.</li>
-                <li>Máy tính của khách hàng được bảo quản cẩn thận, khách hàng được ký tên lên linh kiện (Mainboard, RAM, Ổ cứng, Màn hình) để đảm bảo 100% không tráo đồ.</li>
-                <li>Mọi dữ liệu cá nhân, tài khoản, thông tin riêng tư của khách hàng lưu giữ trong thiết bị luôn được cam kết bảo mật tuyệt đối.</li>
-                <li>Sẵn sàng hoàn lại 100% chi phí dịch vụ nếu máy tính bị lại bệnh cũ quá 3 lần mà không khắc phục triệt để được.</li>
+                <li>Cam kết sửa chữa nhanh chóng tối đa trong vòng 02 ngày. Nếu máy lỗi nặng cần thời gian test thêm linh kiện, tiệm sẽ chủ động gọi thông báo trước rõ ràng.</li>
+                <li>Linh kiện máy tính của quý khách luôn được giữ nguyên trạng, cam kết không tráo đổi đồ. Khách hàng ký tên trực tiếp lên phần cứng khi nhận máy bàn giao.</li>
+                <li>Dữ liệu bảo mật thông tin cá nhân lưu trong ổ cứng của quý khách luôn được cam kết giữ an toàn bảo mật tuyệt đối tại trung tâm kỹ thuật.</li>
+                <li>Hoàn trả 100% chi phí sửa chữa dịch vụ nếu bệnh cũ của máy tái phát lại quá 3 lần trong thời gian bảo hành hoặc bạn cảm thấy không ưng ý.</li>
             </ul>
         </div>
-      <div id="chinh-sach-bao-hanh" class="reveal">
+        
+        <div id="chinh-sach-bao-hanh" class="reveal">
             <div class="policy-grid">
-                <div class="policy-card" style="border-left: 4px solid #10b981;">
-                    <div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
-                    <h4 style="margin: 0 0 8px 0; color: var(--dark); font-size: 16px; font-weight: 700;">Kiểm Tra Miễn Phí</h4>
-                    <p style="margin: 0; color: var(--text-light); font-size: 14px;">Mang máy đến kiểm tra tình trạng, bắt đúng bệnh, báo đúng giá. Khách không đồng ý sửa không thu bất kỳ phí nào.</p>
+                <div class="policy-card" style="border-left: 4px solid var(--accent-green);">
+                    <h4 style="font-weight:700; margin-bottom:8px;">💯 Kiểm Tra Miễn Phí</h4>
+                    <p style="color: var(--text-light); font-size:13.5px;">Bắt chuẩn bệnh, báo đúng giá công khai công thợ. Khách hàng mang máy đến kiểm tra không sửa không mất tiền.</p>
                 </div>
                 <div class="policy-card" style="border-left: 4px solid var(--primary);">
-                    <div style="font-size: 24px; margin-bottom: 10px;">⚡</div>
-                    <h4 style="margin: 0 0 8px 0; color: var(--dark); font-size: 16px; font-weight: 700;">Bảo Hành Lên Đến 36T</h4>
-                    <p style="margin: 0; color: var(--text-light); font-size: 14px;">Linh kiện thay mới (SSD, RAM) bảo hành chính hãng từ 12 - 36 tháng. Lỗi 1 đổi 1 ngay lập tức không cần chờ đợi.</p>
+                    <h4 style="font-weight:700; margin-bottom:8px;">⚡ Bảo Hành 1 Đổi 1</h4>
+                    <p style="color: var(--text-light); font-size:13.5px;">Linh kiện thay thế cao cấp (SSD, RAM, Màn hình, Bàn phím) bảo hành dài lâu, lỗi đổi linh kiện mới tinh cực tốc.</p>
                 </div>
                 <div class="policy-card" style="border-left: 4px solid var(--accent-orange);">
-                    <div style="font-size: 24px; margin-bottom: 10px;">👨‍💻</div>
-                    <h4 style="margin: 0 0 8px 0; color: var(--dark); font-size: 16px; font-weight: 700;">Hỗ Trợ Từ Xa Trọn Đời</h4>
-                    <p style="margin: 0; color: var(--text-light); font-size: 14px;">Tặng gói hỗ trợ kỹ thuật, cài đặt máy in, sửa lỗi vặt qua UltraViewer hoàn toàn miễn phí suốt quá trình dùng máy.</p>
+                    <h4 style="font-weight:700; margin-bottom:8px;">👨‍💻 Hỗ Trợ Từ Xa Free</h4>
+                    <p style="color: var(--text-light); font-size:13.5px;">Tặng trọn đời gói hỗ trợ cài ứng dụng vặt, kết nối driver máy in hay quét dọn virus hệ thống qua UltraView từ xa.</p>
                 </div>
             </div>
         </div>
 
+        <!-- FAQ ACCORDION ĐÃ ĐƯỢC MỞ RỘNG THÀNH 8 CÂU HỎI TRỰC QUAN -->
         <div class="section-title reveal">CÂU HỎI THƯỜNG GẶP</div>
-        <div style="background: var(--bg-card); border-radius: 16px; padding: 10px 24px; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color);" class="reveal">
+        <div style="background: #fff; border-radius:16px; padding:10px 24px; margin-bottom:40px; border:1px solid var(--border-color);" class="reveal">
             <div class="faq-item">
-                <button class="faq-question">Máy tính của tôi bật không lên màn hình, sửa mất bao lâu? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><div class="faq-answer-inner">Thời gian sửa chữa phụ thuộc vào nguyên nhân (do RAM bẩn, lỗi nguồn hay hỏng Mainboard). Đa số các lỗi cơ bản như lỏng RAM sẽ được kỹ thuật viên xử lý và vệ sinh lấy ngay trong vòng 15-30 phút.</div></div>
+                <button class="faq-question">Thay thế nâng cấp ổ cứng SSD mất thời gian bao lâu? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Quy trình tháo ráp thay thế ổ cứng SSD mới và cài đặt lại hệ điều hành Windows đồng bộ phần mềm diễn ra chỉ từ 30 - 45 phút, khách ngồi xem trực tiếp lấy ngay.</p></div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">Nâng cấp ổ cứng SSD liệu có bị mất dữ liệu cũ không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><div class="faq-answer-inner">Hoàn toàn không. Chúng tôi hỗ trợ sao lưu lại toàn bộ dữ liệu quan trọng từ ổ cứng cũ sang ổ SSD mới cho bạn, hoặc biến ổ cứng cũ thành ổ lưu trữ song song cực kỳ an toàn.</div></div>
+                <button class="faq-question">Dữ liệu quan trọng cũ trong máy có bị mất đi khi sửa phần cứng? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Chúng tôi luôn đặt an toàn dữ liệu của khách lên hàng đầu. Kỹ thuật viên luôn thực hiện sao lưu (backup) cẩn thận dữ liệu ở ổ cũ sang ổ mới trước khi can thiệp phần cứng hay sửa nguồn máy.</p></div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">Có nhận sửa chữa tại nhà khu vực Đại Từ không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><div class="faq-answer-inner">Hiện tại trung tâm có hỗ trợ đến tận nhà hoặc cơ quan tại khu vực xung quanh Phú Thịnh. Bạn vui lòng liên hệ trực tiếp qua số Zalo hoặc Hotline để đặt lịch kỹ thuật viên đến tận nơi nhé!</div></div>
+                <button class="faq-question">Cửa hàng có cam kết linh kiện thay thế là chính hãng không? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">100% linh kiện thay thế tại Tran Hoa Computer (SSD, RAM, sạc, màn hình...) đều là hàng chính hãng, có nguồn gốc rõ ràng và nguyên seal. Khách hàng được ký tên lên linh kiện để đảm bảo minh bạch tuyệt đối.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Giá ghi trên bảng giá đã bao gồm công thợ chưa, có phát sinh gì không? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Bảng giá dịch vụ tại cửa hàng luôn được công khai niêm yết rõ ràng. Khi kiểm tra máy xong, kỹ thuật viên sẽ báo trọn gói một giá duy nhất cho bạn, cam kết không phát sinh bất kỳ khoản chi phí ẩn nào sau khi sửa xong.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Nếu máy tính của tôi chỉ bị lỗi phần mềm nhỏ thì có sửa từ xa được không? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Hoàn toàn được! Đối với các lỗi nhỏ như cài phần mềm văn phòng, lỗi driver máy in, quét virus vặt, bạn chỉ cần tải UltraViewer hoặc TeamViewer. Chúng tôi sẽ kết nối hỗ trợ xử lý từ xa qua mạng và dịch vụ này là <strong>MIỄN PHÍ HOÀN TOÀN</strong>.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Chính sách bảo hành sau khi sửa chữa tại tiệm như thế nào? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Mọi dịch vụ sửa chữa phần cứng và thay thế linh kiện tại tiệm đều đi kèm phiếu bảo hành rõ ràng từ 3 đến 12 tháng. Trong thời gian bảo hành, nếu linh kiện phát sinh lỗi do nhà sản xuất, cửa hàng sẽ tiến hành <strong>1 đổi 1 mới tinh</strong> ngay lập tức.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Tôi có thể mang máy đến kiểm tra lỗi mà không sửa thì có mất phí không? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Không mất một đồng nào! Tran Hoa Computer áp dụng chính sách kiểm tra máy miễn phí trọn đời cho mọi khách hàng. Kỹ thuật viên sẽ kiểm tra, báo lỗi và báo giá. Nếu bạn chưa muốn sửa, bạn có thể nhận lại máy nguyên vẹn mà không tốn bất kỳ chi phí kiểm tra nào.</p></div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Thời gian mở cửa của tiệm như thế nào, ngày lễ Tết có làm việc không? <span class="faq-icon">▼</span></button>
+                <div class="faq-answer"><p style="padding-bottom:15px;">Cửa hàng mở cửa liên tục từ 07:00 đến 22:00 tất cả các ngày trong tuần (Thứ 2 đến Chủ Nhật), kể cả các ngày lễ để phục vụ tối đa nhu cầu cấp bách của quý khách. Bạn nên sử dụng tính năng đặt lịch trên web trước để tiệm sắp xếp thợ phục vụ nhanh nhất.</p></div>
             </div>
         </div>
         
-        <div id="danh-gia-khach-hang" class="section-title reveal">ĐÁNH GIÁ TỪ KHÁCH HÀNG</div>
+        <div id="danh-gia-khach-hang" class="section-title reveal">KHÁCH HÀNG ĐÁNH GIÁ</div>
         <div class="review-grid reveal">
             <div class="review-card">
-                <div>
-                    <div style="color: #facc15; margin-bottom: 12px; font-size: 16px;">⭐⭐⭐⭐⭐</div>
-                    <p style="margin: 0 0 16px 0; color: var(--text-main); font-size: 14px; font-style: italic;">"Máy laptop bị bật không lên nguồn, mang ra anh Hòa kiểm tra xử lý rất nhanh, giá hạt dẻ so với phố. Đồ thay chính hãng, yên tâm làm việc tiếp."</p>
-                </div>
-                <div style="font-weight: 700; color: var(--dark); font-size: 14px; border-top: 1px solid var(--border-color); padding-top: 12px;">Bạn Hoàng Nam <br><span style="font-weight: 400; color: var(--text-light); font-size: 12px;">(Hùng Sơn, Đại Từ)</span></div>
+                <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+                <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Máy laptop bật không lên nguồn, mang qua anh Hòa đo mạch sửa rất nhanh, giá hạt dẻ vừa túi tiền so với ngoài thành phố lớn. Rất uy tín."</p>
+                <div style="font-weight:700; font-size:13px;">Bạn Hoàng Nam <span style="font-weight:400; color:var(--text-light);">(Hùng Sơn, Đại Từ)</span></div>
             </div>
             <div class="review-card">
-                <div>
-                    <div style="color: #facc15; margin-bottom: 12px; font-size: 16px;">⭐⭐⭐⭐⭐</div>
-                    <p style="margin: 0 0 16px 0; color: var(--text-main); font-size: 14px; font-style: italic;">"Vừa nâng cấp ổ cứng SSD và thêm cây RAM 8GB, kết hợp vệ sinh máy ở đây xong. Máy từ rùa bò thành chạy vèo vèo, anh chủ cực nhiệt tình, cho 5 sao ủng hộ ạ."</p>
-                </div>
-                <div style="font-weight: 700; color: var(--dark); font-size: 14px; border-top: 1px solid var(--border-color); padding-top: 12px;">Chị Minh Thủy <br><span style="font-weight: 400; color: var(--text-light); font-size: 12px;">(Phú Thịnh, Đại Từ)</span></div>
+                <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
+                <p style="font-size: 13.5px; font-style: italic; color: var(--text-main); margin-bottom:15px;">"Vừa nâng ổ cứng SSD với thổi bụi bảo dưỡng tra keo tản nhiệt ở đây. Máy mát rượi chạy nhanh vèo vèo, anh chủ thợ tận tâm vui tính!"</p>
+                <div style="font-weight:700; font-size:13px;">Chị Minh Thủy <span style="font-weight:400; color:var(--text-light);">(Phú Thịnh, Đại Từ)</span></div>
             </div>
         </div>
         
-        <div class="reveal" style="margin-bottom: 40px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
-            <h3 style="font-size: 18px; font-weight: 700; color: var(--dark); margin-top: 0; margin-bottom: 24px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; display: flex; align-items: center; gap: 8px;"><span>✍️</span> HỎI ĐÁP & BÌNH LUẬN TRỰC TUYẾN</h3>
+        <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">💬 ĐỂ LẠI BÌNH LUẬN CỦA BẠN CHÚNG TÔI SẼ GIẢI ĐÁP</h3>
             <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.netlify.app" data-page-title="TRAN HOA COMPUTER"></div>
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
         
-        <div class="reveal" style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border: 1px solid #bfdbfe; border-radius: 20px; padding: 40px 20px; text-align: center; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.05); margin-bottom: 20px;">
-            <div style="width: 70px; height: 70px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; margin: 0 auto 15px auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">💬</div>
-            <h3 style="font-size: 22px; font-weight: 800; color: #1e40af; margin: 0 0 12px 0;">Tham Gia Cộng Đồng Hỗ Trợ Kỹ Thuật</h3>
-            <p style="font-size: 15px; color: #475569; margin: 0 auto 24px auto; max-width: 500px; line-height: 1.6;">Tham gia nhóm Zalo khách hàng của <strong style="color: var(--primary);">TRAN HOA COMPUTER</strong>. Báo lỗi máy tính, xin link tải phần mềm, nhận hỗ trợ xử lý từ xa hoàn toàn miễn phí!</p>
-            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; background-color: var(--primary); color: #ffffff; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 30px; text-decoration: none; text-transform: uppercase; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); transition: transform 0.3s, box-shadow 0.3s;">👉 Mở Nhóm Zalo Ngay</a>
+        <div class="reveal" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; border-radius: 16px; padding: 30px; text-align: center;">
+            <h3 style="font-size: 18px; font-weight: 800; color: #0369a1; margin-bottom: 10px;">Tham Gia Nhóm Hỗ Trợ Kỹ Thuật Trực Tuyến</h3>
+            <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">Hỏi đáp báo giá pan bệnh máy tính gấp, xin link phần mềm crack an toàn qua nhóm cộng đồng Zalo.</p>
+            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" style="display:inline-block; background-color: var(--primary); color: #fff; font-weight: 700; padding: 12px 28px; border-radius: 30px; text-decoration: none; text-transform: uppercase; box-shadow:0 4px 12px rgba(37,99,235,0.2);">👉 Vào nhóm zalo ngay</a>
         </div>
     </div>
-      <footer style="background-color: var(--dark); color: #94a3b8; padding: 60px 24px 24px 24px; margin-top: 60px; border-top: 1px solid #1e293b;">
-        <div style="max-width: 1152px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">           
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <h3 style="font-size: 22px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: 0.5px;">TRAN HOA COMPUTER</h3>
-                <p style="font-size: 14px; color: #94a3b8; margin: 0; line-height: 1.6;">Giải pháp công nghệ toàn diện – Chuyên gia sửa chữa, nâng cấp & lắp ráp PC, Laptop hàng đầu tại Đại Từ, Thái Nguyên.</p>
+    
+    <footer style="background-color: var(--dark); color: #94a3b8; padding: 50px 20px 20px; margin-top: 60px; border-top: 1px solid #1e293b;">
+        <div style="max-width: 1152px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 35px; font-size:13.5px;">           
+            <div>
+                <h3 style="font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom:12px;">TRAN HOA COMPUTER</h3>
+                <p>Chuyên gia sửa chữa, bảo dưỡng linh kiện, lắp đặt trọn gói hệ thống máy tính Văn Phòng - Net Game có tiếng tại Đại Từ, Thái Nguyên[span_2](start_span)[span_2](end_span).</p>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 14px;">
-                <h4 style="font-size: 13px; font-weight: 700; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px;">➔ Thông tin liên hệ</h4>
-                <div style="display: flex; gap: 10px;"><span style="width: 20px;">📍</span> <span>Phú Thịnh, Đại Từ, Thái Nguyên</span></div>
-                <div style="display: flex; gap: 10px;"><span style="width: 20px;">📞</span> <span>Hotline: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></span></div>
-                <div style="display: flex; gap: 10px;"><span style="width: 20px;">✉️</span> <span>Email: <a href="mailto:thienkim29903@gmail.com" style="color: #cbd5e1; text-decoration: none;">thienkim29903@gmail.com</a></span></div>
+            <div>
+                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">➔ THÔNG TIN CHI TIẾT</h4>
+                <p style="margin-bottom:6px;">📍 Phú Thịnh, Đại Từ, Thái Nguyên[span_3](start_span)[span_3](end_span)</p>
+                <p style="margin-bottom:6px;">📞 Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
+                <p>✉️ Thư điện tử: thienkim29903@gmail.com</p>
             </div>
         </div>
-        <div style="margin-top: 50px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 12px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. Tất cả các quyền được bảo lưu.</p></div>
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p></div>
     </footer>
-    
-    <div class="bottom-nav">
-        <a href="#" class="nav-item" onclick="window.scrollTo(0,0)"><span>🏠</span><span>Trang chủ</span></a>
-        <a href="tel:0963284044" class="nav-item" style="color: var(--accent-orange);"><span>📞</span><span>Gọi ngay</span></a>
-        <a href="#datlich-sua-chua" class="nav-item active-booking"><div class="booking-icon-wrapper">📅</div><span style="margin-top: -6px;">Đặt lịch</span></a>
-        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item" style="color: var(--primary);"><span>💬</span><span>Zalo</span></a>
-        <a href="#bang-gia-phan-cung" class="nav-item"><span>💰</span><span>Bảng giá</span></a>
+       <div class="bottom-nav">
+        <a href="#" class="nav-item"><span>🏠</span><span>Trang chủ</span></a>
+        <a href="tel:0963284044" class="nav-item" style="color: var(--accent-orange);"><span>📞</span><span>Gọi điện</span></a>
+        <a href="#datlich-sua-chua" class="nav-item active-booking"><div class="booking-icon-wrapper">📅</div><span style="margin-top:-5px;">Đặt lịch</span></a>
+        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item" style="color: #0068ff;"><span>💬</span><span>Zalo</span></a>
+        <a href="#muc-bang-gia" class="nav-item"><span>💰</span><span>Bảng giá</span></a>
     </div>
 
-    <button id="backToTop" aria-label="Lên đầu trang">↑</button>
+    <button id="backToTop">↑</button>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // TÍNH NĂNG ĐIỀN THỬ MẪU DATA NHANH
+    function fillDemoData() {
+        document.getElementById('inputFullname').value = "Trần Anh Quân";
+        document.getElementById('inputPhone').value = "0987654321";
+        document.getElementById('selectTime').value = "14:00 - 17:00";
+        document.getElementById('inputNote').value = "Máy tính bàn dùng tầm 15 phút là bị sập nguồn ngắt hẳn, quạt không quay.";
+        showToast("Đã tự động điền thông tin mẫu!");
+    }
+
+    // TÍNH NĂNG CHUYỂN ĐỔI TAB BẢNG GIÁ
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.price-table-section').forEach(sec => sec.classList.remove('active'));
         
-        // 1. CHẶN CHỌN NGÀY TRONG QUÁ KHỨ CHO FORM
-        const dateInput = document.getElementById('dateInput');
-        if (dateInput) {
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.setAttribute('min', today);
-        }
+        event.currentTarget.classList.add('active');
+        document.getElementById('tab-' + tabId).classList.add('active');
+    }
 
-        // 2. STICKY NAVBAR SHADOW EFFECT
-        const header = document.getElementById('headerNav');
+    // ĐÓNG MỞ MODAL XÁC NHẬN
+    function openModal() { document.getElementById('successModal').classList.add('open'); }
+    function closeModal() { document.getElementById('successModal').classList.remove('open'); }
+
+    // HÀM HIỂN THỊ TOAST THÔNG BÁO NHANH
+    function showToast(msg) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `✅ ${msg}`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Khóa chọn ngày quá khứ
+        const dateIn = document.getElementById('dateInput');
+        if(dateIn) dateIn.setAttribute('min', new Date().toISOString().split('T')[0]);
+
+        // Ẩn hiện nút cuộn trang đầu
+        const btt = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 10) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
+            if(window.scrollY > 400) btt.classList.add('visible'); else btt.classList.remove('visible');
+            if(window.scrollY > 20) document.getElementById('headerNav').classList.add('scrolled'); else document.getElementById('headerNav').classList.remove('scrolled');
         });
+        btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
-        // 3. BACK TO TOP BUTTON LOGIC
-        const backToTopBtn = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 400) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // 4. SCROLL REVEAL ANIMATIONS (Hiệu ứng cuộn)
+        // Hiệu ứng Reveal on Scroll
         const reveals = document.querySelectorAll('.reveal');
-        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-        const revealObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target);
-            });
-        }, revealOptions);
-        reveals.forEach(reveal => revealObserver.observe(reveal));
+        const revObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('active'); } });
+        }, {threshold: 0.05});
+        reveals.forEach(r => revObserver.observe(r));
 
-        // 5. FAQ ACCORDION LOGIC
-        const faqs = document.querySelectorAll('.faq-question');
-        faqs.forEach(faq => {
-            faq.addEventListener('click', () => {
-                const parent = faq.parentElement;
-                const answer = faq.nextElementSibling;
-                
-                // Đóng các FAQ khác đang mở (Tùy chọn)
-                document.querySelectorAll('.faq-item').forEach(item => {
-                    if (item !== parent) {
-                        item.classList.remove('active');
-                        item.querySelector('.faq-answer').style.maxHeight = null;
-                    }
-                });
-
-                // Bật/tắt FAQ hiện tại
-                parent.classList.toggle('active');
-                if (parent.classList.contains('active')) {
-                    answer.style.maxHeight = answer.scrollHeight + "px";
-                } else {
-                    answer.style.maxHeight = null;
-                }
+        // FAQ Toggle Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const ans = q.nextElementSibling;
+                item.classList.toggle('active');
+                if(item.classList.contains('active')) ans.style.maxHeight = ans.scrollHeight + "px"; else ans.style.maxHeight = null;
             });
         });
-        // 6. XỬ LÝ MENU MOBILE
+
+        // Xử lý Menu Mobile 3 gạch
         const menuBtn = document.getElementById('menuBtn');
         const menuNavbar = document.getElementById('menuNavbar');
-        if (menuBtn && menuNavbar) {
-            menuBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                menuNavbar.classList.toggle('show');
-            });
-            document.addEventListener('click', function(e) {
-                if(!menuNavbar.contains(e.target) && e.target !== menuBtn) {
-                    menuNavbar.classList.remove('show');
-                }
-            });
-            menuNavbar.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => menuNavbar.classList.remove('show'));
-            });
-        }
+        menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuNavbar.classList.toggle('show'); });
+        document.addEventListener('click', () => menuNavbar.classList.remove('show'));
 
-        // 7. TOAST NOTIFICATION HỆ THỐNG
-        function showToast(message, type = 'success') {
-            const toastContainer = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            const icon = type === 'success' ? '✅' : '❌';
-            toast.innerHTML = `<span class="toast-icon">${icon}</span> <span>${message}</span>`;
-            
-            toastContainer.appendChild(toast);
-            
-            // Kích hoạt animation slide-in
-            setTimeout(() => toast.classList.add('show'), 10);
-            
-            // Tự động ẩn sau 4 giây
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400); // Đợi animation CSS xong
-            }, 4000);
-        }
+        // XỬ LÝ GỬI FORM CHUYÊN NGHIỆP QUA AJAX FORMSUBMIT
+        const form = document.getElementById('bookingForm');
+        const sBtn = document.getElementById('submitBtn');
+        const bTxt = document.getElementById('btnText');
+        const bSpin = document.getElementById('btnSpinner');
 
-        // 8. XỬ LÝ GỬI FORM CHUYÊN NGHIỆP QUA AJAX FORMSUBMIT
-        const bookingForm = document.getElementById('bookingForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText = document.getElementById('btnText');
-        const btnSpinner = document.getElementById('btnSpinner');
-
-        if (bookingForm) {
-            bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault(); 
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
                 
-                // Thu thập dữ liệu
-                const formData = new FormData(bookingForm);
-                const data = {};
-                formData.forEach((value, key) => { data[key] = value; });
+                sBtn.disabled = true;
+                bTxt.innerText = "Đang xử lý gửi...";
+                bSpin.style.display = "inline-block";
 
-                // Thay đổi trạng thái Nút thành Loading
-                submitBtn.disabled = true;
-                btnText.innerText = "Đang xử lý...";
-                btnSpinner.style.display = "inline-block";
+                const fData = new FormData(form);
+                const obj = {};
+                fData.forEach((val, key) => { obj[key] = val; });
 
-                // Gửi API
                 fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                     method: "POST",
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(data)
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(obj)
                 })
-                .then(response => response.json())
-                .then(result => {
-                    if(result.success === "true" || result.success === true) {
-                        bookingForm.reset(); 
-                        showToast("Đặt lịch thành công! Kỹ thuật viên sẽ gọi lại cho bạn.", "success");
+                .then(r => r.json())
+                .then(res => {
+                    if(res.success === "true" || res.success === true) {
+                        form.reset();
+                        openModal(); // Hiện cửa sổ Pop-up chúc mừng đặt lịch thành công lên màn hình
                     } else {
-                        showToast("Hệ thống quá tải, xin vui lòng gọi điện thẳng qua Hotline!", "error");
+                        alert("Hệ thống lỗi, hãy thử gửi lại hoặc gọi Hotline!");
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast("Lỗi mạng, hãy kiểm tra lại kết nối Wifi/3G của bạn!", "error");
+                .catch(err => {
+                    console.error(err);
+                    alert("Có lỗi mạng kết nối xảy ra!");
                 })
                 .finally(() => {
-                    // Trả nút về trạng thái bình thường
-                    submitBtn.disabled = false;
-                    btnText.innerText = "Gửi Yêu Cầu Đặt Lịch";
-                    btnSpinner.style.display = "none";
+                    sBtn.disabled = false;
+                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch Hẹn";
+                    bSpin.style.display = "none";
                 });
             });
         }
