@@ -12,10 +12,46 @@
     <meta property="og:description" content="Sửa chữa laptop, PC, cài Windows nhanh chóng tại Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0f172a">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Tran Hoa Computer",
+      "description": "Trung tâm sửa chữa máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên. Chuyên laptop, PC, cài Windows, cứu dữ liệu.",
+      "url": "https://tranhoacomputer.github.io/",
+      "telephone": "+84963284044",
+      "email": "hoaptdt2005@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gần trường THPT Nguyễn Huệ, Phú Thịnh",
+        "addressLocality": "Đại Từ",
+        "addressRegion": "Thái Nguyên",
+        "addressCountry": "VN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 21.65631,
+        "longitude": 105.60261
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "07:00",
+        "closes": "22:00"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": "500"
+      },
+      "priceRange": "₫₫",
+      "image": "https://tranhoacomputer.github.io/og-image.png"
+    }
+    </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
+        <style>
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
@@ -32,35 +68,44 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif !important; }
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; scroll-behavior: smooth; }
         a, button, input, select { transition: all 0.3s ease; }
-                .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--primary), #38bdf8); z-index: 9999; transition: width 0.1s linear; border-radius: 0 2px 2px 0; }
+        @keyframes pulse-ring {
+            0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.5); }
+            70%  { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
+        }
+        .float-btn.call { animation: pulse-ring 2s ease-out infinite; }
+        .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
         .top-bar .time { color: #38bdf8; }
-        .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; }
-        
+        .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; cursor: pointer; }
+        .shop-open  { display:inline-block; background:#16a34a; color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:4px; }
+        .shop-closed{ display:inline-block; background:#dc2626; color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:4px; }
+        html { scroll-padding-top: 75px; }
         .header-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
         .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
         .logo-animation { font-size: 22px; font-weight: 900; text-transform: uppercase; background: linear-gradient(to right, var(--dark), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }
         .slogan-animation { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--accent-orange); margin-top: 2px; }
-        
         .nav-menu { display: flex; gap: 24px; align-items: center; }
         .nav-menu a { color: var(--dark); text-decoration: none; font-size: 14px; font-weight: 600; position: relative; }
         .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--primary); transition: width 0.3s; }
         .nav-menu a:hover::after { width: 100%; }
-
         .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 100px 20px; position: relative; }
         .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 20px 20px; }
         .hero-tag { background-color: rgba(255,255,255,0.1); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; }
         .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
-        
+        .hero-cta { display: flex; justify-content: center; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+        .hero-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: #fff; padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 15px; text-decoration: none; box-shadow: 0 4px 20px rgba(37,99,235,0.45); transition: all 0.3s; }
+        .hero-btn-primary:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,99,235,0.55); }
+        .hero-btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.12); color: #fff; padding: 14px 28px; border-radius: 40px; font-weight: 700; font-size: 15px; text-decoration: none; border: 1.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(8px); transition: all 0.3s; }
+        .hero-btn-secondary:hover { background: rgba(255,255,255,0.22); transform: translateY(-2px); }
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
         .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; }
         .section-title::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
-        
         .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
         .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
         .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
         .live-counter-badge { display: inline-flex; align-items: center; gap: 6px; background-color: #f0fdf4; color: var(--accent-green); border: 1px dashed #bbf7d0; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; margin-bottom: 20px; animation: pulseGlow 2.5s infinite ease-in-out; }
         @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: var(--bg-body); outline: none; }
@@ -72,20 +117,17 @@
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
         .tab-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 25px; }
         .tab-btn { padding: 12px 24px; border-radius: 30px; border: 1.5px solid var(--border-color); background: #fff; font-weight: 700; font-size: 14px; color: var(--text-light); cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 14px rgba(37,99,235,0.25); }
         .price-table-section { display: none; }
         .price-table-section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .table-responsive { width: 100%; background-color: var(--bg-card); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid var(--border-color); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         th, td { border: 1px solid #f1f5f9; padding: 16px 14px; font-size: 14px; }
         th { background-color: #f1f5f9; color: var(--dark); font-weight: 700; text-transform: uppercase; font-size: 13px; text-align: center; }
         .badge-time { display: inline-block; background-color: #f0fdf4; color: var(--accent-green); font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 6px; border: 1px solid #bbf7d0; }
-        
         @media (min-width: 768px) {
             th:nth-child(1), td:nth-child(1) { width: 8%; text-align: center; }
             th:nth-child(2), td:nth-child(2) { width: 22%; font-weight: 700; color: var(--primary); }
@@ -94,50 +136,40 @@
             tr:nth-child(even) { background-color: #f8fafc; }
             tr:hover { background-color: #f1f5f9; }
         }
-
         .commit-list { background-color: #fffbeb; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(245,158,11,0.05); border: 1px solid #fef3c7; margin-bottom: 40px; }
         .commit-list li { position: relative; padding-left: 32px; margin-bottom: 16px; font-size: 14.5px; list-style: none; text-align: justify; color: #451a03; font-weight: 500; }
         .commit-list li::before { content: "✓"; color: #d97706; background: #fffbeb; border: 1px solid #fde68a; width: 20px; height: 20px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; font-size: 12px; position: absolute; left: 0; top: 2px; }
-        
         .policy-grid, .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .policy-card { background: var(--bg-body); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); }
         .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.01); }
-
         .faq-item { border-bottom: 1px solid var(--border-color); }
         .faq-question { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--dark); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .faq-icon { font-size: 16px; transition: transform 0.3s; color: var(--primary); }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-light); font-size: 14px; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; color: var(--text-light); font-size: 14px; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
-
         .reveal { opacity: 0; transform: translateY(25px); transition: all 0.6s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #fff; border-left: 4px solid var(--accent-green); box-shadow: 0 10px 30px rgba(0,0,0,0.12); padding: 16px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform 0.3s ease; font-size: 14px; font-weight: 500; }
         .toast.show { transform: translateX(0); }
-
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 99999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .modal-overlay.open { opacity: 1; visibility: visible; }
         .modal-card { background: #fff; padding: 35px 25px; border-radius: 24px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: scale(0.8); transition: transform 0.3s ease; }
         .modal-overlay.open .modal-card { transform: scale(1); }
         .modal-success-icon { width: 65px; height: 65px; background: #ecfdf5; color: var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 20px; }
-
         .pc-floating-contact { position: fixed; bottom: 30px; right: 25px; display: flex; flex-direction: column; gap: 12px; z-index: 9000; }
         .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative; }
         .float-btn.call { background: var(--danger); animation: shake 2s infinite; }
         .float-btn.zalo { background: #0068ff; }
         @keyframes shake { 0%, 100% { transform: scale(1); } 10%, 30% { transform: scale(1.05) rotate(3deg); } 20%, 40% { transform: scale(1.05) rotate(-3deg); } }
-
         #backToTop { position: fixed; bottom: 95px; left: 20px; background: var(--dark); color: #fff; width: 42px; height: 42px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 8000; }
         #backToTop.visible { opacity: 1; visibility: visible; }
-
         .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 32px; flex-wrap: wrap; }
         .hero-stat { text-align: center; }
         .hero-stat .stat-num { font-size: 28px; font-weight: 900; color: #38bdf8; line-height: 1; }
         .hero-stat .stat-label { font-size: 12px; color: #cbd5e1; margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
         @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .counter-updated { animation: countUp 0.4s ease; }
-        
         .map-wrapper { border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-top: 16px; }
         .map-wrapper iframe { display: block; width: 100%; height: 200px; border: 0; }
         .menu-toggle { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--dark); }
@@ -145,7 +177,6 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-light); font-size: 11px; font-weight: 600; flex: 1; gap: 4px; }
         .nav-item.active-booking { color: var(--primary); }
         .booking-icon-wrapper { background-color: var(--primary); color: white; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(37,99,235,0.3); margin-top: -26px; border: 4px solid #fff; font-size: 18px; }
-
         @media (max-width: 767px) {
             body { padding-bottom: 85px !important; }
             .top-bar { flex-direction: column; gap: 6px; text-align: center; }
@@ -156,10 +187,11 @@
             .menu-toggle { display: block; }
             .nav-menu { display: flex; width: 100%; flex-direction: column; gap: 0; background-color: #fff; position: absolute; top: 100%; left: 0; border-bottom: 1px solid var(--border-color); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
             .nav-menu.show { max-height: 350px; }
-            .nav-menu a { width: 100%; padding: 14px 20px; border-bottom: 1px solid #f1f5f9; }
+            .nav-menu a { width: 100%; padding: 0 20px; max-height: 0; overflow: hidden; border-bottom: 1px solid #f1f5f9; transition: padding 0.3s ease, max-height 0.3s ease; }
+            .nav-menu.show a { padding: 14px 20px; max-height: 60px; }
             .nav-menu a::after { display: none; }
             .bottom-nav { display: flex !important; }
-            table thead { display: none; }
+            table thead { display: none; height: 0; overflow: hidden; line-height: 0; }
             table, table tbody, table tr, table td { display: block; width: 100%; }
             table tr { border-bottom: 5px solid var(--bg-body); padding: 15px; background: #fff; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.01); }
             table td { border: none !important; padding: 5px 0 !important; font-size: 14px !important; }
@@ -174,6 +206,7 @@
     </style>
 </head>
 <body>
+    <div id="scroll-progress"></div>
     <div id="toast-container"></div>
 
     <div class="modal-overlay" id="successModal">
@@ -191,8 +224,8 @@
     </div>
 
     <div class="top-bar">
-        <div class="time">🕒 Giờ mở cửa: 07:00 - 22:00 (Thứ 2 - Chủ Nhật)</div>
-        <div>📞 Hotline Kỹ Thuật: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
+        <div class="time">🕒 Giờ mở cửa: 07:00 - 22:00 (Thứ 2 - Chủ Nhật)  <span id="shopStatus"></span></div>
+        <div>📞 Hotline Kỹ Thuật: <a href="tel:0963284044" class="phone" onclick="copyPhone(event)">0963.284.044</a></div>
     </div>
     
     <div class="header-nav" id="headerNav">
@@ -217,10 +250,15 @@
         <p>Đơn vị chuyên cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối. CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</p>
     
         <div class="hero-stats">
-            <div class="hero-stat"><div class="stat-num" data-target="+0">0</div><div class="stat-label">Khách hàng</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="+5">0</div><div class="stat-label">Ngày kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Khách hàng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Ngày kinh nghiệm</div></div>
             <div class="hero-stat"><div class="stat-num" data-target="99">0</div><div class="stat-label">% Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
+        </div>
+
+        <div class="hero-cta">
+            <a href="#datlich-sua-chua" class="hero-btn-primary" onclick="event.preventDefault(); document.getElementById('datlich-sua-chua').scrollIntoView({behavior:'smooth', block:'start'});">📅 Đặt Lịch Ngay</a>
+            <a href="tel:0963284044" class="hero-btn-secondary">📞 Gọi Tư Vấn Miễn Phí</a>
         </div>
     </div>
     
@@ -266,6 +304,20 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label>Loại dịch vụ cần *</label>
+                    <select name="service-type" id="selectService" class="form-control" required>
+                        <option value="">-- Chọn dịch vụ --</option>
+                        <option value="Sửa Phần Cứng Laptop">💻 Sửa Phần Cứng Laptop</option>
+                        <option value="Sửa Phần Cứng PC">🖥️ Sửa Phần Cứng PC / Máy bàn</option>
+                        <option value="Cài Windows / Phần Mềm">💿 Cài Windows / Phần Mềm</option>
+                        <option value="Vệ Sinh - Tra Keo Tản Nhiệt">🧹 Vệ Sinh / Tra Keo Tản Nhiệt</option>
+                        <option value="Cứu Dữ Liệu">💾 Cứu Dữ Liệu / Khôi Phục File</option>
+                        <option value="Nâng Cấp RAM / SSD">⚡ Nâng Cấp RAM / SSD</option>
+                        <option value="Ráp Máy Tính Gaming">🎮 Ráp Máy Tính Gaming</option>
+                        <option value="Khác">🔧 Khác (mô tả bên dưới)</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Tình trạng máy / Yêu cầu chi tiết</label>
                     <input type="text" name="note" id="inputNote" class="form-control" placeholder="Ví dụ: Laptop lỗi Win bật không lên, cần tra keo tản nhiệt...">
                 </div>
@@ -277,14 +329,14 @@
         </div>
                 <div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div>
         <div class="tab-container reveal">
-            <button class="tab-btn active" onclick="switchTab('hardware')">💻 Sửa Phần Cứng</button>
-            <button class="tab-btn" onclick="switchTab('software')">💿 Cài Phần Mềm</button>
+            <button class="tab-btn active" onclick="switchTab('hardware', this)">💻 Sửa Phần Cứng</button>
+            <button class="tab-btn" onclick="switchTab('software', this)">💿 Cài Phần Mềm</button>
         </div>
 
-        <div id="tab-hardware" class="price-table-section active reveal">
+        <div id="tab-hardware" class="price-table-section active">
             <div class="table-responsive">
                 <table>
-                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ</th></tr></thead>
+                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ Trọn Gói</th></tr></thead>
                     <tbody>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; <strong>Thay Nguồn mới</strong><br><span class="badge-time">⏱ Xử lý: 45 - 60 phút (Xem sửa trực tiếp)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)<br><span class="badge-time">⏱ Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
@@ -299,7 +351,7 @@
             </div>
         </div>
 
-        <div id="tab-software" class="price-table-section reveal">
+        <div id="tab-software" class="price-table-section">
             <div class="table-responsive">
                 <table>
                     <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ CÀI ĐẶT TRỌN GÓI</th></tr></thead>
@@ -405,7 +457,22 @@
         <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
             <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">💬 ĐỂ LẠI BÌNH LUẬN CỦA BẠN CHÚNG TÔI SẼ GIẢI ĐÁP</h3>
             <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.netlify.app" data-page-title="TRAN HOA COMPUTER"></div>
-            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+            <script>
+            (function() {
+                const el = document.getElementById('cusdis_thread');
+                if (!el) return;
+                const obs = new IntersectionObserver(function(entries) {
+                    if (entries[0].isIntersecting) {
+                        const s = document.createElement('script');
+                        s.src = 'https://cusdis.com/js/cusdis.es.js';
+                        s.async = true;
+                        document.body.appendChild(s);
+                        obs.disconnect();
+                    }
+                }, { rootMargin: '200px' });
+                obs.observe(el);
+            })();
+            </script>
         </div>
         
         <div class="reveal" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; border-radius: 16px; padding: 30px; text-align: center;">
@@ -423,14 +490,14 @@
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">📍 BẢN ĐỒ CỬA HÀNG</h4>
-                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:8px; font-size:13px;">Trường THPT Nguyễn Huệ, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <div class="map-wrapper">
-                    <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=21.65631,105.60261&output=embed&t=h&z=17&hl=vi" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">➔ THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">📍 Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">📍 Trường THPT Nguyễn Huệ, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">📞 Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
                 <p style="margin-bottom:6px;">✉️ Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></p>
             </div>
@@ -442,7 +509,7 @@
         <a href="tel:0963284044" class="nav-item" style="color: var(--accent-orange);"><span>📞</span><span>Gọi điện</span></a>
         <a href="#datlich-sua-chua" class="nav-item active-booking"><div class="booking-icon-wrapper">📅</div><span style="margin-top:-5px;">Đặt lịch</span></a>
         <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item" style="color: #0068ff;"><span>💬</span><span>Zalo</span></a>
-        <a href="#muc-bang-gia" class="nav-item"><span>💰</span><span>Bảng giá</span></a>
+        <a href="#muc-bang-gia" onclick="event.preventDefault(); goBangGia();" class="nav-item"><span>💰</span><span>Bảng giá</span></a>
     </div>
     <button id="backToTop">↑</button>
         <script>
@@ -451,15 +518,56 @@
     function fillDemoData() {
         document.getElementById('inputFullname').value = "Trần Văn A";
         document.getElementById('inputPhone').value = "0987654321";
-        document.getElementById('selectTime').value = "14:00 - 17:00";
+        document.getElementById('selectService').value = "Sửa Phần Cứng Laptop";
+        document.getElementById('selectTime').value = "9:00 - 11:30";
         document.getElementById('inputNote').value = "Máy tính bàn dùng tầm 15 phút là bị sập nguồn ngắt hẳn, quạt không quay.";
+        const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('dateInput').value = localDateStr(tomorrow);
         showToast("Đã tự động điền thông tin mẫu!");
     }
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    (function() {
+        const now = new Date();
+        const h = now.getHours() + now.getMinutes() / 60;
+        const el = document.getElementById('shopStatus');
+        if (el) {
+            if (h >= 7 && h < 22) {
+                el.innerHTML = '<span class="shop-open">🟢 Đang mở cửa</span>';
+            } else {
+                el.innerHTML = '<span class="shop-closed">🔴 Đã đóng cửa</span>';
+            }
+        }
+    })();
+
+    function copyPhone(e) {
+        e.preventDefault();
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText('0963284044').then(() => {
+                showToast('📋 Đã sao chép số điện thoại: 0963.284.044');
+            });
+        } else {
+            window.location.href = 'tel:0963284044';
+        }
+    }
+
+    function localDateStr(date) {
+        return [date.getFullYear(), String(date.getMonth()+1).padStart(2,'0'), String(date.getDate()).padStart(2,'0')].join('-');
+    }
+
+    function goBangGia() {
+        switchTab('hardware', null);
+        const section = document.getElementById('muc-bang-gia');
+        if (section) {
+            const top = section.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.price-table-section').forEach(sec => sec.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        const activeBtn = btn || document.querySelector('.tab-btn[onclick*="' + tabId + '"]');
+        if (activeBtn) activeBtn.classList.add('active');
         document.getElementById('tab-' + tabId).classList.add('active');
     }
 
@@ -512,12 +620,15 @@
         });
 
         const dateIn = document.getElementById('dateInput');
-        if(dateIn) dateIn.setAttribute('min', new Date().toISOString().split('T')[0]);
+        if(dateIn) dateIn.setAttribute('min', localDateStr(new Date()));
 
         const btt = document.getElementById('backToTop');
+        const progressBar = document.getElementById('scroll-progress');
         window.addEventListener('scroll', () => {
             if(window.scrollY > 400) btt.classList.add('visible'); else btt.classList.remove('visible');
             if(window.scrollY > 20) document.getElementById('headerNav').classList.add('scrolled'); else document.getElementById('headerNav').classList.remove('scrolled');
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            if (progressBar && docH > 0) progressBar.style.width = (window.scrollY / docH * 100) + '%';
         });
         btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
@@ -584,16 +695,16 @@
                             }
                         });
                     } else {
-                        alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
+                        showToast("⚠️ Hệ thống bận, vui lòng gọi trực tiếp Hotline 0963.284.044!");
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
+                    showToast("⚠️ Lỗi mạng, vui lòng kiểm tra kết nối Internet rồi thử lại!");
                 })
                 .finally(() => {
                     sBtn.disabled = false;
-                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
+                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch Hẹn";
                     bSpin.style.display = "none";
                 });
             });
