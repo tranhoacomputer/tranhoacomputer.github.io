@@ -999,7 +999,6 @@
     <div class="header-nav" id="headerNav">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1152px; margin: 0 auto;">
             <div style="cursor: pointer; display: flex; align-items: center; gap: 12px;" onclick="window.scrollTo(0,0)">
-                <!-- Thêm ảnh Logo.png nội bộ từ Repo của bạn -->
                 <img src="logo.png" alt="Logo Tran Hoa Computer" style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 10px rgba(0,0,0,0.15);" />
                 <div>
                     <h1 class="logo-animation">Tran Hoa Computer</h1>
@@ -1194,7 +1193,7 @@
             </div>
         </div>
 
-        <!-- KHỐI HOẠT ĐỘNG THỰC TẾ (Mới cập nhật bổ sung ảnh) -->
+        <!-- KHỐI HOẠT ĐỘNG THỰC TẾ -->
         <div id="hoat-dong-thuc-te" class="section-title reveal">HÌNH ẢNH HOẠT ĐỘNG THỰC TẾ</div>
         <p style="text-align: center; color: var(--text-light); margin-bottom: 30px; font-size: 14px;">Hình ảnh ghi nhận kỹ thuật viên làm việc trực tiếp tại cửa hàng, minh bạch và chuyên nghiệp.</p>
         
@@ -1362,7 +1361,7 @@
 
     <!-- TOÀN BỘ SCRIPT XỬ LÝ LOGIC WEBSITE -->
     <script>
-        // Thiết lập ngày tối thiểu trong Form Đặt lịch (chỉ cho đặt từ ngày hiện tại)
+        // Thiết lập ngày tối thiểu trong Form Đặt lịch (chú cho đặt từ ngày hiện tại)
         const dateInput = document.getElementById('dateInput');
         if(dateInput){
             const today = new Date().toISOString().split('T')[0];
@@ -1464,7 +1463,7 @@
             }, 12000);
         }
 
-        // Tự động kiểm tra cập nhật giờ đóng mở cửa thời gian thực của tiệm
+        // Tự động kiểm tra cập nhật trạng thái đóng mở cửa thời gian thực của tiệm
         function updateShopStatus() {
             const statusEl = document.getElementById('shopStatus');
             if(!statusEl) return;
