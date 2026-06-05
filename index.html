@@ -122,11 +122,6 @@
         .modal-card { background: #fff; padding: 35px 25px; border-radius: 24px; max-width: 450px; width: 90%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: scale(0.8); transition: transform 0.3s ease; }
         .modal-overlay.open .modal-card { transform: scale(1); }
         .modal-success-icon { width: 65px; height: 65px; background: #ecfdf5; color: var(--accent-green); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; margin: 0 auto 20px; }
-
-        .pc-floating-contact { position: fixed; bottom: 30px; right: 25px; display: flex; flex-direction: column; gap: 12px; z-index: 9000; }
-        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 22px; text-decoration: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative; }
-        .float-btn.call { background: var(--danger); animation: shake 2s infinite; }
-        .float-btn.zalo { background: #0068ff; }
         @keyframes shake { 0%, 100% { transform: scale(1); } 10%, 30% { transform: scale(1.05) rotate(3deg); } 20%, 40% { transform: scale(1.05) rotate(-3deg); } }
 
         #backToTop { position: fixed; bottom: 95px; left: 20px; background: var(--dark); color: #fff; width: 42px; height: 42px; border-radius: 50%; border: none; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 8000; }
@@ -153,7 +148,6 @@
             .hero-section h2 { font-size: 26px; }
             .booking-form { padding: 30px 20px; }
             .form-row { flex-direction: column; gap: 0; }
-            .pc-floating-contact { display: none; }
             .menu-toggle { display: block; }
             .nav-menu { display: flex; width: 100%; flex-direction: column; gap: 0; background-color: #fff; position: absolute; top: 100%; left: 0; border-bottom: 1px solid var(--border-color); max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
             .nav-menu.show { max-height: 350px; }
@@ -244,6 +238,51 @@
         .form-control option  { font-weight: 400; color: var(--text-main); }
         #selectService { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236b7280' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 40px; appearance: none; -webkit-appearance: none; cursor: pointer; }
 
+        
+        /* ---- Shop status pulse animation ---- */
+        @keyframes pulseDot {
+            0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+            70%  { box-shadow: 0 0 0 8px rgba(34,197,94,0); }
+            100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+        }
+
+        /* ---- FAQ accordion ---- */
+        .faq-list { display: flex; flex-direction: column; gap: 10px; }
+        .faq-item { background: #fff; border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; }
+        .faq-q {
+            width: 100%; background: none; border: none; padding: 18px 20px;
+            display: flex; justify-content: space-between; align-items: center; gap: 12px;
+            cursor: pointer; font-size: 14px; font-weight: 700; color: var(--dark);
+            text-align: left; transition: background .2s;
+        }
+        .faq-q:hover { background: #f8fafc; }
+        .faq-q.open { color: var(--primary); }
+        .faq-q.open .faq-icon { transform: rotate(45deg); color: var(--primary); }
+        .faq-icon { font-size: 20px; font-weight: 300; flex-shrink: 0; transition: transform .3s; }
+        .faq-a {
+            max-height: 0; overflow: hidden; padding: 0 20px;
+            font-size: 13.5px; color: var(--text-main); line-height: 1.7;
+            transition: max-height .35s ease, padding .35s ease;
+        }
+        .faq-a.open { max-height: 300px; padding: 0 20px 18px; }
+
+        /* ---- Hide desktop float buttons on mobile (has bottom-nav instead) ---- */
+        @media (min-width: 768px) { .bottom-nav { display: none !important; } }
+
+        
+        /* ---- Phone shake animation ---- */
+        @keyframes shakePhone {
+            0%, 60%, 100% { transform: rotate(0deg) scale(1); }
+            65%  { transform: rotate(-12deg) scale(1.05); }
+            70%  { transform: rotate(10deg)  scale(1.05); }
+            75%  { transform: rotate(-8deg)  scale(1.05); }
+            80%  { transform: rotate(6deg)   scale(1.05); }
+            85%  { transform: rotate(-4deg)  scale(1.05); }
+            90%  { transform: rotate(0deg)   scale(1); }
+        }
+        /* ---- Hide float call on mobile (has bottom nav instead) ---- */
+        @media (max-width: 767px) { #floatBtnGroup { display: none !important; } }
+
         </style>
 </head>
 <body>
@@ -258,14 +297,17 @@
         </div>
     </div>
 
-    <div class="pc-floating-contact">
-        <a href="tel:0963284044" class="float-btn call" title="Gọi Ngay Tư Vấn">📞</a>
-        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="float-btn zalo" title="Chat Zalo Kỹ Thuật">💬</a>
-    </div>
+
 
     <div class="top-bar">
-        <div class="time">🕒 Giờ mở cửa: 07:00 - 22:00 (Thứ 2 - Chủ Nhật)</div>
-        <div>📞 Hotline Kỹ Thuật: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
+        <div class="time" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span>🕒 07:00 – 22:00 (T2 – CN)</span>
+            <span id="shopStatusBadgeTopbar" style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.15);border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700;">
+                <span id="shopDot2" style="width:8px;height:8px;border-radius:50%;background:#22c55e;animation:pulseDot 2s infinite;display:inline-block;flex-shrink:0;"></span>
+                <span id="shopStatusText2">...</span>
+            </span>
+        </div>
+        <div>📞 Hotline: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
     </div>
     
     <div class="header-nav" id="headerNav">
@@ -285,6 +327,7 @@
                 <a href="#muc-bang-gia">💰 Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">🛡️ Bảo hành</a>
                 <a href="#danh-gia-khach-hang">💬 Đánh giá</a>
+            <a href="#cau-hoi-thuong-gap" onclick="event.preventDefault();document.getElementById('cau-hoi-thuong-gap').scrollIntoView({behavior:'smooth'});">❓ FAQ</a>
             </div>
             <button class="menu-toggle" id="menuBtn">☰</button>
         </div>
@@ -452,41 +495,6 @@
             </div>
         </div>
 
-        <div class="section-title reveal">CÂU HỎI THƯỜNG GẶP</div>
-        <div style="background: #fff; border-radius:16px; padding:10px 24px; margin-bottom:40px; border:1px solid var(--border-color);" class="reveal">
-            <div class="faq-item">
-                <button class="faq-question">Thay thế nâng cấp ổ cứng SSD mất thời gian bao lâu? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Quy trình tháo ráp thay thế ổ cứng SSD mới và cài đặt lại hệ điều hành Windows đồng bộ phần mềm diễn ra chỉ từ 30 - 45 phút, khách ngồi xem trực tiếp lấy ngay.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Dữ liệu quan trọng cũ trong máy có bị mất đi khi sửa phần cứng? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Chúng tôi luôn đặt an toàn dữ liệu của khách lên hàng đầu. Kỹ thuật viên luôn thực hiện sao lưu (backup) cẩn thận dữ liệu ở ổ cũ sang ổ mới trước khi can thiệp phần cứng hay sửa nguồn máy.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Cửa hàng có cam kết linh kiện thay thế là chính hãng không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">100% linh kiện thay thế tại Tran Hoa Computer (SSD, RAM, sạc, màn hình...) đều là hàng chính hãng, có nguồn gốc rõ ràng và nguyên seal. Khách hàng được ký tên lên linh kiện để đảm bảo minh bạch tuyệt đối.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Giá ghi trên bảng giá đã bao gồm công thợ chưa, có phát sinh gì không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Bảng giá dịch vụ tại cửa hàng luôn được công khai niêm yết rõ ràng. Khi kiểm tra máy xong, kỹ thuật viên sẽ báo trọn gói một giá duy nhất cho bạn, cam kết không phát sinh bất kỳ khoản chi phí ẩn nào sau khi sửa xong.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Nếu máy tính của tôi chỉ bị lỗi phần mềm nhỏ thì có sửa từ xa được không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Hoàn toàn được! Đối với các lỗi nhỏ như cài phần mềm văn phòng, lỗi driver máy in, quét virus vặt, bạn chỉ cần tải UltraViewer hoặc TeamViewer. Chúng tôi sẽ kết nối hỗ trợ xử lý từ xa qua mạng và dịch vụ này là <strong>MIỄN PHÍ HOÀN TOÀN</strong>.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Chính sách bảo hành sau khi sửa chữa tại tiệm như thế nào? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Mọi dịch vụ sửa chữa phần cứng và thay thế linh kiện tại tiệm đều đi kèm phiếu bảo hành rõ ràng từ 3 đến 12 tháng. Trong thời gian bảo hành, nếu linh kiện phát sinh lỗi do nhà sản xuất, cửa hàng sẽ tiến hành <strong>1 đổi 1 mới tinh</strong> ngay lập tức.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Tôi có thể mang máy đến kiểm tra lỗi mà không sửa thì có mất phí không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Không mất một đồng nào! Tran Hoa Computer áp dụng chính sách kiểm tra máy miễn phí trọn đời cho mọi khách hàng. Kỹ thuật viên sẽ kiểm tra, báo lỗi và báo giá. Nếu bạn chưa muốn sửa, bạn có thể nhận lại máy nguyên vẹn mà không tốn bất kỳ chi phí kiểm tra nào.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Thời gian mở cửa của tiệm như thế nào, ngày lễ Tết có làm việc không? <span class="faq-icon">▼</span></button>
-                <div class="faq-answer"><p style="padding-bottom:15px;">Cửa hàng mở cửa liên tục từ 07:00 đến 22:00 tất cả các ngày trong tuần (Thứ 2 đến Chủ Nhật), kể cả các ngày lễ để phục vụ tối đa nhu cầu cấp bách của quý khách. Bạn nên sử dụng tính năng đặt lịch trên web trước để tiệm sắp xếp thợ phục vụ nhanh nhất.</p></div>
-            </div>
-        </div>
         
         <div id="danh-gia-khach-hang" class="section-title reveal">KHÁCH HÀNG ĐÁNH GIÁ</div>
         <div class="review-grid reveal">
@@ -512,6 +520,76 @@
             </div>
         </div>
         
+        <!-- FAQ SECTION -->
+        <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
+            <div class="section-title">❓ CÂU HỎI THƯỜNG GẶP</div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Sửa xong máy bao lâu thì lấy được?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Đa số các lỗi phần mềm (cài Win, diệt virus, Office) hoàn thành trong <strong>30–60 phút</strong>. Lỗi phần cứng thông thường (thay pin, thay màn hình, nâng cấp RAM/SSD) từ <strong>1–3 tiếng</strong>. Sửa bo mạch, IC nguồn phức tạp có thể cần <strong>1–3 ngày</strong>. Anh Hòa sẽ báo thời gian cụ thể ngay khi kiểm tra máy.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Dữ liệu của mình có bị mất không khi sửa?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Cửa hàng <strong>cam kết bảo mật dữ liệu tuyệt đối</strong>. Trước mọi thao tác cài lại hệ điều hành, kỹ thuật viên sẽ hỏi và backup dữ liệu quan trọng của bạn trước. Dữ liệu khách hàng không bao giờ bị sao chép hay chia sẻ ra ngoài.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Linh kiện thay thế có chính hãng không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">100% linh kiện sử dụng tại cửa hàng là <strong>hàng chính hãng, có tem/seal đầy đủ</strong>. Cửa hàng không dùng linh kiện tháo máy hay không rõ nguồn gốc. Khách hàng được xem và kiểm tra linh kiện trực tiếp trước khi lắp.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Sửa xong có bảo hành không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Có. Linh kiện thay thế được bảo hành <strong>3–12 tháng</strong> tùy loại. Lỗi phần mềm (cài Win, diệt virus) bảo hành <strong>30 ngày</strong>. Nếu máy hỏng lại đúng lỗi cũ trong thời gian bảo hành, sửa miễn phí hoàn toàn.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Mang máy đến hay gọi kỹ thuật viên đến nhà?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Hiện tại cửa hàng phục vụ chủ yếu tại địa chỉ <strong>Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</strong>. Bạn có thể đặt lịch trước qua form trên web hoặc gọi trực tiếp số <strong>0963.284.044</strong> để không phải chờ lâu.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Có được xem kỹ thuật viên sửa trực tiếp không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Hoàn toàn được! Cửa hàng khuyến khích khách <strong>xem trực tiếp quá trình sửa chữa</strong>. Điều này đảm bảo bạn biết chính xác máy bị lỗi gì, kỹ thuật viên làm gì, và không lo bị tráo linh kiện hay thu thêm phí không rõ ràng.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Giá dịch vụ đã bao gồm công thợ chưa, có phát sinh không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Bảng giá luôn được niêm yết công khai rõ ràng. Khi kiểm tra máy xong, kỹ thuật viên báo trọn gói <strong>một giá duy nhất</strong> — tuyệt đối không phát sinh bất kỳ chi phí ẩn nào sau khi sửa xong.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Lỗi phần mềm nhỏ có thể sửa từ xa không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a">Hoàn toàn được! Với các lỗi nhỏ như cài phần mềm văn phòng, lỗi driver máy in, quét virus vặt — bạn chỉ cần tải <strong>UltraViewer hoặc TeamViewer</strong>. Cửa hàng hỗ trợ kết nối và xử lý từ xa, dịch vụ này <strong>hoàn toàn miễn phí</strong>.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)">
+                        <span>Mang máy đến kiểm tra lỗi mà không muốn sửa có mất phí không?</span>
+                        <span class="faq-icon">＋</span>
+                    </button>
+                    <div class="faq-a"><strong>Không mất một đồng nào!</strong> Tran Hoa Computer áp dụng chính sách <strong>kiểm tra máy miễn phí trọn đời</strong>. Kỹ thuật viên kiểm tra, báo lỗi, báo giá — nếu bạn chưa muốn sửa, nhận lại máy nguyên vẹn hoàn toàn miễn phí.</div>
+                </div>
+            </div>
+        </div>
+
         <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
             <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">💬 ĐỂ LẠI BÌNH LUẬN CỦA BẠN CHÚNG TÔI SẼ GIẢI ĐÁP</h3>
             <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.netlify.app" data-page-title="TRAN HOA COMPUTER"></div>
@@ -614,11 +692,29 @@
         }
 
         function fillDemoData() {
+        // Fill text fields
         document.getElementById('inputFullname').value = "Trần Văn A";
         document.getElementById('inputPhone').value = "0987654321";
         document.getElementById('selectService').value = "cai-win";
         updateServiceNote('cai-win');
-        document.getElementById('selectTime').value = "14:00 - 17:00";
+        // Auto-fill date: tomorrow (Vietnam time)
+        const vnNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+        vnNow.setDate(vnNow.getDate() + 1);
+        const yyyy = vnNow.getFullYear();
+        const mm   = String(vnNow.getMonth() + 1).padStart(2, '0');
+        const dd   = String(vnNow.getDate()).padStart(2, '0');
+        const dateEl = document.getElementById('dateInput');
+        if (dateEl) dateEl.value = yyyy + '-' + mm + '-' + dd;
+        // Auto-fill time slot (must match an existing <option> value)
+        const timeEl = document.getElementById('selectTime');
+        if (timeEl) {
+            // Pick first afternoon slot available
+            const preferred = ['13:00 - 15:00', '15:00 - 18:00', '9:00 - 11:30', '7:00 - 9:00'];
+            for (const opt of preferred) {
+                const found = Array.from(timeEl.options).find(o => o.value === opt);
+                if (found) { timeEl.value = opt; break; }
+            }
+        }
         document.getElementById('inputNote').value = "Máy tính bàn dùng tầm 15 phút là bị sập nguồn ngắt hẳn, quạt không quay.";
         showToast("Đã tự động điền thông tin mẫu!");
     }
@@ -766,7 +862,76 @@
             });
         }
     });
+    
+        // ---- Scroll progress bar ----
+        window.addEventListener('scroll', function() {
+            const el = document.getElementById('scrollProgressBar');
+            if (!el) return;
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            el.style.width = (docH > 0 ? (scrollTop / docH) * 100 : 0) + '%';
+        });
+
+        // ---- Shop open/closed badge (Vietnam UTC+7, open 07:00–22:00) ----
+        (function updateShopStatus() {
+            const dot  = null; // removed hero badge
+            const txt  = null; // removed hero badge
+            // Get current Vietnam time
+            const now = new Date();
+            const vnTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+            const h = vnTime.getHours();
+            const m = vnTime.getMinutes();
+            const totalMin = h * 60 + m;
+            const openMin  = 7 * 60;   // 07:00
+            const closeMin = 22 * 60;  // 22:00
+            const isOpen = totalMin >= openMin && totalMin < closeMin;
+
+            // Next open time string
+            function nextOpenStr() {
+                if (totalMin < openMin) return 'Mở cửa lúc 7:00 sáng hôm nay';
+                return 'Mở cửa lúc 7:00 sáng ngày mai';
+            }
+            // Minutes until close
+            function minsUntilClose() {
+                const mins = closeMin - totalMin;
+                if (mins <= 60) return ' · Đóng cửa sau ' + mins + ' phút';
+                return '';
+            }
+
+            // Update topbar badge
+            const dot2 = document.getElementById('shopDot2');
+            const txt2 = document.getElementById('shopStatusText2');
+            if (isOpen) {
+                if (dot2) { dot2.style.background = '#22c55e'; dot2.style.animation = 'pulseDot 2s infinite'; }
+                if (txt2) txt2.textContent = 'Đang mở cửa' + minsUntilClose();
+            } else {
+                if (dot2) { dot2.style.background = '#ef4444'; dot2.style.animation = 'none'; }
+                if (txt2) txt2.textContent = 'Đã đóng · ' + nextOpenStr();
+            }
+        })();
+
+        // ---- FAQ accordion ----
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const ans  = item.querySelector('.faq-a');
+            const isOpen = ans.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+            document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+            // Toggle clicked
+            if (!isOpen) {
+                ans.classList.add('open');
+                btn.classList.add('open');
+            }
+        }
+
     </script>
+<div id="floatBtnGroup" style="position:fixed;right:20px;bottom:95px;z-index:9000;display:flex;flex-direction:column;gap:12px;">
+    <a id="floatCallBtn" href="tel:0963284044" title="Gọi ngay: 0963.284.044"
+       style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#16a34a;color:#fff;border-radius:50%;text-decoration:none;font-size:24px;box-shadow:0 4px 20px rgba(22,163,74,0.45);animation:shakePhone 3s ease-in-out infinite;">📞</a>
+    <a id="floatZaloBtn" href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" title="Tham gia nhóm Zalo"
+       style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#0068ff;color:#fff;border-radius:50%;text-decoration:none;box-shadow:0 4px 20px rgba(0,104,255,0.45);animation:shakePhone 3s ease-in-out 1.5s infinite;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="26" height="26" fill="#fff"><path d="M24 4C13 4 4 13 4 24c0 3.7 1 7.1 2.8 10L4 44l10.3-2.7C17.1 43 20.4 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.2 0-6.2-.9-8.8-2.5l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.1 30.1 7.2 27.1 7.2 24 7.2 14.7 14.7 7.2 24 7.2S40.8 14.7 40.8 24 33.3 40 24 40zm10.5-15.3c-.6-.3-3.4-1.7-3.9-1.9-.5-.2-.9-.3-1.3.3-.4.6-1.5 1.9-1.8 2.2-.3.4-.7.4-1.2.1-.6-.3-2.4-.9-4.6-2.8-1.7-1.5-2.8-3.4-3.2-3.9-.3-.6 0-.9.3-1.2.3-.3.6-.7.9-1 .3-.3.4-.6.6-1 .2-.4.1-.7 0-1-.1-.3-1.3-3.1-1.8-4.2-.5-1.1-.9-.9-1.3-.9h-1.1c-.4 0-1 .1-1.5.7-.5.6-2 2-2 4.8 0 2.9 2.1 5.6 2.4 6 .3.4 4.1 6.3 10 8.8 5.8 2.5 5.8 1.7 6.9 1.6 1.1-.1 3.4-1.4 3.9-2.7.5-1.3.5-2.4.3-2.7-.1-.2-.5-.4-1.1-.7z"/></svg></a>
+</div>
 </body>
 </html>
 
