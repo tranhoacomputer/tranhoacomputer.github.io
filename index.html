@@ -108,7 +108,14 @@
         
         .header-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
         .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
-        .logo-animation { font-size: 22px; font-weight: 900; text-transform: uppercase; background: linear-gradient(to right, var(--dark), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; }
+        .logo-animation {
+            font-size: 23px; font-weight: 900; text-transform: uppercase;
+            background: linear-gradient(90deg, #0f172a 0%, #2563eb 40%, #38bdf8 60%, #0f172a 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            display: inline-block; animation: shimmerText 4s linear infinite;
+        }
+        @keyframes shimmerText { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
         .slogan-animation { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--accent-orange); margin-top: 2px; }
         
         .nav-menu { display: flex; gap: 24px; align-items: center; }
@@ -122,8 +129,8 @@
         .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
         
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
-        .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; }
-        .section-title::after { content: ''; display: block; width: 50px; height: 3px; background-color: var(--primary); margin: 10px auto 0; border-radius: 2px; }
+        .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
+        .section-title::after { content: ''; display: block; width: 50px; height: 3px; background: linear-gradient(90deg, var(--primary), #38bdf8, var(--accent-green)); margin: 10px auto 0; border-radius: 2px; }
         
         .booking-form { background-color: var(--bg-card); padding: 40px 35px; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06); margin-top: -60px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
         .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
@@ -179,8 +186,12 @@
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-light); font-size: 14px; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
-        .reveal { opacity: 0; transform: translateY(25px); transition: all 0.6s ease-out; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
 
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #fff; border-left: 4px solid var(--accent-green); box-shadow: 0 10px 30px rgba(0,0,0,0.12); padding: 16px 20px; border-radius: 8px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: transform 0.3s ease; font-size: 14px; font-weight: 500; }
@@ -238,9 +249,21 @@
     
         /* ---- Logo ---- */
         .brand-wrap { cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .logo-img-wrap { flex-shrink: 0; }
-        .logo-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover;
-                    border: 2px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
+        .logo-img-wrap { flex-shrink: 0; position: relative; }
+        .logo-img-wrap::after {
+            content: '';
+            position: absolute; inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #2563eb, #38bdf8, #10b981, #2563eb);
+            animation: logoRing 3s linear infinite;
+            z-index: -1;
+        }
+        @keyframes logoRing { to { transform: rotate(360deg); } }
+        .logo-img { width: 62px; height: 62px; border-radius: 50%; object-fit: cover;
+                    border: 3px solid #fff;
+                    box-shadow: 0 0 0 3px rgba(37,99,235,0.25), 0 4px 16px rgba(0,0,0,0.18);
+                    display: block; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .logo-img:hover { transform: scale(1.08); box-shadow: 0 0 0 4px rgba(37,99,235,0.4), 0 6px 24px rgba(37,99,235,0.3); }
 
         /* ---- Responsive: form row stacks on mobile ---- */
         @media (max-width: 600px) {
@@ -254,7 +277,7 @@
             .stat-label { font-size: 11px; }
             .logo-animation { font-size: 17px; }
             .slogan-animation { font-size: 10px; }
-            .logo-img { width: 40px; height: 40px; }
+            .logo-img { width: 48px; height: 48px; }
             .brand-wrap { gap: 8px; }
             .section-title { font-size: clamp(16px, 5vw, 22px); }
             .container { padding: 0 12px; }
@@ -352,7 +375,106 @@
         /* ---- Hide float call on mobile (has bottom nav instead) ---- */
         @media (max-width: 767px) { #floatBtnGroup { display: none !important; } }
 
-        </style>
+        
+        /* ── Floating particles in hero ── */
+        .hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; border-radius: 50%; opacity: 0; animation: floatUp linear infinite; }
+        @keyframes floatUp {
+            0%   { transform: translateY(0) scale(1);   opacity: 0; }
+            10%  { opacity: 0.55; }
+            90%  { opacity: 0.3; }
+            100% { transform: translateY(-120px) scale(0.4); opacity: 0; }
+        }
+        /* ── Hero heading glow ── */
+        .hero-section h2 { font-size: clamp(26px, 6vw, 48px); font-weight: 900; letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff 30%, #93c5fd 70%, #38bdf8 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: none; margin-bottom: 16px; }
+        /* ── Card hover lift ── */
+        .policy-card { transition: transform 0.28s ease, box-shadow 0.28s ease !important; cursor: default; }
+        .policy-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,0.13) !important; }
+        /* ── Review card hover ── */
+        .review-card { transition: transform 0.28s ease, box-shadow 0.28s ease !important; }
+        .review-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(37,99,235,0.15) !important; }
+        /* ── Back to top button ── */
+        #backToTop {
+            position: fixed; right: 20px; bottom: 170px; z-index: 8999;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #38bdf8);
+            color: #fff; border: none; cursor: pointer; font-size: 18px;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.4);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transform: translateY(12px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        #backToTop.visible { opacity: 1; transform: translateY(0); }
+        #backToTop:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); transform: translateY(-2px); }
+        @media (max-width: 767px) { #backToTop { display: none; } }
+        /* ── Bottom nav pulse on Đặt lịch ── */
+        .bottom-nav-cta-center { animation: pulseCTA 3s ease-in-out infinite; }
+        @keyframes pulseCTA {
+            0%, 100% { box-shadow: 0 4px 18px rgba(37,99,235,0.45); }
+            50%       { box-shadow: 0 4px 28px rgba(37,99,235,0.75), 0 0 0 6px rgba(37,99,235,0.12); }
+        }
+        /* ── Consistent mobile typography ── */
+        @media (max-width: 600px) {
+            .hero-section { padding: 50px 16px 80px; }
+            .hero-section p { font-size: 14px; line-height: 1.75; text-align: center; padding: 0 4px; }
+            .hero-tag { font-size: 12px; padding: 5px 14px; }
+            .section-title { font-size: clamp(15px, 4.5vw, 20px); padding: 0 12px; }
+            .hero-stats { gap: 10px; }
+            .hero-stat { min-width: 70px; }
+            .stat-num { font-size: clamp(22px, 6vw, 34px) !important; }
+        }
+        /* ── Slogan animation refinement ── */
+        .slogan-animation { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;
+            color: var(--accent-orange); margin-top: 3px;
+            animation: pulseSlogan 3s ease-in-out infinite; }
+        @keyframes pulseSlogan { 0%,100% { opacity:1; } 50% { opacity: 0.6; } }
+
+    
+        /* ── Service cards ── */
+        .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 767px) { .service-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
+        @media (max-width: 400px)  { .service-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
+        .service-card {
+            background: #fff; border-radius: 16px; padding: 22px 16px 18px;
+            text-align: center; border: 1.5px solid #e2e8f0;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            cursor: default;
+        }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(37,99,235,0.13); border-color: #93c5fd; }
+        .service-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+        .service-name { font-weight: 800; font-size: 14px; color: var(--dark); margin-bottom: 6px; line-height: 1.35; }
+        .service-desc { font-size: 12.5px; color: var(--text-light); line-height: 1.6; }
+        .service-badge { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700;
+            background: #eff6ff; color: var(--primary); border-radius: 20px; padding: 3px 10px; }
+
+        /* ── Process steps ── */
+        .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+        @media (max-width: 767px) { .process-steps { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+        .process-step { text-align: center; padding: 24px 16px; position: relative; }
+        .process-step:not(:last-child)::after {
+            content: '→';
+            position: absolute; right: -8px; top: 30px;
+            font-size: 20px; color: #93c5fd; font-weight: 900;
+        }
+        @media (max-width: 767px) {
+            .process-step:nth-child(2n)::after,
+            .process-step:last-child::after { content: none; }
+        }
+        .process-num {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #38bdf8);
+            color: #fff; font-size: 20px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+        }
+        .process-title { font-weight: 800; font-size: 14px; color: var(--dark); margin-bottom: 6px; }
+        .process-desc  { font-size: 12.5px; color: var(--text-light); line-height: 1.6; }
+
+    </style>
 </head>
 <body>
     <div id="toast-container"></div>
@@ -392,6 +514,7 @@
                 </div>
             </div>
             <div class="nav-menu" id="menuNavbar">
+                <a href="#dich-vu">Dịch vụ</a>
                 <a href="#datlich-sua-chua">Đặt lịch</a>
                 <a href="#muc-bang-gia">Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">Bảo hành</a>
@@ -403,7 +526,28 @@
     </div>
     
     <div class="hero-section">
-        <div class="hero-tag">Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín Hàng Đầu Thái Nguyên</div>
+    <div class="hero-particles" aria-hidden="true">
+        <!-- 18 particles with varied sizes, colors, positions and durations -->
+        <div class="particle" style="left:5%;  bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:7s;  animation-delay:0s;"></div>
+        <div class="particle" style="left:12%; bottom:0; width:4px;  height:4px;  background:#60a5fa; animation-duration:9s;  animation-delay:1s;"></div>
+        <div class="particle" style="left:20%; bottom:0; width:8px;  height:8px;  background:#34d399; animation-duration:6s;  animation-delay:2s;"></div>
+        <div class="particle" style="left:30%; bottom:0; width:5px;  height:5px;  background:#93c5fd; animation-duration:8s;  animation-delay:0.5s;"></div>
+        <div class="particle" style="left:38%; bottom:0; width:3px;  height:3px;  background:#38bdf8; animation-duration:10s; animation-delay:3s;"></div>
+        <div class="particle" style="left:47%; bottom:0; width:7px;  height:7px;  background:#6ee7b7; animation-duration:7.5s;animation-delay:1.5s;"></div>
+        <div class="particle" style="left:55%; bottom:0; width:4px;  height:4px;  background:#60a5fa; animation-duration:9s;  animation-delay:4s;"></div>
+        <div class="particle" style="left:63%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:6.5s;animation-delay:2.5s;"></div>
+        <div class="particle" style="left:70%; bottom:0; width:5px;  height:5px;  background:#34d399; animation-duration:8.5s;animation-delay:0.8s;"></div>
+        <div class="particle" style="left:78%; bottom:0; width:8px;  height:8px;  background:#93c5fd; animation-duration:7s;  animation-delay:3.5s;"></div>
+        <div class="particle" style="left:85%; bottom:0; width:4px;  height:4px;  background:#6ee7b7; animation-duration:9.5s;animation-delay:1.2s;"></div>
+        <div class="particle" style="left:92%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:2.8s;"></div>
+        <div class="particle" style="left:8%;  bottom:0; width:3px;  height:3px;  background:#60a5fa; animation-duration:11s; animation-delay:5s;"></div>
+        <div class="particle" style="left:25%; bottom:0; width:5px;  height:5px;  background:#38bdf8; animation-duration:6s;  animation-delay:4.5s;"></div>
+        <div class="particle" style="left:50%; bottom:0; width:4px;  height:4px;  background:#34d399; animation-duration:10s; animation-delay:6s;"></div>
+        <div class="particle" style="left:73%; bottom:0; width:7px;  height:7px;  background:#93c5fd; animation-duration:7.5s;animation-delay:3.2s;"></div>
+        <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
+        <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
+    </div>
+        <div class="hero-tag">Trung Tâm Sửa Chữa Máy Tính Uy Tín Hàng Đầu Thái Nguyên</div>
         <h2>TRAN HOA COMPUTER</h2>
         <p>Đơn vị chuyên cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối. CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</p>
     
@@ -427,7 +571,7 @@
             </div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <button type="button" onclick="fillDemoData()" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;">✨ Bấm vào đây để điền mẫu thử nhanh</button>
+                <button type="button" onclick="fillDemoData()" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;">Bấm vào đây để điền mẫu thử nhanh</button>
             </div>
 
             <form id="bookingForm">
@@ -497,7 +641,76 @@
                 </button>
             </form>
         </div>
-                <div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div>
+        
+    <div id="dich-vu" class="section-title reveal">DỊCH VỤ CỦA CHÚNG TÔI</div>
+    <div class="container reveal" style="margin-bottom: 40px;">
+        <div class="service-grid">
+            <div class="service-card">
+                <span class="service-icon">💻</span>
+                <div class="service-name">Sửa Chữa Laptop</div>
+                <div class="service-desc">Chẩn đoán & sửa mọi dòng laptop: Dell, HP, Asus, Acer, Lenovo, MacBook... lỗi màn hình, bàn phím, nguồn, card đồ họa.</div>
+                <span class="service-badge">Lấy ngay trong ngày</span>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">🖥️</span>
+                <div class="service-name">Sửa Máy Tính Bàn (PC)</div>
+                <div class="service-desc">Sửa PC văn phòng, gaming, workstation. Nâng cấp RAM, SSD, card màn hình, nguồn máy tính.</div>
+                <span class="service-badge">Tư vấn miễn phí</span>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">⚙️</span>
+                <div class="service-name">Cài Đặt Windows & Phần Mềm</div>
+                <div class="service-desc">Cài Windows 10/11 bản quyền, diệt virus, cài driver, phần mềm văn phòng, bảo mật hệ thống.</div>
+                <span class="service-badge">Bảo hành 30 ngày</span>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">💾</span>
+                <div class="service-name">Cứu Dữ Liệu Ổ Cứng</div>
+                <div class="service-desc">Khôi phục dữ liệu bị mất do format, ổ hỏng, virus, lỗi phân vùng. Cam kết bảo mật tuyệt đối.</div>
+                <span class="service-badge">Không cứu được không thu phí</span>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">🎮</span>
+                <div class="service-name">Lắp Đặt PC Gaming</div>
+                <div class="service-desc">Tư vấn, lắp ráp bộ PC gaming theo ngân sách. Tối ưu hiệu năng, quản lý nhiệt độ, đèn RGB.</div>
+                <span class="service-badge">Bảo hành linh kiện 12 tháng</span>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">🖨️</span>
+                <div class="service-name">Sửa Máy In & Thiết Bị Ngoại Vi</div>
+                <div class="service-desc">Sửa máy in phun, laser; cài driver máy in từ xa; sửa bàn phím, chuột, màn hình ngoài.</div>
+                <span class="service-badge">Hỗ trợ từ xa miễn phí</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title reveal">QUY TRÌNH SỬA CHỮA</div>
+    <div class="container reveal" style="margin-bottom: 50px;">
+        <div class="process-steps">
+            <div class="process-step">
+                <div class="process-num">1</div>
+                <div class="process-title">Tiếp Nhận Máy</div>
+                <div class="process-desc">Khách mang máy đến hoặc gọi đặt lịch. Kiểm tra ngoại quan, ghi nhận triệu chứng lỗi.</div>
+            </div>
+            <div class="process-step">
+                <div class="process-num">2</div>
+                <div class="process-title">Chẩn Đoán Miễn Phí</div>
+                <div class="process-desc">Kỹ thuật viên kiểm tra chuyên sâu, bắt chính xác lỗi, báo giá trọn gói trước khi sửa.</div>
+            </div>
+            <div class="process-step">
+                <div class="process-num">3</div>
+                <div class="process-title">Sửa Chữa Trực Tiếp</div>
+                <div class="process-desc">Khách xem kỹ thuật viên sửa trực tiếp. 100% linh kiện chính hãng, minh bạch từng bước.</div>
+            </div>
+            <div class="process-step">
+                <div class="process-num">4</div>
+                <div class="process-title">Bàn Giao & Bảo Hành</div>
+                <div class="process-desc">Kiểm tra máy cùng khách trước khi nhận. Cấp phiếu bảo hành 3–12 tháng tùy dịch vụ.</div>
+            </div>
+        </div>
+    </div>
+
+        <div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div>
         <div class="tab-container reveal">
             <button class="tab-btn active" onclick="switchTab('hardware')">💻 Sửa Phần Cứng</button>
             <button class="tab-btn" onclick="switchTab('software')">💿 Cài Phần Mềm</button>
@@ -506,7 +719,7 @@
         <div id="tab-hardware" class="price-table-section active reveal">
             <div class="table-responsive">
                 <table>
-                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ TRỌN GÓI</th></tr></thead>
+                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ</th></tr></thead>
                     <tbody>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; <strong>Thay Nguồn mới</strong><br><span class="badge-time">⏱ Xử lý: 45 - 60 phút (Xem sửa trực tiếp)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)<br><span class="badge-time">⏱ Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
@@ -563,7 +776,7 @@
                 </div>
             </div>
                 <div style="margin-top:20px;">
-                    <div class="section-title" style="font-size:15px;margin-bottom:14px;padding-left:4px;">📋 ĐIỀU KIỆN ĐỂ ĐƯỢC BẢO HÀNH</div>
+                    <div class="section-title" style="font-size:15px;margin-bottom:14px;padding-left:4px;">ĐIỀU KIỆN ĐỂ ĐƯỢC BẢO HÀNH</div>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
                         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
                             <span style="font-size:20px;flex-shrink:0;">✅</span>
@@ -609,7 +822,7 @@
                         </div>
                     </div>
                     <p style="font-size:12px;color:#6b7280;margin-top:12px;padding:10px 14px;background:#f9fafb;border-radius:10px;border-left:3px solid #d1d5db;">
-                        💡 <strong>Lưu ý:</strong> Bảo hành không áp dụng cho hư hỏng do người dùng gây ra (rơi vỡ, vào nước, tự sửa, mất tem bảo hành..). Mọi thắc mắc về điều kiện bảo hành, vui lòng liên hệ <a href="tel:0963284044" style="color:#2563eb;font-weight:700;">0963.284.044</a>.
+                        💡 <strong>Lưu ý:</strong> Bảo hành không áp dụng cho hư hỏng do người dùng gây ra (rơi vỡ, vào nước, tự sửa). Mọi thắc mắc về điều kiện bảo hành, vui lòng liên hệ <a href="tel:0963284044" style="color:#2563eb;font-weight:700;">0963.284.044</a>.
                     </p>
                 </div>
         </div>
@@ -640,8 +853,46 @@
         </div>
         
         <!-- FAQ SECTION -->
+        <div id="hoat-dong-thuc-te" class="reveal" style="margin-bottom: 40px;">
+            <div class="section-title">HÌNH ẢNH HOẠT ĐỘNG THỰC TẾ</div>
+            <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:28px;">Hình ảnh ghi nhận kỹ thuật viên làm việc trực tiếp tại cửa hàng, minh bạch và chuyên nghiệp.</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="suaphancung.jpg" alt="Sửa chữa phần cứng máy tính chuyên sâu" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Sửa Chữa Phần Cứng Chuyên Sâu</h4><p style="font-size:13px; color:var(--text-light);">Kiểm tra đo đạc vi mạch, khắc phục triệt để lỗi phần cứng IC nguồn Laptop/PC.</p></div>
+                </div>
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="thayram.jpg" alt="Nâng cấp RAM máy tính tốc độ cao" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Nâng Cấp RAM Máy Tính</h4><p style="font-size:13px; color:var(--text-light);">Tăng cường dung lượng RAM chính hãng giúp máy chạy đa nhiệm mượt mà, không giật lag.</p></div>
+                </div>
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="thayocung.jpg" alt="Nâng cấp thay thế ổ cứng SSD" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Thay Thế &amp; Nâng Cấp SSD</h4><p style="font-size:13px; color:var(--text-light);">Tư vấn nâng cấp ổ cứng SSD tăng tốc độ mở máy và khởi chạy phần mềm cực nhanh.</p></div>
+                </div>
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="anhcaiwin.jpg" alt="Cài đặt Windows phần mềm" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Cài Đặt Hệ Điều Hành Windows</h4><p style="font-size:13px; color:var(--text-light);">Cài đặt Windows 10/11 mượt mà, sạch sẽ, đầy đủ driver chuẩn kèm bộ Office văn phòng.</p></div>
+                </div>
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="lapdatpc.jpg" alt="Lắp ráp build PC máy tính" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Build PC Gaming &amp; Đồ Họa</h4><p style="font-size:13px; color:var(--text-light);">Thiết kế lắp đặt máy tính bàn theo ngân sách, đi dây gọn đẹp, tối ưu hóa tản nhiệt.</p></div>
+                </div>
+                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
+                    <img src="cuachinh.png" alt="Không gian mặt tiền cửa hàng" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Không Gian Cửa Hàng</h4><p style="font-size:13px; color:var(--text-light);">Vị trí cửa hàng dễ tìm kiếm, khang trang, trang bị đầy đủ dụng cụ kỹ thuật cao.</p></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reveal" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; border-radius: 16px; padding: 30px; text-align: center;">
+            <h3 style="font-size: 18px; font-weight: 800; color: #0369a1; margin-bottom: 10px;">Tham Gia Nhóm Hỗ Trợ Kỹ Thuật Trực Tuyến</h3>
+            <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">Hỏi đáp báo giá bệnh máy tính gấp, xin link phần mềm crack an toàn, giao lưu trao đổi kiến thức qua nhóm cộng đồng Zalo.</p>
+            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" style="display:inline-block; background-color: var(--primary); color: #fff; font-weight: 700; padding: 12px 28px; border-radius: 30px; text-decoration: none; text-transform: uppercase; box-shadow:0 4px 12px rgba(37,99,235,0.2);">👉 Vào nhóm zalo ngay</a>
+        </div>
+    </div>
+    
         <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
-            <div class="section-title">❓ CÂU HỎI THƯỜNG GẶP</div>
+            <div class="section-title">CÂU HỎI THƯỜNG GẶP</div>
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">
@@ -716,44 +967,7 @@
         </div>
         
         <!-- GALLERY SECTION -->
-        <div id="hoat-dong-thuc-te" class="reveal" style="margin-bottom: 40px;">
-            <div class="section-title">HÌNH ẢNH HOẠT ĐỘNG THỰC TẾ</div>
-            <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:28px;">Hình ảnh ghi nhận kỹ thuật viên làm việc trực tiếp tại cửa hàng, minh bạch và chuyên nghiệp.</p>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="suaphancung.jpg" alt="Sửa chữa phần cứng máy tính chuyên sâu" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Sửa Chữa Phần Cứng Chuyên Sâu</h4><p style="font-size:13px; color:var(--text-light);">Kiểm tra đo đạc vi mạch, khắc phục triệt để lỗi phần cứng IC nguồn Laptop/PC.</p></div>
-                </div>
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="thayram.jpg" alt="Nâng cấp RAM máy tính tốc độ cao" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Nâng Cấp RAM Máy Tính</h4><p style="font-size:13px; color:var(--text-light);">Tăng cường dung lượng RAM chính hãng giúp máy chạy đa nhiệm mượt mà, không giật lag.</p></div>
-                </div>
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="thayocung.jpg" alt="Nâng cấp thay thế ổ cứng SSD" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Thay Thế &amp; Nâng Cấp SSD</h4><p style="font-size:13px; color:var(--text-light);">Tư vấn nâng cấp ổ cứng SSD tăng tốc độ mở máy và khởi chạy phần mềm cực nhanh.</p></div>
-                </div>
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="anhcaiwin.jpg" alt="Cài đặt Windows phần mềm" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Cài Đặt Hệ Điều Hành Windows</h4><p style="font-size:13px; color:var(--text-light);">Cài đặt Windows 10/11 mượt mà, sạch sẽ, đầy đủ driver chuẩn kèm bộ Office văn phòng.</p></div>
-                </div>
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="lapdatpc.jpg" alt="Lắp ráp build PC máy tính" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Build PC Gaming &amp; Đồ Họa</h4><p style="font-size:13px; color:var(--text-light);">Thiết kế lắp đặt máy tính bàn theo ngân sách, đi dây gọn đẹp, tối ưu hóa tản nhiệt.</p></div>
-                </div>
-                <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
-                    <img src="cuachinh.png" alt="Không gian mặt tiền cửa hàng" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-                    <div style="padding:16px;"><h4 style="font-size:14px; font-weight:700; margin-bottom:6px;">Không Gian Cửa Hàng</h4><p style="font-size:13px; color:var(--text-light);">Vị trí cửa hàng dễ tìm kiếm, khang trang, trang bị đầy đủ dụng cụ kỹ thuật cao.</p></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="reveal" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; border-radius: 16px; padding: 30px; text-align: center;">
-            <h3 style="font-size: 18px; font-weight: 800; color: #0369a1; margin-bottom: 10px;">Tham Gia Nhóm Hỗ Trợ Kỹ Thuật Trực Tuyến</h3>
-            <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">Hỏi đáp báo giá bệnh máy tính gấp, xin link phần mềm crack an toàn, giao lưu trao đổi kiến thức qua nhóm cộng đồng Zalo.</p>
-            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" style="display:inline-block; background-color: var(--primary); color: #fff; font-weight: 700; padding: 12px 28px; border-radius: 30px; text-decoration: none; text-transform: uppercase; box-shadow:0 4px 12px rgba(37,99,235,0.2);">👉 Vào nhóm zalo ngay</a>
-        </div>
-    </div>
-    
+
     <footer style="background-color: var(--dark); color: #94a3b8; padding: 50px 20px 20px; margin-top: 60px; border-top: 1px solid #1e293b;">
         <div style="max-width: 1152px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 35px; font-size:13.5px;">           
             <div>
@@ -905,7 +1119,7 @@
 
         const reveals = document.querySelectorAll('.reveal');
         const revObserver = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('active'); } });
+            entries.forEach((e, i) => { if(e.isIntersecting) { setTimeout(() => e.target.classList.add('active'), i * 70); } });
         }, {threshold: 0.05});
         reveals.forEach(r => revObserver.observe(r));
 
@@ -1044,13 +1258,21 @@
             }
         }
 
-    </script>
+    
+    // Back to top visibility
+    window.addEventListener('scroll', function() {
+        const btn = document.getElementById('backToTop');
+        if (btn) { btn.classList.toggle('visible', window.scrollY > 300); }
+    });
+</script>
 <div id="floatBtnGroup" style="position:fixed;right:20px;bottom:95px;z-index:9000;display:flex;flex-direction:column;gap:12px;">
     <a id="floatCallBtn" href="tel:0963284044" title="Gọi ngay: 0963.284.044"
        style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#16a34a;color:#fff;border-radius:50%;text-decoration:none;font-size:24px;box-shadow:0 4px 20px rgba(22,163,74,0.45);animation:shakePhone 3s ease-in-out infinite;">📞</a>
     <a id="floatZaloBtn" href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" title="Tham gia nhóm Zalo"
        style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#0068ff;color:#fff;border-radius:50%;text-decoration:none;box-shadow:0 4px 20px rgba(0,104,255,0.45);animation:shakePhone 3s ease-in-out 1.5s infinite;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="26" height="26" fill="#fff"><path d="M24 4C13 4 4 13 4 24c0 3.7 1 7.1 2.8 10L4 44l10.3-2.7C17.1 43 20.4 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.2 0-6.2-.9-8.8-2.5l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.1 30.1 7.2 27.1 7.2 24 7.2 14.7 14.7 7.2 24 7.2S40.8 14.7 40.8 24 33.3 40 24 40zm10.5-15.3c-.6-.3-3.4-1.7-3.9-1.9-.5-.2-.9-.3-1.3.3-.4.6-1.5 1.9-1.8 2.2-.3.4-.7.4-1.2.1-.6-.3-2.4-.9-4.6-2.8-1.7-1.5-2.8-3.4-3.2-3.9-.3-.6 0-.9.3-1.2.3-.3.6-.7.9-1 .3-.3.4-.6.6-1 .2-.4.1-.7 0-1-.1-.3-1.3-3.1-1.8-4.2-.5-1.1-.9-.9-1.3-.9h-1.1c-.4 0-1 .1-1.5.7-.5.6-2 2-2 4.8 0 2.9 2.1 5.6 2.4 6 .3.4 4.1 6.3 10 8.8 5.8 2.5 5.8 1.7 6.9 1.6 1.1-.1 3.4-1.4 3.9-2.7.5-1.3.5-2.4.3-2.7-.1-.2-.5-.4-1.1-.7z"/></svg></a>
 </div>
+
+    <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Lên đầu trang">↑</button>
 </body>
 </html>
 
