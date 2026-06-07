@@ -82,7 +82,7 @@
     }
     </script>
     <meta name="theme-color" content="#2563eb">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><text x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white' font-family='Arial,sans-serif' font-weight='bold'>TC</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         :root {
@@ -373,7 +373,6 @@
             90%  { transform: rotate(0deg)   scale(1); }
         }
         /* ---- Hide float call on mobile (has bottom nav instead) ---- */
-        @media (max-width: 767px) { #floatBtnGroup { display: none !important; } }
 
         
         /* ── Floating particles in hero ── */
@@ -409,7 +408,7 @@
         }
         #backToTop.visible { opacity: 1; transform: translateY(0); }
         #backToTop:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); transform: translateY(-2px); }
-        @media (max-width: 767px) { #backToTop { display: none; } }
+        @media (max-width: 767px) { #backToTop { bottom: 140px; left: 14px; width: 38px; height: 38px; font-size: 16px; } }
         /* ── Bottom nav pulse on Đặt lịch ── */
         .bottom-nav-cta-center { animation: pulseCTA 3s ease-in-out infinite; }
         @keyframes pulseCTA {
@@ -474,6 +473,282 @@
         .process-title { font-weight: 800; font-size: 14px; color: var(--dark); margin-bottom: 6px; }
         .process-desc  { font-size: 12.5px; color: var(--text-light); line-height: 1.6; }
 
+
+        .svc-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+        [data-theme="dark"]{--bg-body:#0f172a;--bg-card:#1e293b;--text-main:#e2e8f0;--text-light:#94a3b8;--border-color:#334155;}
+        [data-theme="dark"] body{background-color:var(--bg-body);color:var(--text-main);}
+        [data-theme="dark"] .header-nav{background-color:rgba(15,23,42,0.97);}
+        [data-theme="dark"] .booking-form,[data-theme="dark"] .review-card,[data-theme="dark"] .faq-item,[data-theme="dark"] .modal-card{background-color:var(--bg-card)!important;}
+        [data-theme="dark"] .form-control{background-color:#1e293b!important;color:var(--text-main)!important;border-color:var(--border-color)!important;}
+        [data-theme="dark"] .tab-btn:not(.active){background-color:var(--bg-card);color:var(--text-light);border-color:var(--border-color);}
+        [data-theme="dark"] table tr{background-color:var(--bg-card)!important;}
+        [data-theme="dark"] table tr:nth-child(even){background-color:#162032!important;}
+        [data-theme="dark"] table th{background-color:#0d1a2d!important;color:#94a3b8;}
+        [data-theme="dark"] .commit-list{background-color:#1a1500!important;border-color:#3d3000!important;}
+        [data-theme="dark"] .commit-list li{color:#fde68a!important;}
+        [data-theme="dark"] .service-card{background-color:var(--bg-card)!important;border-color:var(--border-color)!important;}
+        [data-theme="dark"] footer{background-color:#060c14!important;}
+        [data-theme="dark"] .top-bar{background-color:#060c14;}
+        [data-theme="dark"] #darkIcon{display:none;}
+        [data-theme="dark"] #lightIcon{display:flex!important;}
+        #darkModeToggle{background:none;border:1.5px solid var(--border-color);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dark);flex-shrink:0;transition:all 0.2s;}
+        #darkModeToggle:hover{background:var(--bg-body);}
+        [data-theme="dark"] #darkModeToggle{border-color:#334155;color:#fcd34d;}
+        [data-theme="dark"] #darkModeToggle:hover{background:rgba(255,255,255,0.08);}
+        #faqSearch{width:100%;padding:12px 16px 12px 42px;border:1.5px solid var(--border-color);border-radius:12px;font-size:14px;background:var(--bg-body);outline:none;color:var(--text-main);margin-bottom:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280' width='18' height='18'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center;}
+        #faqSearch:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        .copy-ph{cursor:pointer;}.copy-ph:hover{opacity:0.8;}
+
+        /* ── Dark mode contrast fixes: override color:var(--dark) which becomes invisible ── */
+        [data-theme="dark"] .nav-menu a { color: var(--text-main) !important; }
+        [data-theme="dark"] .nav-menu a:hover { color: #38bdf8 !important; }
+        [data-theme="dark"] .section-title { color: #e2e8f0 !important; }
+        [data-theme="dark"] .faq-question { color: var(--text-main) !important; }
+        [data-theme="dark"] .faq-q { color: var(--text-main) !important; }
+        [data-theme="dark"] .faq-q:hover { background: #1e293b !important; }
+        [data-theme="dark"] .faq-item { border-color: #334155 !important; }
+        [data-theme="dark"] .menu-toggle { color: var(--text-main) !important; }
+        [data-theme="dark"] #darkModeToggle { color: #fcd34d; }
+        [data-theme="dark"] .logo-animation { color: #38bdf8 !important; text-shadow: 0 0 20px rgba(56,189,248,0.3) !important; }
+        [data-theme="dark"] .slogan-animation { color: #94a3b8 !important; }
+        [data-theme="dark"] .process-title { color: var(--text-main) !important; }
+        [data-theme="dark"] .process-desc { color: var(--text-light) !important; }
+        [data-theme="dark"] .process-step::after { color: #475569 !important; }
+        [data-theme="dark"] .service-card h3 { color: var(--text-main) !important; }
+        [data-theme="dark"] .service-card p { color: var(--text-light) !important; }
+        [data-theme="dark"] .service-badge { background: #1e3a6e !important; color: #93c5fd !important; }
+        [data-theme="dark"] td { color: var(--text-main) !important; }
+        [data-theme="dark"] .highlight-error { color: #f87171 !important; }
+        [data-theme="dark"] .highlight-price { color: #34d399 !important; }
+        [data-theme="dark"] .badge-time { background: #162032 !important; color: #7dd3fc !important; border-color: #1e3a5f !important; }
+        [data-theme="dark"] .review-name { color: var(--text-main) !important; }
+        [data-theme="dark"] .review-text { color: var(--text-light) !important; }
+        [data-theme="dark"] .hero-tag { color: #7dd3fc !important; border-color: rgba(56,189,248,0.3) !important; background: rgba(56,189,248,0.08) !important; }
+        [data-theme="dark"] h2.logo-animation, [data-theme="dark"] .hero-section h2 { color: #f1f5f9 !important; }
+        [data-theme="dark"] .hero-section p { color: #cbd5e1 !important; }
+        [data-theme="dark"] .form-group label { color: var(--text-main) !important; }
+        [data-theme="dark"] .warranty-title { color: var(--text-main) !important; }
+        [data-theme="dark"] .warranty-text { color: var(--text-light) !important; }
+        [data-theme="dark"] #backToTop { background: #334155 !important; color: #e2e8f0 !important; }
+        [data-theme="dark"] .tab-btn { color: var(--text-main) !important; }
+        [data-theme="dark"] .brand-wrap p { color: #94a3b8 !important; }
+
+        /* Desktop: hide mobile labels in table cells (only shown on mobile via @media) */
+        .mobile-label { display: none; }
+        .mobile-row { display: block; }
+
+    /* ═══ FLOATING CIRCLES (desktop right, call + Zalo only) ═══ */
+    #floatBtnGroup {
+        position: fixed; right: 20px; bottom: 95px; z-index: 9000;
+        display: flex; flex-direction: column; gap: 14px;
+    }
+    @media (max-width: 767px) { #floatBtnGroup { display: none !important; } }
+    .float-circle {
+        width: 56px; height: 56px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        text-decoration: none; position: relative;
+        transition: transform .22s, box-shadow .22s; cursor: pointer;
+        border: none;
+    }
+    .float-circle:hover { transform: scale(1.12); }
+    .float-circle .fc-tip {
+        position: absolute; right: 66px; top: 50%; transform: translateY(-50%);
+        background: rgba(15,23,42,.85); color: #fff; font-size: 12px;
+        padding: 5px 10px; border-radius: 8px; white-space: nowrap;
+        opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .float-circle:hover .fc-tip { opacity: 1; }
+    #floatCallBtn {
+        background: linear-gradient(135deg,#00b06f,#10b981);
+        box-shadow: 0 4px 18px rgba(16,185,129,.5);
+        animation: shakePhone 3s ease-in-out infinite;
+    }
+    #floatZaloBtn {
+        background: linear-gradient(145deg,#0078ff,#0050ee);
+        box-shadow: 0 4px 18px rgba(0,104,255,.5);
+        animation: shakePhone 3s ease-in-out 1.5s infinite;
+        overflow: hidden;
+    }
+
+    /* ═══ CHATBOT WRAP (left side) ═══ */
+    #chatbotWrap {
+        position: fixed; left: 20px; bottom: 20px; z-index: 9500;
+        display: flex; align-items: center; gap: 10px;
+    }
+    @media (max-width: 767px) { #chatbotWrap { left: 14px; bottom: 86px; } }
+
+    #chatbotToggle {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: linear-gradient(135deg,#6d28d9,#7c3aed);
+        color: #fff; border: none; cursor: pointer; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 26px; position: relative;
+        box-shadow: 0 4px 20px rgba(109,40,217,.5);
+        animation: cbPulse 2.5s infinite; transition: transform .22s;
+    }
+    #chatbotToggle:hover { transform: scale(1.1); }
+    @keyframes cbPulse {
+        0%,100%{box-shadow:0 4px 20px rgba(109,40,217,.5);}
+        50%{box-shadow:0 4px 32px rgba(109,40,217,.85);}
+    }
+    #chatbotToggle .cb-badge {
+        position: absolute; top: -3px; right: -3px;
+        width: 16px; height: 16px; border-radius: 50%;
+        background: #ef4444; color: #fff; font-size: 10px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+        border: 2px solid #fff;
+    }
+    #chatLabel {
+        background: rgba(15,23,42,.85); color: #fff;
+        padding: 6px 12px; border-radius: 10px;
+        font-size: 13px; font-weight: 600; white-space: nowrap;
+        pointer-events: none; min-height: 1em;
+    }
+    @media (max-width: 400px) { #chatLabel { font-size: 11px; } }
+
+    /* ═══ CHATBOT PANEL ═══ */
+    #chatbotPanel {
+        position: fixed; left: 20px; bottom: 90px; z-index: 9400;
+        width: 330px; max-height: 510px;
+        background: #fff; border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,.2);
+        display: flex; flex-direction: column; overflow: hidden;
+        transform: scale(.85) translateY(20px);
+        opacity: 0; pointer-events: none;
+        transition: all .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    #chatbotPanel.cb-open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+    @media (max-width: 767px) {
+        #chatbotPanel { left: 8px; right: 8px; width: auto; bottom: 155px; max-height: 65vh; }
+    }
+    .cb-hdr {
+        background: linear-gradient(135deg,#4c1d95,#7c3aed);
+        color: #fff; padding: 12px 14px;
+        display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .cb-av { width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+    .cb-inf .cb-nm { font-weight:700;font-size:13.5px; }
+    .cb-inf .cb-st { font-size:11px;opacity:.8;display:flex;align-items:center;gap:4px; }
+    .cb-dot { width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:dotBlink 1.5s infinite; }
+    @keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+    #cbClose { background:none;border:none;color:#fff;font-size:17px;cursor:pointer;margin-left:auto;opacity:.8; }
+    #cbClose:hover { opacity:1; }
+    #cbMsgs { flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth; }
+    .cb-m { max-width:85%;line-height:1.55;font-size:13.5px;animation:msgIn .25s ease; }
+    @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+    .cb-m.bot { align-self:flex-start; }
+    .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px; }
+    .cb-m.user { align-self:flex-end; }
+    .cb-m.user .bub { background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;padding:9px 12px;border-radius:13px 4px 13px 13px; }
+    .cb-qr { display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 8px;flex-shrink:0; }
+    .cb-qb { background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;transition:all .2s;white-space:nowrap; }
+    .cb-qb:hover { background:#6d28d9;color:#fff;border-color:#6d28d9; }
+    .cb-inp { display:flex;gap:8px;padding:9px 11px 11px;border-top:1px solid #e2e8f0;flex-shrink:0; }
+    #cbInput { flex:1;border:1.5px solid #e2e8f0;border-radius:22px;padding:7px 13px;font-size:13px;outline:none;transition:border-color .2s; }
+    #cbInput:focus { border-color:#7c3aed; }
+    #cbSend { background:#7c3aed;color:#fff;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .2s;flex-shrink:0; }
+    #cbSend:hover { background:#6d28d9; }
+    .cb-ty { display:flex;gap:4px;align-items:center;padding:5px 8px; }
+    .cb-ty span { width:7px;height:7px;background:#94a3b8;border-radius:50%;animation:tyAnim .9s infinite; }
+    .cb-ty span:nth-child(2){animation-delay:.15s;} .cb-ty span:nth-child(3){animation-delay:.3s;}
+    @keyframes tyAnim{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+    [data-theme="dark"] #chatbotPanel { background:#1e293b; }
+    [data-theme="dark"] .cb-inp { border-color:#334155; }
+    [data-theme="dark"] #cbInput { background:#0f172a;border-color:#334155;color:#e2e8f0; }
+    [data-theme="dark"] .cb-m.bot .bub { background:#334155;color:#e2e8f0; }
+    [data-theme="dark"] .cb-qb { background:#2e1065;color:#c4b5fd;border-color:#4c1d95; }
+
+    /* ═══ ZALO JOIN BUTTON EFFECTS ═══ */
+    .zalo-join-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0068ff 0%, #0050cc 50%, #0040bb 100%);
+        color: #fff;
+        font-weight: 800;
+        font-size: 15px;
+        letter-spacing: .5px;
+        padding: 14px 34px;
+        border-radius: 50px;
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: 2px solid rgba(255,255,255,.25);
+        box-shadow: 0 6px 24px rgba(0,104,255,.5), 0 2px 8px rgba(0,0,0,.15);
+        transition: transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+        animation: zjbPulse 2.4s ease-in-out infinite;
+    }
+    .zalo-join-btn:hover {
+        transform: scale(1.07) translateY(-2px);
+        box-shadow: 0 12px 36px rgba(0,104,255,.65), 0 4px 16px rgba(0,0,0,.2);
+        animation: none;
+    }
+    .zalo-join-btn:active { transform: scale(.97); }
+
+    /* shimmer sweep */
+    .zalo-join-btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -75%;
+        width: 50%; height: 100%;
+        background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%);
+        animation: zjbShimmer 2.8s ease-in-out infinite;
+        pointer-events: none;
+    }
+    /* outer ring pulse */
+    .zalo-join-btn::after {
+        content: '';
+        position: absolute;
+        inset: -4px;
+        border-radius: 54px;
+        border: 2px solid rgba(0,104,255,.55);
+        animation: zjbRing 2.4s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .zjb-icon { font-size: 18px; animation: zjbIconWiggle 2s ease-in-out infinite; }
+    .zjb-txt  { position: relative; z-index: 1; }
+    .zjb-arrow { font-size: 16px; animation: zjbArrow 1.2s ease-in-out infinite; display: inline-block; }
+
+    @keyframes zjbPulse {
+        0%,100% { box-shadow: 0 6px 24px rgba(0,104,255,.5), 0 2px 8px rgba(0,0,0,.15); }
+        50%      { box-shadow: 0 8px 40px rgba(0,104,255,.8), 0 4px 16px rgba(0,0,0,.2); }
+    }
+    @keyframes zjbShimmer {
+        0%   { left: -75%; opacity: 0; }
+        10%  { opacity: 1; }
+        60%  { left: 130%; opacity: 1; }
+        61%,100% { opacity: 0; }
+    }
+    @keyframes zjbRing {
+        0%,100% { transform: scale(1);   opacity: .6; }
+        50%      { transform: scale(1.08); opacity: 0; }
+    }
+    @keyframes zjbIconWiggle {
+        0%,80%,100% { transform: rotate(0deg); }
+        85%  { transform: rotate(-15deg); }
+        90%  { transform: rotate(15deg); }
+        95%  { transform: rotate(-8deg); }
+    }
+    @keyframes zjbArrow {
+        0%,100% { transform: translateX(0); }
+        50%     { transform: translateX(5px); }
+    }
+
+    /* ripple */
+    .zjb-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.4);
+        transform: scale(0);
+        animation: zjbRippleAnim .6s linear;
+        pointer-events: none;
+    }
+    @keyframes zjbRippleAnim {
+        to { transform: scale(4); opacity: 0; }
+    }
     </style>
 </head>
 <body>
@@ -498,7 +773,7 @@
                 <span id="shopStatusText2">...</span>
             </span>
         </div>
-        <div>Hotline: <a href="tel:0963284044" class="phone">0963.284.044</a></div>
+        <div>Hotline: <a href="tel:0963284044" class="phone copy-ph" onclick="event.preventDefault();copyPhone('0963284044')" title="Bấm để sao chép số">0963.284.044</a></div>
     </div>
     
     <div class="header-nav" id="headerNav">
@@ -521,7 +796,13 @@
                 <a href="#danh-gia-khach-hang">Đánh giá</a>
             <a href="#cau-hoi-thuong-gap" onclick="event.preventDefault();document.getElementById('cau-hoi-thuong-gap').scrollIntoView({behavior:'smooth'});">FAQ</a>
             </div>
-            <button class="menu-toggle" id="menuBtn">☰</button>
+            <div style="display:flex;align-items:center;gap:8px;">
+            <button id="darkModeToggle" title="Sáng/Tối (tự động 06:00–19:00)" onclick="toggleDarkMode()" aria-label="Đổi chế độ sáng/tối">
+                <svg id="darkIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+                <svg id="lightIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="display:none;"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+            </button>
+            <button class="menu-toggle" id="menuBtn">&#9776;</button>
+        </div>
         </div>
     </div>
     
@@ -549,7 +830,7 @@
     </div>
         <div class="hero-tag">Trung Tâm Sửa Chữa Máy Tính Uy Tín Hàng Đầu Thái Nguyên</div>
         <h2>TRAN HOA COMPUTER</h2>
-        <p>Đơn vị chuyên cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối. CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</p>
+        <p>Đơn vị chuyên cấp cứu sự cố Laptop, PC Văn Phòng & Ráp Máy Tính Gaming chuyên nghiệp tại Phú Thịnh, Thái Nguyên. Cam kết khám đúng bệnh, báo đúng giá trọn gói, xem sửa trực tiếp và bảo mật dữ liệu khách hàng tuyệt đối.<br><span style="font-weight:800;color:#fbbf24;letter-spacing:0.3px;display:inline-block;">CAM KẾT 100% LINH KIỆN CHÍNH HÃNG</span></p>
     
         <div class="hero-stats">
             <div class="hero-stat"><div class="stat-num" data-target="+0">0</div><div class="stat-label">Khách hàng</div></div>
@@ -587,28 +868,28 @@
                     <label>Loại dịch vụ cần sử dụng *</label>
                     <select name="service" id="selectService" class="form-control" required onchange="updateServiceNote(this.value)">
                         <option value="">-- Chọn dịch vụ --</option>
-                        <optgroup label="🔧 Sửa chữa phần cứng">
+                        <optgroup label="Sửa chữa phần cứng">
                             <option value="sua-laptop">Sửa Laptop (không lên nguồn, hỏng màn hình, bàn phím...)</option>
                             <option value="sua-pc">Sửa máy tính bàn (PC)</option>
                             <option value="sua-mainboard">Sửa bo mạch chủ / IC nguồn / chip</option>
                             <option value="thay-pin">Thay pin Laptop</option>
                             <option value="thay-man-hinh">Thay màn hình Laptop</option>
                         </optgroup>
-                        <optgroup label="⚡ Nâng cấp linh kiện">
+                        <optgroup label="Nâng cấp linh kiện">
                             <option value="nang-cap-ram">Nâng cấp RAM</option>
                             <option value="nang-cap-ssd">Nâng cấp ổ cứng SSD</option>
                             <option value="lap-pc-gaming">Lắp ráp PC Gaming / Đồ họa theo yêu cầu</option>
                         </optgroup>
-                        <optgroup label="💻 Phần mềm & Hệ điều hành">
+                        <optgroup label="Phần mềm & Hệ điều hành">
                             <option value="cai-win">Cài đặt / Cài lại Windows 10/11</option>
                             <option value="cai-office">Cài Office, phần mềm văn phòng</option>
                             <option value="diet-virus">Diệt virus, dọn rác, tối ưu máy</option>
                             <option value="cuu-data">Cứu dữ liệu / Khôi phục file bị xóa</option>
                         </optgroup>
-                        <optgroup label="🧹 Bảo dưỡng & vệ sinh">
+                        <optgroup label="Bảo dưỡng & vệ sinh">
                             <option value="bao-duong">Vệ sinh bụi, tra keo tản nhiệt Laptop/PC</option>
                         </optgroup>
-                        <optgroup label="📞 Khác">
+                        <optgroup label="Khác">
                             <option value="tu-van">Tư vấn mua linh kiện / cấu hình máy</option>
                             <option value="khac">Dịch vụ khác (ghi rõ bên dưới)</option>
                         </optgroup>
@@ -646,37 +927,37 @@
     <div class="container reveal" style="margin-bottom: 40px;">
         <div class="service-grid">
             <div class="service-card">
-                <span class="service-icon">💻</span>
+                <div class="svc-icon-wrap" style="background:#eff6ff;color:#2563eb;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
                 <div class="service-name">Sửa Chữa Laptop</div>
                 <div class="service-desc">Chẩn đoán & sửa mọi dòng laptop: Dell, HP, Asus, Acer, Lenovo, MacBook... lỗi màn hình, bàn phím, nguồn, card đồ họa.</div>
                 <span class="service-badge">Lấy ngay trong ngày</span>
             </div>
             <div class="service-card">
-                <span class="service-icon">🖥️</span>
+                <div class="svc-icon-wrap" style="background:#f5f3ff;color:#7c3aed;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7l-2 3v1h8v-1l-2-3h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg></div>
                 <div class="service-name">Sửa Máy Tính Bàn (PC)</div>
                 <div class="service-desc">Sửa PC văn phòng, gaming, workstation. Nâng cấp RAM, SSD, card màn hình, nguồn máy tính.</div>
                 <span class="service-badge">Tư vấn miễn phí</span>
             </div>
             <div class="service-card">
-                <span class="service-icon">⚙️</span>
+                <div class="svc-icon-wrap" style="background:#f0f9ff;color:#0ea5e9;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
                 <div class="service-name">Cài Đặt Windows & Phần Mềm</div>
                 <div class="service-desc">Cài Windows 10/11 bản quyền, diệt virus, cài driver, phần mềm văn phòng, bảo mật hệ thống.</div>
                 <span class="service-badge">Bảo hành 30 ngày</span>
             </div>
             <div class="service-card">
-                <span class="service-icon">💾</span>
+                <div class="svc-icon-wrap" style="background:#fffbeb;color:#f59e0b;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zM4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4zm0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4z"/></svg></div>
                 <div class="service-name">Cứu Dữ Liệu Ổ Cứng</div>
                 <div class="service-desc">Khôi phục dữ liệu bị mất do format, ổ hỏng, virus, lỗi phân vùng. Cam kết bảo mật tuyệt đối.</div>
                 <span class="service-badge">Không cứu được không thu phí</span>
             </div>
             <div class="service-card">
-                <span class="service-icon">🎮</span>
+                <div class="svc-icon-wrap" style="background:#ecfdf5;color:#10b981;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M21.58 16.09l-1.09-7.66C20.21 6.46 18.52 5 16.53 5H7.47C5.48 5 3.79 6.46 3.51 8.43l-1.09 7.66C2.2 17.63 3.39 19 4.94 19c.68 0 1.32-.27 1.8-.75L9 16h6l2.25 2.25c.48.48 1.13.75 1.8.75 1.56 0 2.75-1.37 2.53-2.91zM11 11H9v2H8v-2H6v-1h2V8h1v2h2v1zm4 1c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2-3c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg></div>
                 <div class="service-name">Lắp Đặt PC Gaming</div>
                 <div class="service-desc">Tư vấn, lắp ráp bộ PC gaming theo ngân sách. Tối ưu hiệu năng, quản lý nhiệt độ, đèn RGB.</div>
                 <span class="service-badge">Bảo hành linh kiện 12 tháng</span>
             </div>
             <div class="service-card">
-                <span class="service-icon">🖨️</span>
+                <div class="svc-icon-wrap" style="background:#f8fafc;color:#64748b;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg></div>
                 <div class="service-name">Sửa Máy In & Thiết Bị Ngoại Vi</div>
                 <div class="service-desc">Sửa máy in phun, laser; cài driver máy in từ xa; sửa bàn phím, chuột, màn hình ngoài.</div>
                 <span class="service-badge">Hỗ trợ từ xa miễn phí</span>
@@ -710,16 +991,18 @@
         </div>
     </div>
 
+
+
         <div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div>
         <div class="tab-container reveal">
-            <button class="tab-btn active" onclick="switchTab('hardware')">💻 Sửa Phần Cứng</button>
-            <button class="tab-btn" onclick="switchTab('software')">💿 Cài Phần Mềm</button>
+            <button class="tab-btn active" onclick="switchTab('hardware')">Sửa Phần Cứng</button>
+            <button class="tab-btn" onclick="switchTab('software')">Cài Phần Mềm</button>
         </div>
 
         <div id="tab-hardware" class="price-table-section active reveal">
             <div class="table-responsive">
                 <table>
-                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ</th></tr></thead>
+                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ TRỌN GÓI</th></tr></thead>
                     <tbody>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; <strong>Thay Nguồn mới</strong><br><span class="badge-time">⏱ Xử lý: 45 - 60 phút (Xem sửa trực tiếp)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)<br><span class="badge-time">⏱ Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
@@ -737,7 +1020,7 @@
         <div id="tab-software" class="price-table-section reveal">
             <div class="table-responsive">
                 <table>
-                    <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ CÀI ĐẶT TRỌN GÓI</th></tr></thead>
+                    <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ TRỌN GÓI</th></tr></thead>
                     <tbody>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">PC (Máy bàn)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt mới Windows 7, 8, 10, 11 Pro kích hoạt đầy đủ Driver chuẩn + bộ Office cơ bản mượt mà + Vệ sinh bụi linh kiện nhanh<br><span class="badge-time">⏱ Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 120.000 đ</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Laptop</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài hệ điều hành tối ưu chạy siêu mượt cho dòng Laptop văn phòng, đồ họa, Gaming. Khôi phục Recovery bản quyền gốc nhà sản xuất<br><span class="badge-time">⏱ Xử lý: 40 - 50 phút lấy luôn</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 150.000 đ</span></div></td></tr>
@@ -745,7 +1028,8 @@
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Diệt Virus</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt, cấu hình chuẩn ứng dụng quét diệt virus chuyên nghiệp hàng đầu bảo vệ tài khoản ngân hàng<br><span class="badge-time">⏱ Xử lý: 15 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">70.000 đ</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Cứu dữ liệu</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Khôi phục tệp tin tài liệu dữ liệu quý giá bị format nhầm ổ, xóa vĩnh viễn trong sọt rác, phân vùng ghost lỗi<br><span class="badge-time">⏱ Xử lý: Tùy thuộc dung lượng ổ đĩa</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">Từ 300.000 đ</span></div></td></tr>
                         <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Mạng & Wifi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cấu hình đồng bộ thông số kĩ thuật cục phát Router Modem phát sóng mạng Wifi gia đình ổn định không chập chờn<br><span class="badge-time">⏱ Xử lý: 20 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80.000 - 150.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value" style="color:#10b981; font-weight:700;">Hỗ trợ từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Xử lý sửa lỗi vặt ứng dụng văn phòng, kết nối máy in văn phòng qua Teamviewer / UltraViewer cấp tốc<br><span class="badge-time" style="color:#d97706; background-color:#fffbeb; border-color:#fde68a;">⏱ Xử lý: Kết nối lập tức</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value" style="color: #10b981; font-weight: 800; background: #ecfdf5; padding: 4px 8px; border-radius: 4px;">MIỄN PHÍ TRỌN ĐỜI</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Sửa Máy In & Thiết Bị Ngoại Vi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa lỗi kẹt giấy, in mờ, mực không ra; thay mực/hộp mực; cài driver máy in từ xa; sửa chuột, bàn phím, màn hình ngoài, USB hub<br><span class="badge-time">⏱ Xử lý: 20 – 60 phút (tùy thiết bị)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80.000 – 250.000 đ</span></div></td></tr>
+                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">8</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value" style="color:#10b981; font-weight:700;">Hỗ trợ từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Xử lý sửa lỗi vặt ứng dụng văn phòng, kết nối máy in văn phòng qua Teamviewer / UltraViewer cấp tốc<br><span class="badge-time" style="color:#d97706; background-color:#fffbeb; border-color:#fde68a;">⏱ Xử lý: Kết nối lập tức</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value" style="color: #10b981; font-weight: 800; background: #ecfdf5; padding: 4px 8px; border-radius: 4px;">MIỄN PHÍ TRỌN ĐỜI</span></div></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -753,25 +1037,25 @@
                 <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG VÀNG</div>
         <div class="commit-list reveal">
             <ul>
-                <li>★ <strong>Cam kết sửa chữa nhanh chóng:</strong> Thiết bị xử lý tối đa trong vòng 02 ngày. Nếu máy lỗi nặng cần thời gian test mạch sâu, tiệm sẽ chủ động gọi thông báo trước rõ ràng.</li>
-                <li>★ <strong>Đảm bảo minh bạch 100%:</strong> Linh kiện luôn được giữ nguyên trạng, tuyệt đối không tráo đổi đồ. Khách hàng được xem trực tiếp thợ làm và ký tên lên linh kiện.</li>
-                <li>★ <strong>Bảo mật thông tin tuyệt đối:</strong> Mọi dữ liệu tài liệu cá nhân, hình ảnh riêng tư lưu trong ổ cứng luôn được cam kết an toàn bảo mật tuyệt đối tại trung tâm.</li>
-                <li>★ <strong>Chính sách bảo hành an tâm:</strong> Hoàn trả lại 100% chi phí sửa chữa dịch vụ nếu bệnh cũ của máy tái phát lại quá 3 lần trong thời gian bảo hành hoặc bạn không hài lòng.</li>
+                <li><strong>Cam kết sửa chữa nhanh chóng:</strong> Thiết bị xử lý tối đa trong vòng 02 ngày. Nếu máy lỗi nặng cần thời gian test mạch sâu, tiệm sẽ chủ động gọi thông báo trước rõ ràng.</li>
+                <li><strong>Đảm bảo minh bạch 100%:</strong> Linh kiện luôn được giữ nguyên trạng, tuyệt đối không tráo đổi đồ. Khách hàng được xem trực tiếp thợ làm và ký tên lên linh kiện.</li>
+                <li><strong>Bảo mật thông tin tuyệt đối:</strong> Mọi dữ liệu tài liệu cá nhân, hình ảnh riêng tư lưu trong ổ cứng luôn được cam kết an toàn bảo mật tuyệt đối tại trung tâm.</li>
+                <li><strong>Chính sách bảo hành an tâm:</strong> Hoàn trả lại 100% chi phí sửa chữa dịch vụ nếu bệnh cũ của máy tái phát lại quá 3 lần trong thời gian bảo hành hoặc bạn không hài lòng.</li>
             </ul>
         </div>
         
         <div id="chinh-sach-bao-hanh" class="reveal">
             <div class="policy-grid">
                 <div class="policy-card" style="border-left: 4px solid var(--accent-green); background-color: #f0fdf4;">
-                    <h4 style="font-weight:800; margin-bottom:8px; color:#166534;">💯 Kiểm Tra Miễn Phí</h4>
+                    <h4 style="font-weight:800; margin-bottom:8px; color:#166534;">Kiểm Tra Miễn Phí</h4>
                     <p style="color: #1e3a1e; font-size:13.5px;">Bắt chuẩn bệnh, báo đúng giá công khai công thợ. Khách hàng mang máy đến kiểm tra không sửa không mất một đồng tiền khám nào.</p>
                 </div>
                 <div class="policy-card" style="border-left: 4px solid var(--primary); background-color: #eff6ff;">
-                    <h4 style="font-weight:800; margin-bottom:8px; color:#1e40af;">⚡ Bảo Hành 1 Đổi 1</h4>
+                    <h4 style="font-weight:800; margin-bottom:8px; color:#1e40af;">Bảo Hành 1 Đổi 1</h4>
                     <p style="color: #1e1e3a; font-size:13.5px;">Linh kiện thay thế cao cấp (SSD, RAM, Màn hình, Bàn phím) luôn được bảo hành chính hãng dài lâu, lỗi đổi luôn linh kiện mới tinh.</p>
                 </div>
                 <div class="policy-card" style="border-left: 4px solid var(--accent-orange); background-color: #fff7ed;">
-                    <h4 style="font-weight:800; margin-bottom:8px; color:#9a3412;">👨‍💻 Hỗ Trợ Từ Xa Free</h4>
+                    <h4 style="font-weight:800; margin-bottom:8px; color:#9a3412;">Hỗ Trợ Từ Xa Free</h4>
                     <p style="color: #3a1e1e; font-size:13.5px;">Tặng trọn đời gói hỗ trợ cài ứng dụng văn phòng vặt, kết nối driver máy in từ xa hay quét dọn virus hệ thống qua phần mềm UltraView.</p>
                 </div>
             </div>
@@ -779,42 +1063,42 @@
                     <div class="section-title" style="font-size:15px;margin-bottom:14px;padding-left:4px;">ĐIỀU KIỆN ĐỂ ĐƯỢC BẢO HÀNH</div>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
                         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">✅</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#166534;margin-bottom:4px;">Trong thời hạn bảo hành</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Máy còn trong thời gian bảo hành ghi trên phiếu (3–12 tháng tùy dịch vụ).</div>
                             </div>
                         </div>
                         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">🧾</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#166534;margin-bottom:4px;">Có phiếu bảo hành hợp lệ</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Mang theo phiếu bảo hành cửa hàng cấp khi nhận máy. Mất phiếu liên hệ hotline để đối chiếu.</div>
                             </div>
                         </div>
                         <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">🔍</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#166534;margin-bottom:4px;">Đúng lỗi đã sửa ban đầu</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Lỗi tái phát phải trùng với hạng mục đã sửa trước đó, không phải lỗi mới phát sinh.</div>
                             </div>
                         </div>
                         <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">🚫</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#f97316;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#9a3412;margin-bottom:4px;">Không tự ý tháo máy</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Máy không bị tháo ra hoặc can thiệp bởi người khác ngoài cửa hàng sau khi sửa.</div>
                             </div>
                         </div>
                         <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">💧</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#f97316;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#9a3412;margin-bottom:4px;">Không bị vào nước / va đập</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Máy không bị ngấm nước, rơi vỡ, hoặc chập điện do nguồn ngoài sau khi nhận máy.</div>
                             </div>
                         </div>
                         <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
-                            <span style="font-size:20px;flex-shrink:0;">⚙️</span>
+                            <span style="width:22px;height:22px;border-radius:50%;background:#f97316;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='#fff' width='13' height='13'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg></span>
                             <div>
                                 <div style="font-weight:700;font-size:13.5px;color:#9a3412;margin-bottom:4px;">Không cài phần mềm độc hại</div>
                                 <div style="font-size:12.5px;color:#374151;line-height:1.6;">Với dịch vụ phần mềm: không bị nhiễm virus lại do tải phần mềm không rõ nguồn gốc sau khi bàn giao.</div>
@@ -822,7 +1106,7 @@
                         </div>
                     </div>
                     <p style="font-size:12px;color:#6b7280;margin-top:12px;padding:10px 14px;background:#f9fafb;border-radius:10px;border-left:3px solid #d1d5db;">
-                        💡 <strong>Lưu ý:</strong> Bảo hành không áp dụng cho hư hỏng do người dùng gây ra (rơi vỡ, vào nước, tự sửa). Mọi thắc mắc về điều kiện bảo hành, vui lòng liên hệ <a href="tel:0963284044" style="color:#2563eb;font-weight:700;">0963.284.044</a>.
+                        <strong>Lưu ý:</strong> Bảo hành không áp dụng cho hư hỏng do người dùng gây ra (rơi vỡ, vào nước, tự sửa). Mọi thắc mắc về điều kiện bảo hành, vui lòng liên hệ <a href="tel:0963284044" style="color:#2563eb;font-weight:700;">0963.284.044</a>.
                     </p>
                 </div>
         </div>
@@ -887,12 +1171,18 @@
         <div class="reveal" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); border: 1px solid #bae6fd; border-radius: 16px; padding: 30px; text-align: center;">
             <h3 style="font-size: 18px; font-weight: 800; color: #0369a1; margin-bottom: 10px;">Tham Gia Nhóm Hỗ Trợ Kỹ Thuật Trực Tuyến</h3>
             <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">Hỏi đáp báo giá bệnh máy tính gấp, xin link phần mềm crack an toàn, giao lưu trao đổi kiến thức qua nhóm cộng đồng Zalo.</p>
-            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" style="display:inline-block; background-color: var(--primary); color: #fff; font-weight: 700; padding: 12px 28px; border-radius: 30px; text-decoration: none; text-transform: uppercase; box-shadow:0 4px 12px rgba(37,99,235,0.2);">👉 Vào nhóm zalo ngay</a>
+            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="zalo-join-btn" id="zaloJoinBtn">
+                <span class="zjb-icon">🔔</span>
+                <span class="zjb-txt">VÀO NHÓM ZALO NGAY</span>
+                <span class="zjb-arrow">→</span>
+            </a>
         </div>
     </div>
     
         <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
             <div class="section-title">CÂU HỎI THƯỜNG GẶP</div>
+            <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." oninput="filterFaq(this.value)">
+            <div id="faqNoResult" style="display:none;text-align:center;padding:16px;color:var(--text-light);font-size:14px;">Không tìm thấy câu hỏi phù hợp</div>
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">
@@ -961,7 +1251,7 @@
         </div>
 
         <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">💬 ĐỂ LẠI BÌNH LUẬN CỦA BẠN CHÚNG TÔI SẼ GIẢI ĐÁP</h3>
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px;">ĐỂ LẠI BÌNH LUẬN CỦA BẠN CHÚNG TÔI SẼ GIẢI ĐÁP</h3>
             <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.netlify.app" data-page-title="TRAN HOA COMPUTER"></div>
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
@@ -975,27 +1265,27 @@
                 <p>Chuyên gia sửa chữa, bảo dưỡng linh kiện, lắp đặt trọn gói hệ thống máy tính Văn Phòng - Gaming tại Thái Nguyên.</p>
             </div>
             <div>
-                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">📍 BẢN ĐỒ CỬA HÀNG</h4>
+                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">BẢN ĐỒ CỬA HÀNG</h4>
                 <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <div class="map-wrapper">
                     <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
-                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">➔ THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">📍 Phú Thịnh, Đại Từ, Thái Nguyên</p>
-                <p style="margin-bottom:6px;">📞 Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
-                <p style="margin-bottom:6px;">✉️ Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></p>
+                <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">THÔNG TIN CHI TIẾT</h4>
+                <p style="margin-bottom:6px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
+                <p style="margin-bottom:6px;">Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></p>
             </div>
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p></div>
     </footer>
     <div class="bottom-nav">
-        <a href="tel:0963284044" class="nav-item"><span>📞</span><span>Gọi Ngay</span></a>
-        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item"><span>💬</span><span>Chat Zalo</span></a>
-        <a href="#datlich-sua-chua" class="nav-item active-booking" onclick="event.preventDefault(); document.getElementById('datlich-sua-chua').scrollIntoView({behavior:'smooth'});"><div class="booking-icon-wrapper">📅</div><span style="margin-top:2px;">Đặt Lịch</span></a>
-        <a href="#muc-bang-gia" class="nav-item" onclick="event.preventDefault(); document.getElementById('muc-bang-gia').scrollIntoView({behavior:'smooth'});"><span>💰</span><span>Bảng Giá</span></a>
-        <a href="#hoat-dong-thuc-te" class="nav-item" onclick="event.preventDefault(); document.getElementById('hoat-dong-thuc-te').scrollIntoView({behavior:'smooth'});"><span>🖼️</span><span>Hình Ảnh</span></a>
+        <a href="tel:0963284044" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.62 10.79z"/></svg><span>Gọi Ngay</span></a>
+        <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>Chat Zalo</span></a>
+        <a href="#datlich-sua-chua" class="nav-item active-booking" onclick="event.preventDefault(); document.getElementById('datlich-sua-chua').scrollIntoView({behavior:'smooth'});"><div class="booking-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div><span style="margin-top:2px;">Đặt Lịch</span></a>
+        <a href="#muc-bang-gia" class="nav-item" onclick="event.preventDefault(); document.getElementById('muc-bang-gia').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg><span>Bảng Giá</span></a>
+        <a href="#hoat-dong-thuc-te" class="nav-item" onclick="event.preventDefault(); document.getElementById('hoat-dong-thuc-te').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Hình Ảnh</span></a>
     </div>
     <button id="backToTop">↑</button>
         <script>
@@ -1086,7 +1376,7 @@
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
         toast.className = 'toast';
-        toast.innerHTML = `✅ ${msg}`;
+        toast.innerHTML = `<span style='color:var(--accent-green);font-weight:700;margin-right:6px;'>✓</span>${msg}`;
         container.appendChild(toast);
         setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
@@ -1112,7 +1402,15 @@
 
         const btt = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
-            if(window.scrollY > 400) btt.classList.add('visible'); else btt.classList.remove('visible');
+            // Show while scrolling, auto-hide 2s after scroll stops
+            if(window.scrollY > 200) {
+                btt.classList.add('visible');
+                clearTimeout(window._bttTimer);
+                window._bttTimer = setTimeout(() => btt.classList.remove('visible'), 2000);
+            } else {
+                clearTimeout(window._bttTimer);
+                btt.classList.remove('visible');
+            }
             if(window.scrollY > 20) document.getElementById('headerNav').classList.add('scrolled'); else document.getElementById('headerNav').classList.remove('scrolled');
         });
         btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
@@ -1244,6 +1542,22 @@
         })();
 
         // ---- FAQ accordion ----
+
+        function filterFaq(query) {
+            var q = query.trim().toLowerCase();
+            var items = document.querySelectorAll('.faq-item');
+            var found = 0;
+            items.forEach(function(item) {
+                var btn = item.querySelector('.faq-q');
+                var text = (btn ? btn.textContent : item.textContent).toLowerCase();
+                var match = !q || text.indexOf(q) !== -1;
+                item.style.display = match ? '' : 'none';
+                if (match) found++;
+            });
+            // Show "no results" hint if nothing found
+            var hint = document.getElementById('faqNoResult');
+            if (hint) hint.style.display = (found === 0 && q) ? '' : 'none';
+        }
         function toggleFaq(btn) {
             const item = btn.closest('.faq-item');
             const ans  = item.querySelector('.faq-a');
@@ -1265,14 +1579,398 @@
         if (btn) { btn.classList.toggle('visible', window.scrollY > 300); }
     });
 </script>
-<div id="floatBtnGroup" style="position:fixed;right:20px;bottom:95px;z-index:9000;display:flex;flex-direction:column;gap:12px;">
-    <a id="floatCallBtn" href="tel:0963284044" title="Gọi ngay: 0963.284.044"
-       style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#16a34a;color:#fff;border-radius:50%;text-decoration:none;font-size:24px;box-shadow:0 4px 20px rgba(22,163,74,0.45);animation:shakePhone 3s ease-in-out infinite;">📞</a>
-    <a id="floatZaloBtn" href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" title="Tham gia nhóm Zalo"
-       style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#0068ff;color:#fff;border-radius:50%;text-decoration:none;box-shadow:0 4px 20px rgba(0,104,255,0.45);animation:shakePhone 3s ease-in-out 1.5s infinite;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="26" height="26" fill="#fff"><path d="M24 4C13 4 4 13 4 24c0 3.7 1 7.1 2.8 10L4 44l10.3-2.7C17.1 43 20.4 44 24 44c11 0 20-9 20-20S35 4 24 4zm0 36c-3.2 0-6.2-.9-8.8-2.5l-.6-.4-6.1 1.6 1.6-5.9-.4-.6C8.1 30.1 7.2 27.1 7.2 24 7.2 14.7 14.7 7.2 24 7.2S40.8 14.7 40.8 24 33.3 40 24 40zm10.5-15.3c-.6-.3-3.4-1.7-3.9-1.9-.5-.2-.9-.3-1.3.3-.4.6-1.5 1.9-1.8 2.2-.3.4-.7.4-1.2.1-.6-.3-2.4-.9-4.6-2.8-1.7-1.5-2.8-3.4-3.2-3.9-.3-.6 0-.9.3-1.2.3-.3.6-.7.9-1 .3-.3.4-.6.6-1 .2-.4.1-.7 0-1-.1-.3-1.3-3.1-1.8-4.2-.5-1.1-.9-.9-1.3-.9h-1.1c-.4 0-1 .1-1.5.7-.5.6-2 2-2 4.8 0 2.9 2.1 5.6 2.4 6 .3.4 4.1 6.3 10 8.8 5.8 2.5 5.8 1.7 6.9 1.6 1.1-.1 3.4-1.4 3.9-2.7.5-1.3.5-2.4.3-2.7-.1-.2-.5-.4-1.1-.7z"/></svg></a>
+
+    <script>
+    // ── Dark Mode: auto by Vietnam time (06:00–19:00 = light, rest = dark)
+    //               + manual override stored in localStorage ──
+    (function initTheme() {
+        var override = localStorage.getItem('themeOverride'); // 'dark' | 'light' | null
+        var theme;
+        if (override) {
+            theme = override;
+        } else {
+            var vn = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Ho_Chi_Minh'}));
+            theme = (vn.getHours() >= 6 && vn.getHours() < 19) ? 'light' : 'dark';
+        }
+        applyTheme(theme);
+    })();
+
+    function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        var dIcon = document.getElementById('darkIcon');
+        var lIcon = document.getElementById('lightIcon');
+        if (dIcon && lIcon) {
+            dIcon.style.display = (t === 'dark') ? 'none' : '';
+            lIcon.style.display = (t === 'dark') ? '' : 'none';
+        }
+    }
+
+    function toggleDarkMode() {
+        var cur = document.documentElement.getAttribute('data-theme') || 'light';
+        var next = (cur === 'dark') ? 'light' : 'dark';
+        localStorage.setItem('themeOverride', next);
+        applyTheme(next);
+    }
+
+    // Re-check auto every 60s when no manual override
+    setInterval(function() {
+        if (!localStorage.getItem('themeOverride')) {
+            var vn = new Date(new Date().toLocaleString('en-US', {timeZone:'Asia/Ho_Chi_Minh'}));
+            applyTheme((vn.getHours() >= 6 && vn.getHours() < 19) ? 'light' : 'dark');
+        }
+    }, 60000);
+    </script>
+<!-- ══ FLOATING CIRCLES — call + Zalo only ══ -->
+<div id="floatBtnGroup">
+    <a id="floatCallBtn" class="float-circle" href="tel:0963284044" title="Gọi ngay">
+        <span class="fc-tip">Gọi ngay: 0963.284.044</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="26" height="26"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.62 10.79z"/></svg>
+    </a>
+    <a id="floatZaloBtn" class="float-circle" href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" title="Vào nhóm Zalo">
+        <span class="fc-tip">Vào nhóm Zalo</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="34" height="34">
+            <path d="M8 9 Q8 5 12 5 L44 5 Q48 5 48 9 L48 35 Q48 39 44 39 L30 39 L22 47 L22 39 L12 39 Q8 39 8 35 Z" fill="white" opacity=".97"/>
+            <text x="14" y="30" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="15" fill="#0068ff" letter-spacing="-0.3">Zalo</text>
+        </svg>
+    </a>
 </div>
 
-    <button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Lên đầu trang">↑</button>
+<!-- ══ CHATBOT TOGGLE + LABEL ══ -->
+<div id="chatbotWrap">
+    <button id="chatbotToggle" onclick="cbToggle()" aria-label="Mở chat hỗ trợ">
+        🤖<span class="cb-badge">1</span>
+    </button>
+    <span id="chatLabel"></span>
+</div>
+
+<!-- ══ CHATBOT PANEL ══ -->
+<div id="chatbotPanel" role="dialog" aria-label="Trợ lý tư vấn">
+    <div class="cb-hdr">
+        <div class="cb-av">🤖</div>
+        <div class="cb-inf">
+            <div class="cb-nm">Trợ lý Tran Hoa Computer</div>
+            <div class="cb-st"><span class="cb-dot"></span> Đang trực tuyến</div>
+        </div>
+        <button id="cbClose" onclick="cbToggle()" aria-label="Đóng">✕</button>
+    </div>
+    <div id="cbMsgs"></div>
+    <div class="cb-qr" id="cbQR"></div>
+    <div class="cb-inp">
+        <input id="cbInput" type="text" placeholder="Nhập câu hỏi bất kỳ..." autocomplete="off" onkeydown="if(event.key==='Enter')cbSend()">
+        <button id="cbSend" onclick="cbSend()" aria-label="Gửi">&#10148;</button>
+    </div>
+</div>
+
+<script>
+/* ════════════════════ CHATBOT ENGINE v16 ════════════════════ */
+(function(){
+'use strict';
+var _open=false, _greeted=false;
+var msgs=document.getElementById('cbMsgs');
+var qrDiv=document.getElementById('cbQR');
+
+/* ── KNOWLEDGE BASE ── */
+var KB=[
+ {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
+  a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
+  q:['Giá dịch vụ','Đặt lịch sửa','Dịch vụ của shop','Hỗ trợ từ xa']},
+
+ {k:['giá','bao nhiêu','chi phí','phí','tiền','price','tốn','mất bao'],
+  a:'💰 <b>Bảng giá tham khảo:</b><br>• Sửa lỗi nguồn/main: <b>150k–450k</b><br>• Thay RAM/SSD: <b>50k–150k</b><br>• Cài Windows trọn gói: <b>150k–350k</b><br>• Diệt virus: <b>80k–200k</b><br>• Cứu dữ liệu: <b>200k–800k</b><br>• Ráp PC Gaming (công): <b>100k–300k</b><br>• Hỗ trợ từ xa: <b>MIỄN PHÍ 🎁</b>',
+  q:['Kiểm tra miễn phí','Đặt lịch sửa','Liên hệ ngay']},
+
+ {k:['địa chỉ','ở đâu','chỗ nào','vị trí','đường','thái nguyên','đại từ'],
+  a:'📍 Cửa hàng tại <b>Phú Thịnh, Đại Từ, Thái Nguyên</b>.<br>Xem bản đồ ngay trên trang hoặc gọi hotline để được hướng dẫn đường đi!',
+  q:['Hotline gọi ngay','Zalo tư vấn','Giờ làm việc']},
+
+ {k:['giờ','mở cửa','đóng cửa','thời gian','mấy giờ','khi nào mở'],
+  a:'🕐 Mở cửa <b>07:00 – 22:00 mỗi ngày</b>, kể cả thứ 7 & Chủ nhật.<br>Đặt lịch trước để được phục vụ ưu tiên!',
+  q:['Đặt lịch sửa','Hotline gọi ngay']},
+
+ {k:['đặt lịch','hẹn','booking','đăng ký lịch','appointment'],
+  a:'📅 Đặt lịch ngay tại phần <b>Đặt Lịch Sửa Chữa</b> trên trang này, hoặc nhắn Zalo / gọi hotline.<br>✅ Xác nhận trong <b>15 phút</b>!',
+  q:['Zalo tư vấn','Hotline gọi ngay','Giá dịch vụ']},
+
+ {k:['laptop','máy xách tay','notebook','macbook'],
+  a:'💻 <b>Sửa Laptop:</b><br>• Không lên nguồn, lỗi nguồn<br>• Màn hình hỏng, bản lề gãy<br>• Chậm, treo, virus<br>• Thay SSD, RAM, pin, bàn phím<br>• Lỗi mainboard, chip<br>✅ Kiểm tra miễn phí!',
+  q:['Giá sửa laptop','Đặt lịch','Bảo hành']},
+
+ {k:['pc','máy bàn','desktop','máy cây','máy tính để bàn'],
+  a:'🖥️ <b>Sửa PC / Máy bàn:</b><br>• Lỗi nguồn, không khởi động<br>• Lỗi mainboard, RAM, VGA<br>• Cài Windows, driver, phần mềm<br>• Nâng cấp SSD, RAM, VGA, PSU<br>• Ráp PC Gaming theo yêu cầu',
+  q:['Ráp PC Gaming','Giá dịch vụ','Đặt lịch']},
+
+ {k:['gaming','game','chơi game','ráp máy','build pc','cấu hình game','rtx','rx ','ryzen','i5','i7','i9'],
+  a:'🎮 <b>Ráp PC Gaming chuyên nghiệp:</b><br>• Tư vấn cấu hình theo ngân sách<br>• Linh kiện chính hãng 100%<br>• Ráp & test bền trước giao<br>• Bảo hành theo hãng<br>Cho mình biết ngân sách nhé! 💪',
+  q:['Tư vấn cấu hình','Liên hệ ngay','Giá dịch vụ']},
+
+ {k:['bảo hành','warranty','đổi trả','hoàn tiền','cam kết'],
+  a:'🛡️ <b>Chính sách bảo hành:</b><br>• Dịch vụ sửa: <b>3–12 tháng</b><br>• Linh kiện mới: theo hãng<br>• Lỗi tái phát → sửa lại miễn phí<br>• Báo giá trước — không phát sinh ẩn',
+  q:['Giá dịch vụ','Đặt lịch','Liên hệ']},
+
+ {k:['virus','malware','mã độc','bị hack','ransomware','trojan','diệt virus','bảo mật'],
+  a:'🦠 <b>Diệt virus & bảo mật:</b><br>• Quét & diệt malware, ransomware<br>• Phục hồi file bị mã hóa (nếu khả thi)<br>• Cài phần mềm bảo vệ chuyên dụng<br>• Hỗ trợ từ xa miễn phí 🎁',
+  q:['Hỗ trợ từ xa','Giá dịch vụ','Đặt lịch']},
+
+ {k:['dữ liệu','cứu dữ liệu','xóa nhầm','format nhầm','ổ cứng chết','mất file','phục hồi'],
+  a:'💾 <b>Cứu dữ liệu:</b><br>• Ổ cứng chết cơ, bad sector<br>• SSD lỗi, không nhận ổ<br>• Xóa nhầm, format nhầm<br>• Tỉ lệ phục hồi <b>80–95%</b><br><i>Kiểm tra → báo kết quả trước!</i>',
+  q:['Giá cứu dữ liệu','Đặt lịch','Liên hệ ngay']},
+
+ {k:['pass','mật khẩu','password','bios','quên pass','unlock','bitlocker'],
+  a:'🔑 <b>Xử lý mật khẩu & PASS BIOS:</b><br>• Phá pass Windows (không mất dữ liệu)<br>• PASS BIOS/UEFI (phần cứng trực tiếp)<br>• Xử lý Bitlocker, TPM<br>⚠️ <i>Cần mang máy đến — không từ xa!</i>',
+  q:['Đặt lịch sửa','Địa chỉ','Giá dịch vụ']},
+
+ {k:['máy in','printer','kẹt giấy','in mờ','mực in','không in được'],
+  a:'🖨️ <b>Sửa máy in & ngoại vi:</b><br>• Kẹt giấy, in mờ, không in<br>• Thay mực, drum<br>• Cài driver từ xa miễn phí 🎁<br>• Sửa chuột, bàn phím, màn hình ngoài',
+  q:['Hỗ trợ từ xa','Giá dịch vụ','Đặt lịch']},
+
+ {k:['từ xa','remote','ultraviewer','teamviewer','hỗ trợ online','qua mạng'],
+  a:'🌐 <b>Hỗ trợ từ xa MIỄN PHÍ TRỌN ĐỜI:</b><br>• Lỗi vặt văn phòng, ứng dụng<br>• Cài driver, phần mềm<br>• Quét virus nhẹ<br>Tải UltraViewer → nhắn ID + Pass là xong! 🚀',
+  q:['Zalo tư vấn','Hotline gọi ngay']},
+
+ {k:['win','windows','cài win','cài lại windows','hệ điều hành','win 10','win 11'],
+  a:'⚙️ <b>Cài Windows trọn gói:</b><br>• Windows 10 / 11 bản quyền<br>• Kèm driver, Office, phần mềm<br>• Tối ưu hiệu năng, dọn rác<br>• Backup dữ liệu trước khi cài<br>⏱️ <i>Xong trong 45–90 phút!</i>',
+  q:['Giá cài Windows','Đặt lịch','Hỗ trợ từ xa']},
+
+ {k:['nóng','quá nhiệt','overheat','tản nhiệt','quạt kêu','fan','nhiệt độ cao'],
+  a:'🌡️ <b>Máy bị nóng:</b><br>• Bụi bám quạt → cần <b>vệ sinh</b><br>• Keo tản nhiệt khô → cần <b>thay keo</b><br>• Quạt hỏng → cần <b>thay quạt</b><br><i>Vệ sinh & thay keo chuyên nghiệp — máy mát ngay!</i>',
+  q:['Đặt lịch sửa','Giá dịch vụ','Liên hệ']},
+
+ {k:['chậm','lag','đơ máy','giật','treo máy','loading lâu','khởi động chậm'],
+  a:'🐢 <b>Máy chậm — giải pháp:</b><br>1. Nâng cấp HDD → <b>SSD</b> (nhanh 5–10 lần)<br>2. Thêm <b>RAM</b> (tối thiểu 8GB)<br>3. Cài lại Windows sạch<br>4. Diệt virus, dọn rác<br>Mang đến kiểm tra free để biết cần làm gì!',
+  q:['Giá nâng cấp SSD','Đặt lịch','Hỗ trợ từ xa']},
+
+ {k:['màn hình','screen','sọc màn','đen màn','vỡ màn','không lên hình','màn tối'],
+  a:'🖥️ <b>Lỗi màn hình laptop:</b><br>• Vỡ màn → thay màn chính hãng<br>• Sọc dọc/ngang → lỗi cáp hoặc màn<br>• Màn tối → lỗi backlight/cáp<br>• Không lên hình → kiểm tra VGA<br><i>Cần kiểm tra trực tiếp để chẩn đoán chính xác!</i>',
+  q:['Đặt lịch sửa','Giá dịch vụ','Liên hệ']},
+
+ {k:['pin','battery','chai pin','hết pin','sạc không vào','pin hao'],
+  a:'🔋 <b>Vấn đề pin laptop:</b><br>• Pin chai → nên <b>thay pin</b> mới<br>• Không nhận sạc → lỗi cổng sạc/IC<br>• Hao nhanh bất thường → kiểm tra phần mềm ngốn pin<br><i>Thay pin chính hãng, bảo hành 3–6 tháng!</i>',
+  q:['Giá thay pin','Đặt lịch','Liên hệ ngay']},
+
+ {k:['bàn phím','keyboard','phím liệt','phím không bấm','đổ nước bàn phím'],
+  a:'⌨️ <b>Lỗi bàn phím laptop:</b><br>• Phím liệt → vệ sinh hoặc thay cụm<br>• Đổ nước → <b>tắt ngay, không cắm điện!</b><br>• Thay bàn phím mới: 200k–600k tùy model',
+  q:['Đặt lịch sửa','Liên hệ ngay']},
+
+ {k:['không lên nguồn','không bật','không khởi động','bấm nguồn không lên','chết nguồn'],
+  a:'⚡ <b>Máy không lên nguồn:</b><br>• Lỗi adapter / nguồn máy bàn<br>• Pin chai hoàn toàn<br>• Lỗi IC nguồn, mainboard<br>• RAM lỗi (thử tháo lắp lại)<br><i>Chẩn đoán miễn phí — không sửa thì không tính tiền!</i>',
+  q:['Đặt lịch sửa','Kiểm tra miễn phí','Liên hệ']},
+
+ {k:['ssd','hdd','ổ cứng','nvme','sata','nâng cấp ổ'],
+  a:'💡 <b>SSD vs HDD:</b><br>• SSD nhanh hơn HDD <b>5–10 lần</b><br>• Windows khởi động trong 10–15 giây với SSD!<br>• SSD 256GB+ cho ổ hệ thống là lý tưởng<br>• HDD vẫn tốt cho lưu trữ dung lượng lớn<br><i>Nâng cấp SSD = đầu tư xứng đáng nhất!</i>',
+  q:['Giá nâng cấp SSD','Đặt lịch','Liên hệ']},
+
+ {k:['ram','bộ nhớ','memory','ddr4','ddr5','8gb','16gb','32gb'],
+  a:'🧠 <b>RAM — bao nhiêu là đủ?</b><br>• Văn phòng / lướt web: <b>8GB</b><br>• Đa nhiệm + game: <b>16GB</b> lý tưởng<br>• Đồ họa / 3D: <b>32GB+</b><br>Thêm RAM = cách rẻ nhất để máy nhanh hơn!',
+  q:['Giá nâng cấp RAM','Đặt lịch','Liên hệ']},
+
+ {k:['amd','intel','ryzen','core i','cpu','vi xử lý','processor'],
+  a:'⚔️ <b>AMD vs Intel:</b><br>• <b>Intel i5/i7</b> thế hệ mới: tốt cho gaming FPS cao<br>• <b>AMD Ryzen 5/7</b>: đa nhân tốt, giá rẻ hơn, tiết kiệm điện<br>• Văn phòng → Ryzen 5 tốt nhất theo giá<br>• Gaming thuần → Intel i5 thế hệ mới vẫn dẫn',
+  q:['Tư vấn cấu hình','Ráp PC Gaming','Liên hệ ngay']},
+
+ {k:['wifi','mạng','internet','mất mạng','không kết nối mạng','lan','ethernet'],
+  a:'📶 <b>Lỗi WiFi / Mạng:</b><br>• Không kết nối → quên mạng và kết nối lại<br>• Driver lỗi → cài lại driver WiFi<br>• Card WiFi hỏng → thay mới 150–300k<br>• Mạng chậm → kiểm tra DNS, tắt app ngốn băng thông<br><i>Hỗ trợ từ xa miễn phí cho lỗi phần mềm!</i>',
+  q:['Hỗ trợ từ xa','Đặt lịch','Liên hệ']},
+
+ {k:['office','word','excel','powerpoint','phần mềm','cài phần mềm','cài app'],
+  a:'📄 <b>Cài đặt phần mềm:</b><br>• Microsoft Office, kế toán, thiết kế<br>• Driver thiết bị ngoại vi<br>• Hỗ trợ từ xa miễn phí cho cài đặt cơ bản 🎁<br>Nhắn mình tên phần mềm cần cài nhé!',
+  q:['Hỗ trợ từ xa','Đặt lịch','Liên hệ']},
+
+ {k:['màn hình xanh','bsod','blue screen','crash','restart liên tục','lỗi hệ thống'],
+  a:'💙 <b>Màn hình xanh (BSOD):</b><br>• RAM lỗi → tháo lắp lại, test MemTest<br>• Driver lỗi → xem error code, gỡ driver<br>• SSD/HDD lỗi → chạy CHKDSK<br>• Windows hỏng → SFC /scannow hoặc cài lại<br><i>Bó tay thì mang đến mình!</i>',
+  q:['Đặt lịch sửa','Hỗ trợ từ xa','Liên hệ']},
+
+ {k:['mua mới','nên sửa','đáng sửa','nên mua hay sửa','worth'],
+  a:'🤔 <b>Nên sửa hay mua mới?</b><br>• Chi phí sửa > 60–70% giá máy mới → nên mua mới<br>• Máy dưới 3 tuổi, lỗi nhỏ → sửa là hợp lý<br>• Chỉ cần SSD/RAM → rẻ mà hiệu quả như mua mới<br><i>Mang đến kiểm tra — tư vấn thật lòng!</i>',
+  q:['Kiểm tra miễn phí','Đặt lịch','Liên hệ ngay']},
+
+ {k:['vệ sinh','bảo trì','bảo dưỡng','dọn bụi','tăng tuổi thọ máy'],
+  a:'🧹 <b>Bảo dưỡng định kỳ:</b><br>• Vệ sinh bụi: <b>6–12 tháng/lần</b><br>• Thay keo tản nhiệt: <b>1–2 năm/lần</b><br>• Dọn rác hệ thống: hàng tháng<br>• Quét virus: hàng tuần<br><i>Đặt lịch bảo dưỡng để máy bền lâu!</i>',
+  q:['Đặt lịch','Giá dịch vụ','Liên hệ']},
+
+ {k:['hotline','điện thoại','gọi điện','số điện thoại','liên hệ','contact'],
+  a:'📞 Hotline: <b>0963.284.044</b><br>Bấm nút <b>Gọi Ngay</b> màu xanh lá ở góc phải trang!',
+  q:['Zalo tư vấn','Địa chỉ','Đặt lịch']},
+
+ {k:['zalo','nhắn tin zalo','chat zalo','liên hệ zalo'],
+  a:'💬 Nhắn Zalo ngay — phản hồi trong vài phút ⚡<br>Bấm nút <b>Zalo</b> ở góc phải trang.',
+  q:['Hotline gọi ngay','Địa chỉ','Đặt lịch']},
+
+ {k:['miễn phí','free','kiểm tra máy','chẩn đoán','xem thử','không mất tiền'],
+  a:'🔍 <b>Kiểm tra máy MIỄN PHÍ:</b><br>Mang máy đến → kỹ thuật viên chẩn đoán & báo giá.<br>✅ Không hài lòng → mang máy về, không tính tiền!',
+  q:['Đặt lịch','Địa chỉ','Liên hệ ngay']},
+
+ {k:['cảm ơn','thank you','thanks','ok rồi','được rồi','hiểu rồi'],
+  a:'😊 Không có gì! Cứ hỏi thêm nếu cần nhé. Chúc bạn một ngày tốt lành! ✨',
+  q:['Đặt lịch sửa','Hotline gọi ngay']},
+
+ {k:['dịch vụ','service','sửa gì','làm gì','bán gì','cung cấp gì'],
+  a:'🛠️ <b>Dịch vụ tại Tran Hoa Computer:</b><br>💻 Sửa Laptop & PC<br>🎮 Ráp PC Gaming<br>⚙️ Cài Windows, phần mềm<br>💾 Cứu dữ liệu<br>🦠 Diệt virus, bảo mật<br>🖨️ Sửa máy in & ngoại vi<br>🌐 Hỗ trợ từ xa MIỄN PHÍ',
+  q:['Giá dịch vụ','Đặt lịch','Liên hệ ngay']},
+
+ {k:['tiếng ồn','tiếng kêu','ổ cứng kêu','quạt ồn','noise lạ'],
+  a:'🔊 <b>Máy kêu lạ:</b><br>• Quạt ồn → bụi hoặc bi hỏng → vệ sinh/thay<br>• <b>Ổ cứng kêu lạch cạch → NGUY HIỂM!</b> Backup dữ liệu ngay!<br>• Nguồn kêu → tụ hoặc cuộn cảm vấn đề<br><i>Ổ cứng kêu = báo động đỏ, đừng bỏ qua!</i>',
+  q:['Cứu dữ liệu','Đặt lịch sửa','Liên hệ']},
+
+ {k:['usb','cổng usb','type-c','hdmi','vga port','jack tai nghe','âm thanh không ra'],
+  a:'🔌 <b>Lỗi cổng kết nối:</b><br>• USB/Type-C lỏng → cần hàn lại hoặc thay<br>• Không ra âm thanh → lỗi driver hoặc IC âm thanh<br>• HDMI không nhận màn → kiểm tra driver VGA<br><i>Mang đến kiểm tra để chẩn đoán chính xác!</i>',
+  q:['Đặt lịch sửa','Giá dịch vụ','Liên hệ']},
+
+ {k:['bluetooth','kết nối bluetooth','tai nghe bluetooth','không tìm thấy bluetooth'],
+  a:'📱 <b>Lỗi Bluetooth:</b><br>• Thử bật/tắt Bluetooth trong Settings<br>• Cài lại driver Bluetooth<br>• Kiểm tra xem BIOS có tắt Bluetooth không<br>• Card Bluetooth hỏng → thay card WiFi+BT combo<br><i>Hỗ trợ từ xa miễn phí để kiểm tra!</i>',
+  q:['Hỗ trợ từ xa','Đặt lịch','Liên hệ']},
+];
+
+/* ── QUICK REPLY ACTIONS ── */
+var QRA={
+  'Giá dịch vụ':       function(){uS('Giá dịch vụ?');rp('giá');},
+  'Giá sửa laptop':    function(){uS('Giá sửa laptop?');rp('laptop');},
+  'Giá cài Windows':   function(){uS('Giá cài Windows?');rp('win');},
+  'Giá cứu dữ liệu':  function(){uS('Giá cứu dữ liệu?');rp('dữ liệu');},
+  'Giá nâng cấp SSD':  function(){uS('Giá nâng cấp SSD?');rp('ssd');},
+  'Giá nâng cấp RAM':  function(){uS('Giá nâng cấp RAM?');rp('ram');},
+  'Giá thay pin':      function(){uS('Giá thay pin?');rp('pin');},
+  'Đặt lịch sửa':     function(){uS('Đặt lịch sửa máy');rp('đặt lịch');},
+  'Đặt lịch':         function(){uS('Đặt lịch');rp('đặt lịch');},
+  'Liên hệ ngay':     function(){uS('Liên hệ cửa hàng?');rp('hotline');},
+  'Liên hệ':          function(){uS('Liên hệ?');rp('hotline');},
+  'Hotline gọi ngay': function(){uS('Hotline là gì?');rp('hotline');},
+  'Zalo tư vấn':      function(){uS('Nhắn Zalo?');rp('zalo');},
+  'Hỗ trợ từ xa':     function(){uS('Hỗ trợ từ xa?');rp('từ xa');},
+  'Bảo hành':         function(){uS('Bảo hành?');rp('bảo hành');},
+  'Ráp PC Gaming':    function(){uS('Ráp PC Gaming');rp('gaming');},
+  'Tư vấn cấu hình':  function(){uS('Tư vấn cấu hình');rp('gaming');},
+  'Địa chỉ':          function(){uS('Địa chỉ cửa hàng?');rp('địa chỉ');},
+  'Địa chỉ cửa hàng': function(){uS('Địa chỉ?');rp('địa chỉ');},
+  'Giờ làm việc':     function(){uS('Giờ mở cửa?');rp('giờ');},
+  'Dịch vụ của shop': function(){uS('Shop có dịch vụ gì?');rp('dịch vụ');},
+  'Kiểm tra miễn phí':function(){uS('Kiểm tra miễn phí?');rp('miễn phí');},
+  'Cứu dữ liệu':      function(){uS('Cứu dữ liệu?');rp('dữ liệu');},
+};
+
+var offT=[
+  '😄 Câu hỏi này ngoài chuyên môn máy tính của mình rồi 😅<br>Nhưng về <b>máy tính & công nghệ</b> thì mình biết hết! Bạn có thắc mắc gì về thiết bị không?',
+  '🤖 Ồ, mình chỉ giỏi về máy tính thôi, không phải mọi thứ 😄<br>Có vấn đề gì với laptop hay PC không? Mình sẵn sàng hỗ trợ!',
+  '🤔 Haha, câu này hơi ngoài vùng phủ sóng của mình! Mình chuyên về <b>sửa chữa & tư vấn máy tính</b>.<br>Bạn cần hỗ trợ gì về thiết bị không?',
+];
+var offIdx=0;
+
+function uS(t){addMsg(t,'user',[]);}
+function bS(t,q){addMsg(t,'bot',q||[]);}
+
+function addMsg(t,role,qrs){
+  var w=document.createElement('div');
+  w.className='cb-m '+(role==='user'?'user':'bot');
+  var b=document.createElement('div');
+  b.className='bub'; b.innerHTML=t;
+  w.appendChild(b); msgs.appendChild(w);
+  msgs.scrollTop=msgs.scrollHeight;
+  setQR(qrs);
+}
+
+function setQR(list){
+  qrDiv.innerHTML='';
+  (list||[]).slice(0,4).forEach(function(lbl){
+    var btn=document.createElement('button');
+    btn.className='cb-qb'; btn.textContent=lbl;
+    btn.onclick=function(){if(QRA[lbl])QRA[lbl]();};
+    qrDiv.appendChild(btn);
+  });
+}
+
+function ty_then(a,q){
+  var tw=document.createElement('div');
+  tw.className='cb-m bot';
+  tw.innerHTML='<div class="bub"><div class="cb-ty"><span></span><span></span><span></span></div></div>';
+  msgs.appendChild(tw); msgs.scrollTop=msgs.scrollHeight; setQR([]);
+  setTimeout(function(){msgs.removeChild(tw);bS(a,q);},600+Math.random()*400);
+}
+
+function rp(txt){
+  var low=(txt||'').toLowerCase();
+  for(var i=0;i<KB.length;i++){
+    if(KB[i].k.some(function(k){return low.indexOf(k)>-1;})){
+      ty_then(KB[i].a,KB[i].q); return;
+    }
+  }
+  var tech=['máy','cpu','gpu','ram','ssd','hdd','cài','lỗi','sửa','win','driver','bios','usb','vga','card','chip','main','modem','game','lag','fps','file','disk','boot','crash','screen','display','laptop','pc '];
+  if(tech.some(function(w){return low.indexOf(w)>-1;})){
+    ty_then('🤔 Mình chưa có câu trả lời chi tiết cho câu này.<br>Nhưng đừng lo — gọi hoặc nhắn Zalo, kỹ thuật viên tư vấn ngay! 💪',
+      ['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa']);
+    return;
+  }
+  ty_then(offT[offIdx%offT.length],['Giá dịch vụ','Đặt lịch sửa','Dịch vụ của shop']);
+  offIdx++;
+}
+
+window.cbSend=function(){
+  var inp=document.getElementById('cbInput');
+  var t=(inp.value||'').trim();
+  if(!t) return;
+  inp.value='';
+  uS(t); rp(t);
+};
+
+window.cbToggle=function(){
+  _open=!_open;
+  var panel=document.getElementById('chatbotPanel');
+  var badge=document.querySelector('#chatbotToggle .cb-badge');
+  panel.classList.toggle('cb-open',_open);
+  if(badge) badge.style.display=_open?'none':'flex';
+  if(_open && !_greeted){
+    _greeted=true;
+    setTimeout(function(){
+      ty_then('👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>. Rất vui được gặp bạn!<br><br>Bạn đang cần hỗ trợ về vấn đề gì?',
+        ['Giá dịch vụ','Đặt lịch sửa','Dịch vụ của shop','Hỗ trợ từ xa']);
+    },300);
+  }
+};
+
+/* ── TYPEWRITER LABEL ── */
+(function(){
+  var el=document.getElementById('chatLabel');
+  if(!el) return;
+  var txt='Chat với trợ lý';
+  var idx=0, phase='typing', hold=0;
+  function tick(){
+    if(_open){el.textContent='';setTimeout(tick,500);return;}
+    if(phase==='typing'){
+      el.textContent=txt.substring(0,idx+1);
+      idx++;
+      if(idx>=txt.length){phase='holding';hold=0;setTimeout(tick,100);}
+      else setTimeout(tick,90);
+    } else if(phase==='holding'){
+      hold++;
+      if(hold>=50) phase='erasing'; /* ~5s at 100ms */
+      setTimeout(tick,100);
+    } else if(phase==='erasing'){
+      if(idx>0){el.textContent=txt.substring(0,idx-1);idx--; setTimeout(tick,40);}
+      else {el.textContent='';phase='waiting';setTimeout(tick,2000);} /* 2s gap */
+    } else { /* waiting */
+      phase='typing';idx=0; setTimeout(tick,50);
+    }
+  }
+  setTimeout(tick,1500);
+})();
+
+})();
+/* ════════════════════════════════════════════════════════════ */
+</script>
+
+<script>
+/* Zalo button ripple */
+(function(){
+  var btn=document.getElementById('zaloJoinBtn');
+  if(!btn) return;
+  btn.addEventListener('click',function(e){
+    var r=document.createElement('span');
+    r.className='zjb-ripple';
+    var d=Math.max(btn.offsetWidth,btn.offsetHeight);
+    r.style.cssText='width:'+d+'px;height:'+d+'px;left:'+(e.offsetX-d/2)+'px;top:'+(e.offsetY-d/2)+'px;';
+    btn.appendChild(r);
+    setTimeout(function(){r.remove();},650);
+  });
+})();
+</script>
 </body>
 </html>
 
