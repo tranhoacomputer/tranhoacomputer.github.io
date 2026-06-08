@@ -911,6 +911,13 @@
     #priceTabsWrapper{overflow:hidden;position:relative;touch-action:pan-y;} #priceTabsWrapper .tab-content-slide{touch-action:pan-x pan-y;}
 
     /* ── Price tab slide animation ── */
+    
+    @keyframes swipeHint {
+        0%,100%{ transform: translateX(0); opacity:0.7; }
+        25%{ transform: translateX(-8px); opacity:1; }
+        75%{ transform: translateX(8px); opacity:1; }
+    }
+    #swipeHint { animation: swipeHint 2.5s ease-in-out infinite; }
     @keyframes tabSlideIn  { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:translateX(0)} }
     @keyframes tabSlideOut { from{opacity:0;transform:translateX(-18px)} to{opacity:1;transform:translateX(0)} }
     .price-table-section.active { animation: tabSlideIn .22s ease; }
@@ -1017,6 +1024,58 @@
         #priceTabsWrapper .price-table-section table{
             width:100%;
         }
+    }
+    
+    /* ══════════════════════════════════════════════════
+       TOUCH OPTIMIZATIONS — faster tap, no highlight
+       ══════════════════════════════════════════════════ */
+    /* Remove 300ms tap delay on all buttons and links */
+    a, button, .tab-btn, .bottom-nav-item, .bottom-nav-cta-center,
+    .service-card, .commit-item, [onclick], input[type="submit"],
+    .faq-question, #chatbotToggle, .kb-suggestion, .chatbot-send {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    /* Visual tap feedback */
+    a:active, button:active, .tab-btn:active, .bottom-nav-item:active {
+        opacity: 0.75;
+        transform: scale(0.97);
+        transition: transform 0.08s, opacity 0.08s;
+    }
+    .bottom-nav-cta-center:active {
+        transform: scale(0.93) translateY(-2px);
+        transition: transform 0.08s;
+    }
+    /* Ensure minimum 44×44px touch targets (WCAG AA) */
+    .tab-btn { min-height: 44px; }
+    .bottom-nav-item { min-height: 56px; }
+    .faq-question { min-height: 48px; }
+    /* Smooth momentum scroll everywhere */
+    * { -webkit-overflow-scrolling: touch; }
+    /* Prevent text selection on interactive elements during swipe */
+    .tab-btn, #priceTabContainer, #priceTabsWrapper,
+    .bottom-nav, .chatbot-header { user-select: none; -webkit-user-select: none; }
+    /* Larger tap target for chatbot toggle */
+    #chatbotToggle { min-width: 56px; min-height: 56px; }
+    /* Smooth scroll everywhere */
+    html { scroll-behavior: smooth; }
+    /* Prevent double-tap zoom on buttons */
+    button, a, input, select, textarea { touch-action: manipulation; }
+    
+    /* ── Promo Banner (Ưu đãi tháng này) ── */
+    .promo-banner{background:linear-gradient(135deg,#1e40af,#2563eb,#0ea5e9);color:#fff;border-radius:20px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px;box-shadow:0 8px 28px rgba(37,99,235,0.35);position:relative;overflow:hidden;}
+    .promo-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 60%);animation:promoBgRotate 6s linear infinite;pointer-events:none;}
+    @keyframes promoBgRotate{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+    .promo-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+    .promo-desc{font-size:13px;opacity:.9;}
+    .promo-cta{background:linear-gradient(90deg,#facc15,#f97316,#facc15);background-size:250% auto;color:#0f172a;font-weight:900;font-size:14.5px;padding:13px 24px;border-radius:30px;white-space:nowrap;text-decoration:none;box-shadow:0 4px 20px rgba(251,191,36,0.6);animation:promoShimmer 2.5s linear infinite,promoGlowPulse 2s ease-in-out infinite;display:inline-flex;align-items:center;gap:6px;transition:transform .2s;flex-shrink:0;}
+    .promo-cta:hover{transform:scale(1.08);}
+    .promo-cta:active{transform:scale(1.04);}
+    @keyframes promoShimmer{0%{background-position:200% center;}100%{background-position:-200% center;}}
+    @keyframes promoGlowPulse{0%,100%{box-shadow:0 4px 20px rgba(251,191,36,0.6),0 0 0 0 rgba(251,191,36,0.35);}50%{box-shadow:0 6px 28px rgba(251,191,36,0.9),0 0 0 8px rgba(251,191,36,0.0);}}
+    @media(max-width:600px){
+        .promo-banner{flex-direction:column;text-align:center;}
+        .promo-cta{width:100%;justify-content:center;touch-action:manipulation;}
     }
     </style>
 </head>
@@ -1132,7 +1191,14 @@
                 <button type="button" onclick="fillDemoData()" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;">Bấm vào đây để điền mẫu thử nhanh</button>
             </div>
 
-            <form id="bookingForm">
+            <form id="bookingForm" action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST">
+                <!-- FormSubmit config -->
+                <input type="hidden" name="_subject" value="📅 Đặt lịch sửa máy tính - Tran Hoa Computer">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="box">
+                <input type="hidden" name="_replyto" id="fsReplyTo" value="">
+                <!-- Fallback redirect (used only if JS fetch fails) -->
+                <input type="hidden" name="_next" value="https://tranhoacomputer.github.io/?booked=1">
                 <div class="form-group">
                     <label>Họ và tên khách hàng *</label>
                     <input type="text" name="fullname" id="inputFullname" class="form-control" placeholder="Nhập họ và tên của bạn" required>
@@ -1199,7 +1265,18 @@
                 </button>
             </form>
         </div>
-    <div id="dich-vu" class="section-title reveal">DỊCH VỤ CỦA CHÚNG TÔI</div>
+
+    <!-- ══ PROMO BANNER — Ưu đãi tháng này ══ -->
+    <div class="container reveal">
+        <div class="promo-banner">
+            <div>
+                <div class="promo-title">🎁 Ưu đãi tháng này: Hỗ trợ từ xa MIỄN PHÍ trọn đời!</div>
+                <div class="promo-desc">Mọi lỗi phần mềm, driver, virus nhẹ — kỹ thuật viên xử lý qua mạng ngay.</div>
+            </div>
+            <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="promo-cta">🎁 NHẬN NGAY →</a>
+        </div>
+    </div>
+        <div id="dich-vu" class="section-title reveal">DỊCH VỤ CỦA CHÚNG TÔI</div>
     <div class="container reveal" style="margin-bottom: 40px;">
         <div class="service-grid">
             <div class="service-card">
@@ -2703,49 +2780,67 @@
         if (form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                var errBox = document.getElementById('formErrorBox');
+                if (errBox) errBox.style.display = 'none';
                 sBtn.disabled = true;
-                bTxt.innerText = "Đang kết nối hệ thống...";
+                bTxt.innerText = "Đang gửi yêu cầu...";
                 bSpin.style.display = "inline-block";
 
-                const fData = new FormData(form);
-                const obj = {};
-                fData.forEach((val, key) => { obj[key] = val; });
+                /* Build form data as JSON */
+                var fData = new FormData(form);
+                var obj = {};
+                fData.forEach(function(val, key) {
+                    if (!key.startsWith('_')) obj[key] = val;  /* skip hidden fields */
+                });
+
+                /* AbortController for 18-second timeout */
+                var ctrl = new AbortController();
+                var tOut = setTimeout(function(){ ctrl.abort(); }, 18000);
+
+                /* Sync phone to _replyto */
+                var ph = document.getElementById('inputPhone');
+                if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
 
                 fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify(obj)
+                    body: JSON.stringify(obj),
+                    signal: ctrl.signal
                 })
-                .then(response => response.json())
-                .then(result => {
+                .then(function(response) {
+                    clearTimeout(tOut);
+                    return response.json();
+                })
+                .then(function(result) {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
-                        form.reset(); 
+                        form.reset();
                         openModal();
-                        
+                        /* Update counter */
                         fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
-                        .then(res => res.json())
-                        .then(data => {
-                            const liveCounter = document.getElementById("liveCounter");
-                            if (liveCounter && data.count !== undefined) {
-                                liveCounter.innerText = 10 + data.count;
-                            }
+                        .then(function(r){ return r.json(); })
+                        .then(function(data){
+                            var lc = document.getElementById("liveCounter");
+                            if (lc && data.count !== undefined) lc.innerText = 10 + data.count;
                         })
-                        .catch(err => {
-                            const liveCounter = document.getElementById("liveCounter");
-                            if (liveCounter) {
-                                const current = parseInt(liveCounter.innerText) || 10;
-                                liveCounter.innerText = current + 1;
-                            }
+                        .catch(function(){
+                            var lc = document.getElementById("liveCounter");
+                            if (lc) lc.innerText = (parseInt(lc.innerText)||10) + 1;
                         });
                     } else {
-                        alert("Hệ thống bận, vui lòng nhắn tin trực tiếp qua Hotline!");
+                        /* FormSubmit returned non-success — show inline error */
+                        if (errBox) errBox.style.display = 'block';
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("Lỗi mạng, vui lòng kiểm tra lại kết nối Internet!");
+                .catch(function(err) {
+                    clearTimeout(tOut);
+                    console.warn('Form submit error:', err);
+                    /* Show inline fallback contact UI */
+                    if (errBox) {
+                        errBox.style.display = 'block';
+                        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 })
-                .finally(() => {
+                .finally(function() {
                     sBtn.disabled = false;
                     bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
                     bSpin.style.display = "none";
@@ -2826,6 +2921,31 @@
         }
 
     
+    
+        /* ── Swipe-down to close chatbot on mobile ── */
+        (function(){
+            var wrap = document.getElementById('chatbotWrap');
+            if (!wrap) return;
+            var swY = 0;
+            wrap.addEventListener('touchstart', function(e){
+                if (e.touches[0].clientY < wrap.getBoundingClientRect().top + 60) {
+                    swY = e.touches[0].clientY;
+                }
+            }, {passive: true});
+            wrap.addEventListener('touchend', function(e){
+                if (!swY) return;
+                var dy = e.changedTouches[0].clientY - swY;
+                swY = 0;
+                if (dy > 60) {  /* swiped down ≥60px on header area → close */
+                    var tog = document.getElementById('chatbotToggle');
+                    var chatb = document.getElementById('chatbotWrap');
+                    if (chatb && chatb.classList.contains('open')) {
+                        if (tog) tog.click();
+                    }
+                }
+            }, {passive: true});
+        })();
+
     // Back-to-top handled by merged rAF scroll listener above
 </script>
 
