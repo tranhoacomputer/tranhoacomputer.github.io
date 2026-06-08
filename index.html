@@ -6,10 +6,14 @@
     <title>Sửa Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Đại Từ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.gstatic.com/s/bevietnam/v25/FwZf7-Q1xVk-40qxOdnIoOlAIMByudQ.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Be Vietnam Pro: designed for Vietnamese + Latin, renders correctly on Android -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+    <!-- Inter: fallback for Latin UI elements -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Sửa máy tính, laptop uy tín tại Thái Nguyên - Tran Hoa Computer. Cài Windows, thay linh kiện, cứu dữ liệu tại Phú Thịnh, Đại Từ. Lấy ngay trong ngày. Hotline: 0963.284.044">
     <meta property="og:title" content="Tran Hoa Computer - Sửa Máy Tính Uy Tín Thái Nguyên">
-    <meta property="og:description" content="Sửa chữa laptop, PC, cài Windows nhanh chóng tại Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
+    <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Phú   Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
@@ -83,7 +87,7 @@
     </script>
     <meta name="theme-color" content="#2563eb">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><text x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white' font-family='Arial,sans-serif' font-weight='bold'>TC</text></svg>">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CDN removed: no utility classes used in this project -->
     <style>
         html { max-width: 100%; scroll-padding-top: 72px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         #datlich-sua-chua { scroll-margin-top: 72px; }
@@ -100,17 +104,37 @@
             --accent-green: #10b981;
             --danger: #ef4444;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif !important; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', 'Inter', 'Roboto', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
+        html { overflow-x: clip; }
+    /* ── Font rendering (smooth on Android, macOS, Windows) ── */
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+    body {
+        font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    }
+    /* Vietnamese text needs slightly more line-height for diacritics */
+    p, li, td, th, .faq-answer, .review-text, .service-desc {
+        line-height: 1.75;
+    }
+    h1, h2, h3, h4, h5 {
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        letter-spacing: -0.01em;
+    }
         body {
-            padding-bottom: 75px; background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; overscroll-behavior-y: auto; }
+            padding-bottom: 75px; background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: clip; overscroll-behavior-y: auto; }
         a, button, input, select { transition: all 0.3s ease; }
                 .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
         .top-bar .time { color: #38bdf8; }
         .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; }
-        
-        .header-nav { background-color: #fff; padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; will-change: transform; }
+    .header-nav { background-color: #fff; padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; will-change: transform; }
         @media (min-width: 1024px) {
-            .header-nav { background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+            .header-nav { background-color: rgba(255, 255, 255, 0.98); }
         }
         .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
         .logo-animation {
@@ -128,16 +152,19 @@
         .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: var(--primary); transition: width 0.3s; }
         .nav-menu a:hover::after { width: 100%; }
 
-        .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 70px 20px; position: relative; overflow: visible; max-width: 100%; width: 100%; }
+        .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 70px 20px; position: relative; overflow: hidden; max-width: 100%; width: 100%; }
         .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; z-index: 0; }
         .hero-tag { background-color: rgba(255,255,255,0.1); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; }
         .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
         
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; overflow-x: hidden; }
-        .section-title { text-align: center; color: var(--dark); font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
+        .section-title { text-align: center; font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #1d4ed8, #2563eb, #0ea5e9);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; color: transparent; }
         .section-title::after { content: ''; display: block; width: 54px; height: 3px; background: linear-gradient(90deg, var(--primary), #38bdf8, var(--accent-green)); margin: 10px auto 0; border-radius: 3px; }
         
-        .booking-form { background-color: var(--bg-card); padding: 44px 35px 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12); margin-top: -32px; position: relative; z-index: 10; border: 1px solid var(--border-color); }
+        .booking-form { background-color: #ffffff; padding: 44px 35px 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12); margin-top: -32px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
         .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
         .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
         .live-counter-badge { display: inline-flex; align-items: center; gap: 6px; background-color: #f0fdf4; color: var(--accent-green); border: 1px dashed #bbf7d0; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; margin-bottom: 20px; animation: pulseGlow 2.5s infinite ease-in-out; }
@@ -146,7 +173,7 @@
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: var(--bg-body); outline: none; }
-        .form-control:focus { border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .form-control:focus { border-color: var(--primary); background-color: var(--bg-input, #fff); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
         .form-row { display: flex; gap: 20px; }
         .form-row .form-group { flex: 1; }
         .btn-submit { width: 100%; background-color: var(--primary); color: #fff; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
@@ -188,16 +215,18 @@
         
         .policy-grid, .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .policy-card { background: var(--bg-body); padding: 24px; border-radius: 16px; border: 1px solid var(--border-color); }
-        .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.01); }
+        .review-card { background: var(--bg-card); border: 1px solid var(--border-color); padding: 24px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border-left: 4px solid #3b82f6; }
 
         .faq-item { border-bottom: 1px solid var(--border-color); }
-        .faq-question { width: 100%; text-align: left; padding: 18px 0; font-size: 15px; font-weight: 600; color: var(--dark); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question { width: 100%; text-align: left; padding: 18px 4px; font-size: 15px; font-weight: 600; color: var(--dark); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; transition: background 0.18s; touch-action: manipulation; }
+        .faq-question:hover { background: rgba(59,130,246,0.06); }
+        .faq-question:active { background: rgba(59,130,246,0.11); }
         .faq-icon { font-size: 16px; transition: transform 0.3s; color: var(--primary); }
         .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: var(--text-light); font-size: 14px; }
         .faq-item.active .faq-icon { transform: rotate(180deg); }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.6s cubic-bezier(.22,.68,0,1.15), transform 0.6s cubic-bezier(.22,.68,0,1.15); }
+        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
         .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
         .reveal-left.active { opacity: 1; transform: translateX(0); }
         .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
@@ -218,7 +247,8 @@
         #backToTop.visible { opacity: 1; visibility: visible; }
 
         .hero-stats { display: flex; justify-content: center; gap: 40px; margin-top: 32px; flex-wrap: wrap; }
-        .hero-stat { text-align: center; }
+        .hero-stat { text-align: center; background: rgba(255,255,255,0.13); border: 1px solid rgba(255,255,255,0.18); border-radius: 14px; padding: 10px 12px; transition: transform 0.25s, background 0.25s; box-sizing: border-box; min-width: 0; }
+    .hero-stat:hover { transform: translateY(-3px); background: rgba(255,255,255,0.11); }
         .hero-stat .stat-num { font-size: 28px; font-weight: 900; color: #38bdf8; line-height: 1; }
         .hero-stat .stat-label { font-size: 12px; color: #cbd5e1; margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
         @keyframes countUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -466,7 +496,7 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
             cursor: default;
         }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(37,99,235,0.13); border-color: #93c5fd; }
+        .service-card { /* will-change removed — hover-only, no permanent layer needed */ } .service-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 16px 36px rgba(37,99,235,0.18); border-color: #60a5fa; border-top: 3px solid #3b82f6; }
         .service-icon { font-size: 36px; margin-bottom: 10px; display: block; }
         .service-name { font-weight: 800; font-size: 14px; color: var(--dark); margin-bottom: 6px; line-height: 1.35; }
         .service-desc { font-size: 12.5px; color: var(--text-light); line-height: 1.6; }
@@ -502,7 +532,8 @@
         [data-theme="dark"]{--bg-body:#0f172a;--bg-card:#1e293b;--text-main:#e2e8f0;--text-light:#94a3b8;--border-color:#334155;}
         [data-theme="dark"] body{background-color:var(--bg-body);color:var(--text-main);}
         [data-theme="dark"] .header-nav{background-color:rgba(15,23,42,0.97);}
-        [data-theme="dark"] .booking-form,[data-theme="dark"] .review-card,[data-theme="dark"] .faq-item,[data-theme="dark"] .modal-card{background-color:var(--bg-card)!important;}
+        [data-theme="dark"] .booking-form{background-color:var(--bg-card)!important;border-color:var(--border-color)!important;box-shadow:0 20px 60px rgba(0,0,0,0.45)!important;}
+        [data-theme="dark"] .review-card,[data-theme="dark"] .faq-item,[data-theme="dark"] .modal-card{background-color:var(--bg-card)!important;}
         [data-theme="dark"] .form-control{background-color:#1e293b!important;color:var(--text-main)!important;border-color:var(--border-color)!important;}
         [data-theme="dark"] .tab-btn:not(.active){background-color:var(--bg-card);color:var(--text-light);border-color:var(--border-color);}
         [data-theme="dark"] table tr{background-color:var(--bg-card)!important;}
@@ -823,10 +854,12 @@
     .zalo-join-btn::before {
         content: '';
         position: absolute;
-        top: 0; left: -75%;
+        top: 0; left: 0;
         width: 50%; height: 100%;
         background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%);
+        transform: translateX(-200%);
         animation: zjbShimmer 2.8s ease-in-out infinite;
+        will-change: transform, opacity;
         pointer-events: none;
     }
     /* outer ring pulse */
@@ -850,10 +883,10 @@
         50%      { transform: scale(1.03); }
     }
     @keyframes zjbShimmer {
-        0%   { left: -75%; opacity: 0; }
+        0%   { transform: translateX(-200%); opacity: 0; }
         10%  { opacity: 1; }
-        60%  { left: 130%; opacity: 1; }
-        61%,100% { opacity: 0; }
+        60%  { transform: translateX(280%); opacity: 1; }
+        61%,100% { transform: translateX(280%); opacity: 0; }
     }
     @keyframes zjbRing {
         0%,100% { transform: scale(1);   opacity: .6; }
@@ -925,6 +958,63 @@
     [data-theme="dark"] .mobile-price-card{background:#1e293b;border-color:#334155;}
     [data-theme="dark"] .mobile-card-header{background:#0f172a;}
     [data-theme="dark"] .pc-spec{border-color:#334155;}
+
+/* ── Dark mode additions v17 ── */
+[data-theme="dark"]{--bg-input:#0f172a;}
+
+/* Booking form inner elements */
+[data-theme="dark"] .form-title{color:#38bdf8!important;}
+[data-theme="dark"] .form-control:focus{background-color:#0f172a!important;}
+[data-theme="dark"] .form-control::placeholder{color:#475569!important;opacity:1;}
+[data-theme="dark"] select.form-control option{background:#1e293b;color:#e2e8f0;}
+[data-theme="dark"] .live-counter-badge{background-color:#0d2218!important;color:#4ade80!important;border-color:#166534!important;}
+[data-theme="dark"] .demo-fill-btn{background:#1e3a6e!important;color:#93c5fd!important;border-color:#3b82f6!important;}
+[data-theme="dark"] .booking-form .form-error-box,
+[data-theme="dark"] #formErrorBox{background:#3b1111!important;color:#fca5a5!important;border-color:#7f1d1d!important;}
+
+/* Bottom navigation */
+[data-theme="dark"] .bottom-nav{background-color:#0f172a!important;border-top:1px solid #334155!important;box-shadow:0 -4px 20px rgba(0,0,0,0.4)!important;}
+[data-theme="dark"] .nav-item{color:#94a3b8!important;}
+[data-theme="dark"] .nav-item.active{color:var(--primary)!important;}
+[data-theme="dark"] .nav-item.active .nav-dot,
+[data-theme="dark"] .nav-item .nav-dot{background:var(--primary);}
+
+/* Policy / warranty cards */
+[data-theme="dark"] .policy-yes{background:rgba(20,83,45,0.45)!important;border-color:#166534!important;}
+[data-theme="dark"] .policy-yes .policy-icon{background:rgba(74,222,128,0.12)!important;}
+[data-theme="dark"] .policy-yes .policy-title{color:#4ade80!important;}
+[data-theme="dark"] .policy-yes .policy-text{color:#86efac!important;}
+[data-theme="dark"] .policy-no{background:rgba(124,45,18,0.45)!important;border-color:#9a3412!important;}
+[data-theme="dark"] .policy-no .policy-icon{background:rgba(251,146,60,0.12)!important;}
+[data-theme="dark"] .policy-no .policy-title{color:#fb923c!important;}
+[data-theme="dark"] .policy-no .policy-text{color:#fdba74!important;}
+[data-theme="dark"] .policy-card{background-color:var(--bg-card)!important;}
+
+/* Lưu ý info boxes (inline-style boxes in pricing tabs) */
+[data-theme="dark"] .pricing-note-box{background:linear-gradient(135deg,#0f2340,#0d2218)!important;border-color:#1e3a5f!important;}
+[data-theme="dark"] .pricing-note-box p{color:#cbd5e1!important;}
+[data-theme="dark"] .pricing-note-box .note-title{color:#60a5fa!important;}
+
+/* Hero stat pills — explicit for dark (already semi-transparent but text may need help) */
+[data-theme="dark"] .hero-stat{background:rgba(255,255,255,0.07)!important;border-color:rgba(255,255,255,0.12)!important;}
+
+/* Price table section wrapper */
+[data-theme="dark"] .price-table-section.active{background:transparent;}
+[data-theme="dark"] .price-tabs-wrapper{background:var(--bg-card);border-color:var(--border-color);}
+
+/* Scrollbar in dark mode */
+[data-theme="dark"] ::-webkit-scrollbar{width:6px;height:6px;}
+[data-theme="dark"] ::-webkit-scrollbar-track{background:#0f172a;}
+[data-theme="dark"] ::-webkit-scrollbar-thumb{background:#334155;border-radius:3px;}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover{background:#475569;}
+
+/* Text selection in dark mode */
+[data-theme="dark"] ::selection{background:rgba(37,99,235,0.4);color:#e2e8f0;}
+
+/* Booking form smooth theme transition */
+.booking-form{transition:background-color 0.3s ease,border-color 0.3s ease,box-shadow 0.3s ease;}
+.form-control{transition:background-color 0.25s ease,border-color 0.25s ease,color 0.25s ease;}
+.bottom-nav{transition:background-color 0.3s ease,border-color 0.3s ease;}
     /* Show desktop table on lg screens */
             /* ── Hide desktop tables by default (shown on ≥768px) ── */
         #laptopTableDesktop, #accessoryTableDesktop, #installTableDesktop { display: none; }
@@ -964,11 +1054,10 @@
     }
 
         /* ── Scroll performance ── */
-        .hero-section, .hero-particles, #scrollProgressBar, .reveal {
-            will-change: transform;
-        }
-        .particle { will-change: transform; contain: layout style; }
-        #scrollProgressBar { will-change: width; }
+        /* will-change removed from .hero-section/.hero-particles/.reveal — set dynamically by JS instead */
+        #scrollProgressBar { will-change: transform; }
+        .particle { contain: strict; }
+        #scrollProgressBar { will-change: transform; transform-origin: left center; transform: scaleX(0); }
 
         /* ── Overflow containment ── */
         section, .price-table-section, .booking-form, .container, .hero-section,
@@ -1077,6 +1166,187 @@
         .promo-banner{flex-direction:column;text-align:center;}
         .promo-cta{width:100%;justify-content:center;touch-action:manipulation;}
     }
+    
+    /* ── paint containment on off-screen sections (safe alternative) ── */
+    .service-grid, .price-section, .faq-section, .reviews-section {
+        contain: layout style;
+    }
+
+    /* ── Booking form animated gradient ring ── */
+    .booking-form { position: relative; }
+    /* booking-form gradient ring removed (user: white bg only) */ /* formBorderSpin keyframe removed */
+        100% { background-position: 0% 50%; }
+    }
+
+    /* ── Input focus: gradient ring ── */
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+        background: var(--bg-card);
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    /* ── Hero ambient glow orbs ── */
+    .hero-orb { position: absolute; border-radius: 50%; filter: blur(55px); pointer-events: none; }
+    .hero-orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%); top: -100px; left: -60px; animation: orbFloat 9s ease-in-out infinite; }
+    .hero-orb-2 { width: 240px; height: 240px; background: radial-gradient(circle, rgba(139,92,246,0.20) 0%, transparent 70%); bottom: -40px; right: -40px; animation: orbFloat 11s ease-in-out infinite; animation-delay: -4s; }
+    .hero-orb-3 { width: 180px; height: 180px; background: radial-gradient(circle, rgba(14,165,233,0.22) 0%, transparent 70%); top: 35%; left: 55%; animation: orbFloat 7s ease-in-out infinite; animation-delay: -2s; }
+    @keyframes orbFloat {
+        0%,100% { transform: translate(0,0) scale(1); }
+        33%  { transform: translate(-12px,-20px) scale(1.05); }
+        66%  { transform: translate(10px,12px) scale(0.96); }
+    }
+
+        /* ── Hero orbs: disable expensive filter:blur on mobile ── */
+        @media (max-width: 767px) {
+            .hero-orb {
+                filter: none;      /* blur is rasterized per-frame on mobile GPU → remove */
+                opacity: 0.18;     /* same soft glow look via opacity only */
+            }
+            .hero-orb-1, .hero-orb-2, .hero-orb-3 {
+                animation-duration: 16s; /* slower = fewer repaints/sec */
+            }
+        }
+        @media (min-width: 768px) {
+            .hero-orb-1, .hero-orb-2, .hero-orb-3 {
+                animation-duration: 10s;
+            }
+        }
+    
+        /* ══════════════════════════════════════════════════════════
+           MOBILE ANIMATION BUDGET — cut GPU/CPU load on phones
+           Strategy: ≤5 simultaneous infinite animations on mobile.
+           Keep: dotBlink (typing), swipeHint (UX affordance).
+           Kill: all decorative continuous animations.
+           Desktop keeps full animation set.
+           ══════════════════════════════════════════════════════════ */
+        @media (max-width: 767px) {
+
+            /* Hero orbs: already have filter:none — also kill orbFloat */
+            .hero-orb-1, .hero-orb-2, .hero-orb-3 {
+                animation: none;
+                opacity: 0.12;
+            }
+
+            /* Hero section: no shimmer title (background-clip animation → CPU repaint) */
+            .hero-title,
+            [class*="shimmer"],
+            .gradient-text {
+                animation: none !important;
+                background-clip: unset;
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: unset;
+                color: inherit;
+            }
+
+            /* Bottom-nav pulse glow */
+            .bottom-nav-cta-center {
+                animation: none;
+                box-shadow: 0 4px 14px rgba(37,99,235,0.4);
+            }
+
+            /* Logo ring spin */
+            .logo-ring, [class*="logo-ring"] {
+                animation: none;
+            }
+
+            /* Floating phone / contact buttons */
+            .float-btn, [class*="float-btn"],
+            .phone-btn, [class*="phone-btn"],
+            #floatButtons > * {
+                animation: none;
+                transform: none;
+            }
+
+            /* Chatbot toggle: kill cbFloat, cbBreath, cbPulse, cbRotateRing */
+            #chatbotToggle {
+                animation: none !important;
+            }
+            #chatbotToggle::before,
+            #chatbotToggle::after {
+                animation: none !important;
+            }
+            #chatbotWrap #chatbotToggle,
+            #chatbotWrap #chatbotToggle > * {
+                animation: none !important;
+            }
+
+            /* ZJB Zalo button: kill zjbPulse, zjbShimmer, zjbRing, zjbIconWiggle, zjbArrow */
+            [id*="zjb"], [class*="zjb"],
+            [id*="zjb"] *, [class*="zjb"] * {
+                animation: none !important;
+            }
+            /* Keep the button visible + static */
+            [id*="zjb"] {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            /* Promo banner: kill rotating gradient + shimmer + glow pulse */
+            .promo-banner, [class*="promo-banner"],
+            .promo-banner::before, .promo-banner::after,
+            [class*="promo"] * {
+                animation: none !important;
+            }
+            /* Keep promo banner visible with static gradient */
+            .promo-banner {
+                background: linear-gradient(135deg, #1d4ed8 0%, #0891b2 100%) !important;
+            }
+
+            /* Slogan pulse */
+            [class*="slogan"], .hero-slogan {
+                animation: none !important;
+            }
+
+            /* Scroll progress bar spin (loading indicator) */
+            [class*="spin"]:not([class*="logo"]) {
+                animation: none;
+            }
+
+            /* pulseDot / pulseCTA (box-shadow animations → CPU repaint) */
+            [class*="pulseDot"], [class*="pulseCTA"] {
+                animation: none !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            }
+
+            /* Floating particles */
+            .hero-particles {
+                display: none; /* hidden on mobile: 4 animated elements, no UX value */
+            }
+
+            /* KEEP: dotBlink for chatbot typing indicator */
+            /* KEEP: swipeHint for pricing tab affordance */
+            /* These are UX-critical and run on ≤3 tiny elements */
+
+            /* Reveal animations: keep (one-shot, not continuous) */
+            /* Form, button, card transitions: keep (interaction-only, not continuous) */
+        }
+
+        /* ── Accessibility: respect system preference to reduce motion ── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal, .reveal-left, .reveal-right {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    
+        @media (max-width: 767px) {
+            .hero-title, h1.hero-title, .hero-title span {
+                background: none !important;
+                -webkit-background-clip: unset !important;
+                background-clip: unset !important;
+                -webkit-text-fill-color: #ffffff !important;
+                color: #ffffff !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1136,6 +1406,10 @@
     </div>
     
     <div class="hero-section">
+    <!-- ambient glow orbs -->
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
     <div class="hero-particles" aria-hidden="true">
         <!-- 18 particles with varied sizes, colors, positions and durations -->
         <div class="particle" style="left:5%;  bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:7s;  animation-delay:0s;"></div>
@@ -1157,20 +1431,20 @@
         <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
-        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
+        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
         <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
             <span>✅ Khám đúng bệnh</span>
             <span>✅ Báo giá trọn gói</span>
-            <span>✅ Sửa trước mặt</span>
+            <span>✅ Sửa chữa nhanh chóng</span>
             <span>✅ Bảo hành rõ ràng</span>
         </span></p>
-        <p style="margin:10px auto 0;font-weight:800;color:#fbbf24;font-size:clamp(12px,3vw,14px);letter-spacing:0.5px;">⭐ CAM KẾT 100% LINH KIỆN CHÍNH HÃNG — BẢO HÀNH GIẤY TỜ ĐẦY ĐỦ</p>
+        <p style="margin:10px auto 0;font-weight:800;color:#fbbf24;font-size:clamp(12px,3vw,14px);letter-spacing:0.5px;">CAM KẾT 100% LINH KIỆN CHÍNH HÃNG </p>
     
         <div class="hero-stats">
-            <div class="hero-stat"><div class="stat-num" data-target="500">0</div><div class="stat-label">Lượt sửa chữa</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Năm kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">Lượt sửa chữa</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="7">0</div><div class="stat-label">Ngày kinh nghiệm</div></div>
             <div class="hero-stat"><div class="stat-num" data-target="99">0</div><div class="stat-label">% Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
         </div>
@@ -1178,7 +1452,7 @@
     
     <div class="container">
         <div id="datlich-sua-chua" class="booking-form reveal active">
-            <div class="form-title">📝 ĐẶT LỊCH SỬA MÁY TÍNH</div>
+            <div class="form-title">ĐẶT LỊCH SỬA MÁY TÍNH</div>
             <div class="form-desc">Vui lòng để lại thông tin đặt lịch hẹn trước dưới đây để không phải xếp hàng chờ đợi lâu khi mang máy tới tiệm.</div>
             
             <div style="text-align: center;">
@@ -1188,12 +1462,12 @@
             </div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <button type="button" onclick="fillDemoData()" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;">Bấm vào đây để điền mẫu thử nhanh</button>
+                <button type="button" onclick="fillDemoData()" class="demo-fill-btn" style="background: #eff6ff; color: var(--primary); border: 1px dashed var(--primary); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition:background 0.25s,color 0.25s,border-color 0.25s;">Bấm vào đây để điền mẫu thử nhanh</button>
             </div>
 
             <form id="bookingForm" action="https://formsubmit.co/hoaptdt2005@gmail.com" method="POST">
                 <!-- FormSubmit config -->
-                <input type="hidden" name="_subject" value="📅 Đặt lịch sửa máy tính - Tran Hoa Computer">
+                <input type="hidden" name="_subject" value="Đặt lịch sửa máy tính - Tran Hoa Computer">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="box">
                 <input type="hidden" name="_replyto" id="fsReplyTo" value="">
@@ -1205,7 +1479,7 @@
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại liên hệ *</label>
-                    <input type="tel" name="phone" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
+                    <input type="tel" name="phone" autocomplete="tel" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
                 </div>
                 <div class="form-group">
                     <label>Loại dịch vụ cần sử dụng *</label>
@@ -1270,7 +1544,7 @@
     <div class="container reveal">
         <div class="promo-banner">
             <div>
-                <div class="promo-title">🎁 Ưu đãi tháng này: Hỗ trợ từ xa MIỄN PHÍ trọn đời!</div>
+                <div class="promo-title">Ưu đãi tháng này: Hỗ trợ từ xa MIỄN PHÍ trọn đời!</div>
                 <div class="promo-desc">Mọi lỗi phần mềm, driver, virus nhẹ — kỹ thuật viên xử lý qua mạng ngay.</div>
             </div>
             <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="promo-cta">🎁 NHẬN NGAY →</a>
@@ -1526,12 +1800,6 @@
                     </div>
                 </div>
 
-                <!-- Note -->
-                <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;font-size:13px;color:#78350f;margin-top:12px;">
-                    <strong>📌 Lưu ý:</strong> Giá trên là ước tính tham khảo, có thể thay đổi theo thị trường. Mang đến cửa hàng để được <strong>tư vấn cấu hình chi tiết và báo giá thực tế</strong> ngay!<br><br>
-                    <strong>Bao gồm:</strong> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.<br>
-                    🛡️ <strong>Bảo hành:</strong> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.
-                </div>
 
             </div><!-- end .mobile-price-cards -->
 
@@ -1587,6 +1855,31 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+
+            <!-- ── Lưu ý lắp đặt PC ── -->
+            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
+                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:17px;">❗</span> Lưu ý
+                </div>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
+                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
+                    Mang đến cửa hàng để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!
+                </p>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#16a34a;font-weight:700;">✅</span>
+                    <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.
+                </p>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
+                    <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.
+                </p>
+                <p style="margin:0;color:#92400e;background:#fef3c7;border-radius:8px;padding:9px 12px;font-weight:600;">
+                    <span style="font-size:15px;">📦</span>
+                    Giá trên <b>chưa bao gồm</b> các phụ kiện đi kèm gồm: màn hình, chuột, bàn phím, loa...
+                </p>
             </div>
 
         </div><!-- end #tab-install -->
@@ -1861,6 +2154,27 @@
                         <tr><td>4</td><td>MacBook Pro 16" (M3 Pro/Max)</td><td>M3 Pro/Max | 18–128GB | 512GB–8TB | 16.2" XDR 120Hz | Pro-level</td><td>Apple chính hãng VN/A</td><td class="highlight-price">62.000.000 – 130.000.000 đ</td></tr>
                     </tbody>
                 </table>
+            </div>
+
+
+            <!-- ── Lưu ý laptop/iPad/MacBook ── -->
+            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
+                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:17px;">❗</span> Lưu ý
+                </div>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
+                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
+                    Mang đến cửa hàng để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!
+                </p>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#16a34a;font-weight:700;">✅</span>
+                    <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.
+                </p>
+                <p style="margin:0;color:#374151;">
+                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
+                    <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.
+                </p>
             </div>
 
         </div><!-- end #tab-laptop -->
@@ -2285,6 +2599,23 @@
                 </table>
             </div>
 
+
+            <!-- ── Lưu ý phụ kiện ── -->
+            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
+                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:17px;">❗</span> Lưu ý
+                </div>
+                <p style="margin:0 0 8px 0;color:#374151;">
+                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
+                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
+                    Mang đến cửa hàng để được tư vấn chi tiết và báo giá thực tế ngay!
+                </p>
+                <p style="margin:0;color:#374151;">
+                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
+                    <b>Bảo hành:</b> Theo hãng sản xuất, hỗ trợ kỹ thuật trọn đời cho phụ kiện mua tại tiệm.
+                </p>
+            </div>
+
         </div><!-- end #tab-accessory -->
 
         </div><!-- end #priceTabsWrapper -->
@@ -2438,7 +2769,7 @@
         <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
 
             <div class="section-title">CÂU HỎI THƯỜNG GẶP</div>
-            <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." oninput="filterFaq(this.value)">
+            <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." oninput="(function(v){clearTimeout(window._fqT);window._fqT=setTimeout(function(){filterFaq(v);},180);})(this.value)">
             <div id="faqNoResult" style="display:none;text-align:center;padding:16px;color:var(--text-light);font-size:14px;">Không tìm thấy câu hỏi phù hợp</div>
             <div class="faq-list">
                 <div class="faq-item">
@@ -2510,7 +2841,7 @@
         <div class="reveal" style="margin-bottom: 40px; background: #fff; border: 1px solid var(--border-color); border-radius: 16px; padding: 25px;">
             <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 8px; text-align:center; text-transform:uppercase; color:var(--dark); letter-spacing:0.4px;">Để Lại Bình Luận Của Bạn — Chúng Tôi Sẽ Giải Đáp</h3>
             <div style="width:44px;height:3px;background:linear-gradient(90deg,var(--primary),#38bdf8);border-radius:2px;margin:0 auto 20px;"></div>
-            <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.netlify.app" data-page-title="TRAN HOA COMPUTER"></div>
+            <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="4da71509-5b60-42f0-856d-127dea839983" data-page-id="tran-hoa-computer-homepage" data-page-url="https://tranhoacomputer.github.io/" data-page-title="TRAN HOA COMPUTER"></div>
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
         
@@ -2727,7 +3058,7 @@
             var docH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
 
             /* progress bar */
-            if (progressBar) progressBar.style.width = (docH > 0 ? (sy / docH * 100) : 0) + '%';
+            if (progressBar) progressBar.style.transform = 'scaleX(' + (docH > 0 ? (sy / docH) : 0) + ')';
 
             /* back-to-top: show on scroll, auto-hide 2s after stops */
             if (sy > 200) {
@@ -2754,7 +3085,20 @@
 
         const reveals = document.querySelectorAll('.reveal');
         const revObserver = new IntersectionObserver((entries) => {
-            entries.forEach((e, i) => { if(e.isIntersecting) { setTimeout(() => e.target.classList.add('active'), i * 70); } });
+            entries.forEach((e, i) => {
+                if (e.isIntersecting) {
+                    const el = e.target;
+                    // Set will-change just before animation (minimises GPU layer lifetime)
+                    el.style.willChange = 'opacity, transform';
+                    setTimeout(() => {
+                        el.classList.add('active');
+                        // Release GPU layer right after transition ends
+                        el.addEventListener('transitionend', () => {
+                            el.style.willChange = 'auto';
+                        }, { once: true });
+                    }, i * 70);
+                }
+            });
         }, {threshold: 0.05});
         reveals.forEach(r => revObserver.observe(r));
 
@@ -2782,6 +3126,22 @@
                 e.preventDefault();
                 var errBox = document.getElementById('formErrorBox');
                 if (errBox) errBox.style.display = 'none';
+
+                // Vietnamese phone validation
+                var phoneInput = form.querySelector('input[type="tel"]');
+                if (phoneInput) {
+                    var pVal = phoneInput.value.trim().replace(/\s/g,'');
+                    var vnOk = /^(0|\+84)(3[2-9]|5[25689]|7[06-9]|8[0-9]|9[0-9])\d{7}$/.test(pVal);
+                    if (!vnOk) {
+                        phoneInput.style.borderColor = '#ef4444';
+                        phoneInput.style.boxShadow = '0 0 0 3px rgba(239,68,68,.15)';
+                        var pe = phoneInput.parentNode.querySelector('.phone-err');
+                        if (!pe) { pe = document.createElement('p'); pe.className='phone-err'; pe.style.cssText='color:#ef4444;font-size:12px;margin-top:4px;margin-bottom:0;'; phoneInput.after(pe); }
+                        pe.textContent = '⚠️ Số điện thoại chưa đúng định dạng (VD: 0963 284 044)';
+                        phoneInput.addEventListener('input', function(){ phoneInput.style.borderColor=''; phoneInput.style.boxShadow=''; if(pe) pe.textContent=''; },{once:true});
+                        phoneInput.focus(); return;
+                    }
+                }
                 sBtn.disabled = true;
                 bTxt.innerText = "Đang gửi yêu cầu...";
                 bSpin.style.display = "inline-block";
@@ -3062,7 +3422,7 @@ var KB=[
   q:['Giá dịch vụ','Đặt lịch sửa','Hỗ trợ từ xa','Ưu đãi hiện tại','Kiểm tra miễn phí']},
 
  {k:['giá','bao nhiêu','chi phí','phí','tiền','price','tốn','mất bao'],
-  a:'💰 <b>Bảng giá tham khảo:</b><br>• Sửa lỗi nguồn/main: <b>150k–450k</b><br>• Thay RAM/SSD: <b>50k–150k</b><br>• Cài Windows trọn gói: <b>150k–350k</b><br>• Diệt virus: <b>80k–200k</b><br>• Cứu dữ liệu: <b>200k–800k</b><br>• Ráp PC Gaming (công): <b>100k–300k</b><br>• Hỗ trợ từ xa: <b>MIỄN PHÍ 🎁</b>',
+  a:'💰 <b>Bảng giá tham khảo:</b><br>• Sửa lỗi nguồn/main: <b>150k–450k</b><br>• Thay RAM/SSD: <b>50k–150k</b><br>• Cài Windows trọn gói: <b>150k–350k</b><br>• Diệt virus: <b>80k–200k</b><br>• Cứu dữ liệu: <b>200k–800k</b><br><br>🖥️ <b>Lắp PC văn phòng:</b> ~6.5 – 13 triệu<br>🎮 <b>Lắp PC gaming:</b> ~15 – 32 triệu<br>💻 <b>Laptop phổ thông:</b> từ ~10 triệu<br>📱 <b>iPad / MacBook:</b> từ ~9 triệu<br><br>⚠️ Giá ước tính, có thể thay đổi theo thị trường<br>→ Mang máy đến để được báo giá thực tế miễn phí!',
   q:['Kiểm tra miễn phí','Đặt lịch sửa','Liên hệ ngay']},
 
  {k:['địa chỉ','ở đâu','chỗ nào','vị trí','đường','thái nguyên','đại từ'],
@@ -3306,7 +3666,7 @@ var KB=[
 
   {k:['giá lắp đặt pc','giá ráp pc','pc văn phòng giá','pc gaming giá','lắp pc bao nhiêu','cấu hình máy tính','mua pc'],
    q:['Tư vấn cấu hình','Giá sửa phần cứng','Ưu đãi hiện tại','Đặt lịch sửa'],
-   a:'<b>Báo giá lắp đặt PC:</b><br><br>🏢 <b>Máy văn phòng:</b><br>• Cơ bản (i3-12100, 8GB, 240GB): <b>~6.5 triệu</b><br>• Trung bình (i5-12400, 16GB, 512GB): <b>~9.5 triệu</b><br>• Cao cấp (i5-13400, 16GB, 1TB NVMe): <b>~13 triệu</b><br><br>🎮 <b>PC Gaming:</b><br>• Nhập môn (R5 5600 + GTX 1650): <b>~15 triệu</b><br>• Tầm trung (R5 7600 + RTX 4060): <b>~22 triệu</b><br>• Cao cấp (i7-13700F + RTX 4070): <b>~32 triệu</b><br><br><i>Giá trên chưa bao gồm màn hình. Liên hệ để báo giá chi tiết!</i>'},
+   a:'<b>Báo giá lắp đặt PC:</b><br><br>🏢 <b>Máy văn phòng:</b><br>• Cơ bản (i3-12100, 8GB, 240GB): <b>~6.5 triệu</b><br>• Trung bình (i5-12400, 16GB, 512GB): <b>~9.5 triệu</b><br>• Cao cấp (i5-13400, 16GB, 1TB NVMe): <b>~13 triệu</b><br><br>🎮 <b>PC Gaming:</b><br>• Nhập môn (R5 5600 + GTX 1650): <b>~15 triệu</b><br>• Tầm trung (R5 7600 + RTX 4060): <b>~22 triệu</b><br>• Cao cấp (i7-13700F + RTX 4070): <b>~32 triệu</b><br><br>⚠️ Giá ước tính tham khảo, chưa gồm màn hình/chuột/bàn phím/loa.<br>✅ Bao gồm: lắp ráp, cài Windows bản quyền, driver, test 30 phút.<br>🛡️ Bảo hành: theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời.<br><b>Mang máy đến để được báo giá thực tế nhé!</b>'},
 
   {k:['ưu đãi','khuyến mãi','miễn phí','từ xa free','hỗ trợ từ xa miễn phí','nhận ngay','ưu đãi tháng','ưu đãi hiện tại'],
    q:['Hỗ trợ từ xa','Giá cài phần mềm','Vào nhóm Zalo','Đặt lịch sửa'],
@@ -3378,12 +3738,12 @@ var KB=[
   /* ── PC GAMING BUILD DETAIL ── */
   {k:['ráp pc gaming','build gaming','máy gaming','cấu hình gaming','lắp pc gaming','pc chơi game','xây dựng pc gaming'],
    q:['Tư vấn ngân sách','Zalo tư vấn','Đặt lịch sửa'],
-   a:'🎮 <b>Ráp PC Gaming chuyên nghiệp:</b><br><br>• <b>~15 triệu (nhập môn):</b> Ryzen 5 5600 + GTX 1650, 16GB RAM<br>• <b>~22 triệu (tầm trung):</b> Ryzen 5 7600 + RTX 4060, 16GB DDR5<br>• <b>~32 triệu (cao cấp):</b> i7-13700F + RTX 4070, 32GB DDR5<br><br>✅ Linh kiện chính hãng 100%<br>✅ Ráp & test stress 30 phút trước giao<br>✅ Bảo hành linh kiện đầy đủ<br><br><b>Ngân sách của bạn là bao nhiêu?</b>'},
+   a:'🎮 <b>Ráp PC Gaming chuyên nghiệp:</b><br><br>• <b>~15 triệu (nhập môn):</b> Ryzen 5 5600 + GTX 1650, 16GB RAM<br>• <b>~22 triệu (tầm trung):</b> Ryzen 5 7600 + RTX 4060, 16GB DDR5<br>• <b>~32 triệu (cao cấp):</b> i7-13700F + RTX 4070, 32GB DDR5<br><br>✅ Linh kiện chính hãng 100%<br>✅ Lắp ráp, test stress 30 phút, hướng dẫn dùng<br>⚠️ Giá ước tính, chưa gồm màn hình/chuột/bàn phím/loa<br>🛡️ Bảo hành theo hãng, kỹ thuật trọn đời<br>Cho mình biết ngân sách nhé! 💪'},
 
   /* ── PC VĂN PHÒNG BUILD ── */
   {k:['pc văn phòng','lắp pc văn phòng','máy văn phòng','máy bàn văn phòng','ráp pc văn phòng'],
    q:['Lắp đặt PC','Tư vấn ngân sách','Zalo tư vấn'],
-   a:'🏢 <b>Lắp PC Văn phòng:</b><br><br>• <b>~6.5 triệu (cơ bản):</b> i3-12100, 8GB RAM, SSD 240GB<br>• <b>~9.5 triệu (trung bình):</b> i5-12400, 16GB RAM, SSD 512GB<br>• <b>~13 triệu (cao cấp):</b> i5-13400, 16GB RAM, 1TB NVMe<br><br>Tất cả bao gồm lắp, cài Windows bản quyền + driver đầy đủ.<br><b>Ngân sách của bạn là bao nhiêu?</b>'},
+   a:'🏢 <b>Lắp PC Văn phòng:</b><br><br>• <b>~6.5 triệu (cơ bản):</b> i3-12100, 8GB RAM, SSD 240GB<br>• <b>~9.5 triệu (trung bình):</b> i5-12400, 16GB RAM, SSD 512GB<br>• <b>~13 triệu (cao cấp):</b> i5-13400, 16GB RAM, 1TB NVMe<br><br>✅ Bao gồm: lắp ráp, cài Windows bản quyền + driver đầy đủ, test 30 phút<br>⚠️ Giá ước tính tham khảo, chưa gồm màn hình/chuột/bàn phím/loa<br>🛡️ Bảo hành theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời<br><b>Ngân sách của bạn là bao nhiêu?</b>'},
 
   /* ── TƯ VẤN NGÂN SÁCH ── */
   {k:['tư vấn ngân sách','ngân sách bao nhiêu','bao nhiêu tiền','giá bao nhiêu cho pc','tư vấn theo ngân sách'],
@@ -4380,6 +4740,48 @@ window.copyPhone=function(btn){
 })();
 </script>
 
+
+    <script>
+    // ── Intersection-based animation pause (mobile performance) ──
+    // Pause infinite CSS animations on elements scrolled off-screen
+    // Resumes when they scroll back in — browser never composites hidden layers
+    if (window.IntersectionObserver && window.matchMedia('(max-width: 767px)').matches) {
+        const animPauseTargets = document.querySelectorAll(
+            '.promo-banner, #chatbotWrap, #floatButtons, [id*="zjb"], [class*="zjb"]'
+        );
+        const animObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const el = entry.target;
+                // Pause all animated children when scrolled off screen
+                el.querySelectorAll('*').forEach(child => {
+                    child.style.animationPlayState = entry.isIntersecting ? '' : 'paused';
+                });
+                el.style.animationPlayState = entry.isIntersecting ? '' : 'paused';
+            });
+        }, { rootMargin: '200px' }); // 200px margin = pre-resume before scrolling into view
+        animPauseTargets.forEach(el => animObserver.observe(el));
+    }
+    </script>
+
+<script>
+    // Sync Cusdis comment widget with dark mode
+    (function() {
+        const cusdisEl = document.getElementById('cusdis_thread');
+        function syncCusdisTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (cusdisEl) {
+                cusdisEl.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                // Re-render if API available
+                if (window.CUSDIS && window.CUSDIS.setTheme) window.CUSDIS.setTheme(isDark ? 'dark' : 'light');
+            }
+        }
+        const obs = new MutationObserver(function(muts) {
+            muts.forEach(function(m) { if (m.attributeName === 'data-theme') syncCusdisTheme(); });
+        });
+        obs.observe(document.documentElement, { attributes: true });
+        document.addEventListener('DOMContentLoaded', syncCusdisTheme);
+    })();
+</script>
 </body>
 </html>
 
