@@ -714,6 +714,59 @@ var KB=[
   a:'👨‍🔧 <b>Kết nối với kỹ thuật viên ngay!</b><br><br>📞 <b>Hotline:</b> <a href="tel:0819120401" style="color:#2563eb;font-weight:700">0819.120.401</a><br>💬 <b>Zalo:</b> <a href="https://zalo.me/0819120401" target="_blank" style="color:#2563eb;font-weight:700">Nhắn Zalo ngay</a><br><br>⏰ Giờ làm việc: <b>7:30 – 20:00</b> hàng ngày (kể cả T7, CN)<br><br><i>Kỹ thuật viên sẽ tư vấn miễn phí và xử lý nhanh nhất!</i>',
   q:['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa']},
 
+  // ─── KB EXPANSION v17 ───────────────────────────────────
+
+  // Kích hoạt Windows / bản quyền
+  {k:['kích hoạt windows','activate windows','windows lậu','bản quyền windows','win bản quyền','crack windows','watermark windows','windows genuine'],
+   a:'🔑 <b>Kích hoạt Windows bản quyền tại Tran Hoa Computer:</b><br><br>• <b>Windows 10 Home:</b> 300K–400K (kích hoạt vĩnh viễn)<br>• <b>Windows 11 Home:</b> 350K–450K<br>• <b>Windows 10/11 Pro:</b> 450K–600K<br><br>✅ Bản quyền chính hãng, kích hoạt online, không bao giờ bị thu hồi<br>✅ Kèm cài đặt driver đầy đủ, Windows Update hoạt động bình thường<br><br><i>Tuyệt đối KHÔNG dùng bản crack — dễ nhiễm virus, mất dữ liệu!</i>'},
+
+  // Lỗi màn hình (không thay) — đường sọc, nhấp nháy, tối màn
+  {k:['màn hình sọc','màn hình nhấp nháy','màn hình tối','độ sáng màn hình','màn hình chớp','display flicker','màn hình lỗi không vỡ','đường sọc màn hình'],
+   a:'🖥️ <b>Lỗi màn hình không do vỡ kính:</b><br><br>• <b>Đường sọc dọc/ngang:</b> Có thể do cáp màn hình lỏng → sửa 200K–400K<br>• <b>Nhấp nháy khi dùng:</b> Thường do card đồ họa hoặc driver → 0đ (cài driver) đến 500K<br>• <b>Màn hình tối đột ngột:</b> IC led backlight hỏng → 300K–600K<br>• <b>Màn hình mờ/xỉn màu:</b> Đèn nền yếu → thay đèn LED 400K–800K<br><br>📌 Kiểm tra miễn phí, báo giá trước khi sửa!'},
+
+  // Bàn phím / Trackpad lỗi
+  {k:['bàn phím hỏng','phím không gõ được','phím bị liệt','trackpad không hoạt động','chuột cảm ứng laptop','thay bàn phím','keyboard broken','bàn phím vài phím hỏng'],
+   a:'⌨️ <b>Sửa bàn phím & trackpad laptop:</b><br><br><b>Bàn phím:</b><br>• Một vài phím hỏng: Thay phím lẻ 50K–150K/phím<br>• Bàn phím hỏng nhiều phím: Thay cả bàn phím 350K–800K<br>• Bàn phím dính nước: Vệ sinh + sấy khô 150K–300K<br><br><b>Trackpad:</b><br>• Không nhận cử chỉ, click không được: 200K–500K<br>• Trackpad liệt hoàn toàn: Thay mới 350K–700K<br><br><i>Thay bàn phím giữ nguyên bảo hành linh kiện cũ!</i>'},
+
+  // Pin chai/phồng/cạn nhanh
+  {k:['pin chai','pin phồng','pin cạn nhanh','pin không sạc','sạc không vào','pin bị phồng','pin hao nhanh','kiểm tra pin','pin 0%','battery health'],
+   a:'🔋 <b>Thay pin laptop tại Tran Hoa Computer:</b><br><br>• <b>Pin chai (dưới 50% capacity):</b> Thay mới, sử dụng bình thường lại<br>• <b>Pin phồng:</b> Nguy hiểm — nên thay ngay, không chờ!<br>• <b>Giá thay pin:</b> 350K–1.500K (tùy dòng máy)<br><br>🔧 <b>Dòng máy phổ biến:</b><br>• Asus VivoBook/ZenBook: 450K–800K<br>• Dell Inspiron/Vostro: 500K–900K<br>• HP Pavilion/Envy: 450K–850K<br>• Lenovo IdeaPad/ThinkPad: 400K–1.000K<br>• MacBook Air/Pro M1/M2: 1.200K–2.200K<br><br>✅ Bảo hành pin 6–12 tháng'},
+
+  // Wifi không kết nối / mạng chập chờn
+  {k:['wifi không bắt','wifi yếu','không kết nối wifi','wifi bị ngắt','wifi chập chờn','mạng không ổn định','wifi limited','wifi !','không có internet'],
+   a:'📶 <b>Xử lý lỗi Wifi / mạng:</b><br><br><b>Tự thử trước:</b><br>• Restart máy và router<br>• Forget network rồi kết nối lại<br>• Cài lại driver wifi: Device Manager → Network Adapters<br><br><b>Nếu vẫn lỗi, mang vào tiệm:</b><br>• <b>Cài driver Wifi:</b> MIỄN PHÍ (hỗ trợ từ xa)<br>• <b>Card Wifi hỏng:</b> Thay 200K–500K<br>• <b>Anten Wifi đứt:</b> Hàn/thay 150K–350K<br><br><i>Xử lý từ xa qua UltraViewer miễn phí nếu lỗi phần mềm!</i>'},
+
+  // Máy quá nóng / quạt kêu to
+  {k:['máy quá nóng','laptop nóng','quạt kêu to','quạt ồn','cpu nóng','nhiệt độ cao','máy bị nóng','thermal throttle','vệ sinh máy','thay keo tản nhiệt'],
+   a:'🌡️ <b>Xử lý laptop quá nóng / quạt ồn:</b><br><br><b>Nguyên nhân chính:</b><br>• Bụi bám quạt & tản nhiệt → tắc luồng khí<br>• Keo tản nhiệt CPU khô → dẫn nhiệt kém<br>• Quạt hỏng → không tản nhiệt được<br><br><b>Giải pháp:</b><br>• 🧹 <b>Vệ sinh bụi toàn bộ:</b> 150K (lấy ngay 20–30 phút)<br>• 🧊 <b>Thay keo tản nhiệt cao cấp (Thermal Grizzly/Kryonaut):</b> +100K<br>• 🔧 <b>Thay quạt mới:</b> 250K–500K<br><br>✅ Sau vệ sinh + thay keo, máy có thể giảm 15–25°C!'},
+
+  // Cứu dữ liệu chi tiết (nâng cao)
+  {k:['cứu dữ liệu','khôi phục dữ liệu','ổ cứng chết','ổ cứng hỏng','file bị xóa','format nhầm','mất dữ liệu','data recovery','ổ cứng không nhận','bad sector'],
+   a:'💾 <b>Cứu dữ liệu tại Tran Hoa Computer:</b><br><br><b>Các trường hợp cứu được:</b><br>✅ Xóa nhầm file (Recycle Bin đã xóa)<br>✅ Format ổ cứng nhầm<br>✅ Virus mã hóa tệp (một số loại)<br>✅ Phân vùng bị xóa<br>✅ Ổ cứng không nhận, click-click (cơ học nhẹ)<br><br><b>Bảng giá cứu dữ liệu:</b><br>• Xóa file / format đơn giản: <b>200K–500K</b><br>• Phân vùng hỏng: <b>300K–700K</b><br>• Ổ cứng lỗi cơ học nhẹ: <b>800K–2.000K</b><br><br>⚡ <b>Cam kết: Không cứu được → Không thu phí!</b><br>🔒 Bảo mật dữ liệu tuyệt đối — không sao chép, không chia sẻ'},
+
+  // Cài driver / driver không nhận thiết bị
+  {k:['cài driver','driver không nhận','driver lỗi','driver âm thanh','driver màn hình','driver mạng','device unknown','thiết bị không nhận','cài lại driver'],
+   a:'⚙️ <b>Cài driver & xử lý thiết bị không nhận:</b><br><br><b>Hỗ trợ từ xa MIỄN PHÍ:</b><br>• Driver âm thanh (no sound)<br>• Driver mạng / Wifi<br>• Driver màn hình / card đồ họa<br>• Máy in, máy quét, webcam<br><br><b>Cách kết nối hỗ trợ từ xa:</b><br>1️⃣ Tải UltraViewer: ultraviewer.net<br>2️⃣ Gửi ID + Password qua Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;">0963.284.044</a><br>3️⃣ Kỹ thuật viên kết nối và cài trong 5–15 phút<br><br><i>Tất cả miễn phí, không cần mang máy!</i>'},
+
+  // Màn hình xanh chết chóc BSOD
+  {k:['màn hình xanh','blue screen','bsod','critical process died','system service exception','màn hình xanh lỗi','windows lỗi xanh','ntoskrnl'],
+   a:'🔵 <b>Xử lý màn hình xanh (BSOD):</b><br><br><b>Tự kiểm tra trước:</b><br>• Ghi lại mã lỗi (VD: CRITICAL_PROCESS_DIED)<br>• Thử Safe Mode (F8 khi khởi động)<br>• Cập nhật Windows & driver<br><br><b>Nguyên nhân phổ biến:</b><br>• RAM lỏng / lỗi → Test bằng MemTest86<br>• Driver xung đột (đặc biệt driver đồ họa)<br>• Ổ cứng bad sector<br>• Windows bị hỏng hệ thống<br><br><b>Mang vào tiệm chẩn đoán miễn phí!</b><br>Sửa từ: <b>0đ</b> (cài lại driver/Windows) đến <b>500K+</b> (thay RAM/SSD)'},
+
+  // Mua laptop tư vấn chi tiết theo nhu cầu
+  {k:['tư vấn mua laptop','nên mua laptop nào','laptop sinh viên','laptop văn phòng','laptop đồ họa','laptop lập trình','laptop gaming','mua laptop nào tốt','laptop tầm giá'],
+   a:'💻 <b>Tư vấn mua laptop theo nhu cầu:</b><br><br>🎓 <b>Sinh viên / Văn phòng (5–12 triệu):</b><br>• Asus VivoBook 15 (i5-1235U, 8GB, 512GB): ~10tr<br>• Dell Inspiron 15 (i5, 8GB): ~11tr<br>• HP 15s (i5 Gen 12, SSD 512GB): ~10.5tr<br><br>🎨 <b>Đồ họa / Video (15–25 triệu):</b><br>• ASUS ProArt Studiobook / ZenBook Pro: 20–28tr<br>• MacBook Pro M3 14": 42tr (hiệu năng cao nhất)<br><br>🎮 <b>Gaming (15–35 triệu):</b><br>• Asus ROG / TUF, Acer Nitro 5, Lenovo Legion<br>• RTX 4060 trở lên cho game AAA<br><br>📌 Nhắn nhu cầu + ngân sách cụ thể để mình tư vấn máy phù hợp nhất!',
+   qr:['Sinh viên ~10tr','Đồ họa ~20tr','Gaming ~20tr','MacBook Air M3']},
+
+  // So sánh sửa máy cũ vs mua máy mới
+  {k:['có nên sửa không','sửa hay mua mới','đáng sửa không','bỏ tiền sửa hay mua','máy cũ có nên sửa'],
+   a:'⚖️ <b>Khi nào nên sửa, khi nào nên mua mới?</b><br><br><b>✅ Nên SỬA khi:</b><br>• Chi phí sửa < 30–40% giá máy mới tương đương<br>• Máy dưới 4 tuổi, cấu hình vẫn đủ dùng<br>• Lỗi đơn giản: pin, màn hình, bàn phím<br>• Còn dữ liệu quan trọng chưa backup<br><br><b>❌ Nên MUA MỚI khi:</b><br>• Máy trên 6–7 tuổi, CPU/RAM lỗi thời<br>• Mainboard hỏng + chi phí > 50% máy mới<br>• Máy đã sửa nhiều lần, hay hỏng vặt<br><br>📞 Mang máy vào — chẩn đoán miễn phí, báo giá thật — bạn quyết định!'},
+
+  // Dịch vụ lắp ráp PC theo yêu cầu
+  {k:['lắp pc','ráp máy tính','build pc','cấu hình pc','lắp ráp pc','tư vấn build','pc theo yêu cầu','cấu hình theo nhu cầu'],
+   a:'🖥️ <b>Lắp ráp PC theo yêu cầu tại Tran Hoa Computer:</b><br><br><b>Gói phổ biến:</b><br>💼 <b>PC Văn phòng</b> (7–10 triệu): i3-12100 / Ryzen 3, 8GB RAM, SSD 256GB<br>🎮 <b>PC Gaming</b> (12–25 triệu): i5-13400F / Ryzen 5 7600X, RTX 4060/4070, 16GB DDR5<br>🎨 <b>PC Đồ họa</b> (18–40 triệu): i7/Ryzen 7, RTX 4070 Ti, 32GB RAM, NVMe 1TB<br><br><b>Quy trình:</b><br>1️⃣ Nêu nhu cầu + ngân sách<br>2️⃣ Nhận báo giá chi tiết từng linh kiện<br>3️⃣ Lắp ráp, chạy test 24h, bàn giao<br><br>✅ Bảo hành linh kiện 12 tháng • Tư vấn miễn phí',
+   qr:['PC Văn phòng 8tr','PC Gaming 15tr','PC Đồ họa 25tr']}
+
+
 ];
 
 /* ── QUICK REPLY ACTIONS ── */
@@ -855,7 +908,17 @@ function addMsg(t,role,qrs){
   w.className='cb-m '+(role==='user'?'user':'bot');
   var b=document.createElement('div');
   b.className='bub'; b.innerHTML=t;
-  w.appendChild(b); msgs.appendChild(w);
+  w.appendChild(b);
+  // feedback buttons for bot messages (below bubble)
+  if (role === 'bot') {
+    var fbRow = document.createElement('div');
+    fbRow.className = 'cb-fb';
+    fbRow.innerHTML = '<span class="cb-fb-label">Hữu ích không?</span>'
+      + '<button class="cb-fb-btn" onclick="cbFeedback(this,1)" title="Có, hữu ích">👍</button>'
+      + '<button class="cb-fb-btn" onclick="cbFeedback(this,0)" title="Chưa hữu ích">👎</button>';
+    w.appendChild(fbRow);
+  }
+  msgs.appendChild(w);
   msgs.scrollTop=msgs.scrollHeight;
   setQR(qrs);
   /* save to session history */
@@ -1199,3 +1262,11 @@ window.copyPhone=function(btn){
   document.addEventListener('DOMContentLoaded',patchChatbot);
   setTimeout(patchChatbot,500);
 })();
+
+/* ── CHATBOT FEEDBACK ── */
+function cbFeedback(btn, val) {
+  var row = btn.parentNode;
+  row.innerHTML = val
+    ? '<span style="color:#16a34a;font-size:12px;">✓ Cảm ơn phản hồi của bạn! 😊</span>'
+    : '<span style="color:#6d28d9;font-size:12px;">Mình sẽ cải thiện câu trả lời này. Bạn có muốn <a href="tel:0963284044" style="color:#2563eb;font-weight:700;">gọi trực tiếp</a> không?</span>';
+}

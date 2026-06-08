@@ -189,3 +189,11 @@
 [data-theme="dark"] #cbInput { background:#0f172a;border-color:#334155;color:#e2e8f0; }
 [data-theme="dark"] .cb-m.bot .bub { background:#334155;color:#e2e8f0; }
 [data-theme="dark"] .cb-qb { background:#2e1065;color:#c4b5fd;border-color:#4c1d95; }
+
+/* ── CHATBOT FEEDBACK BUTTONS ── */
+.cb-fb { display:flex; align-items:center; gap:5px; margin-top:5px; padding:2px 0; }
+.cb-fb-label { font-size:11px; color:#94a3b8; }
+.cb-fb-btn { background:none; border:1px solid #e2e8f0; border-radius:12px; padding:2px 7px; font-size:13px; cursor:pointer; transition:all .15s; }
+.cb-fb-btn:hover { background:#f5f3ff; border-color:#6d28d9; transform:scale(1.15); }
+[data-theme="dark"] .cb-fb-btn { border-color:#334155; }
+[data-theme="dark"] .cb-fb-btn:hover { background:#2e1065; border-color:#7c3aed; }
