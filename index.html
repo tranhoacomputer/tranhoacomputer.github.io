@@ -5074,6 +5074,36 @@ function rp(txt) {
      • Single word match → smaller bonus based on word length
      • Avoid single-char / stop-word false positives
   */
+  /* ── DIRECT-TO-AI bypass cho câu hỏi rõ ràng ngoài lề ── */
+  var _offTopicPatterns = [
+    /* thời tiết */
+    'thoi tiet','nhiet do','du bao','mua','nang','lanh','nong','am',
+    /* tài chính */
+    'gia vang','gia dollar','ty gia','ti gia','usd','eur','bitcoin','crypto',
+    /* danh tính bot */
+    'ban ten gi','ten cua ban','ban la ai','ban la gi','ban thong minh',
+    'ban co the lam','ban gioi khong','you are','what can you do',
+    /* chào hỏi / giao tiếp */
+    'xin chao','chao ban','chao buoi','hello','hi ban','hey','howdy',
+    'ban khoe khong','ban co khoe','hom nay the nao','ban sao roi',
+    /* giải trí / tin tức */
+    'tin tuc','bong da','lich thi dau','ty so','ket qua bong da',
+    'bai hat','nghe nhac','phim hay','truyen hay','sach hay',
+    /* kiến thức chung */
+    'tieng anh','dich sang','translate','how to','cach de','bi quyet',
+    'lich su','dia ly','toan hoc','vat ly','hoa hoc',
+    /* câu hỏi tổng quát */
+    'cho toi biet','ban biet gi','ban nghi sao','y kien cua ban'
+  ];
+  var _lowNorm = low;
+  for (var _op = 0; _op < _offTopicPatterns.length; _op++) {
+    if (_lowNorm.indexOf(_offTopicPatterns[_op]) > -1) {
+      _cbCtx.lastTopic = raw;
+      _askAI(raw);
+      return;
+    }
+  }
+
   var inputWords = low.split(/\s+/).filter(function(w){ return w.length >= 2; });
   var STOP = {
     'bi':1,'co':1,'va':1,'la':1,'thi':1,'de':1,'cho':1,'nhung':1,'cua':1,'nay':1,
@@ -5160,9 +5190,12 @@ function _gk() {
   });
 }
 var _GROQ_KEYS = _gk();
-var _groqKeyIdx = 0;
+var _groqKeyIdx = Math.floor(Math.random() * _GROQ_KEYS.length); /* Phân phối load ngẫu nhiên qua 6 keys */
 
-var _GROQ_SYSTEM = 'Bạn là trợ lý AI của Tran Hoa Computer — cửa hàng sửa chữa, lắp ráp máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044. Kỹ thuật viên: 0819.120.401. Giờ làm việc: 7:00–22:00 hàng ngày kể cả T7, CN. Zalo: 0963.284.044.\n\nDỊCH VỤ & BẢNG GIÁ:\n- Cài Windows 10/11 PC: 100K–120K | Laptop: 100K–150K (kèm driver, +Office 50K)\n- Vệ sinh máy, thay keo tản nhiệt: 150K–250K\n- Diệt virus chuyên sâu: 70K–150K\n- Hỗ trợ từ xa: MIỄN PHÍ TRỌN ĐỜI\n- Kiểm tra, chẩn đoán: MIỄN PHÍ, báo giá trước khi sửa\n- Thay pin laptop (Asus/Acer/HP/Lenovo): 350K–800K | Dell/MSI/Razer: 500K–1.2tr | MacBook: 800K–2tr | Bảo hành 6 tháng\n- Thay màn hình 15.6" FHD: 1.2tr–2.5tr | 13–14" FHD: 1.5tr–3tr | 2K/4K/OLED: 2.5tr–6tr | MacBook Retina: 3tr–8tr\n- Thay bàn phím laptop: 200K–600K\n- Sửa bản lề/nắp lưng/vỏ laptop: 200K–1.5tr\n- Thay quạt laptop: 200K–450K | PC/CPU: 150K–350K\n- Sửa mainboard/chip/IC nguồn: 200K–1.5tr | Nạp ROM/BIOS: 200K–500K\n- Nâng cấp SSD 256GB SATA: 300K–500K | 512GB NVMe: 500K–850K | 1TB NVMe: 800K–1.4tr | 2TB NVMe: 1.4tr–2.5tr\n- Nâng cấp RAM 8GB DDR4: 250K–400K | 16GB DDR4: 450K–700K | 16GB DDR5: 550K–900K | 32GB DDR4: 800K–1.3tr\n- Cứu dữ liệu xóa nhầm: 300K–500K | Ổ hỏng logic: 500K–1.5tr | Ổ hỏng cơ: 1.5tr–5tr\n- Cài phần mềm chuyên dụng (Photoshop, AutoCAD, MISA...): 100K–300K\n- Lắp đặt PC văn phòng: từ 6tr | PC gaming: từ 20tr | PC đồ họa: từ 30tr\n- MacBook Air M2/M3: 28–40tr | MacBook Pro: 35–75tr | iPad các dòng: 8tr–35tr\n- Sửa cổng sạc laptop: 150K–400K | USB hỏng: 100K–250K\n\nCOMBO ƯU ĐÃI:\n- Cài Windows + Vệ sinh: giảm 50K\n- Nâng cấp SSD + RAM cùng lúc: giảm 100K–200K\n- Giới thiệu bạn bè: nhận 50K voucher\n\nCAM KẾT: Kiểm tra & báo giá MIỄN PHÍ. Không phát sinh chi phí ẩn. Bảo hành rõ ràng. Linh kiện chính hãng.\n\nQUY TẮC TRẢ LỜI:\n- Trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chuyên nghiệp\n- Dùng HTML đơn giản (<b>, <br>, •) để format — KHÔNG dùng markdown ** hay ##\n- Câu trả lời tối đa ~150 từ, súc tích\n- Mời khách mang máy kiểm tra miễn phí nếu sửa phức tạp\n- Cuối câu gợi ý 1 bước tiếp theo ngắn gọn\n- Nếu khách hỏi về bạn (bạn là ai, bạn thông minh không...): trả lời thân thiện, giới thiệu bản thân là trợ lý AI của Tran Hoa Computer\n- Nếu khách hỏi câu hỏi ngoài lề (chào hỏi, hỏi thăm, câu hỏi kiến thức chung...): trả lời tự nhiên, thân thiện, không cần gắng kéo về chủ đề cửa hàng\n- Nếu khách hỏi dữ liệu thời gian thực (thời tiết, giá vàng, tỷ giá, tin tức mới nhất...): giải thích nhẹ nhàng rằng bạn không có thông tin cập nhật theo thời gian thực, gợi ý tra Google hoặc các app chuyên dụng';
+var _GROQ_SYSTEM = 'Tên bạn là Thoại — trợ lý AI thông minh của Tran Hoa Computer (cửa hàng sửa chữa, lắp ráp máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên). Hotline: 0963.284.044. Kỹ thuật viên: 0819.120.401. Giờ làm việc: 7:00–22:00 hàng ngày kể cả T7, CN. Zalo: 0963.284.044. Khi khách hỏi tên bạn, hãy trả lời: Tôi là Thoại, trợ lý AI của Tran Hoa Computer.\n\nDỊCH VỤ & BẢNG GIÁ:\n- Cài Windows 10/11 PC: 100K–120K | Laptop: 100K–150K (kèm driver, +Office 50K)\n- Vệ sinh máy, thay keo tản nhiệt: 150K–250K\n- Diệt virus chuyên sâu: 70K–150K\n- Hỗ trợ từ xa: MIỄN PHÍ TRỌN ĐỜI\n- Kiểm tra, chẩn đoán: MIỄN PHÍ, báo giá trước khi sửa\n- Thay pin laptop (Asus/Acer/HP/Lenovo): 350K–800K | Dell/MSI/Razer: 500K–1.2tr | MacBook: 800K–2tr | Bảo hành 6 tháng\n- Thay màn hình 15.6" FHD: 1.2tr–2.5tr | 13–14" FHD: 1.5tr–3tr | 2K/4K/OLED: 2.5tr–6tr | MacBook Retina: 3tr–8tr\n- Thay bàn phím laptop: 200K–600K\n- Sửa bản lề/nắp lưng/vỏ laptop: 200K–1.5tr\n- Thay quạt laptop: 200K–450K | PC/CPU: 150K–350K\n- Sửa mainboard/chip/IC nguồn: 200K–1.5tr | Nạp ROM/BIOS: 200K–500K\n- Nâng cấp SSD 256GB SATA: 300K–500K | 512GB NVMe: 500K–850K | 1TB NVMe: 800K–1.4tr | 2TB NVMe: 1.4tr–2.5tr\n- Nâng cấp RAM 8GB DDR4: 250K–400K | 16GB DDR4: 450K–700K | 16GB DDR5: 550K–900K | 32GB DDR4: 800K–1.3tr\n- Cứu dữ liệu xóa nhầm: 300K–500K | Ổ hỏng logic: 500K–1.5tr | Ổ hỏng cơ: 1.5tr–5tr\n- Cài phần mềm chuyên dụng (Photoshop, AutoCAD, MISA...): 100K–300K\n- Lắp đặt PC văn phòng: từ 6tr | PC gaming: từ 20tr | PC đồ họa: từ 30tr\n- MacBook Air M2/M3: 28–40tr | MacBook Pro: 35–75tr | iPad các dòng: 8tr–35tr\n- Sửa cổng sạc laptop: 150K–400K | USB hỏng: 100K–250K\n\nCOMBO ƯU ĐÃI:\n- Cài Windows + Vệ sinh: giảm 50K\n- Nâng cấp SSD + RAM cùng lúc: giảm 100K–200K\n- Giới thiệu bạn bè: nhận 50K voucher\n\nCAM KẾT: Kiểm tra & báo giá MIỄN PHÍ. Không phát sinh chi phí ẩn. Bảo hành rõ ràng. Linh kiện chính hãng.\n\nQUY TẮC TRẢ LỜI:\n- Trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chuyên nghiệp\n- Dùng HTML đơn giản (<b>, <br>, •) để format — KHÔNG dùng markdown ** hay ##\n- Câu trả lời tối đa ~150 từ, súc tích\n- Mời khách mang máy kiểm tra miễn phí nếu sửa phức tạp\n- Cuối câu gợi ý 1 bước tiếp theo ngắn gọn\n- Nếu khách hỏi về bạn (bạn là ai, bạn thông minh không...): trả lời thân thiện, giới thiệu bản thân là trợ lý AI của Tran Hoa Computer\n- Nếu khách hỏi câu hỏi ngoài lề (chào hỏi, hỏi thăm, câu hỏi kiến thức chung...): trả lời tự nhiên, thân thiện, không cần gắng kéo về chủ đề cửa hàng\n- Nếu khách hỏi dữ liệu thời gian thực (thời tiết, giá vàng, tỷ giá, tin tức mới nhất...): giải thích nhẹ nhàng rằng bạn không có thông tin cập nhật theo thời gian thực, gợi ý tra Google hoặc các app chuyên dụng';
+
+/* ── Key health tracker — ghi nhớ key nào đang bị rate-limit ── */
+var _keyRateLimited = {};
 
 function _askAI(userMsg) {
   _cbSetBusy(true);
@@ -5173,18 +5206,34 @@ function _askAI(userMsg) {
   msgs.scrollTop = msgs.scrollHeight;
   setQR([]);
 
-  /* Xây messages với history (6 lượt gần nhất) */
+  /* Xây messages với history (8 lượt gần nhất) */
   var messages = [{ role: 'system', content: _GROQ_SYSTEM }];
-  var histSlice = _aiHistory.slice(-6);
+  var histSlice = _aiHistory.slice(-8);
   for (var i = 0; i < histSlice.length; i++) {
     messages.push({ role: histSlice[i].role, content: histSlice[i].content });
   }
   messages.push({ role: 'user', content: userMsg });
 
-  /* Thử từng key, xoay vòng nếu lỗi */
+  /* Mô phỏng typing animation — hiển thị từng chữ */
+  function _typeText(el, text, onDone) {
+    var words = text.split(' ');
+    var idx = 0;
+    var current = '';
+    function step() {
+      if (idx >= words.length) { if (onDone) onDone(); return; }
+      current += (idx > 0 ? ' ' : '') + words[idx];
+      el.innerHTML = current.replace(/\n/g, '<br>');
+      msgs.scrollTop = msgs.scrollHeight;
+      idx++;
+      var delay = words[idx - 1].length > 6 ? 28 : 18;
+      setTimeout(step, delay);
+    }
+    step();
+  }
+
+  /* Thử key — NON-STREAMING để đảm bảo response đầy đủ trên mọi thiết bị */
   function _tryKey(attempt) {
-    if (attempt >= _GROQ_KEYS.length) {
-      /* Tất cả key đều lỗi */
+    if (attempt >= _GROQ_KEYS.length * 2) {
       if (tw.parentNode) tw.parentNode.removeChild(tw);
       bS('🤖 Xin lỗi, trợ lý AI đang bận.<br>Vui lòng liên hệ trực tiếp:<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
         ['Hotline gọi ngay', 'Zalo tư vấn', 'Đặt lịch sửa']);
@@ -5192,7 +5241,14 @@ function _askAI(userMsg) {
       return;
     }
     var keyIdx = (_groqKeyIdx + attempt) % _GROQ_KEYS.length;
+    /* Bỏ qua key đang bị rate-limit (trong 60 giây) */
+    if (_keyRateLimited[keyIdx] && Date.now() - _keyRateLimited[keyIdx] < 60000) {
+      _tryKey(attempt + 1);
+      return;
+    }
     var apiKey = _GROQ_KEYS[keyIdx];
+    /* Dùng model nhanh trước, model mạnh làm fallback */
+    var model = attempt < _GROQ_KEYS.length ? 'llama-3.1-8b-instant' : 'llama-3.3-70b-versatile';
 
     fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -5201,74 +5257,52 @@ function _askAI(userMsg) {
         'Authorization': 'Bearer ' + apiKey
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: model,
         messages: messages,
-        max_tokens: 512,
-        stream: true,
+        max_tokens: 1024,
+        stream: false,
         temperature: 0.7
       })
     }).then(function(res) {
-      if (res.status === 429 || res.status === 401) {
-        /* Rate limit hoặc key lỗi → thử key tiếp theo */
+      if (res.status === 429) {
+        _keyRateLimited[keyIdx] = Date.now(); /* Đánh dấu key này bị rate-limit */
         _tryKey(attempt + 1);
         return;
       }
-      if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
-
-      /* Key này thành công — cập nhật index cho lần sau */
-      _groqKeyIdx = keyIdx;
-
-      var reader = res.body.getReader();
-      var decoder = new TextDecoder();
-      var full = '';
-      var msgEl = null;
-      var bubEl = null;
-
-      function pump() {
-        return reader.read().then(function(ref) {
-          if (ref.done) {
-            /* Stream kết thúc */
-            if (full) {
-              _aiHistory.push({ role: 'user', content: userMsg });
-              _aiHistory.push({ role: 'assistant', content: full });
-              if (_aiHistory.length > 16) _aiHistory = _aiHistory.slice(-16);
-              _chatHistory.push({ role: 'bot', html: full });
-              _saveChatHistory();
-            }
-            setQR(['Đặt lịch sửa', 'Hotline gọi ngay', 'Zalo tư vấn', 'Kiểm tra miễn phí']);
-            _cbSetBusy(false);
-            return;
-          }
-          var rawText = decoder.decode(ref.value, { stream: true });
-          var lines = rawText.split('\n');
-          for (var li = 0; li < lines.length; li++) {
-            var line = lines[li].trim();
-            if (!line.startsWith('data: ')) continue;
-            var payload = line.slice(6);
-            if (payload === '[DONE]') continue;
-            try {
-              var chunk = JSON.parse(payload);
-              var token = chunk.choices && chunk.choices[0] && chunk.choices[0].delta && chunk.choices[0].delta.content;
-              if (token) {
-                full += token;
-                if (!msgEl) {
-                  if (tw.parentNode) tw.parentNode.removeChild(tw);
-                  msgEl = document.createElement('div');
-                  msgEl.className = 'cb-m bot';
-                  bubEl = document.createElement('div');
-                  bubEl.className = 'bub';
-                  msgEl.appendChild(bubEl);
-                  msgs.appendChild(msgEl);
-                }
-                bubEl.innerHTML = full.replace(/\n/g, '<br>');
-                msgs.scrollTop = msgs.scrollHeight;
-              }
-            } catch(e) {}
-          }
-          return pump();
-        });
+      if (res.status === 401) {
+        _tryKey(attempt + 1);
+        return;
       }
-      return pump();
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function(data) {
+      if (!data) return;
+      _groqKeyIdx = keyIdx;
+      var full = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if (!full) { _tryKey(attempt + 1); return; }
+
+      /* Tạo bubble bot */
+      if (tw.parentNode) tw.parentNode.removeChild(tw);
+      var msgEl = document.createElement('div');
+      msgEl.className = 'cb-m bot';
+      var bubEl = document.createElement('div');
+      bubEl.className = 'bub';
+      msgEl.appendChild(bubEl);
+      msgs.appendChild(msgEl);
+      msgs.scrollTop = msgs.scrollHeight;
+
+      /* Lưu history trước */
+      _aiHistory.push({ role: 'user', content: userMsg });
+      _aiHistory.push({ role: 'assistant', content: full });
+      if (_aiHistory.length > 20) _aiHistory = _aiHistory.slice(-20);
+      _chatHistory.push({ role: 'bot', html: full });
+      _saveChatHistory();
+
+      /* Typing animation → rồi show quick replies */
+      _typeText(bubEl, full, function() {
+        setQR(['Đặt lịch sửa', 'Hotline gọi ngay', 'Zalo tư vấn', 'Kiểm tra miễn phí']);
+        _cbSetBusy(false);
+      });
     }).catch(function() {
       _tryKey(attempt + 1);
     });
