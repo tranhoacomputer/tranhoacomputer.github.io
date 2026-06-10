@@ -1070,6 +1070,7 @@
     .promo-desc{font-size:clamp(11.5px,2.8vw,13px);opacity:.9;}
     .promo-cta{background:linear-gradient(90deg,#facc15,#f97316,#facc15);background-size:250% auto;color:#0f172a;font-weight:900;font-size:clamp(12px,3.2vw,14.5px);padding:clamp(9px,2.5vw,13px) clamp(16px,4vw,24px);border-radius:30px;white-space:nowrap;text-decoration:none;box-shadow:0 4px 20px rgba(251,191,36,0.6);animation:promoShimmer 2.5s linear infinite,promoGlowPulse 2s ease-in-out infinite;display:inline-flex;align-items:center;gap:6px;transition:transform .2s;flex-shrink:0;}
     .promo-cta:hover{transform:scale(1.08);}
+    .promo-cta:active{transform:scale(1.04);}
     @keyframes promoShimmer{0%{background-position:200% center;}100%{background-position:-200% center;}}
     @keyframes promoGlowPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.85;transform:scale(1.02);}}
     @media(max-width:600px){.promo-banner{flex-direction:column;text-align:center;}.promo-cta{width:100%;justify-content:center;}}
@@ -1183,32 +1184,13 @@
     /* Prevent double-tap zoom on buttons */
     button, a, input, select, textarea { touch-action: manipulation; }
     
-    /* ── Promo Banner (Ưu đãi tháng này) ── */
-    .promo-banner{background:linear-gradient(135deg,#1e40af,#2563eb,#0ea5e9);color:#fff;border-radius:20px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px;box-shadow:0 8px 28px rgba(37,99,235,0.35);position:relative;overflow:hidden;}
-    .promo-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 60%);animation:promoBgRotate 6s linear infinite;pointer-events:none;}
-    100%{transform:rotate(360deg);}}
-    .promo-title{font-size:16px;font-weight:800;margin-bottom:4px;}
-    .promo-desc{font-size:13px;opacity:.9;}
-    .promo-cta{background:linear-gradient(90deg,#facc15,#f97316,#facc15);background-size:250% auto;color:#0f172a;font-weight:900;font-size:14.5px;padding:13px 24px;border-radius:30px;white-space:nowrap;text-decoration:none;box-shadow:0 4px 20px rgba(251,191,36,0.6);animation:promoShimmer 2.5s linear infinite,promoGlowPulse 2s ease-in-out infinite;display:inline-flex;align-items:center;gap:6px;transition:transform .2s;flex-shrink:0;}
-    .promo-cta:hover{transform:scale(1.08);}
-    .promo-cta:active{transform:scale(1.04);}
-    100%{background-position:-200% center;}}
-    50%{opacity:0.85;transform:scale(1.02);}}
-    @media(max-width:600px){
-        .promo-banner{flex-direction:column;text-align:center;}
-        .promo-cta{width:100%;justify-content:center;touch-action:manipulation;}
-    }
-    
     /* ── paint containment on off-screen sections (safe alternative) ── */
     .service-grid, .price-section, .faq-section, .reviews-section {
         contain: layout style;
     }
 
-    /* ── Booking form animated gradient ring ── */
+    /* ── Booking form ── */
     .booking-form { position: relative; }
-    /* booking-form gradient ring removed (user: white bg only) */ /* formBorderSpin keyframe removed */
-        100% { background-position: 0% 50%; }
-    }
 
     /* ── Input focus: gradient ring ── */
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -3854,6 +3836,12 @@ body {
         menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuNavbar.classList.toggle('show'); });
         document.addEventListener('click', () => menuNavbar.classList.remove('show'));
 
+        // =====================================================
+        // CẤU HÌNH API ADMIN — Điền URL Apps Script của bạn
+        // Ví dụ: 'https://script.google.com/macros/s/AKfy.../exec'
+        // =====================================================
+        var ADMIN_API_URL = 'https://script.google.com/macros/s/AKfycbwPI1ZuihL7vV3phTNYU_aOpwm3Xjq-MqGNXzhgQLbwb64fO2efYXFvk-CxLt3JlgBSeQ/exec';
+
         const form = document.getElementById('bookingForm');
         const sBtn = document.getElementById('submitBtn');
         const bTxt = document.getElementById('btnText');
@@ -3913,6 +3901,14 @@ body {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
                         form.reset();
                         openModal();
+                        /* Gửi đến Admin Dashboard qua Apps Script */
+                        if (ADMIN_API_URL) {
+                            fetch(ADMIN_API_URL, {
+                                method: 'POST',
+                                mode: 'no-cors',
+                                body: new URLSearchParams(obj)
+                            }).catch(function(){});
+                        }
                         /* Update counter */
                         fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
                         .then(function(r){ return r.json(); })
