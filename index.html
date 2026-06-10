@@ -23,6 +23,7 @@
     <meta name="geo.region" content="VN-69">
     <meta name="geo.placename" content="Thái Nguyên, Việt Nam">
     <link rel="canonical" href="https://tranhoacomputer.github.io/">
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -65,37 +66,44 @@
       ]
     }
     </script>
+
     <meta name="theme-color" content="#2563eb">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <!-- Tailwind CDN removed: no utility classes used in this project -->
+
     <style>
-        /* Basic reset and typography */
-        :root{ --primary:#0fa89a; --dark:#0f172a; --text-main:#0f1720; --text-light:#475569; --bg-body:#f8fafc; --bg-card:#ffffff; --border-color:#e6edf4; --accent-orange:#d97706; --accent-green:#16a34a; --danger:#dc2626; }
-        *{box-sizing:border-box;margin:0;padding:0;font-family:'Be Vietnam Pro', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;}
-        html,body{height:100%;background:var(--bg-body);color:var(--text-main);}
-        a{color:var(--primary);}
-        .container{max-width:940px;margin:20px auto;padding:0 16px;}
-        header.header-nav{background:#fff;padding:12px;border-bottom:1px solid var(--border-color);position:sticky;top:0;z-index:1000;}
-        .brand-wrap{display:flex;align-items:center;gap:12px}
-        .logo-img{width:56px;height:56px;border-radius:50%;object-fit:cover}
-        .hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;padding:60px 16px;text-align:center;border-radius:12px;}
-        .hero h1{font-size:28px;margin-bottom:8px}
-        .booking-form{background:var(--bg-card);padding:24px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.04);margin-top:18px}
-        /* responsive tweaks */
-        @media(min-width:900px){.hero h1{font-size:40px}}
+      :root{
+        --primary:#0fa89a;
+        --dark:#0f172a;
+        --text-main:#0f1720;
+        --text-light:#475569;
+        --bg-body:#f8fafc;
+        --bg-card:#ffffff;
+        --border-color:#e6edf4;
+        --accent-orange:#d97706;
+        --accent-green:#16a34a;
+        --danger:#dc2626;
+      }
+      *{box-sizing:border-box;margin:0;padding:0;font-family:'Be Vietnam Pro', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;}
+      html,body{height:100%;background:var(--bg-body);color:var(--text-main);}
+      .container{max-width:940px;margin:20px auto;padding:0 16px}
+      header.header-nav{background:#fff;padding:12px;border-bottom:1px solid var(--border-color);position:sticky;top:0;z-index:1000}
+      .logo-img{width:56px;height:56px;border-radius:50%;object-fit:cover}
+      .hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#fff;padding:60px 16px;text-align:center;border-radius:12px}
+      .booking-form{background:var(--bg-card);padding:24px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.04);margin-top:18px}
+      @media(min-width:900px){.hero h1{font-size:40px}}
     </style>
 </head>
 <body>
   <header class="header-nav">
     <div class="container" style="display:flex;align-items:center;justify-content:space-between">
-      <div class="brand-wrap">
+      <div class="brand-wrap" style="display:flex;align-items:center;gap:12px">
         <img class="logo-img" src="/logo.png" alt="Tran Hoa Computer logo">
         <div>
-          <div class="logo-animation">Tran Hoa Computer</div>
-          <div class="slogan-animation">Sửa chữa &amp; Lắp ráp máy tính</div>
+          <div class="logo-animation" style="font-weight:800;font-size:18px;color:var(--primary)">Tran Hoa Computer</div>
+          <div class="slogan-animation" style="font-size:11px;color:var(--accent-orange);margin-top:4px">Sửa chữa &amp; Lắp ráp máy tính</div>
         </div>
       </div>
-      <nav class="nav-menu" aria-label="Main navigation">
+      <nav class="nav-menu" aria-label="Main navigation" style="display:flex;gap:18px">
         <a href="#services">Dịch vụ</a>
         <a href="#prices">Bảng giá</a>
         <a href="#contact">Liên hệ</a>
@@ -106,7 +114,7 @@
   <main class="container">
     <section class="hero" role="region" aria-label="Giới thiệu">
       <h1>Trung tâm sửa chữa lắp ráp máy tính uy tín tại Thái Nguyên</h1>
-      <p style="max-width:760px;margin:8px auto 0;">Cài đặt Windows, thay linh kiện, cứu dữ liệu, mua bán laptop/iPad/Macbook, phụ kiện chính hãng. Hotline: <strong>0963.284.044</strong></p>
+      <p style="max-width:760px;margin:8px auto 0">Cài đặt Windows, thay linh kiện, cứu dữ liệu, mua bán laptop/iPad/Macbook, phụ kiện chính hãng. Hotline: <strong>0963.284.044</strong></p>
       <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <a class="hero-action primary" href="#datlich-sua-chua" style="background:#fff;color:#0f172a;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700">Đặt lịch</a>
         <a class="hero-action secondary" href="#contact" style="background:rgba(255,255,255,0.12);color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid rgba(255,255,255,0.2)">Gọi ngay</a>
@@ -116,7 +124,7 @@
     <section id="datlich-sua-chua" class="booking-form" aria-labelledby="bookingTitle">
       <h2 id="bookingTitle" class="form-title">Đặt lịch sửa chữa</h2>
       <p class="form-desc">Điền thông tin và chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.</p>
-      <form onsubmit="event.preventDefault();alert('Mẫu gửi (demo)');" style="margin-top:12px">
+      <form onsubmit="event.preventDefault();alert('Mẫu gửi (demo)')" style="margin-top:12px">
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <input class="form-control" type="text" name="name" placeholder="Họ và tên" style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--border-color)">
           <input class="form-control" type="tel" name="phone" placeholder="Số điện thoại" style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--border-color)">
@@ -141,7 +149,6 @@
   </main>
 
   <script>
-    // Simple accessibility: toggle prefers-color-scheme fallback
     (function(){
       try {
         const root = document.documentElement;
