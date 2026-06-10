@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
-    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên,mua laptop iPad Macbook chính hãng, Phụ kiện máy tính chính hãng Thái Nguyên,tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, Trần Văn Hoà, Tran Van Hoa, tranvanhoa, Trần Hoà, Tran Hoa, tranhoa, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Đại Từ, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, tranhoa84373, Tran Hoa Computer">
+    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên,mua laptop iPad Macbook chính hãng, Phụ kiện máy tính chính hãng Thái Nguyên,tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Đại Từ, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, tranhoa84373, Tran Hoa Computer">
     <meta name="author" content="Tran Hoa Computer">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="VN-69">
@@ -159,7 +159,7 @@
         .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
         
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; overflow-x: hidden; }
-        .section-title { text-align: center; font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
+        .section-title, h2.section-title { text-align: center; font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
     background: linear-gradient(90deg, #1d4ed8, #2563eb, #0ea5e9);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text; color: transparent; }
@@ -559,7 +559,7 @@
         /* ── Dark mode contrast fixes: override color:var(--dark) which becomes invisible ── */
         [data-theme="dark"] .nav-menu a { color: var(--text-main) !important; }
         [data-theme="dark"] .nav-menu a:hover { color: #38bdf8 !important; }
-        [data-theme="dark"] .section-title { color: #e2e8f0 !important; }
+        /* section-title dark color handled by gradient rule below */
         [data-theme="dark"] .faq-question { color: var(--text-main) !important; }
         [data-theme="dark"] .faq-q { color: var(--text-main) !important; }
         [data-theme="dark"] .faq-q:hover { background: #1e293b !important; }
@@ -797,13 +797,13 @@
     @keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
     #cbClose { background:none;border:none;color:#fff;font-size:17px;cursor:pointer;margin-left:auto;opacity:.8;padding:6px 8px;min-width:36px;min-height:36px;display:flex;align-items:center;justify-content:center; }
     #cbClose:hover { opacity:1; }
-    #cbMsgs { flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth; }
+    #cbMsgs { flex:1;overflow-y:auto;overflow-x:hidden;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth; }
     .cb-m { max-width:85%;line-height:1.55;font-size:13.5px;animation:msgIn .25s ease; }
     @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
     .cb-m.bot { align-self:flex-start; }
-    .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px; }
+    .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px;word-break:break-word;overflow-wrap:break-word;max-width:100%; }
     .cb-m.user { align-self:flex-end; }
-    .cb-m.user .bub { background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;padding:9px 12px;border-radius:13px 4px 13px 13px; }
+    .cb-m.user .bub { background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;padding:9px 12px;border-radius:13px 4px 13px 13px;word-break:break-word;overflow-wrap:break-word;max-width:100%; }
     .cb-qr { display:flex;flex-wrap:wrap;gap:5px;padding:4px 10px 8px;flex-shrink:0;max-height:76px;overflow-y:auto; }
     .cb-qb { background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:20px;padding:8px 14px;font-size:12px;cursor:pointer;transition: background-color .2s  , color .2s  , opacity .2s  , transform .2s  , border-color .2s  ;white-space:nowrap; }
     .cb-qb:hover { background:#6d28d9;color:#fff;border-color:#6d28d9; }
@@ -819,7 +819,8 @@
     [data-theme="dark"] #chatbotPanel { background:#1e293b; }
     [data-theme="dark"] .cb-inp { border-color:#334155; }
     [data-theme="dark"] #cbInput { background:#0f172a;border-color:#334155;color:#e2e8f0; }
-    [data-theme="dark"] .cb-m.bot .bub { background:#334155;color:#e2e8f0; }
+    [data-theme="dark"] .cb-m.bot .bub { background:#334155;color:#e2e8f0;word-break:break-word;overflow-wrap:break-word; }
+    [data-theme="dark"] .cb-m.bot .bub button { color:#94a3b8 !important; border-color:#475569 !important; }
     [data-theme="dark"] .cb-qb { background:#2e1065;color:#c4b5fd;border-color:#4c1d95; }
 
     /* ═══ ZALO JOIN BUTTON EFFECTS ═══ */
@@ -1688,6 +1689,8 @@ body {
         background: linear-gradient(100deg, #93c5fd 0%, #60a5fa 45%, #38bdf8 100%) !important;
         -webkit-background-clip: text !important;
         background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        color: transparent !important;
     }
     [data-theme="dark"] .section-title::after {
         background: linear-gradient(90deg, #3b82f6, #38bdf8, #34d399) !important;
@@ -1799,6 +1802,20 @@ body {
     @media (prefers-reduced-motion: reduce) {
         #chatbotToggle::before { animation: none !important; }
         .cb-ring, .cb-ring::before { animation: none !important; opacity: 0 !important; }
+    }
+
+    /* ── Hero tagline gradient text ── */
+    .hero-tagline {
+      background: linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      font-size: clamp(18px,5vw,26px); font-weight: 800;
+      margin: 0 0 8px; text-align: center;
+    }
+    [data-theme="dark"] .hero-tagline {
+      background: linear-gradient(135deg,#e0f2fe 20%,#93c5fd 60%,#38bdf8 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 </style>
     <script>
@@ -1925,7 +1942,7 @@ body {
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
         <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
-        <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
+        <h2 class="hero-tagline">Sửa Chữa · Lắp Ráp · Nâng Cấp Máy Tính</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
             <span>✅ Khám đúng bệnh</span>
@@ -1945,7 +1962,7 @@ body {
     
     <div class="container">
         <div id="datlich-sua-chua" class="booking-form reveal active">
-            <div class="section-title-wrap"><span class="section-badge">ĐẶT LỊCH</span></div><div class="form-title booking-heading">ĐẶT LỊCH SỬA MÁY TÍNH</div>
+            <div class="section-title-wrap"><span class="section-badge">ĐẶT LỊCH</span></div><h2 class="section-title booking-heading">Đặt Lịch Sửa Máy</h2>
             <div class="form-desc">Vui lòng để lại thông tin đặt lịch hẹn trước dưới đây để không phải xếp hàng chờ đợi lâu khi mang máy tới tiệm.</div>
             
             <div style="text-align: center;">
@@ -2059,7 +2076,7 @@ body {
             <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="promo-cta">🎁 NHẬN NGAY →</a>
         </div>
     </div>
-        <div class="section-title-wrap"><span class="section-badge">DỊCH VỤ</span></div><div id="dich-vu" class="section-title reveal">DỊCH VỤ CỦA CHÚNG TÔI</div><p class="section-subtitle">Sửa chữa · Nâng cấp · Lắp ráp</p>
+        <div class="section-title-wrap"><span class="section-badge">DỊCH VỤ</span></div><h2 id="dich-vu" class="section-title reveal">Dịch Vụ Sửa Chữa</h2><p class="section-subtitle">Sửa chữa · Nâng cấp · Lắp ráp</p>
     <div class="container reveal" style="margin-bottom: 40px;">
         <div class="service-grid">
             <div class="service-card">
@@ -2101,7 +2118,7 @@ body {
         </div>
     </div>
 
-    <div class="section-title-wrap"><span class="section-badge">QUY TRÌNH</span></div><div class="section-title reveal">QUY TRÌNH SỬA CHỮA</div><p class="section-subtitle">4 bước chuẩn — minh bạch từng giai đoạn</p>
+    <div class="section-title-wrap"><span class="section-badge">QUY TRÌNH</span></div><h2 class="section-title reveal">Quy Trình Sửa Chữa</h2><p class="section-subtitle">4 bước chuẩn — minh bạch từng giai đoạn</p>
     <div class="container reveal" style="margin-bottom: 50px;">
         <div class="process-steps">
             <div class="process-step">
@@ -2129,7 +2146,7 @@ body {
 
 
 
-        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai — không phát sinh</p>
+        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><h2 id="muc-bang-gia" class="section-title reveal">Bảng Giá Dịch Vụ</h2><p class="section-subtitle">Giá niêm yết công khai — không phát sinh</p>
         <div class="tab-container reveal" id="priceTabContainer">
             <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
             <button class="tab-btn" id="tabBtn-software" role="tab" aria-label="Cài Phần Mềm" aria-controls="tab-software" onclick="switchTab('software',this)">Cài Phần Mềm</button>
@@ -3139,7 +3156,7 @@ body {
             </ul>
         </div>
         
-        <div id="chinh-sach-bao-hanh" class="reveal"><div class="section-title-wrap"><span class="section-badge">BẢO HÀNH</span></div><div class="section-title reveal">CHÍNH SÁCH BẢO HÀNH</div><p class="section-subtitle">Cam kết rõ ràng — bảo hành chính hãng — đổi linh kiện nếu lỗi</p>
+        <div id="chinh-sach-bao-hanh" class="reveal"><div class="section-title-wrap"><span class="section-badge">BẢO HÀNH</span></div><h2 class="section-title reveal">Chính Sách Bảo Hành</h2><p class="section-subtitle">Cam kết rõ ràng — bảo hành chính hãng — đổi linh kiện nếu lỗi</p>
 
             <div class="policy-grid">
                 <div class="policy-card" style="border-left: 4px solid var(--accent-green); background-color: #f0fdf4;">
@@ -3208,7 +3225,7 @@ body {
         </div>
 
         
-        <div class="section-title-wrap"><span class="section-badge">ĐÁNH GIÁ</span></div><div id="danh-gia-khach-hang" class="section-title reveal">KHÁCH HÀNG ĐÁNH GIÁ</div><p class="section-subtitle">Ý kiến thực tế từ khách hàng</p>
+        <div class="section-title-wrap"><span class="section-badge">ĐÁNH GIÁ</span></div><h2 id="danh-gia-khach-hang" class="section-title reveal">Đánh Giá Của Khách Hàng</h2><p class="section-subtitle">Ý kiến thực tế từ khách hàng</p>
         <div class="review-grid reveal">
             <div class="review-card">
                 <div style="color: #facc15; margin-bottom: 8px;">⭐⭐⭐⭐⭐</div>
@@ -3234,7 +3251,7 @@ body {
         
         <!-- FAQ SECTION -->
         <div id="hoat-dong-thuc-te" class="reveal" style="margin-bottom: 40px;">
-            <div class="section-title-wrap"><span class="section-badge">THỰC TẾ</span></div><div class="section-title">HÌNH ẢNH HOẠT ĐỘNG THỰC TẾ</div><p class="section-subtitle">Kỹ thuật viên làm việc trực tiếp tại cửa hàng</p>
+            <div class="section-title-wrap"><span class="section-badge">GALLERY</span></div><h2 class="section-title">Hình Ảnh Thực Tế</h2><p class="section-subtitle">Kỹ thuật viên làm việc trực tiếp tại cửa hàng</p>
             <p style="text-align:center; color:var(--text-light); font-size:14px; margin-bottom:28px;">Hình ảnh ghi nhận kỹ thuật viên làm việc trực tiếp tại cửa hàng, minh bạch và chuyên nghiệp.</p>
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
                 <div style="background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); border:1px solid var(--border-color);">
@@ -3278,7 +3295,7 @@ body {
     
         <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
 
-            <div class="section-title-wrap"><span class="section-badge">FAQ</span></div><div class="section-title">CÂU HỎI THƯỜNG GẶP</div><p class="section-subtitle">Những thắc mắc phổ biến nhất</p>
+            <div id="cau-hoi-thuong-gap" class="section-title-wrap"><span class="section-badge">FAQ</span></div><h2 class="section-title">Câu Hỏi Thường Gặp</h2><p class="section-subtitle">Những thắc mắc phổ biến nhất</p>
             <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." oninput="(function(v){clearTimeout(window._fqT);window._fqT=setTimeout(function(){filterFaq(v);},180);})(this.value)">
             <div id="faqNoResult" style="display:none;text-align:center;padding:16px;color:var(--text-light);font-size:14px;">Không tìm thấy câu hỏi phù hợp</div>
             <div class="faq-list">
@@ -4837,16 +4854,55 @@ var offIdx=0;
 function uS(t){addMsg(t,'user',[]);}
 function bS(t,q){addMsg(t,'bot',q||[]);}
 
+function _mkActRow(bub) {
+  /* Tạo hàng nút Copy + 👍👎 cho mọi câu trả lời bot */
+  var actRow = document.createElement('div');
+  actRow.style.cssText = 'display:flex;align-items:center;gap:8px;margin-top:5px;padding-top:4px;border-top:1px solid rgba(0,0,0,0.06);';
+  var cpBtn = document.createElement('button');
+  cpBtn.textContent = '⎘ Sao chép';
+  cpBtn.className = 'cb-act-copy';
+  cpBtn.style.cssText = 'background:none;border:1px solid #e2e8f0;border-radius:12px;padding:2px 9px;font-size:11px;color:#64748b;cursor:pointer;transition:all .2s;line-height:1.6;';
+  cpBtn.onclick = function() { _copyText(this); };
+  cpBtn.onmouseenter = function() { this.style.background='#f1f5f9'; this.style.borderColor='#c7d2fe'; };
+  cpBtn.onmouseleave = function() { this.style.background='none'; this.style.borderColor='#e2e8f0'; };
+  var rateRow = document.createElement('span');
+  rateRow.className = 'cb-rate-row';
+  rateRow.style.cssText = 'display:flex;gap:2px;margin-left:auto;';
+  var rU = document.createElement('button');
+  rU.textContent = '👍';
+  rU.title = 'Hữu ích';
+  rU.className = 'cb-act-rate';
+  rU.style.cssText = 'background:none;border:none;font-size:14px;cursor:pointer;opacity:.4;padding:0 2px;transition:opacity .15s;';
+  rU.onclick = function() { _rateBub(this, 1); };
+  rU.onmouseenter = function() { this.style.opacity = '1'; };
+  rU.onmouseleave = function() { this.style.opacity = '.4'; };
+  var rD = document.createElement('button');
+  rD.textContent = '👎';
+  rD.title = 'Chưa đúng';
+  rD.className = 'cb-act-rate';
+  rD.style.cssText = 'background:none;border:none;font-size:14px;cursor:pointer;opacity:.4;padding:0 2px;transition:opacity .15s;';
+  rD.onclick = function() { _rateBub(this, 0); };
+  rD.onmouseenter = function() { this.style.opacity = '1'; };
+  rD.onmouseleave = function() { this.style.opacity = '.4'; };
+  rateRow.appendChild(rU);
+  rateRow.appendChild(rD);
+  actRow.appendChild(cpBtn);
+  actRow.appendChild(rateRow);
+  bub.appendChild(actRow);
+}
+
 function addMsg(t,role,qrs){
   var w=document.createElement('div');
   w.className='cb-m '+(role==='user'?'user':'bot');
   var b=document.createElement('div');
-  b.className='bub'; b.innerHTML=t;
+  b.className='bub'; b.innerHTML=t||'';
+  /* Thêm nút Copy + 👍👎 cho mọi tin bot */
+  if (role !== 'user') _mkActRow(b);
   w.appendChild(b); msgs.appendChild(w);
   msgs.scrollTop=msgs.scrollHeight;
   setQR(qrs);
   /* save to session history */
-  _chatHistory.push({role:(role==='user'?'user':'bot'), html:t});
+  _chatHistory.push({role:(role==='user'?'user':'bot'), html:t||''});
   _saveChatHistory();
 }
 
@@ -5075,33 +5131,45 @@ function rp(txt) {
      • Avoid single-char / stop-word false positives
   */
   /* ── DIRECT-TO-AI bypass cho câu hỏi rõ ràng ngoài lề ── */
-  var _offTopicPatterns = [
-    /* thời tiết */
-    'thoi tiet','nhiet do','du bao','mua','nang','lanh','nong','am',
+  /* Dùng từ ghép để tránh false-positive: 'am' trong 'cham', 'nang' trong 'nang cap', v.v. */
+  var _offTopicPhrases = [
+    /* thời tiết — dùng cụm từ, tránh 'am'/'nang'/'nong'/'mua' đứng một mình */
+    'thoi tiet','nhiet do','du bao thoi','troi mua','troi nang','troi lanh',
+    'troi nong','am uot','do am','nhiet do ngoai troi',
     /* tài chính */
-    'gia vang','gia dollar','ty gia','ti gia','usd','eur','bitcoin','crypto',
+    'gia vang','gia dollar','ty gia','ti gia ngoai te','usd eur','bitcoin','crypto',
     /* danh tính bot */
-    'ban ten gi','ten cua ban','ban la ai','ban la gi','ban thong minh',
-    'ban co the lam','ban gioi khong','you are','what can you do',
-    /* chào hỏi / giao tiếp */
-    'xin chao','chao ban','chao buoi','hello','hi ban','hey','howdy',
-    'ban khoe khong','ban co khoe','hom nay the nao','ban sao roi',
+    'ban ten gi','ten cua ban','ban la ai','ban la gi','ban thong minh khong',
+    'ban co the lam gi','ban gioi khong','you are','what can you do',
+    /* chào hỏi — only explicit greetings, not 'xin chao' alone (could be "xin chào shop") */
+    'chao ban hom nay','chao buoi sang','hello ban','hi ban','hey ban','howdy',
+    'ban khoe khong','ban co khoe','hom nay ban the nao','ban sao roi',
     /* giải trí / tin tức */
-    'tin tuc','bong da','lich thi dau','ty so','ket qua bong da',
-    'bai hat','nghe nhac','phim hay','truyen hay','sach hay',
+    'tin tuc moi','bong da hom nay','lich thi dau bong','ty so bong da','ket qua bong da',
+    'bai hat hay','nghe nhac','phim hay','truyen hay','sach hay',
     /* kiến thức chung */
-    'tieng anh','dich sang','translate','how to','cach de','bi quyet',
-    'lich su','dia ly','toan hoc','vat ly','hoa hoc',
-    /* câu hỏi tổng quát */
-    'cho toi biet','ban biet gi','ban nghi sao','y kien cua ban'
+    'dich sang tieng','translate to','how to make','cach de lam','bi quyet song',
+    'lich su the gioi','dia ly viet nam','toan hoc','vat ly','hoa hoc',
+    /* câu hỏi tổng quát không liên quan shop */
+    'cho toi biet ve','ban biet gi ve','ban nghi the nao ve','y kien cua ban ve'
   ];
-  var _lowNorm = low;
-  for (var _op = 0; _op < _offTopicPatterns.length; _op++) {
-    if (_lowNorm.indexOf(_offTopicPatterns[_op]) > -1) {
-      _cbCtx.lastTopic = raw;
-      _askAI(raw);
-      return;
+  /* Word-boundary check cho pattern 1 từ; substring OK cho cụm 2+ từ */
+  var _lowWords = low.split(/\s+/);
+  var _isOffTopic = false;
+  for (var _op = 0; _op < _offTopicPhrases.length; _op++) {
+    var _pat = _offTopicPhrases[_op];
+    if (_pat.indexOf(' ') > -1) {
+      /* multi-word phrase: substring search */
+      if (low.indexOf(_pat) > -1) { _isOffTopic = true; break; }
+    } else {
+      /* single word: whole-word only to prevent 'am' matching 'cham' */
+      if (_lowWords.indexOf(_pat) > -1) { _isOffTopic = true; break; }
     }
+  }
+  if (_isOffTopic) {
+    _cbCtx.lastTopic = raw;
+    _askAI(raw);
+    return;
   }
 
   var inputWords = low.split(/\s+/).filter(function(w){ return w.length >= 2; });
@@ -5192,10 +5260,75 @@ function _gk() {
 var _GROQ_KEYS = _gk();
 var _groqKeyIdx = Math.floor(Math.random() * _GROQ_KEYS.length); /* Phân phối load ngẫu nhiên qua 6 keys */
 
-var _GROQ_SYSTEM = 'Tên bạn là Thoại — trợ lý AI thông minh của Tran Hoa Computer (cửa hàng sửa chữa, lắp ráp máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên). Hotline: 0963.284.044. Kỹ thuật viên: 0819.120.401. Giờ làm việc: 7:00–22:00 hàng ngày kể cả T7, CN. Zalo: 0963.284.044. Khi khách hỏi tên bạn, hãy trả lời: Tôi là Thoại, trợ lý AI của Tran Hoa Computer.\n\nDỊCH VỤ & BẢNG GIÁ:\n- Cài Windows 10/11 PC: 100K–120K | Laptop: 100K–150K (kèm driver, +Office 50K)\n- Vệ sinh máy, thay keo tản nhiệt: 150K–250K\n- Diệt virus chuyên sâu: 70K–150K\n- Hỗ trợ từ xa: MIỄN PHÍ TRỌN ĐỜI\n- Kiểm tra, chẩn đoán: MIỄN PHÍ, báo giá trước khi sửa\n- Thay pin laptop (Asus/Acer/HP/Lenovo): 350K–800K | Dell/MSI/Razer: 500K–1.2tr | MacBook: 800K–2tr | Bảo hành 6 tháng\n- Thay màn hình 15.6" FHD: 1.2tr–2.5tr | 13–14" FHD: 1.5tr–3tr | 2K/4K/OLED: 2.5tr–6tr | MacBook Retina: 3tr–8tr\n- Thay bàn phím laptop: 200K–600K\n- Sửa bản lề/nắp lưng/vỏ laptop: 200K–1.5tr\n- Thay quạt laptop: 200K–450K | PC/CPU: 150K–350K\n- Sửa mainboard/chip/IC nguồn: 200K–1.5tr | Nạp ROM/BIOS: 200K–500K\n- Nâng cấp SSD 256GB SATA: 300K–500K | 512GB NVMe: 500K–850K | 1TB NVMe: 800K–1.4tr | 2TB NVMe: 1.4tr–2.5tr\n- Nâng cấp RAM 8GB DDR4: 250K–400K | 16GB DDR4: 450K–700K | 16GB DDR5: 550K–900K | 32GB DDR4: 800K–1.3tr\n- Cứu dữ liệu xóa nhầm: 300K–500K | Ổ hỏng logic: 500K–1.5tr | Ổ hỏng cơ: 1.5tr–5tr\n- Cài phần mềm chuyên dụng (Photoshop, AutoCAD, MISA...): 100K–300K\n- Lắp đặt PC văn phòng: từ 6tr | PC gaming: từ 20tr | PC đồ họa: từ 30tr\n- MacBook Air M2/M3: 28–40tr | MacBook Pro: 35–75tr | iPad các dòng: 8tr–35tr\n- Sửa cổng sạc laptop: 150K–400K | USB hỏng: 100K–250K\n\nCOMBO ƯU ĐÃI:\n- Cài Windows + Vệ sinh: giảm 50K\n- Nâng cấp SSD + RAM cùng lúc: giảm 100K–200K\n- Giới thiệu bạn bè: nhận 50K voucher\n\nCAM KẾT: Kiểm tra & báo giá MIỄN PHÍ. Không phát sinh chi phí ẩn. Bảo hành rõ ràng. Linh kiện chính hãng.\n\nQUY TẮC TRẢ LỜI:\n- Trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chuyên nghiệp\n- Dùng HTML đơn giản (<b>, <br>, •) để format — KHÔNG dùng markdown ** hay ##\n- Câu trả lời tối đa ~150 từ, súc tích\n- Mời khách mang máy kiểm tra miễn phí nếu sửa phức tạp\n- Cuối câu gợi ý 1 bước tiếp theo ngắn gọn\n- Nếu khách hỏi về bạn (bạn là ai, bạn thông minh không...): trả lời thân thiện, giới thiệu bản thân là trợ lý AI của Tran Hoa Computer\n- Nếu khách hỏi câu hỏi ngoài lề (chào hỏi, hỏi thăm, câu hỏi kiến thức chung...): trả lời tự nhiên, thân thiện, không cần gắng kéo về chủ đề cửa hàng\n- Nếu khách hỏi dữ liệu thời gian thực (thời tiết, giá vàng, tỷ giá, tin tức mới nhất...): giải thích nhẹ nhàng rằng bạn không có thông tin cập nhật theo thời gian thực, gợi ý tra Google hoặc các app chuyên dụng';
+var _GROQ_SYSTEM = 'Tên bạn là Thoại — trợ lý AI thông minh của Tran Hoa Computer (cửa hàng sửa chữa, lắp ráp máy tính uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên). Hotline: 0963.284.044. Kỹ thuật viên: 0819.120.401. Giờ làm việc: 7:00–22:00 hàng ngày kể cả T7, CN. Zalo: 0963.284.044. Khi khách hỏi tên bạn, hãy trả lời: Tôi là Thoại, trợ lý AI của Tran Hoa Computer.\n\nDỊCH VỤ & BẢNG GIÁ:\n- Cài Windows 10/11 PC: 100K–120K | Laptop: 100K–150K (kèm driver, +Office 50K)\n- Vệ sinh máy, thay keo tản nhiệt: 150K–250K\n- Diệt virus chuyên sâu: 70K–150K\n- Hỗ trợ từ xa: MIỄN PHÍ TRỌN ĐỜI\n- Kiểm tra, chẩn đoán: MIỄN PHÍ, báo giá trước khi sửa\n- Thay pin laptop (Asus/Acer/HP/Lenovo): 350K–800K | Dell/MSI/Razer: 500K–1.2tr | MacBook: 800K–2tr | Bảo hành 6 tháng\n- Thay màn hình 15.6" FHD: 1.2tr–2.5tr | 13–14" FHD: 1.5tr–3tr | 2K/4K/OLED: 2.5tr–6tr | MacBook Retina: 3tr–8tr\n- Thay bàn phím laptop: 200K–600K\n- Sửa bản lề/nắp lưng/vỏ laptop: 200K–1.5tr\n- Thay quạt laptop: 200K–450K | PC/CPU: 150K–350K\n- Sửa mainboard/chip/IC nguồn: 200K–1.5tr | Nạp ROM/BIOS: 200K–500K\n- Nâng cấp SSD 256GB SATA: 300K–500K | 512GB NVMe: 500K–850K | 1TB NVMe: 800K–1.4tr | 2TB NVMe: 1.4tr–2.5tr\n- Nâng cấp RAM 8GB DDR4: 250K–400K | 16GB DDR4: 450K–700K | 16GB DDR5: 550K–900K | 32GB DDR4: 800K–1.3tr\n- Cứu dữ liệu xóa nhầm: 300K–500K | Ổ hỏng logic: 500K–1.5tr | Ổ hỏng cơ: 1.5tr–5tr\n- Cài phần mềm chuyên dụng (Photoshop, AutoCAD, MISA...): 100K–300K\n- Lắp đặt PC văn phòng: từ 6tr | PC gaming: từ 20tr | PC đồ họa: từ 30tr\n- MacBook Air M2/M3: 28–40tr | MacBook Pro: 35–75tr | iPad các dòng: 8tr–35tr\n- Sửa cổng sạc laptop: 150K–400K | USB hỏng: 100K–250K\n\nCOMBO ƯU ĐÃI:\n- Cài Windows + Vệ sinh: giảm 50K\n- Nâng cấp SSD + RAM cùng lúc: giảm 100K–200K\n- Giới thiệu bạn bè: nhận 50K voucher\n\nCAM KẾT: Kiểm tra & báo giá MIỄN PHÍ. Không phát sinh chi phí ẩn. Bảo hành rõ ràng. Linh kiện chính hãng.\n\nQUY TẮC TRẢ LỜI:\n- Trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chuyên nghiệp\n- Dùng HTML đơn giản (<b>, <br>, •) để format — KHÔNG dùng markdown ** hay ##. Dùng <b></b> cho in đậm, <br> cho xuống dòng. Khi liệt kê dùng •\n- Câu trả lời tối đa ~150 từ, súc tích\n- Mời khách mang máy kiểm tra miễn phí nếu sửa phức tạp\n- Cuối câu gợi ý 1 bước tiếp theo ngắn gọn\n- Nếu khách hỏi về bạn (bạn là ai, bạn thông minh không...): trả lời thân thiện, giới thiệu bản thân là trợ lý AI của Tran Hoa Computer\n- Nếu khách hỏi câu hỏi ngoài lề (chào hỏi, hỏi thăm, câu hỏi kiến thức chung...): trả lời tự nhiên, thân thiện, không cần gắng kéo về chủ đề cửa hàng\n- Nếu khách hỏi dữ liệu thời gian thực (thời tiết, giá vàng, tỷ giá, tin tức mới nhất...): giải thích nhẹ nhàng rằng bạn không có thông tin cập nhật theo thời gian thực, gợi ý tra Google hoặc các app chuyên dụng';
 
 /* ── Key health tracker — ghi nhớ key nào đang bị rate-limit ── */
 var _keyRateLimited = {};
+
+/* ═══════════════════════════════════════════════════════════════
+   CHATBOT GLOBAL HELPERS — định nghĩa ở global scope
+   để onclick="..." trong innerHTML có thể gọi được
+═══════════════════════════════════════════════════════════════ */
+
+/* Markdown → HTML fallback (nếu AI vẫn trả về markdown) */
+function _mdToHtml(t) {
+  t = t.replace(/^###\s+(.+)$/gm, '<b>$1</b>');
+  t = t.replace(/^##\s+(.+)$/gm,  '<b>$1</b>');
+  t = t.replace(/^#\s+(.+)$/gm,   '<b>$1</b>');
+  t = t.replace(/\*\*\*(.+?)\*\*\*/g, '<b><em>$1</em></b>');
+  t = t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  t = t.replace(/\*(.+?)\*/g,     '<em>$1</em>');
+  t = t.replace(/`([^`]+)`/g, '<code style="background:#f0f0f0;padding:1px 4px;border-radius:3px;font-size:12px;">$1</code>');
+  t = t.replace(/^[-*]\s+(.+)$/gm, '• $1');
+  t = t.replace(/^(\d+)\.\s+(.+)$/gm, '$1. $2');
+  t = t.replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #e2e8f0;margin:6px 0;">');
+  t = t.replace(/\n/g, '<br>');
+  return t;
+}
+window._mdToHtml = _mdToHtml;
+
+/* Copy nội dung bot response vào clipboard */
+function _copyText(btn) {
+  var bub = btn.closest('.bub');
+  if (!bub) return;
+  var clone = bub.cloneNode(true);
+  /* Xóa row action/rating khỏi bản sao trước khi copy */
+  clone.querySelectorAll('div[style*="border-top"]').forEach(function(r){ r.parentNode.removeChild(r); });
+  var txt = clone.innerText.trim();
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(txt)
+      .then(function() {
+        btn.textContent = '✓ Đã chép';
+        setTimeout(function(){ btn.textContent = '⎘ Sao chép'; }, 1800);
+      })
+      .catch(function() { _fallbackCopy(txt, btn); });
+  } else { _fallbackCopy(txt, btn); }
+}
+function _fallbackCopy(txt, btn) {
+  var ta = document.createElement('textarea');
+  ta.value = txt;
+  ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    btn.textContent = '✓ Đã chép';
+    setTimeout(function(){ btn.textContent = '⎘ Sao chép'; }, 1800);
+  } catch(e) {}
+  document.body.removeChild(ta);
+}
+window._copyText = _copyText;
+
+/* Rating 👍 👎 — hiển thị kết quả và khóa không vote lại */
+function _rateBub(btn, val) {
+  var row = btn.closest('.cb-rate-row');
+  if (!row) return;
+  row.innerHTML = val === 1
+    ? '<span style="font-size:11px;color:#16a34a;font-weight:500;">👍 Cảm ơn bạn!</span>'
+    : '<span style="font-size:11px;color:#dc2626;font-weight:500;">👎 Tôi sẽ cố gắng hơn!</span>';
+}
+window._rateBub = _rateBub;
+
 
 function _askAI(userMsg) {
   _cbSetBusy(true);
@@ -5215,18 +5348,28 @@ function _askAI(userMsg) {
   messages.push({ role: 'user', content: userMsg });
 
   /* Mô phỏng typing animation — hiển thị từng chữ */
-  function _typeText(el, text, onDone) {
-    var words = text.split(' ');
-    var idx = 0;
-    var current = '';
+  function _typeText(el, html, onDone) {
+    /* Animate char-by-char but jump OVER <html-tags> entirely
+       so we never set innerHTML to a broken mid-tag state */
+    var i = 0;
+    var len = html.length;
     function step() {
-      if (idx >= words.length) { if (onDone) onDone(); return; }
-      current += (idx > 0 ? ' ' : '') + words[idx];
-      el.innerHTML = current.replace(/\n/g, '<br>');
+      if (i >= len) {
+        el.innerHTML = html; /* Đảm bảo final state hoàn chỉnh */
+        msgs.scrollTop = msgs.scrollHeight;
+        if (onDone) onDone();
+        return;
+      }
+      if (html[i] === '<') {
+        /* Nhảy qua cả thẻ HTML, không hiển thị dở */
+        var close = html.indexOf('>', i);
+        i = (close > -1) ? close + 1 : len;
+      } else {
+        i += 3; /* Hiển thị 3 ký tự mỗi bước → mượt mà */
+      }
+      el.innerHTML = html.slice(0, i);
       msgs.scrollTop = msgs.scrollHeight;
-      idx++;
-      var delay = words[idx - 1].length > 6 ? 28 : 18;
-      setTimeout(step, delay);
+      setTimeout(step, 16); /* ~60fps */
     }
     step();
   }
@@ -5235,7 +5378,10 @@ function _askAI(userMsg) {
   function _tryKey(attempt) {
     if (attempt >= _GROQ_KEYS.length * 2) {
       if (tw.parentNode) tw.parentNode.removeChild(tw);
-      bS('🤖 Xin lỗi, trợ lý AI đang bận.<br>Vui lòng liên hệ trực tiếp:<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
+      bS('🤖 Xin lỗi, trợ lý AI đang bận một chút.<br>' +
+         '<br><button onclick="if(window._lastMsg){document.getElementById(\'cbInput\').value=window._lastMsg;window.cbSend();}" ' +
+         'style="background:#7c3aed;color:#fff;border:none;border-radius:14px;padding:5px 14px;font-size:12px;cursor:pointer;margin-right:8px;">↺ Thử lại</button>' +
+         'hoặc liên hệ: 📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
         ['Hotline gọi ngay', 'Zalo tư vấn', 'Đặt lịch sửa']);
       _cbSetBusy(false);
       return;
@@ -5250,6 +5396,9 @@ function _askAI(userMsg) {
     /* Dùng model nhanh trước, model mạnh làm fallback */
     var model = attempt < _GROQ_KEYS.length ? 'llama-3.1-8b-instant' : 'llama-3.3-70b-versatile';
 
+    /* AbortController: tự huỷ nếu API không trả lời sau 18 giây */
+    var _ctrl = new AbortController();
+    var _abortTimer = setTimeout(function() { _ctrl.abort(); }, 18000);
     fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -5262,8 +5411,10 @@ function _askAI(userMsg) {
         max_tokens: 1024,
         stream: false,
         temperature: 0.7
-      })
+      }),
+      signal: _ctrl.signal
     }).then(function(res) {
+      clearTimeout(_abortTimer);
       if (res.status === 429) {
         _keyRateLimited[keyIdx] = Date.now(); /* Đánh dấu key này bị rate-limit */
         _tryKey(attempt + 1);
@@ -5291,19 +5442,41 @@ function _askAI(userMsg) {
       msgs.appendChild(msgEl);
       msgs.scrollTop = msgs.scrollHeight;
 
-      /* Lưu history trước */
+      /* Sanitize trước khi lưu & hiển thị */
+      var safeFull = full.replace(/<script[\s\S]*?<\/script>/gi, '')
+                         .replace(/(<[^>]+\s)on[a-z]+\s*=/gi, '$1data-blocked=');
+      safeFull = _mdToHtml(safeFull);
+      /* Guard: nếu nội dung trống sau khi xử lý, dùng fallback */
+      var _safeText = safeFull.replace(/<[^>]+>/g, '').replace(/&[a-z]+;/gi, ' ').trim();
+      if (!_safeText) {
+        /* Thử lại với key tiếp theo trước, nếu hết key mới hiện fallback */
+        if (attempt < _GROQ_KEYS.length * 2 - 1) { _tryKey(attempt + 1); return; }
+        safeFull = '🤖 Mình chưa tìm được câu trả lời phù hợp cho câu hỏi này.<br>Bạn vui lòng liên hệ trực tiếp: 📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để được tư vấn ngay nhé!';
+      }
+
+      /* Lưu history */
       _aiHistory.push({ role: 'user', content: userMsg });
-      _aiHistory.push({ role: 'assistant', content: full });
+      _aiHistory.push({ role: 'assistant', content: safeFull });
       if (_aiHistory.length > 20) _aiHistory = _aiHistory.slice(-20);
-      _chatHistory.push({ role: 'bot', html: full });
+      _chatHistory.push({ role: 'bot', html: safeFull });
       _saveChatHistory();
 
-      /* Typing animation → rồi show quick replies */
-      _typeText(bubEl, full, function() {
+      /* Typing animation → sau đó show copy + rating buttons */
+      _typeText(bubEl, safeFull, function() {
+        _mkActRow(bubEl);
         setQR(['Đặt lịch sửa', 'Hotline gọi ngay', 'Zalo tư vấn', 'Kiểm tra miễn phí']);
         _cbSetBusy(false);
       });
-    }).catch(function() {
+    }).catch(function(e) {
+      clearTimeout(_abortTimer);
+      if (e && e.name === 'AbortError') {
+        /* Network timeout after 18s — show message, don't loop forever */
+        if (attempt < 2) { _tryKey(attempt + 1); return; }
+        if (tw && tw.parentNode) tw.parentNode.removeChild(tw);
+        bS('⏱️ Mạng chậm — không thể kết nối AI. Liên hệ: 📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>', []);
+        _cbSetBusy(false);
+        return;
+      }
       _tryKey(attempt + 1);
     });
   }
@@ -5425,6 +5598,7 @@ window.cbSend=function(){
   var inp=document.getElementById('cbInput');
   var t=(inp.value||'').trim();
   if(!t) return;
+  window._lastMsg = t; /* Lưu để nút Thử lại dùng */
   inp.value='';
   var _phoneM=t.match(/0[35789][0-9]{8}/);
 
@@ -5519,7 +5693,7 @@ window.cbToggle=function(){
     var _restoredV23 = (typeof loadHistory === 'function') && loadHistory();
     if(!_restoredV23){
       var _prev2=_loadChatHistory();
-      if(_prev2.length>0){_chatHistory=_prev2;var _cbM=document.getElementById('cbMsgs');_prev2.forEach(function(m){var w=document.createElement('div');w.className='cb-m '+m.role;w.innerHTML='<div class="bub">'+m.html+'</div>';if(_cbM)_cbM.appendChild(w);});if(_cbM)_cbM.scrollTop=_cbM.scrollHeight;return;}
+      var _validPrev=_prev2.filter(function(m){return m&&m.html&&typeof m.html==='string'&&m.html.trim().length>0;});if(_validPrev.length>0){_chatHistory=_validPrev;var _cbM=document.getElementById('cbMsgs');_validPrev.forEach(function(m){var w=document.createElement('div');w.className='cb-m '+m.role;var b=document.createElement('div');b.className='bub';b.innerHTML=m.html;if(m.role==='bot')_mkActRow(b);w.appendChild(b);if(_cbM)_cbM.appendChild(w);});if(_cbM)_cbM.scrollTop=_cbM.scrollHeight;return;}
     } else { return; }
     setTimeout(function(){
       var _h=new Date().getHours();
