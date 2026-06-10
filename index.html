@@ -93,17 +93,19 @@
         html { max-width: 100%; scroll-padding-top: 72px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         #datlich-sua-chua { scroll-margin-top: 72px; }
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
+            /* Calmer, desaturated palette for reduced eye-strain (Tone B: Teal Calm) */
+            --primary: #0fa89a; /* teal calm */
+            --primary-hover: #0c8f86;
+            --primary-muted: #66c5bd;
             --dark: #0f172a;
-            --text-main: #1e293b;
-            --text-light: #64748b;
+            --text-main: #0f1720; /* deep but not pure black */
+            --text-light: #475569; /* muted secondary */
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
-            --border-color: #e2e8f0;
-            --accent-orange: #ea580c;
-            --accent-green: #10b981;
-            --danger: #ef4444;
+            --border-color: #e6edf4; /* softer border */
+            --accent-orange: #d97706;
+            --accent-green: #16a34a;
+            --danger: #dc2626;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Be Vietnam Pro', 'Inter', 'Roboto', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif !important; }
         html { overflow-x: clip; }
@@ -115,6 +117,7 @@
         -webkit-text-size-adjust: 100%;
         text-size-adjust: 100%;
     }
+    :focus-visible { outline: 3px solid rgba(15,168,154,0.18); outline-offset: 2px; border-radius: 6px; }
     body {
         font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
     }
@@ -133,17 +136,18 @@
                 .top-bar { background-color: var(--dark); color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 500; }
         .top-bar .time { color: #38bdf8; }
         .top-bar .phone { color: #facc15; text-decoration: none; font-weight: 700; }
-    .header-nav { background-color: #fff; padding: 15px 20px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; will-change: transform; }
+    .header-nav { background-color: #fff; padding: 10px 12px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; will-change: transform; }
         @media (min-width: 1024px) {
             .header-nav { background-color: rgba(255, 255, 255, 0.98); }
         }
         .header-nav.scrolled { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08); }
+        .header-nav .brand-wrap { gap: 10px; }
+        .header-nav button#darkModeToggle { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; padding: 0; border-radius: 14px; }
+        .header-nav .menu-toggle { width: 42px; height: 42px; border-radius: 14px; }
         .logo-animation {
             font-size: 23px; font-weight: 900; text-transform: uppercase;
-            background: linear-gradient(90deg, #0f172a 0%, #2563eb 40%, #38bdf8 60%, #0f172a 100%);
-            background-size: 250% auto;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            display: inline-block; animation: shimmerText 4s linear infinite;
+            color: var(--primary);
+            display: inline-block;
         }
         @keyframes shimmerText { 0% { background-position: 200% center; } 100% { background-position: -200% center; } }
         .slogan-animation { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: var(--accent-orange); margin-top: 2px; }
@@ -156,29 +160,35 @@
         .hero-section { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; text-align: center; padding: 70px 20px 70px 20px; position: relative; overflow: hidden; max-width: 100%; width: 100%; }
         .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; z-index: 0; }
         .hero-tag { background-color: rgba(255,255,255,0.1); color: #38bdf8; display: inline-block; padding: 6px 18px; border-radius: 30px; font-size: 13px; margin-bottom: 20px; font-weight: 600; }
-        .hero-section h2 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
-        
+        .hero-section h2, .hero-title { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
+        .hero-title { color: #ffffff; }
+        .hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 24px auto 0; }
+        .hero-action { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 999px; font-weight: 700; text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+        .hero-action.primary { background: #ffffff; color: #0f172a; box-shadow: 0 18px 40px rgba(15,23,42,0.18); }
+        .hero-action.secondary { background: rgba(255,255,255,0.14); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+        .hero-action:hover { transform: translateY(-2px); box-shadow: 0 22px 48px rgba(15,23,42,0.22); }
+        @media (max-width: 600px) { .hero-actions { flex-direction: column; width: 100%; } .hero-action { width: 100%; justify-content: center; } }
+
         .container { max-width: 900px; margin: 20px auto; padding: 0 20px; overflow-x: hidden; }
-        .section-title { text-align: center; font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;
-    background: linear-gradient(90deg, #1d4ed8, #2563eb, #0ea5e9);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text; color: transparent; }
-        .section-title::after { content: ''; display: block; width: 54px; height: 3px; background: linear-gradient(90deg, var(--primary), #38bdf8, var(--accent-green)); margin: 10px auto 0; border-radius: 3px; }
+        .section-title { text-align: center; font-size: 20px; margin: 50px 0 25px 0; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; color: var(--text-main); }
+        .section-title::after { content: ''; display: block; width: 54px; height: 3px; background: var(--primary); opacity: 0.85; margin: 10px auto 0; border-radius: 3px; }
         
-        .booking-form { background-color: #ffffff; padding: 44px 35px 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12); margin-top: -32px; position: relative; z-index: 10; border: 1px solid #e2e8f0; }
-        .form-title { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 8px; text-align: center; }
-        .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 20px; text-align: center; }
+        .booking-form { background-color: var(--bg-card); padding: 36px 28px; border-radius: 18px; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06); margin-top: 20px; position: relative; z-index: 10; border: 1px solid var(--border-color); overflow: hidden; }
+        .booking-form::before { content: ''; position: absolute; inset: 0; border-radius: 18px; background: transparent; pointer-events: none; }
+        .booking-form > * { position: relative; z-index: 1; }
+        .form-title { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; text-align: center; }
+        .form-desc { font-size: 14px; color: var(--text-light); margin-bottom: 18px; text-align: center; }
         .live-counter-badge { display: inline-flex; align-items: center; gap: 6px; background-color: #f0fdf4; color: var(--accent-green); border: 1px dashed #bbf7d0; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; margin-bottom: 20px; animation: pulseGlow 2.5s infinite ease-in-out; }
         @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
         
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
         .form-control { width: 100%; padding: 14px 16px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 14px; background-color: var(--bg-body); outline: none; }
-        .form-control:focus { border-color: var(--primary); background-color: var(--bg-input, #fff); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .form-control:focus { border-color: var(--primary); background-color: var(--bg-input, #fff); box-shadow: 0 0 0 3px rgba(15,168,154,0.08); }
         .form-row { display: flex; gap: 20px; }
         .form-row .form-group { flex: 1; }
-        .btn-submit { width: 100%; background-color: var(--primary); color: #fff; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn-submit { width: 100%; background-color: var(--primary); color: #fff; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; text-transform: uppercase; box-shadow: 0 6px 18px rgba(15,168,154,0.12); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-1px); }
         .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
         .spinner { display: none; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -190,7 +200,7 @@
           .tab-btn { padding: 7px 12px !important; font-size: 11.5px !important; border-radius: 20px !important; white-space: nowrap; flex-shrink: 0; }
         }
         .tab-btn { padding: 12px 24px; border-radius: 30px; border: 1.5px solid var(--border-color); background: #fff; font-weight: 700; font-size: 14px; color: var(--text-light); cursor: pointer; display: flex; align-items: center; gap: 6px; }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 14px rgba(37,99,235,0.25); }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 6px 18px rgba(15,168,154,0.12); }
         .price-table-section { display: none; }
         .price-table-section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -379,8 +389,6 @@
             0%,100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.3); opacity: 0.7; }
         }
-            50%     { opacity: 0.4; transform: scale(1.3); }
-        }
 
         /* ---- FAQ accordion ---- */
         .faq-list { display: flex; flex-direction: column; gap: 10px; }
@@ -531,12 +539,20 @@
 
 
         .svc-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
-        [data-theme="dark"]{--bg-body:#0f172a;--bg-card:#1e293b;--text-main:#e2e8f0;--text-light:#94a3b8;--border-color:#334155;}
-        [data-theme="dark"] body{background-color:var(--bg-body);color:var(--text-main);}
-        [data-theme="dark"] .header-nav{background-color:rgba(15,23,42,0.97);}
-        [data-theme="dark"] .booking-form{background-color:var(--bg-card)!important;border-color:var(--border-color)!important;box-shadow:0 20px 60px rgba(0,0,0,0.45)!important;}
-        [data-theme="dark"] .review-card,[data-theme="dark"] .faq-item,[data-theme="dark"] .modal-card{background-color:var(--bg-card)!important;}
-        [data-theme="dark"] .form-control{background-color:#1e293b!important;color:var(--text-main)!important;border-color:var(--border-color)!important;}
+        [data-theme="dark"]{
+            --bg-body:#07090b;
+            --bg-card:#0f1619;
+            --text-main:#d7e6ee;
+            --text-light:#96a6b0;
+            --border-color:#172229;
+            --primary:#0b8f82; /* muted dark-mode teal */
+            --primary-hover:#086f64;
+        }
+        [data-theme="dark"] body{background-color:var(--bg-body);color:var(--text-main);} 
+        [data-theme="dark"] .header-nav{background-color:rgba(7,9,11,0.96);} 
+        [data-theme="dark"] .booking-form{background-color:var(--bg-card)!important;border-color:var(--border-color)!important;box-shadow:0 8px 28px rgba(0,0,0,0.6)!important;} 
+        [data-theme="dark"] .review-card,[data-theme="dark"] .faq-item,[data-theme="dark"] .modal-card{background-color:var(--bg-card)!important;box-shadow:none!important;} 
+        [data-theme="dark"] .form-control{background-color:transparent!important;color:var(--text-main)!important;border-color:var(--border-color)!important;} 
         [data-theme="dark"] .tab-btn:not(.active){background-color:var(--bg-card);color:var(--text-light);border-color:var(--border-color);}
         [data-theme="dark"] table tr{background-color:var(--bg-card)!important;}
         [data-theme="dark"] table tr:nth-child(even){background-color:#162032!important;}
@@ -550,10 +566,10 @@
         [data-theme="dark"] #lightIcon{display:flex!important;}
         #darkModeToggle{background:none;border:1.5px solid var(--border-color);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dark);flex-shrink:0;transition:background-color 0.2s, color 0.2s, border-color 0.2s;}
         #darkModeToggle:hover{background:var(--bg-body);}
-        [data-theme="dark"] #darkModeToggle{border-color:#334155;color:#fcd34d;}
-        [data-theme="dark"] #darkModeToggle:hover{background:rgba(255,255,255,0.08);}
+        [data-theme="dark"] #darkModeToggle{border-color:#25313a;color:var(--text-main);} 
+        [data-theme="dark"] #darkModeToggle:hover{background:rgba(255,255,255,0.03);} 
         #faqSearch{width:100%;padding:12px 16px 12px 42px;border:1.5px solid var(--border-color);border-radius:12px;font-size:14px;background:var(--bg-body);outline:none;color:var(--text-main);margin-bottom:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280' width='18' height='18'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center;}
-        #faqSearch:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        #faqSearch:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,168,154,0.08);}
         .copy-ph{cursor:pointer;}.copy-ph:hover{opacity:0.8;}
 
         /* ── Dark mode contrast fixes: override color:var(--dark) which becomes invisible ── */
@@ -566,7 +582,7 @@
         [data-theme="dark"] .faq-item { border-color: #334155 !important; }
         [data-theme="dark"] .menu-toggle { color: var(--text-main) !important; }
         [data-theme="dark"] #darkModeToggle { color: #fcd34d; }
-        [data-theme="dark"] .logo-animation { color: #38bdf8 !important; text-shadow: 0 0 20px rgba(56,189,248,0.3) !important; }
+        [data-theme="dark"] .logo-animation { color: #60a5fa !important; text-shadow: 0 0 8px rgba(59,130,246,0.06) !important; }
         [data-theme="dark"] .slogan-animation { color: #94a3b8 !important; }
         [data-theme="dark"] .process-title { color: var(--text-main) !important; }
         [data-theme="dark"] .process-desc { color: var(--text-light) !important; }
@@ -580,9 +596,11 @@
         [data-theme="dark"] .badge-time { background: #162032 !important; color: #7dd3fc !important; border-color: #1e3a5f !important; }
         [data-theme="dark"] .review-name { color: var(--text-main) !important; }
         [data-theme="dark"] .review-text { color: var(--text-light) !important; }
-        [data-theme="dark"] .hero-tag { color: #7dd3fc !important; border-color: rgba(56,189,248,0.3) !important; background: rgba(56,189,248,0.08) !important; }
-        [data-theme="dark"] h2.logo-animation, [data-theme="dark"] .hero-section h2 { color: #f1f5f9 !important; }
-        [data-theme="dark"] .hero-section p { color: #cbd5e1 !important; }
+        [data-theme="dark"] .hero-tag { color: var(--text-main) !important; border-color: rgba(255,255,255,0.03) !important; background: rgba(255,255,255,0.02) !important; }
+        [data-theme="dark"] h2.logo-animation, [data-theme="dark"] .hero-section h2 { color: var(--text-main) !important; }
+        [data-theme="dark"] .hero-section p { color: var(--text-light) !important; }
+        [data-theme="dark"] .hero-section { background: linear-gradient(135deg,#040506 0%, #0b1013 100%) !important; }
+        [data-theme="dark"] .hero-particles .particle { opacity: 0.45 !important; }
         [data-theme="dark"] .form-group label { color: var(--text-main) !important; }
         [data-theme="dark"] .warranty-title { color: var(--text-main) !important; }
         [data-theme="dark"] .warranty-text { color: var(--text-light) !important; }
@@ -653,8 +671,6 @@
     @keyframes cbPulse {
         0%,100% { transform: scale(1); }
         50% { transform: scale(1.08); }
-    }
-        50%     { transform: scale(1.06); }
     }
     #chatbotToggle .cb-badge {
         position: absolute; top: -3px; right: -3px;
@@ -905,8 +921,6 @@
     @keyframes zjbPulse {
         0%,100% { transform: scale(1); }
         50% { transform: scale(1.06); }
-    }
-        50%      { transform: scale(1.03); }
     }
     @keyframes zjbShimmer {
         0%   { transform: translateX(-200%); opacity: 0; }
@@ -1176,18 +1190,7 @@
     html { scroll-behavior: smooth; }
     /* Prevent double-tap zoom on buttons */
     button, a, input, select, textarea { touch-action: manipulation; }
-    
-    /* ── Promo Banner (Ưu đãi tháng này) ── */
-    .promo-banner{background:linear-gradient(135deg,#1e40af,#2563eb,#0ea5e9);color:#fff;border-radius:20px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:36px;box-shadow:0 8px 28px rgba(37,99,235,0.35);position:relative;overflow:hidden;}
-    .promo-banner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 60%);animation:promoBgRotate 6s linear infinite;pointer-events:none;}
-    100%{transform:rotate(360deg);}}
-    .promo-title{font-size:16px;font-weight:800;margin-bottom:4px;}
-    .promo-desc{font-size:13px;opacity:.9;}
-    .promo-cta{background:linear-gradient(90deg,#facc15,#f97316,#facc15);background-size:250% auto;color:#0f172a;font-weight:900;font-size:14.5px;padding:13px 24px;border-radius:30px;white-space:nowrap;text-decoration:none;box-shadow:0 4px 20px rgba(251,191,36,0.6);animation:promoShimmer 2.5s linear infinite,promoGlowPulse 2s ease-in-out infinite;display:inline-flex;align-items:center;gap:6px;transition:transform .2s;flex-shrink:0;}
-    .promo-cta:hover{transform:scale(1.08);}
-    .promo-cta:active{transform:scale(1.04);}
-    100%{background-position:-200% center;}}
-    50%{opacity:0.85;transform:scale(1.02);}}
+
     @media(max-width:600px){
         .promo-banner{flex-direction:column;text-align:center;}
         .promo-cta{width:100%;justify-content:center;touch-action:manipulation;}
@@ -1200,9 +1203,7 @@
 
     /* ── Booking form animated gradient ring ── */
     .booking-form { position: relative; }
-    /* booking-form gradient ring removed (user: white bg only) */ /* formBorderSpin keyframe removed */
-        100% { background-position: 0% 50%; }
-    }
+    /* booking-form gradient ring removed (user: white bg only) */
 
     /* ── Input focus: gradient ring ── */
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
@@ -1637,8 +1638,8 @@ body {
 
     /* 3a. Thêm CSS vars bị thiếu trong dark theme */
     [data-theme="dark"] {
-        --primary: #60a5fa;          /* lighter blue — dễ đọc trên dark bg */
-        --primary-hover: #3b82f6;
+        --primary: #0b8f82;
+        --primary-hover: #086f64;
     }
 
     /* 3b. section-badge — hardcoded light blue, cần override */
@@ -2089,15 +2090,19 @@ body {
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
         <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
-        <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
+        <h2 class="hero-title">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
-            <span>✅ Khám đúng bệnh</span>
-            <span>✅ Báo giá trọn gói</span>
-            <span>✅ Sửa chữa nhanh chóng</span>
-            <span>✅ Bảo hành rõ ràng</span>
+            <span>Khám đúng bệnh</span>
+            <span>Báo giá trọn gói</span>
+            <span>Sửa chữa nhanh chóng</span>
+            <span>Bảo hành rõ ràng</span>
         </span></p>
         <p style="margin:10px auto 0;font-weight:800;color:#fbbf24;font-size:clamp(12px,3vw,14px);letter-spacing:0.5px;">CAM KẾT 100% LINH KIỆN CHÍNH HÃNG </p>
+        <div class="hero-actions">
+            <a href="#datlich-sua-chua" class="hero-action primary">Đặt lịch ngay</a>
+            <a href="#muc-bang-gia" class="hero-action secondary">Xem bảng giá</a>
+        </div>
     
         <div class="hero-stats">
             <div class="hero-stat"><div class="stat-num" data-target="0" data-suffix="+">0</div><div class="stat-label">Lượt sửa chữa</div></div>
@@ -2132,11 +2137,11 @@ body {
                 <input type="hidden" name="_next" value="https://tranhoacomputer.github.io/?booked=1">
                 <div class="form-group">
                     <label>Họ và tên khách hàng *</label>
-                    <input type="text" name="fullname" id="inputFullname" class="form-control" placeholder="Nhập họ và tên của bạn" required>
+                    <input type="text" name="fullname" id="inputFullname" class="form-control" placeholder="Nhập họ và tên của bạn" required aria-label="Họ và tên khách hàng" aria-required="true">
                 </div>
                 <div class="form-group">
                     <label>Số điện thoại liên hệ *</label>
-                    <input type="tel" name="phone" autocomplete="tel" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
+                    <input type="tel" name="phone" autocomplete="tel" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}" aria-label="Số điện thoại" aria-required="true">
                 </div>
                 <div class="form-group">
                     <label>Loại dịch vụ cần sử dụng *</label>
@@ -2172,7 +2177,7 @@ body {
                 <div class="form-row">
                     <div class="form-group">
                         <label>Chọn ngày hẹn sửa *</label>
-                        <input type="date" name="date" id="dateInput" class="form-control" required title="Chọn ngày hẹn sửa máy">
+                        <input type="date" name="date" id="dateInput" class="form-control" required title="Chọn ngày hẹn sửa máy" aria-label="Ngày hẹn" aria-required="true">
                     </div>
                     <div class="form-group">
                         <label>Chọn khung giờ thích hợp *</label>
@@ -2188,7 +2193,7 @@ body {
                 </div>
                 <div class="form-group">
                     <label>Tình trạng máy / Yêu cầu chi tiết</label>
-                    <input type="text" name="note" id="inputNote" class="form-control" placeholder="Ví dụ: Laptop lỗi Win bật không lên, cần tra keo tản nhiệt...">
+                    <input type="text" name="note" id="inputNote" class="form-control" placeholder="Ví dụ: Laptop lỗi Win bật không lên, cần tra keo tản nhiệt..." aria-label="Ghi chú">
                 </div>
                 <button type="submit" id="submitBtn" class="btn-submit">
                     <span class="spinner" id="btnSpinner"></span>
@@ -3427,7 +3432,7 @@ body {
         <div id="cau-hoi-thuong-gap" class="reveal" style="margin-bottom:40px;">
 
             <div class="section-title-wrap"><span class="section-badge">FAQ</span></div><div class="section-title">CÂU HỎI THƯỜNG GẶP</div><p class="section-subtitle">Những thắc mắc phổ biến nhất</p>
-            <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." oninput="(function(v){clearTimeout(window._fqT);window._fqT=setTimeout(function(){filterFaq(v);},180);})(this.value)">
+            <input type="text" id="faqSearch" placeholder="Tìm câu hỏi..." aria-label="Tìm kiếm câu hỏi" oninput="(function(v){clearTimeout(window._fqT);window._fqT=setTimeout(function(){filterFaq(v);},180);})(this.value)">
             <div id="faqNoResult" style="display:none;text-align:center;padding:16px;color:var(--text-light);font-size:14px;">Không tìm thấy câu hỏi phù hợp</div>
             <div class="faq-list">
                 <div class="faq-item">
@@ -4050,10 +4055,10 @@ body {
         </div>
         <button id="cbClose" onclick="cbToggle()" aria-label="Đóng">✕</button>
     </div>
-    <div id="cbMsgs"></div>
+    <div id="cbMsgs" role="log" aria-live="polite" aria-atomic="false"></div>
     <div class="cb-qr" id="cbQR"></div>
     <div class="cb-inp">
-        <input id="cbInput" type="text" placeholder="Nhập câu hỏi bất kỳ..." autocomplete="off" data-enter-send="true">
+        <input id="cbInput" type="text" placeholder="Nhập câu hỏi bất kỳ..." autocomplete="off" data-enter-send="true" aria-label="Nhập câu hỏi cho trợ lý" aria-controls="cbMsgs">
         <button id="cbSend" onclick="cbSend()" aria-label="Gửi">&#10148;</button>
     </div>
     <div class="cb-footer">⚡ AI · Phản hồi tức thì · Hỗ trợ 24/7</div>
@@ -4964,10 +4969,31 @@ function addMsg(t,role,qrs){
   b.className='bub'; b.innerHTML=t;
   w.appendChild(b); msgs.appendChild(w);
   msgs.scrollTop=msgs.scrollHeight;
-  setQR(qrs);
+    setQR(qrs);
+    if(role!=='user') _attachInlineQuickReplies(w, qrs);
   /* save to session history */
   _chatHistory.push({role:(role==='user'?'user':'bot'), html:t});
   _saveChatHistory();
+}
+
+/* Add quick-reply buttons inside bot message bubble for faster access */
+function _attachInlineQuickReplies(container, qrs){
+    if(!qrs || !qrs.length) return;
+    try{
+        var wrap=document.createElement('div'); wrap.className='cb-quick-wrap';
+        qrs.slice(0,6).forEach(function(lbl){
+            var btn=document.createElement('button'); btn.className='cb-qb'; btn.textContent=lbl;
+            btn.onclick=function(e){
+                e.preventDefault();
+                if(QRA && QRA[lbl]){ QRA[lbl](); }
+                else {
+                    var inp=document.getElementById('cbInput'); if(inp){ inp.value=lbl; inp.focus(); window.cbSend(); }
+                }
+            };
+            wrap.appendChild(btn);
+        });
+        container.appendChild(wrap);
+    }catch(e){}
 }
 
 function setQR(list){
@@ -5089,6 +5115,28 @@ function normalizeStr(s) {
   return s.toLowerCase().split('').map(function(c){ return map[c]||c; }).join('').trim();
 }
 
+/* ── LEVENSHTEIN / SIMILARITY FOR FUZZY MATCHING ── */
+function levenshtein(a,b){
+    if(!a||!b) return (a||b)?Math.max(a.length,b.length):0;
+    var m=a.length, n=b.length, i,j;
+    var dp = Array(m+1);
+    for(i=0;i<=m;i++){ dp[i]=Array(n+1); dp[i][0]=i; }
+    for(j=0;j<=n;j++) dp[0][j]=j;
+    for(i=1;i<=m;i++){
+        for(j=1;j<=n;j++){
+            var cost = a.charAt(i-1)===b.charAt(j-1)?0:1;
+            dp[i][j]=Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
+        }
+    }
+    return dp[m][n];
+}
+function similarity(a,b){
+    a=(a||'').trim(); b=(b||'').trim(); if(!a||!b) return 0;
+    var maxLen = Math.max(a.length,b.length); if(maxLen===0) return 1;
+    var dist = levenshtein(a,b);
+    return Math.max(0, 1 - dist/maxLen);
+}
+
 /* ── SCORING ENGINE ── */
 function rp(txt) {
   if (botIsTyping) return;
@@ -5205,11 +5253,26 @@ function rp(txt) {
         }
         if (matched) kwMatched++;
       }
-      /* Require at least 1 meaningful word match; multi-word phrases get bonus */
-      if (kwMatched > 0) {
-        var wordBonus = kwMatched >= 2 ? kwMatched * 2 : 1;
-        score += wordBonus;
-      }
+            /* Require at least 1 meaningful word match; multi-word phrases get bonus */
+            if (kwMatched > 0) {
+                var wordBonus = kwMatched >= 2 ? kwMatched * 2 : 1;
+                score += wordBonus;
+            } else {
+                /* FUZZY: allow approximate matches (typos, missing diacritics)
+                     Compare normalized input vs keyword; small similarity adds small score */
+                var sim = similarity(low, nk);
+                if (sim >= 0.55) { score += Math.round(sim * 4); }
+                else {
+                    /* also try per-word fuzzy between input words and keyword words */
+                    var kwWords2 = nk.split(/\s+/).filter(function(w){ return w.length>=2; });
+                    for (var pw=0; pw<kwWords2.length; pw++){
+                        for (var iw=0; iw<inputWords.length; iw++){
+                            var s = similarity(inputWords[iw], kwWords2[pw]);
+                            if (s >= 0.7) score += 1; 
+                        }
+                    }
+                }
+            }
     }
     if (score > bestScore) { secondScore = bestScore; bestScore = score; best = KB[i]; }
     else if (score > secondScore) { secondScore = score; }
