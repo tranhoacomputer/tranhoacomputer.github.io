@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;70&display=swap0&display=swap" rel="stylesheet">
     <meta name="description" content="Sửa chữa lắp ráp máy tính, laptop uy tín tại Thái Nguyên - Tran Hoa Computer. Cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook chính hãng tại Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:title" content="Tran Hoa Computer - Sửa Chữa Lắp Ráp Máy Tính Uy Tín Thái Nguyên">
-    <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Phú   Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
+    <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
@@ -36,7 +36,7 @@
       "image": "https://tranhoacomputer.github.io/logo.png",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Phú Thịnh",
+        "streetAddress": "Xóm 6, Phú Thịnh",
         "addressLocality": "Đại Từ",
         "addressRegion": "Thái Nguyên",
         "addressCountry": "VN"
@@ -852,6 +852,37 @@
     [data-theme="dark"] .cb-footer { color:rgba(148,163,184,.5); }
     [data-theme="dark"] .cb-ai-badge { box-shadow:0 1px 4px rgba(99,102,241,.25); }
 
+    /* ═══ TRA CỨU TÌNH TRẠNG MÁY ═══ */
+    .status-lookup-wrap{background:linear-gradient(135deg,#f0fdf4 0%,#ecfeff 100%);border:1.5px solid #a7f3d0;border-radius:clamp(12px,3vw,20px);padding:clamp(18px,4vw,30px) clamp(16px,4vw,30px);margin-bottom:clamp(18px,4vw,36px);}
+    [data-theme="dark"] .status-lookup-wrap{background:linear-gradient(135deg,#0a1f14 0%,#0d1b2e 100%)!important;border-color:#1a4731!important;}
+    .status-lookup-title{font-size:clamp(14px,3.5vw,18px);font-weight:800;color:#065f46;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+    [data-theme="dark"] .status-lookup-title{color:#6ee7b7;}
+    .status-lookup-desc{font-size:clamp(12px,2.8vw,13.5px);color:#475569;margin-bottom:clamp(14px,3vw,20px);}
+    [data-theme="dark"] .status-lookup-desc{color:var(--text-light);}
+    .status-lookup-row{display:flex;gap:10px;flex-wrap:wrap;}
+    .status-lookup-input{flex:1;min-width:200px;padding:clamp(10px,2.5vw,13px) clamp(14px,3vw,16px);border:1.5px solid #a7f3d0;border-radius:12px;font-size:clamp(13px,3vw,15px);outline:none;background:#fff;color:var(--dark);transition:border-color .2s,box-shadow .2s;}
+    .status-lookup-input:focus{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.15);}
+    [data-theme="dark"] .status-lookup-input{background:#0f2b1e;border-color:#1a4731;color:#e2e8f0;}
+    .status-lookup-btn{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:clamp(10px,2.5vw,13px) clamp(20px,4vw,28px);border-radius:12px;font-size:clamp(13px,3vw,14.5px);font-weight:700;cursor:pointer;white-space:nowrap;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(16,185,129,.35);}
+    .status-lookup-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(16,185,129,.5);}
+    .status-lookup-btn:active{transform:scale(.97);}
+    .status-lookup-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+    .status-result{margin-top:clamp(14px,3vw,20px);display:none;}
+    .status-result.visible{display:block;}
+    .status-result-card{background:#fff;border-radius:14px;padding:clamp(14px,3vw,20px);box-shadow:0 4px 20px rgba(0,0,0,.07);border:1px solid #e2e8f0;}
+    [data-theme="dark"] .status-result-card{background:#1e293b;border-color:#334155;}
+    .status-result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:clamp(12px,2.8vw,13.5px);}
+    .status-result-row:last-child{border-bottom:none;padding-bottom:0;}
+    [data-theme="dark"] .status-result-row{border-color:#334155;}
+    .status-result-label{color:var(--text-light);font-weight:500;}
+    .status-result-value{font-weight:700;color:var(--dark);text-align:right;max-width:60%;}
+    .status-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+    .status-badge.waiting{background:#fef3c7;color:#92400e;}
+    .status-badge.assigned{background:#dbeafe;color:#1e40af;}
+    .status-badge.fixing{background:#ede9fe;color:#5b21b6;}
+    .status-badge.done{background:#d1fae5;color:#065f46;}
+    .status-badge.cancelled{background:#fee2e2;color:#991b1b;}
+    .status-not-found{text-align:center;padding:20px;color:var(--text-light);font-size:13.5px;}
     /* ═══ ZALO JOIN BUTTON EFFECTS ═══ */
     .zalo-join-btn {
         display: inline-flex;
@@ -2143,7 +2174,7 @@ body {
         <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
-        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
+        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</div>
         <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
@@ -2155,9 +2186,9 @@ body {
         <p style="margin:10px auto 0;font-weight:800;color:#fbbf24;font-size:clamp(12px,3vw,14px);letter-spacing:0.5px;">CAM KẾT 100% LINH KIỆN CHÍNH HÃNG </p>
     
         <div class="hero-stats">
-            <div class="hero-stat"><div class="stat-num" data-target="0" data-suffix="+">0</div><div class="stat-label">Lượt sửa chữa</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="7" data-suffix="">7+</div><div class="stat-label">ngày kinh nghiệm</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="">99+</div><div class="stat-label">% Hài lòng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="50" data-suffix="+">0</div><div class="stat-label">Lượt sửa chữa</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="7" data-suffix="+">7+</div><div class="stat-label">năm kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="%">99+</div><div class="stat-label">% Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
         </div>
     </div>
@@ -2252,6 +2283,19 @@ body {
             </form>
         </div>
     </section>
+
+    <!-- ══ TRA CỨU TÌNH TRẠNG SỬA MÁY ══ -->
+    <div class="container reveal" style="margin-bottom:0;">
+        <div class="status-lookup-wrap">
+            <div class="status-lookup-title">🔍 Tra cứu tình trạng sửa máy</div>
+            <div class="status-lookup-desc">Nhập số điện thoại đã đặt lịch để xem máy của bạn đang ở bước nào — đã có kỹ thuật viên nhận hay chưa.</div>
+            <div class="status-lookup-row">
+                <input type="tel" id="statusPhone" class="status-lookup-input" placeholder="Nhập số điện thoại đặt lịch..." maxlength="11" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')">
+                <button class="status-lookup-btn" id="statusLookupBtn" onclick="lookupRepairStatus()">🔍 Kiểm tra</button>
+            </div>
+            <div class="status-result" id="statusResult"></div>
+        </div>
+    </div>
 
     <!-- ══ PROMO BANNER — Ưu đãi tháng này ══ -->
     <div class="container reveal">
@@ -3565,20 +3609,21 @@ body {
         <div style="max-width: 1152px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 35px; font-size:13.5px;">           
             <div>
                 <h3 style="font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom:12px;">TRAN HOA COMPUTER</h3>
-                <p>Chuyên sửa chữa laptop, máy tính bàn, lắp ráp PC Gaming theo yêu cầu. Bảo hành rõ ràng, linh kiện chính hãng, giá công khai minh bạch tại Phú Thịnh, Đại Từ, Thái Nguyên.</p>
+                <p>Chuyên sửa chữa laptop, máy tính bàn, lắp ráp PC Gaming theo yêu cầu. Bảo hành rõ ràng, linh kiện chính hãng, giá công khai minh bạch tại Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên.</p>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">BẢN ĐỒ CỬA HÀNG</h4>
-                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:8px; font-size:13px;">Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <div class="map-wrapper">
                     <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">Địa chỉ: Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">Địa chỉ: Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
-                <p style="margin-bottom:6px;">Email: <a href="mailto:Hoaptdt2005@gmail.com" style="color: #38bdf8; font-weight: 500; text-decoration: none;">hoaptdt2005@gmail.com</a></p>
+                <p style="margin-bottom:6px;">Email: <a href="mailto:thienkim29903@gmail.com" style="color:#7dd3fc;font-weight:600;text-decoration:none;">thienkim29903@gmail.com</a></p>
+
             </div>
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p></div>
@@ -3592,7 +3637,70 @@ body {
     </div>
     <button id="backToTop">↑</button>
         <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ__BaYliJdbHK94kIfv0mzr8V14kyb-ymp1M4Ip6o62jELsQfG7G6zUHAc2M6kWsvdw/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_PalnN-lBzp5ws6O1IvhtO5jV6Bz9lrM_Veow5yKp7EiB8HYuR6c3sIXXHBM7n-879Q/exec";
+
+    /* ── Tra cứu tình trạng sửa máy ── */
+    function lookupRepairStatus() {
+        const phone = (document.getElementById('statusPhone').value || '').trim().replace(/\D/g,'');
+        const resultEl = document.getElementById('statusResult');
+        const btn = document.getElementById('statusLookupBtn');
+        if (!phone || phone.length < 9) {
+            resultEl.className = 'status-result visible';
+            resultEl.innerHTML = '<div class="status-not-found">⚠️ Vui lòng nhập đúng số điện thoại (ít nhất 9 chữ số).</div>';
+            return;
+        }
+        btn.disabled = true;
+        btn.textContent = '⏳ Đang tra...';
+        resultEl.className = 'status-result visible';
+        resultEl.innerHTML = '<div class="status-not-found" style="color:#3b82f6;">⏳ Đang tra cứu...</div>';
+        const url = GOOGLE_SCRIPT_URL + '?action=lookup&phone=' + encodeURIComponent(phone);
+        fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                btn.disabled = false; btn.textContent = '🔍 Kiểm tra';
+                if (!data || (!data.success && !data.found) || (data.data && data.data.length === 0)) {
+                    resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a></span></div>';
+                    return;
+                }
+                const rows = Array.isArray(data.data) ? data.data : [data.data];
+                const statusMap = {
+                    'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
+                    'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned','dang sua':'fixing','đang sửa':'fixing',
+                    'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','complete':'done','completed':'done',
+                    'da huy':'cancelled','đã hủy':'cancelled','cancelled':'cancelled','cancel':'cancelled'
+                };
+                const statusLabel = {'waiting':'Chờ xử lý','assigned':'Đã có KTV','fixing':'Đang sửa','done':'Hoàn thành','cancelled':'Đã hủy'};
+                let html = '';
+                rows.slice(0,3).forEach((item,i) => {
+                    const rawStatus = (item.status||item.trang_thai||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+                    let badgeClass = 'waiting';
+                    for (const [k,v] of Object.entries(statusMap)) {
+                        if (rawStatus.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))) { badgeClass = v; break; }
+                    }
+                    const displayStatus = statusLabel[badgeClass] || item.status || 'Chờ xử lý';
+                    const techName = item.kyThuat || item.ky_thuat_vien || item.technician || '';
+                    const svcName = item.dichVu || item.dich_vu || item.service || item.loaiDichVu || '';
+                    const scheduledDate = item.ngayHen || item.ngay_hen || item.scheduledDate || '';
+                    html += '<div class="status-result-card"' + (i>0?' style="margin-top:10px;"':'') + '>';
+                    html += '<div class="status-result-row"><span class="status-result-label">Khách hàng</span><span class="status-result-value">' + (item.hoTen||item.name||phone) + '</span></div>';
+                    if (svcName) html += '<div class="status-result-row"><span class="status-result-label">Dịch vụ</span><span class="status-result-value">' + svcName + '</span></div>';
+                    if (scheduledDate) html += '<div class="status-result-row"><span class="status-result-label">Ngày hẹn</span><span class="status-result-value">' + scheduledDate + '</span></div>';
+                    html += '<div class="status-result-row"><span class="status-result-label">Trạng thái</span><span class="status-result-value"><span class="status-badge ' + badgeClass + '">' + displayStatus + '</span></span></div>';
+                    if (techName) html += '<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value">' + techName + '</span></div>';
+                    else html += '<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#f59e0b;">Chưa phân công</span></div>';
+                    html += '</div>';
+                });
+                resultEl.innerHTML = html;
+            })
+            .catch(() => {
+                btn.disabled = false; btn.textContent = '🔍 Kiểm tra';
+                resultEl.innerHTML = '<div class="status-not-found">⚠️ Không thể kết nối lúc này. Vui lòng gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</div>';
+            });
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        var sp = document.getElementById('statusPhone');
+        if (sp) sp.addEventListener('keydown', function(e){ if(e.key==='Enter') lookupRepairStatus(); });
+    });
 
     function updateServiceNote(val) {
             const noteEl = document.getElementById('inputNote');
@@ -3836,12 +3944,6 @@ body {
         menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuNavbar.classList.toggle('show'); });
         document.addEventListener('click', () => menuNavbar.classList.remove('show'));
 
-        // =====================================================
-        // CẤU HÌNH API ADMIN — Điền URL Apps Script của bạn
-        // Ví dụ: 'https://script.google.com/macros/s/AKfy.../exec'
-        // =====================================================
-        var ADMIN_API_URL = 'https://script.google.com/macros/s/AKfycbwZ__BaYliJdbHK94kIfv0mzr8V14kyb-ymp1M4Ip6o62jELsQfG7G6zUHAc2M6kWsvdw/exec';
-
         const form = document.getElementById('bookingForm');
         const sBtn = document.getElementById('submitBtn');
         const bTxt = document.getElementById('btnText');
@@ -3901,14 +4003,6 @@ body {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
                         form.reset();
                         openModal();
-                        /* Gửi đến Admin Dashboard qua Apps Script */
-                        if (ADMIN_API_URL) {
-                            fetch(ADMIN_API_URL, {
-                                method: 'POST',
-                                mode: 'no-cors',
-                                body: new URLSearchParams(obj)
-                            }).catch(function(){});
-                        }
                         /* Update counter */
                         fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
                         .then(function(r){ return r.json(); })
