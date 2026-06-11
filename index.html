@@ -3662,7 +3662,7 @@ body {
     </div>
     <button id="backToTop">↑</button>
         <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqjC0RPwqJqpQUAGF7n-r6B2uwEvJHIeNbMlVegPi6JSBK-INUHt7o52Pb8xZzJ3sE5A";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfXBsPA5173jjCTtAKu-qoid3Sldzd5Y6LInug1Q_SStS90uJ14uJSiuXqspeMZGpidA/exec";
 
     /* ── Tra cứu tình trạng sửa máy ── */
     function lookupRepairStatus() {
@@ -3715,12 +3715,12 @@ body {
                     }
                     const isCancelled = badge === 'cancelled';
                     const curStep = isCancelled ? -1 : (stepIdx[badge] ?? 0);
-                    const tech     = item.tech||item.kyThuat||item.ky_thuat_vien||item.technician||'';
-                    const svc      = item.service||item.dichVu||item.dich_vu||item.loaiDichVu||'';
-                    const dt       = item.date||item.ngayHen||item.ngay_hen||item.scheduledDate||'';
-                    const costEst  = item.costEst||item.chi_phi_uoc_tinh||'';
-                    const aNote    = item.adminNote||item.ghi_chu_admin||item.note||'';
-                    const cust     = item.name||item.hoTen||phoneWith0||phone;
+                    const tech     = item.technician||item.tech||item.kyThuat||item.ky_thuat_vien||'';
+                    const svc      = item.service||item.deviceType||item.issue||item.dichVu||item.dich_vu||item.loaiDichVu||'';
+                    const dt       = item.date||item.scheduledAt||item.ngayHen||item.ngay_hen||item.scheduledDate||'';
+                    const costEst  = item.estimatedCost||item.costEst||item.chi_phi_uoc_tinh||'';
+                    const aNote    = item.adminNote||item.notes||item.ghi_chu_admin||item.note||'';
+                    const cust     = item.customerName||item.name||item.hoTen||phoneWith0||phone;
                     // Stepper
                     const fillPct = isCancelled ? 0 : Math.min(82,(curStep/(STEPS.length-1))*72+10);
                     let step = '<div class="status-stepper"><div class="status-stepper-fill" style="width:'+fillPct+'%"></div>';
@@ -4060,6 +4060,28 @@ body {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
                         form.reset();
                         openModal();
+                        /* ── Đẩy booking lên Google Sheet qua Apps Script ── */
+                        try {
+                          var gsData = {
+                            action: 'addBooking',
+                            data: {
+                              name:    (document.getElementById('inputName')  || document.querySelector('[name="Họ và tên"]')  || {}).value || obj['Họ và tên'] || '',
+                              phone:   (document.getElementById('inputPhone') || document.querySelector('[name="Số điện thoại"]') || {}).value || obj['Số điện thoại'] || '',
+                              service: obj['Dịch vụ'] || obj['service'] || '',
+                              note:    obj['Ghi chú'] || obj['note'] || '',
+                              status:  'pending'
+                            }
+                          };
+                          var gsUrl = typeof GOOGLE_SCRIPT_URL !== 'undefined' ? GOOGLE_SCRIPT_URL : null;
+                          if (gsUrl && gsData.data.phone) {
+                            fetch(gsUrl, {
+                              method: 'POST',
+                              headers: {'Content-Type': 'application/json'},
+                              body: JSON.stringify(gsData)
+                            }).catch(function(){});  /* Silent fail — FormSubmit already sent email */
+                          }
+                        } catch(gsErr) {}
+
                         /* Update counter */
                         fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
                         .then(function(r){ return r.json(); })
