@@ -777,47 +777,67 @@ async function doSync(){
   if(_si)_si.classList.add('syncing');
   setSL('ing','Đang đồng bộ...');
   try{
-    var r=await fetch(SHEETDB_URL+'?action=getAll');var _buf=await r.arrayBuffer();var d=JSON.parse(new TextDecoder('utf-8').decode(_buf));
-    if(d.success&&Array.isArray(d.data)){
-      /* ── Field normalization: support both old-format (name/service) and new-format (customerName/deviceType) ── */
+    // SheetDB GET: returns plain JSON array directly (no wrapper)
+    var r=await fetch(SHEETDB_URL);
+    if(!r.ok){ throw new Error('HTTP '+r.status); }
+    var rawData=await r.json();
+    // SheetDB may return array directly or {data:[...]}
+    var dataArr = Array.isArray(rawData) ? rawData : (Array.isArray(rawData.data) ? rawData.data : null);
+    if(dataArr !== null){
+      /* ── Field normalization: support both SheetDB column names and rich admin fields ── */
       function normalizeBooking(b) {
         if (!b) return b;
-        // Map old simple fields → rich fields (preserving existing rich fields)
-        if (!b.customerName && b.name)       b.customerName = b.name;
-        if (!b.deviceType   && b.service)    b.deviceType   = b.service;
-        if (!b.issue        && b.note)        b.issue        = b.note;
-        if (!b.technician   && b.tech)        b.technician   = b.tech;
-        if (!b.notes        && b.adminNote)   b.notes        = b.adminNote;
-        if (!b.estimatedCost && b.costEst != null) b.estimatedCost = b.costEst;
-        if (!b.actualCost   && b.costAct != null)  b.actualCost    = b.costAct;
-        // scheduledAt from date+time
-        if (!b.scheduledAt && b.date) b.scheduledAt = b.time ? b.time + ' ' + b.date : b.date;
-        // status text normalization (old Apps Script used 'Chờ xử lý', new uses 'pending')
-        var statusMap = {
-          'chờ xử lý':'pending','cho xu ly':'pending',
-          'đang xử lý':'assigned','dang xu ly':'assigned',
-          'đang sửa':'in_progress','dang sua':'in_progress',
-          'hoàn thành':'completed','hoan thanh':'completed','xong':'completed',
-          'đã hủy':'cancelled','da huy':'cancelled'
-        };
-        var rawStatus = (b.status||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-        for (var k in statusMap) {
-          if (rawStatus === k.normalize('NFD').replace(/[̀-ͯ]/g,'')) {
-            b.status = statusMap[k]; break;
-          }
+        // SheetDB column → admin field mapping
+        if (!b.customerName && (b['Full name']||b['full name']||b.name)) b.customerName = b['Full name']||b['full name']||b.name;
+        if (!b.phone        && b.Phone)       b.phone        = b.Phone;
+        if (!b.deviceType   && (b.Service||b.service)) b.deviceType = b.Service||b.service;
+        if (!b.issue        && (b.Note||b.note))   b.issue  = b.Note||b.note;
+        if (!b.technician   && b.Technician)  b.technician   = b.Technician;
+        if (!b.brand        && b.Brand)       b.brand        = b.Brand;
+        if (!b.model        && b.Model)       b.model        = b.Model;
+        if (!b.serial       && b.Serial)      b.serial       = b.Serial;
+        if (!b.address      && b.Address)     b.address      = b.Address;
+        if (!b.priority     && b.Priority)    b.priority     = b.Priority;
+        if (!b.notes        && b.Notes)       b.notes        = b.Notes;
+        if (!b.estimatedCost && b.estimated_cost) b.estimatedCost = b.estimated_cost;
+        if (!b.actualCost   && b.actual_cost) b.actualCost   = b.actual_cost;
+        if (!b.id           && b.Id)          b.id           = b.Id;
+        if (!b.createdAt    && b.createdAt)   b.createdAt    = b.createdAt;
+        // scheduledAt from Date+Time_slot columns
+        if (!b.scheduledAt && b.Date) {
+          b.scheduledAt = b.Time_slot ? (b.Date + 'T' + b.Time_slot) : b.Date;
         }
+        // status normalization
+        var statusMap = {
+          'chờ xử lý':'pending','cho xu ly':'pending','pending':'pending',
+          'đã phân công':'assigned','da phan cong':'assigned','assigned':'assigned',
+          'đang xử lý':'assigned','dang xu ly':'assigned',
+          'đang sửa':'in_progress','dang sua':'in_progress','in_progress':'in_progress','fixing':'in_progress',
+          'hoàn thành':'completed','hoan thanh':'completed','xong':'completed','completed':'completed','done':'completed',
+          'đã hủy':'cancelled','đã huỷ':'cancelled','da huy':'cancelled','cancelled':'cancelled'
+        };
+        var rawStatus = (b.Status||b.status||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        for (var k in statusMap) {
+          var normKey = k.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+          if (rawStatus === normKey) { b.status = statusMap[k]; break; }
+        }
+        if (!b.status) b.status = 'pending';
+        // priority
+        if (!b.priority) b.priority = 'normal';
         return b;
       }
-      d.data = d.data.map(normalizeBooking);
+      dataArr = dataArr.map(normalizeBooking);
+      // Filter out rows with no id
+      dataArr = dataArr.filter(function(b){ return b.id; });
 
       var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
-      var rows=d.data.filter(function(r){return!del.includes(r.id);});
+      var rows=dataArr.filter(function(r){return!del.includes(r.id);});
       var ids=new Set(rows.map(function(r){return r.id;}));
       books=rows.concat(books.filter(function(b){return!ids.has(b.id);}));
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
       toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
-    }else{setSL('err','Lỗi dữ liệu');toast('Lỗi dữ liệu từ Google Sheets','err');}
-  }catch(e){setSL('err','Lỗi kết nối');toast('Lỗi kết nối Google Sheets','err');}
+    }else{setSL('err','Lỗi dữ liệu');toast('Lỗi dữ liệu từ SheetDB — kiểm tra lại URL','err');}
+  }catch(e){setSL('err','Lỗi kết nối');toast('Lỗi kết nối SheetDB: '+e.message,'err');}
   finally{if(_si)_si.classList.remove('syncing');}
 }
 function setSL(t,x){
