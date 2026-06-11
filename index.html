@@ -4065,10 +4065,12 @@ body {
                           var gsData = {
                             action: 'addBooking',
                             data: {
-                              name:    (document.getElementById('inputName')  || document.querySelector('[name="Họ và tên"]')  || {}).value || obj['Họ và tên'] || '',
-                              phone:   (document.getElementById('inputPhone') || document.querySelector('[name="Số điện thoại"]') || {}).value || obj['Số điện thoại'] || '',
-                              service: obj['Dịch vụ'] || obj['service'] || '',
-                              note:    obj['Ghi chú'] || obj['note'] || '',
+                              name:    obj['fullname'] || '',
+                              phone:   obj['phone'] || '',
+                              service: obj['service'] || '',
+                              date:    obj['date'] || '',
+                              time:    obj['time-slot'] || '',
+                              note:    obj['note'] || '',
                               status:  'pending'
                             }
                           };
