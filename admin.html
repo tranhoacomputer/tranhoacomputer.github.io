@@ -659,8 +659,10 @@ function initAfterAuth(){
   loadBooks();startClk();renderDash();renderBT();
   var _modal=document.getElementById('modov');
   if(_modal)_modal.addEventListener('click',function(e){if(e.target===_modal)cMod();});
-  if(books.length===0){doSync();}
+  // Only auto-sync if explicitly configured, not on every fresh open
   if(cfg.autoSync){startAutoSync();}
+  // If localStorage is empty AND autoSync is on, try a background sync
+  if(books.length===0 && cfg.autoSync){ doSync(); }
 }
 
 function startAutoSync(){
@@ -827,8 +829,15 @@ async function doSync(){
         return b;
       }
       dataArr = dataArr.map(normalizeBooking);
-      // Filter out rows with no id
-      dataArr = dataArr.filter(function(b){ return b.id; });
+      // Auto-generate id for rows missing one (SheetDB rows may not have Id column set)
+      dataArr = dataArr.map(function(b, idx) {
+        if (!b.id) {
+          // Generate a stable id from phone + date + index
+          b.id = 'sdb_' + (b.phone||b.Phone||'').replace(/\D/g,'') + '_' + (b.Date||b.date||'').replace(/\D/g,'') + '_' + idx;
+          b.Id = b.id;
+        }
+        return b;
+      });
 
       var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       var rows=dataArr.filter(function(r){return!del.includes(r.id);});
@@ -836,8 +845,16 @@ async function doSync(){
       books=rows.concat(books.filter(function(b){return!ids.has(b.id);}));
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
       toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
-    }else{setSL('err','Lỗi dữ liệu');toast('Lỗi dữ liệu từ SheetDB — kiểm tra lại URL','err');}
-  }catch(e){setSL('err','Lỗi kết nối');toast('Lỗi kết nối SheetDB: '+e.message,'err');}
+    }else{
+      // SheetDB trả dữ liệu không hợp lệ — dùng localStorage hiện có, không báo lỗi
+      setSL('ok','Dùng dữ liệu cục bộ');
+      renderAll();
+    }
+  }catch(e){
+    // Không kết nối được SheetDB — im lặng, dùng localStorage
+    setSL('ok','Offline — dùng dữ liệu cục bộ');
+    renderAll();
+  }
   finally{if(_si)_si.classList.remove('syncing');}
 }
 function setSL(t,x){
