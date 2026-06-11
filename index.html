@@ -9,9 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/bevietnam/v25/FwZf7-Q1xVk-40qxOdnIoOlAIMByudQ.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Be Vietnam Pro: designed for Vietnamese + Latin, renders correctly on Android -->
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,40&display=swap0&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
     <!-- Inter: fallback for Latin UI elements -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;70&display=swap0&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Sửa chữa lắp ráp máy tính, laptop uy tín tại Thái Nguyên - Tran Hoa Computer. Cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook chính hãng tại Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:title" content="Tran Hoa Computer - Sửa Chữa Lắp Ráp Máy Tính Uy Tín Thái Nguyên">
     <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
@@ -3664,7 +3664,9 @@ body {
         <script>
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfXBsPA5173jjCTtAKu-qoid3Sldzd5Y6LInug1Q_SStS90uJ14uJSiuXqspeMZGpidA/exec";
 
-    /* ── Tra cứu tình trạng sửa máy ── */
+    /* ── Tra cứu tình trạng sửa máy (SheetDB) ── */
+    var SHEETDB_URL = 'https://sheetdb.io/api/v1/lzhr8x88wpa5q';
+
     function lookupRepairStatus() {
         const phone = (document.getElementById('statusPhone').value || '').trim().replace(/\D/g,'');
         const resultEl = document.getElementById('statusResult');
@@ -3678,82 +3680,106 @@ body {
         btn.innerHTML = '⏳ Đang tra...';
         resultEl.className = 'status-result visible';
         resultEl.innerHTML = '<div class="status-not-found" style="color:#3b82f6;">⏳ Đang tra cứu...</div>';
-        // Normalize phone: strip leading 84/+84, always send without leading 0 AND with leading 0 (try both)
-        const phoneNorm = phone.replace(/^(\+84|84|0)/, '');  // e.g. "989889686"
-        const phoneWith0 = '0' + phoneNorm;                    // e.g. "0989889686"
-        const url = GOOGLE_SCRIPT_URL + '?action=getStatus&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0);
-        fetch(url)
-            .then(r => r.json())
-            .then(data => {
-                btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-                if (!data || data.success === false || !data.data || (Array.isArray(data.data) && data.data.length === 0)) {
-                    resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a></span></div>';
-                    return;
-                }
-                const rows = Array.isArray(data.data) ? data.data : [data.data];
-                const STEPS = [
-                    {key:'waiting', icon:'📋', label:'Chờ xử lý'},
-                    {key:'assigned',icon:'👨‍🔧',label:'Nhận máy'},
-                    {key:'fixing',  icon:'🔧', label:'Đang sửa'},
-                    {key:'done',    icon:'✅', label:'Hoàn thành'}
-                ];
-                const statusMap = {
-                    'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
-                    'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned','nhan may':'assigned',
-                    'dang sua':'fixing','đang sửa':'fixing','fixing':'fixing',
-                    'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','complete':'done','completed':'done',
-                    'da huy':'cancelled','đã hủy':'cancelled','cancelled':'cancelled','cancel':'cancelled'
-                };
-                const statusLabel = {'waiting':'Chờ xử lý','assigned':'Đã nhận máy','fixing':'Đang sửa','done':'Hoàn thành','cancelled':'Đã hủy'};
-                const stepIdx = {'waiting':0,'assigned':1,'fixing':2,'done':3};
-                let outHtml = '';
-                rows.slice(0,3).forEach((item,i) => {
-                    const rawNorm = (item.status||item.trang_thai||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-                    let badge = 'waiting';
-                    for (const [k,v] of Object.entries(statusMap)) {
-                        if (rawNorm.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))) { badge = v; break; }
-                    }
-                    const isCancelled = badge === 'cancelled';
-                    const curStep = isCancelled ? -1 : (stepIdx[badge] ?? 0);
-                    const tech     = item.technician||item.tech||item.kyThuat||item.ky_thuat_vien||'';
-                    const svc      = item.service||item.deviceType||item.issue||item.dichVu||item.dich_vu||item.loaiDichVu||'';
-                    const dt       = item.date||item.scheduledAt||item.ngayHen||item.ngay_hen||item.scheduledDate||'';
-                    const costEst  = item.estimatedCost||item.costEst||item.chi_phi_uoc_tinh||'';
-                    const aNote    = item.adminNote||item.notes||item.ghi_chu_admin||item.note||'';
-                    const cust     = item.customerName||item.name||item.hoTen||phoneWith0||phone;
-                    // Stepper
-                    const fillPct = isCancelled ? 0 : Math.min(82,(curStep/(STEPS.length-1))*72+10);
-                    let step = '<div class="status-stepper"><div class="status-stepper-fill" style="width:'+fillPct+'%"></div>';
-                    STEPS.forEach((s,idx)=>{
-                        let dc='', sc='';
-                        if(!isCancelled){ if(idx<curStep){dc='s-done';sc='s-past-row';}else if(idx===curStep){dc='s-active';sc='s-active-row';} }
-                        step+='<div class="status-step '+sc+'"><div class="status-step-dot '+dc+'">'+s.icon+'</div><div class="status-step-label">'+s.label+'</div></div>';
-                    });
-                    if(isCancelled) step+='<div class="status-step"><div class="status-step-dot s-cancel">✕</div><div class="status-step-label">Đã hủy</div></div>';
-                    step+='</div>';
-                    // Chips
-                    let chips='';
-                    if(dt||costEst||aNote){
-                        chips='<div class="status-extra-chips">';
-                        if(dt) chips+='<span class="s-chip">📅 '+dt+'</span>';
-                        if(costEst) chips+='<span class="s-chip s-cost">💰 '+costEst+'</span>';
-                        if(aNote) chips+='<span class="s-chip s-note">📝 '+aNote+'</span>';
-                        chips+='</div>';
-                    }
-                    outHtml+='<div class="status-result-card"'+(i>0?' style="margin-top:14px;"':'')+'>'+
-                        '<div class="status-result-row"><span class="status-result-label">Khách hàng</span><span class="status-result-value">'+cust+'</span></div>'+
-                        (svc?'<div class="status-result-row"><span class="status-result-label">Dịch vụ</span><span class="status-result-value">'+svc+'</span></div>':'')+
-                        '<div class="status-result-row"><span class="status-result-label">Trạng thái</span><span class="status-result-value"><span class="status-badge '+badge+'">'+(statusLabel[badge]||item.status)+'</span></span></div>'+
-                        (tech?'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value">'+tech+'</span></div>':'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#f59e0b;">Chưa phân công</span></div>')+
-                        step+chips+'</div>';
-                });
-                resultEl.innerHTML = outHtml;
-            })
-            .catch(() => {
-                btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-                resultEl.innerHTML = '<div class="status-not-found">⚠️ Không thể kết nối lúc này. Vui lòng gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</div>';
+
+        const phoneNorm  = phone.replace(/^(\+84|84|0)/, '');
+        const phoneWith0 = '0' + phoneNorm;
+
+        // SheetDB: search by Phone column (try both formats)
+        const url = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneWith0);
+        const url2 = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneNorm);
+
+        Promise.all([
+            fetch(url).then(r => r.ok ? r.json() : []).catch(() => []),
+            fetch(url2).then(r => r.ok ? r.json() : []).catch(() => [])
+        ]).then(([rows1, rows2]) => {
+            btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
+
+            // Merge and deduplicate by Id
+            const seen = new Set();
+            const allRows = [...(Array.isArray(rows1)?rows1:[]), ...(Array.isArray(rows2)?rows2:[])].filter(r => {
+                const id = r.Id||r.id||JSON.stringify(r);
+                if (seen.has(id)) return false;
+                seen.add(id); return true;
             });
+
+            if (!allRows.length) {
+                resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a></span></div>';
+                return;
+            }
+
+            const STEPS = [
+                {key:'waiting', icon:'📋', label:'Chờ xử lý'},
+                {key:'assigned',icon:'👨‍🔧',label:'Nhận máy'},
+                {key:'fixing',  icon:'🔧', label:'Đang sửa'},
+                {key:'done',    icon:'✅', label:'Hoàn thành'}
+            ];
+            const statusMap = {
+                'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
+                'da phan cong':'assigned','đã phân công':'assigned',
+                'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned','nhan may':'assigned',
+                'dang sua':'fixing','đang sửa':'fixing','fixing':'fixing','in_progress':'fixing',
+                'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','complete':'done','completed':'done',
+                'da huy':'cancelled','đã hủy':'cancelled','đã huỷ':'cancelled','cancelled':'cancelled','cancel':'cancelled'
+            };
+            const statusLabel = {'waiting':'Chờ xử lý','assigned':'Đã nhận máy','fixing':'Đang sửa','done':'Hoàn thành','cancelled':'Đã hủy'};
+            const stepIdx = {'waiting':0,'assigned':1,'fixing':2,'done':3};
+
+            let outHtml = '';
+            allRows.slice(0,3).forEach((item, i) => {
+                // Normalize status
+                const rawNorm = (item.Status||item.status||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+                let badge = 'waiting';
+                for (const [k,v] of Object.entries(statusMap)) {
+                    if (rawNorm.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))) { badge = v; break; }
+                }
+                const isCancelled = badge === 'cancelled';
+                const curStep = isCancelled ? -1 : (stepIdx[badge] ?? 0);
+
+                // Map SheetDB columns (Id, Full name, Phone, Service, Date, Time_slot, Note, Status)
+                const tech  = item.Technician||item.technician||'';
+                const svc   = item.Service||item.service||item.Note||item.note||'';
+                const date  = item.Date||item.date||'';
+                const tslot = item.Time_slot||item.time_slot||'';
+                const dt    = date ? (tslot ? date + ' · ' + tslot : date) : '';
+                const costEst = item.estimated_cost||item.estimatedCost||'';
+                const aNote   = item.Notes||item.notes||'';
+                const cust    = item['Full name']||item.Full_name||item.customerName||item.name||phoneWith0;
+
+                // Build stepper
+                const fillPct = isCancelled ? 0 : Math.min(82,(curStep/(STEPS.length-1))*72+10);
+                let step = '<div class="status-stepper"><div class="status-stepper-fill" style="width:'+fillPct+'%"></div>';
+                STEPS.forEach((s,idx)=>{
+                    let dc='', sc='';
+                    if(!isCancelled){ if(idx<curStep){dc='s-done';sc='s-past-row';}else if(idx===curStep){dc='s-active';sc='s-active-row';} }
+                    step+='<div class="status-step '+sc+'"><div class="status-step-dot '+dc+'">'+s.icon+'</div><div class="status-step-label">'+s.label+'</div></div>';
+                });
+                if(isCancelled) step+='<div class="status-step"><div class="status-step-dot s-cancel">✕</div><div class="status-step-label">Đã hủy</div></div>';
+                step+='</div>';
+
+                // Build chips
+                let chips='';
+                if(dt||costEst||aNote){
+                    chips='<div class="status-extra-chips">';
+                    if(dt) chips+='<span class="s-chip">📅 '+dt+'</span>';
+                    if(costEst) chips+='<span class="s-chip s-cost">💰 '+costEst+'</span>';
+                    if(aNote) chips+='<span class="s-chip s-note">📝 '+aNote+'</span>';
+                    chips+='</div>';
+                }
+
+                outHtml+='<div class="status-result-card"'+(i>0?' style="margin-top:14px;"':'')+'>'+
+                    '<div class="status-result-row"><span class="status-result-label">Khách hàng</span><span class="status-result-value">'+cust+'</span></div>'+
+                    (svc?'<div class="status-result-row"><span class="status-result-label">Dịch vụ</span><span class="status-result-value">'+svc+'</span></div>':'')+
+                    '<div class="status-result-row"><span class="status-result-label">Trạng thái</span><span class="status-result-value"><span class="status-badge '+badge+'">'+(statusLabel[badge]||item.Status||item.status)+'</span></span></div>'+
+                    (tech?'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value">'+tech+'</span></div>':'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#f59e0b;">Chưa phân công</span></div>')+
+                    step+chips+'</div>';
+            });
+            resultEl.innerHTML = outHtml;
+        }).catch(() => {
+            btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
+            resultEl.innerHTML = '<div class="status-not-found">⚠️ Không thể kết nối lúc này. Vui lòng gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</div>';
+        });
     }
+
     document.addEventListener('DOMContentLoaded', function() {
         var sp = document.getElementById('statusPhone');
         if (sp) sp.addEventListener('keydown', function(e){ if(e.key==='Enter') lookupRepairStatus(); });
