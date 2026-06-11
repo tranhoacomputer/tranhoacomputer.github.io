@@ -3662,7 +3662,7 @@ body {
     </div>
     <button id="backToTop">↑</button>
         <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHZ8FMPBCW0cIiOBKUyfIzI0eWdFfvCO2Kk5ce5o507LOSBpP5TAakfPHNV3XZaW2f/exec";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuXAcoBM88AqQUqihYVTUyQ2PcWEEqJZ6NnmCc6PssvqjCy8F9jtvH1QaV0_iUW3R5og/exec";
 
     /* ── Tra cứu tình trạng sửa máy ── */
     function lookupRepairStatus() {
@@ -3678,12 +3678,15 @@ body {
         btn.innerHTML = '⏳ Đang tra...';
         resultEl.className = 'status-result visible';
         resultEl.innerHTML = '<div class="status-not-found" style="color:#3b82f6;">⏳ Đang tra cứu...</div>';
-        const url = GOOGLE_SCRIPT_URL + '?action=getStatus&phone=' + encodeURIComponent(phone);
+        // Normalize phone: strip leading 84/+84, always send without leading 0 AND with leading 0 (try both)
+        const phoneNorm = phone.replace(/^(\+84|84|0)/, '');  // e.g. "989889686"
+        const phoneWith0 = '0' + phoneNorm;                    // e.g. "0989889686"
+        const url = GOOGLE_SCRIPT_URL + '?action=getStatus&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0);
         fetch(url)
             .then(r => r.json())
             .then(data => {
                 btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-                if (!data || (!data.success && !data.found) || (data.data && data.data.length === 0)) {
+                if (!data || data.success === false || !data.data || (Array.isArray(data.data) && data.data.length === 0)) {
                     resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a></span></div>';
                     return;
                 }
@@ -3716,8 +3719,8 @@ body {
                     const svc      = item.service||item.dichVu||item.dich_vu||item.loaiDichVu||'';
                     const dt       = item.date||item.ngayHen||item.ngay_hen||item.scheduledDate||'';
                     const costEst  = item.costEst||item.chi_phi_uoc_tinh||'';
-                    const aNote    = item.adminNote||item.ghi_chu_admin||'';
-                    const cust     = item.name||item.hoTen||phone;
+                    const aNote    = item.adminNote||item.ghi_chu_admin||item.note||'';
+                    const cust     = item.name||item.hoTen||phoneWith0||phone;
                     // Stepper
                     const fillPct = isCancelled ? 0 : Math.min(82,(curStep/(STEPS.length-1))*72+10);
                     let step = '<div class="status-stepper"><div class="status-stepper-fill" style="width:'+fillPct+'%"></div>';
