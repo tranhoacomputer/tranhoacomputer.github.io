@@ -913,7 +913,11 @@ function bookingToSheetRow(b) {
   return {
     Id:           b.id || '',
     'Full name':  b.customerName || '',
-    Phone:        b.phone || '',
+    Phone:        (function(p){
+      p = String(p||'').replace(/\D/g,'');
+      // Lưu dạng không có số 0 đầu để đồng nhất với dữ liệu SheetDB hiện có
+      return p.startsWith('0') ? p.slice(1) : p;
+    })(b.phone),
     Service:      b.deviceType || '',
     Date:         dateStr,
     Time_slot:    timeStr,
@@ -978,14 +982,14 @@ async function pushToSheets(b, isNew){
           var r2 = await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone0), {
             method: 'PATCH',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id} })
+            body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
           });
           if (!r2.ok) {
             // Thử không có số 0
             await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phoneNorm), {
               method: 'PATCH',
               headers: {'Content-Type':'application/json'},
-              body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id} })
+              body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
             });
           }
         }
