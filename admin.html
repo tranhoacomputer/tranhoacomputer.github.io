@@ -361,8 +361,6 @@ tr:hover td{background:#f8fafc}
   .tb-actions button{font-size:11px;padding:7px 8px}
   .sn{font-size:16px}
 }
-
-
 /* legacy class aliases */
 .nb{display:flex;align-items:center;gap:10px;padding:9px 14px;color:var(--sidebar-text);cursor:pointer;border-radius:8px;margin:1px 6px;transition:all .15s;font-size:13.5px;background:none;border:none;width:calc(100% - 12px);text-align:left}
 .nb:hover{background:rgba(255,255,255,.06);color:#cbd5e1}
@@ -656,12 +654,13 @@ var SHEETDB_URL='https://sheetdb.io/api/v1/lzhr8x88wpa5q';
 var books=[],editId=null,cfg={},sch=null,_sortK='scheduledAt',_sortD=1,_autoSyncInterval=null,_slTimer=null;
 
 function initAfterAuth(){
-  loadBooks();startClk();renderDash();renderBT();
+  loadBooks();
+  // Nếu không có dữ liệu, tạo demo
+  if(books.length===0) initDemoData();
+  startClk();renderDash();renderBT();
   var _modal=document.getElementById('modov');
   if(_modal)_modal.addEventListener('click',function(e){if(e.target===_modal)cMod();});
-  // Only auto-sync if explicitly configured, not on every fresh open
   if(cfg.autoSync){startAutoSync();}
-  // If localStorage is empty AND autoSync is on, try a background sync
   if(books.length===0 && cfg.autoSync){ doSync(); }
 }
 
@@ -671,7 +670,7 @@ function startAutoSync(){
   doSync();
   _autoSyncInterval=setInterval(function(){
     doSync();
-  }, 60000); // every 60 seconds
+  }, 60000);
 }
 
 function stopAutoSync(){
@@ -697,7 +696,7 @@ function logoutAdmin(){
 
 window.addEventListener('DOMContentLoaded',function(){
   loadCfg();
-  var authNeeded = cfg.authEnabled!==false; // default: enabled
+  var authNeeded = cfg.authEnabled!==false;
   var authed = localStorage.getItem('thc_auth')==='1';
   if(!authNeeded || authed){ initAfterAuth(); }
   else{
@@ -721,10 +720,6 @@ function startClk(){
   t();setInterval(t,10000);
 }
 function loadCfg(){
-  // ⚠️  CẬP NHẬT URL: Sau khi deploy AppScript_TranHoaComputer.gs mới,
-  //   vào Settings → dán URL mới vào ô "Apps Script URL"
-  // Sheet ID: 1aod21BPZbQ7AWd7keTltnZaycZW5HqdQz49aVIy7q6Y
-
   cfg=JSON.parse(localStorage.getItem('thc_cfg')||'{}');
   cfg.sheetdbUrl=cfg.sheetdbUrl||'https://sheetdb.io/api/v1/lzhr8x88wpa5q';
   SHEETDB_URL=cfg.sheetdbUrl;
@@ -746,7 +741,6 @@ function loadCfg(){
   var as=document.getElementById('s_auto_sync'); if(as) as.checked=!!cfg.autoSync;
 
   var sn=document.getElementById("sb-shopname");if(sn&&cfg.name)sn.textContent=cfg.name;
-  // persist defaults (ensure admin credentials and auth flag saved)
   localStorage.setItem('thc_cfg',JSON.stringify(cfg));
 }
 function savCfg(k,v){cfg[k]=v;localStorage.setItem('thc_cfg',JSON.stringify(cfg));
@@ -764,6 +758,19 @@ function updBdg(){
 
   var sn=document.getElementById("sb-shopname");if(sn&&cfg.name)sn.textContent=cfg.name;
 }
+
+// Thêm dữ liệu mẫu nếu chưa có
+function initDemoData(){
+  var demo = [
+    {id:'BK'+Date.now()+'_1', customerName:'Nguyễn Văn A', phone:'0987654321', deviceType:'Laptop', brand:'Dell', issue:'Không lên nguồn', status:'pending', scheduledAt:new Date().toISOString(), priority:'urgent', createdAt:new Date().toISOString(), actualCost:0, technician:'Kỹ thuật 1'},
+    {id:'BK'+Date.now()+'_2', customerName:'Trần Thị B', phone:'0912345678', deviceType:'PC Desktop', brand:'HP', issue:'Máy chạy chậm', status:'in_progress', scheduledAt:new Date(Date.now()+86400000).toISOString(), priority:'normal', createdAt:new Date().toISOString(), actualCost:0, technician:'Kỹ thuật 2'},
+    {id:'BK'+Date.now()+'_3', customerName:'Lê Văn C', phone:'0977777777', deviceType:'Laptop', brand:'ASUS', issue:'Màn hình vỡ', status:'pending', scheduledAt:new Date(Date.now()+172800000).toISOString(), priority:'urgent', createdAt:new Date().toISOString(), actualCost:0, technician:''}
+  ];
+  books = demo;
+  saveBooks();
+  toast('Đã tạo dữ liệu mẫu để quản trị','ok');
+}
+
 function getStats(){
   var s={total:books.length,pending:0,assigned:0,inProgress:0,completed:0,cancelled:0,revenue:0};
   books.forEach(function(b){
@@ -779,17 +786,13 @@ async function doSync(){
   if(_si)_si.classList.add('syncing');
   setSL('ing','Đang đồng bộ...');
   try{
-    // SheetDB GET: returns plain JSON array directly (no wrapper)
     var r=await fetch(SHEETDB_URL);
     if(!r.ok){ throw new Error('HTTP '+r.status); }
     var rawData=await r.json();
-    // SheetDB may return array directly or {data:[...]}
     var dataArr = Array.isArray(rawData) ? rawData : (Array.isArray(rawData.data) ? rawData.data : null);
     if(dataArr !== null){
-      /* ── Field normalization: support both SheetDB column names and rich admin fields ── */
       function normalizeBooking(b) {
         if (!b) return b;
-        // SheetDB column → admin field mapping
         if (!b.customerName && (b['Full name']||b['full name']||b.name)) b.customerName = b['Full name']||b['full name']||b.name;
         if (!b.phone        && b.Phone)       b.phone        = b.Phone;
         if (!b.deviceType   && (b.Service||b.service)) b.deviceType = b.Service||b.service;
@@ -805,11 +808,9 @@ async function doSync(){
         if (!b.actualCost   && b.actual_cost) b.actualCost   = b.actual_cost;
         if (!b.id           && b.Id)          b.id           = b.Id;
         if (!b.createdAt    && b.createdAt)   b.createdAt    = b.createdAt;
-        // scheduledAt from Date+Time_slot columns
         if (!b.scheduledAt && b.Date) {
           b.scheduledAt = b.Time_slot ? (b.Date + 'T' + b.Time_slot) : b.Date;
         }
-        // status normalization
         var statusMap = {
           'chờ xử lý':'pending','cho xu ly':'pending','pending':'pending',
           'đã phân công':'assigned','da phan cong':'assigned','assigned':'assigned',
@@ -824,35 +825,30 @@ async function doSync(){
           if (rawStatus === normKey) { b.status = statusMap[k]; break; }
         }
         if (!b.status) b.status = 'pending';
-        // priority
         if (!b.priority) b.priority = 'normal';
         return b;
       }
       dataArr = dataArr.map(normalizeBooking);
-      // Auto-generate id for rows missing one (SheetDB rows may not have Id column set)
       dataArr = dataArr.map(function(b, idx) {
         if (!b.id) {
-          // Generate a stable id from phone + date + index
           b.id = 'sdb_' + (b.phone||b.Phone||'').replace(/\D/g,'') + '_' + (b.Date||b.date||'').replace(/\D/g,'') + '_' + idx;
           b.Id = b.id;
         }
         return b;
       });
-
-      var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
+var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       var rows=dataArr.filter(function(r){return!del.includes(r.id);});
       var ids=new Set(rows.map(function(r){return r.id;}));
       books=rows.concat(books.filter(function(b){return!ids.has(b.id);}));
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
       toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
     }else{
-      // SheetDB trả dữ liệu không hợp lệ — dùng localStorage hiện có, không báo lỗi
       setSL('ok','Dùng dữ liệu cục bộ');
       renderAll();
     }
   }catch(e){
-    // Không kết nối được SheetDB — im lặng, dùng localStorage
     setSL('ok','Offline — dùng dữ liệu cục bộ');
+    if(books.length===0) initDemoData();
     renderAll();
   }
   finally{if(_si)_si.classList.remove('syncing');}
@@ -861,12 +857,10 @@ function setSL(t,x){
   var el=document.getElementById('slbl'); if(!el) return;
   el.textContent = x; el.className = 'sl s-'+t;
   if(_slTimer){ clearTimeout(_slTimer); _slTimer = null; }
-  // auto-hide non-sync states after a short delay
   if(t !== 'ing' && x){
     _slTimer = setTimeout(function(){ if(el){ el.textContent=''; el.className='sl'; } _slTimer=null; }, 2000);
   }
 }
-// Chuyển booking object → SheetDB row (theo cột của Google Sheet)
 function bookingToSheetRow(b) {
   var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
   var dateStr = d ? d.toISOString().slice(0,10) : '';
@@ -956,7 +950,6 @@ var SM={
 function sbdg(s){var m=SM[s]||{l:s,c:'b-p'};return '<span class="bdg '+m.c+'">'+m.l+'</span>';}
 
 
-// ── Revenue reset helpers ────────────────────────────────
 function resetRevenue(){
   if(!confirm('Đặt lại mốc tính doanh thu từ bây giờ?\nDoanh thu trước thời điểm này sẽ không được tính.')) return;
   localStorage.setItem('thc_rev_reset', new Date().toISOString());
@@ -999,13 +992,9 @@ function sc(icon,label,val,cls,icls){
   return '<div class="sc"><div class="si '+(icls||'c-blue')+'">'+icon+'</div>'
     +'<div class="sv"><div class="sl">'+label+'</div><div class="sn'+(cls?' '+cls:'')+' ">'+val+'</div></div></div>';
 }
-
-
-  /* Guard against double-encoded UTF-8 (Windows-1252 mis-read) */
-  function safeStr(s) {
+function safeStr(s) {
     if (!s) return s;
     try {
-      // If string looks like it was decoded as Latin-1 (contains Ã, Â, á» patterns), fix it
       if (/[\xC0-\xFF]{2,}|\xC3[\x80-\xBF]|\xe1\xbb/.test(s)) {
         var bytes = new Uint8Array(s.length);
         for (var i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i) & 0xFF;
@@ -1073,7 +1062,7 @@ function sc(icon,label,val,cls,icls){
       +'<td><div class="ic" title="'+esc(b.issue||'')+'">'+esc(b.issue||'—')+'</div></td>'
       +'<td><div class="dc">'+fdt(b.scheduledAt)+'</div></td>'
       +'<td><select class="ssel" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select></td>'
-      +'<td>'+(b.actualCost?'<span class="ca">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span class="ce">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</td>'
+      +'<td>'+(b.actualCost?'<span class="ca">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span class="ce">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</span></td>'
       +'<td><div class="ac"><button class="ib edt" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="ib edt" onclick="doEdit(\''+b.id+'\')" title="Sua">✏</button><button class="ib del" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
       +'</tr>';
   }).join('');
@@ -1150,7 +1139,6 @@ function doSave(){
   }
   goP('books',document.querySelector('[data-pg=books]'));
 }
-
 function viewDet(id){
   var b=books.find(function(x){return x.id===id;});
   if(!b)return;
@@ -1212,7 +1200,6 @@ function doDel(id){
 function doPrint(id){
   var b=id?books.find(function(x){return x.id===id;}):null;
   if(!b){
-    // If on detail page, get current booking
     var det=document.getElementById('pg-det');
     if(det&&det.style.display!=='none'){
       var did=det.getAttribute('data-id');
@@ -1272,7 +1259,6 @@ function doPrint(id){
       +'<div class="foot">Cảm ơn quý khách đã tin tưởng sử dụng dịch vụ — '+_esc(shop)+'</div>'
     +'</div>'
   +'</body></html>';
-  // helper functions injected into the new window via script tags
   win.document.write(html);
   win.document.close();
 }
@@ -1327,7 +1313,7 @@ function doCSV(){
   toast('Đã xuất '+books.length+' lịch hẹn ✅');
 }
 
-// ── renderChart (Chart.js doughnut) ──────────────────────────────────────────
+
 function renderChart(){
   if(typeof Chart==='undefined')return;
   var ctx=document.getElementById('sch');if(!ctx)return;
@@ -1349,7 +1335,7 @@ function renderChart(){
   });
 }
 
-// ── renderRecent (last 6 bookings) ───────────────────────────────────────────
+
 function renderRecent(){
   var el=document.getElementById('recl');if(!el)return;
   var sorted=[].concat(books).sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
@@ -1367,7 +1353,7 @@ function renderRecent(){
   }).join('');
 }
 
-// ── renderUrgent (urgent + not done) ─────────────────────────────────────────
+
 function renderUrgent(){
   var urg=books.filter(function(b){return b.priority==='urgent'&&b.status!=='completed'&&b.status!=='cancelled';});
   var el=document.getElementById('urgc'),list=document.getElementById('urgl');
@@ -1384,8 +1370,6 @@ function renderUrgent(){
       +'</div>';
   }).join('');
 }
-
-// ── sortBy ────────────────────────────────────────────────────────────────────
 function sortBy(k){
   if(_sortK===k)_sortD*=-1;else{_sortK=k;_sortD=1;}
   document.querySelectorAll('th[data-sort]').forEach(function(th){
@@ -1397,7 +1381,7 @@ function sortBy(k){
   renderBT();
 }
 
-// ── buildTimeline ─────────────────────────────────────────────────────────────
+
 function buildTimeline(b){
   var steps=[
     {key:'pending',icon:'📋',label:'Tiếp nhận'},
@@ -1422,9 +1406,7 @@ function buildTimeline(b){
 
 
 
-// ═══════════════════════════════════════════════════════
-// CUSTOMERS TAB
-// ═══════════════════════════════════════════════════════
+
 function buildCustMap() {
   var map = {};
   books.forEach(function(b) {
@@ -1461,23 +1443,19 @@ function renderCust() {
   var q = (document.getElementById('cust_q').value || '').toLowerCase();
   var sortVal = document.getElementById('cust_sort').value;
 
-  // Filter
   if (q) customers = customers.filter(function(c) {
     return c.name.toLowerCase().includes(q) || c.phone.includes(q);
   });
 
-  // Sort
   customers.sort(function(a, b) {
     if (sortVal === 'orders')   return b.orders - a.orders;
     if (sortVal === 'revenue')  return b.revenue - a.revenue;
     if (sortVal === 'name')     return a.name.localeCompare(b.name, 'vi');
-    // last: most recent first
     var da = a.lastDate ? a.lastDate.getTime() : 0;
     var db = b.lastDate ? b.lastDate.getTime() : 0;
     return db - da;
   });
 
-  // Stat cards
   var total = customers.length;
   var repeat = customers.filter(function(c){return c.orders > 1;}).length;
   var totalRev = customers.reduce(function(s,c){return s+c.revenue;},0);
@@ -1571,9 +1549,7 @@ function openCustModal(phone) {
   document.body.appendChild(modal);
 }
 
-// ═══════════════════════════════════════════════════════
-// REVENUE CHART (monthly, last 6 months)
-// ═══════════════════════════════════════════════════════
+
 var _revChart = null;
 function renderRevChart() {
   if (typeof Chart === 'undefined') return;
@@ -1634,15 +1610,13 @@ function renderRevChart() {
   });
 }
 
-// ═══════════════════════════════════════════════════════
-// TECH SUMMARY (dashboard card)
-// ═══════════════════════════════════════════════════════
+
 function renderTechSummary() {
   var el = document.getElementById('toptech-body');
   if (!el) return;
   var map = {};
   books.forEach(function(b) {
-    var t = b.tech || b.technician || b.assignedTo || '';
+    var t = b.technician || '';
     if (!t) return;
     if (!map[t]) map[t] = { name: t, total: 0, done: 0 };
     map[t].total++;
@@ -1662,7 +1636,7 @@ function renderTechSummary() {
         '<div style="font-size:11.5px;color:var(--text-muted)">' + t.done + '/' + t.total + ' hoàn thành</div>' +
         '<div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px">' +
           '<div style="height:4px;background:#10b981;border-radius:2px;width:' + pct + '%"></div>' +
-        '</div>' +
+'</div>' +
       '</div>' +
       '<span style="font-size:12px;font-weight:700;color:' + (pct>=80?'#10b981':pct>=50?'#f59e0b':'#ef4444') + '">' + pct + '%</span>' +
     '</div>';
@@ -1675,3 +1649,4 @@ function renderTechSummary() {
 <!-- bottom nav removed -->
 </body>
 </html>
+```
