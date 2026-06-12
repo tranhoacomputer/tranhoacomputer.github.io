@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<!-- admin_v29.html | Tran Hoa Computer | 2026-06-13 | v29: fetchWithRetry, debounce, svcLabel fixes, qkSt renderAll -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -474,7 +475,7 @@ tr:hover td{background:#f8fafc}
   <div class="tb-actions">
     <div class="clk" id="clk"></div>
     <span class="sl s-ok" id="slbl">✅ Cục bộ</span>
-    <button class="tb-btn" id="synbtn" onclick="doSync()"><span id="synicon">🔄</span> Tải từ SheetDB</button>
+    <button class="tb-btn" id="synbtn" onclick="if(!_autoSyncInterval||true){doSync();}"><span id="synicon">🔄</span> Tải từ SheetDB</button>
     <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none">🌐 Web KH</a>
     <button class="tb-btn primary" onclick="doAdd()">➕ Thêm lịch hẹn</button>
   </div>
@@ -752,6 +753,7 @@ function savCfg(k,v){cfg[k]=v;localStorage.setItem('thc_cfg',JSON.stringify(cfg)
 function loadBooks(){books=JSON.parse(localStorage.getItem('thc_books')||'[]');updBdg();}
 function saveBooks(){localStorage.setItem('thc_books',JSON.stringify(books));updBdg();}
 function updBdg(){
+  document.title = 'Trần Hoà Computer – Quản Trị' + (books.filter(function(b){return b.status==='pending';}).length ? ' 🔔' : '');
   var n=books.filter(function(b){return b.status==='pending';}).length;
   var el=document.getElementById('pbadge');el.textContent=n;el.style.display=n>0?'':'none';
 
@@ -780,7 +782,11 @@ function getStats(){
     else if(b.status==='cancelled')s.cancelled++;
   });return s;
 }
+var _syncDebounce=null;
 async function doSync(){
+  // Debounce 500ms để tránh gọi liên tiếp
+  if(_syncDebounce){clearTimeout(_syncDebounce);_syncDebounce=null;}
+  await new Promise(function(res){_syncDebounce=setTimeout(res,300);});
   var _si=document.getElementById('synicon');
   if(_si)_si.classList.add('syncing');
   setSL('ing','Đang đồng bộ...');
@@ -794,6 +800,8 @@ async function doSync(){
         if (!b) return b;
         if (!b.customerName && (b['Full name']||b['full name']||b.name)) b.customerName = b['Full name']||b['full name']||b.name;
         if (!b.phone        && b.Phone)       b.phone        = b.Phone;
+        if (b.phone) b.phone = String(b.phone).trim();
+        if (b.customerName) b.customerName = String(b.customerName||'').trim();
         if (!b.deviceType   && (b.Service||b.service)) b.deviceType = b.Service||b.service;
         if (!b.issue        && (b.Note||b.note))   b.issue  = b.Note||b.note;
         if (!b.technician   && b.Technician)  b.technician   = b.Technician;
@@ -893,21 +901,34 @@ function bookingToSheetRow(b) {
   };
 }
 
+// Helper: fetch với retry khi gặp 429/503
+async function fetchWithRetry(url, opts, maxRetry){
+  maxRetry = maxRetry||2;
+  for(var _r=0;_r<=maxRetry;_r++){
+    try{
+      var _res = await fetch(url, opts);
+      if(_res.status===429||_res.status===503){
+        if(_r<maxRetry){ await new Promise(function(ok){setTimeout(ok,1200*(_r+1));}); continue; }
+      }
+      return _res;
+    }catch(e){ if(_r===maxRetry) throw e; await new Promise(function(ok){setTimeout(ok,800);}); }
+  }
+}
 async function pushToSheets(b, isNew){
   try{
     var row = bookingToSheetRow(b);
     var res;
     if (isNew) {
-      res = await fetch(SHEETDB_URL, {
+      res = await fetchWithRetry(SHEETDB_URL, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ data: [row] })
       });
-      if (res.ok) { setSL('ok','Đã lưu lên Sheets'); return b.id; }
+      if (res.ok) { setSL('ok','Đã lưu lên Sheets'); b.Id = b.id; saveBooks(); return b.id; }
       else { setSL('err','Lỗi lưu Sheets'); toast('Lỗi lưu SheetDB: '+res.status,'err'); return false; }
     } else {
       // Thử PATCH theo Id trước
-      var patchRes = await fetch(SHEETDB_URL + '/Id/' + encodeURIComponent(b.id), {
+      var patchRes = await fetchWithRetry(SHEETDB_URL + '/Id/' + encodeURIComponent(b.id), {
         method: 'PATCH',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ data: row })
@@ -1122,7 +1143,7 @@ function safeStr(s) {
   if(isMob && mwrap) mwrap.innerHTML = rows;
   if(!isMob && tb) tb.innerHTML = rows;
 }
-function qkSt(id,val){var b=books.find(function(x){return x.id===id;});if(b){b.status=val;b.updatedAt=new Date().toISOString();saveBooks();pushToSheets(b,false);renderDash();toast('Cập nhật: '+SM[val].l,'ok');}}
+function qkSt(id,val){var b=books.find(function(x){return x.id===id;});if(b){b.status=val;b.updatedAt=new Date().toISOString();saveBooks();pushToSheets(b,false);renderAll();toast('Cập nhật: '+SM[val].l,'ok');}}
 
 function resetForm(){
   ['cN','ph','em','ad','br','md','sr','is','tc','nt'].forEach(function(f){var el=document.getElementById('fw_'+f);if(el)el.value='';});
@@ -1181,7 +1202,7 @@ function doSave(){
     toast('Đã cập nhật lịch hẹn','ok');
   }else{
     var id='BK'+Date.now();
-    var nb=Object.assign({id:id,status:'pending',createdAt:now},obj);
+    var nb=Object.assign({id:id,status:'pending',createdAt:now,source:'admin'},obj);
     books.unshift(nb);saveBooks();renderAll();
     pushToSheets(nb,true).then(function(ret){
       if(ret && typeof ret==='string' && ret!==id){
@@ -1298,7 +1319,7 @@ function doPrint(id){
         +_row('Khách hàng', _esc(b.customerName||'—'))
         +_row('Điện thoại', _esc(b.phone||'—'))
         +_row('Địa chỉ', _esc(b.address||'—'))
-        +_row('Thiết bị', _esc((b.deviceType?b.deviceType+' · ':'') + (b.brand||'') + (b.model? ' '+b.model: '')))
+        +_row('Thiết bị', _esc((b.deviceType?svcLabel(b.deviceType)+' · ':'') + (b.brand||'') + (b.model? ' '+b.model: '')))
         +_row('Serial/IMEI', _esc(b.serial||'—'))
         +_row('Vấn đề', _esc(b.issue||'—'))
         +_row('Kỹ thuật viên', _esc(b.technician||'—'))
@@ -1320,7 +1341,7 @@ function doPrint(id){
 function doExport(){
   var headers=['Ma DL','Họ tên','SDT','Email','Thiết bị','Thương hiệu','Model','Vấn đề','Trạng thái','Ngày hẹn','Chi phí thực tế','KTV','Ghi chú','Ngày tạo'];
   var rows=books.map(function(b){
-    return [b.id,b.customerName,b.phone,b.email||'',b.deviceType,b.brand,b.model||'',
+    return [b.id,b.customerName,b.phone,b.email||'',svcLabel(b.deviceType),b.brand,b.model||'',
       '"'+(b.issue||'').replace(/"/g,'""')+'"',SM[b.status]?SM[b.status].l:b.status,
       fdt(b.scheduledAt),b.actualCost||'',b.technician||'',b.notes||'',fdt(b.createdAt)].join(',');
   });
