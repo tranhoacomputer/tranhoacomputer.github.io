@@ -1,4 +1,4 @@
-<!-- index_v28.html | Tran Hoa Computer | 2026-06-13 | v28: fix SheetDB Id column, service labels, admin pushToSheets fallback -->
+<!-- index_v29.html | Tran Hoa Computer | 2026-06-13 | v29: lookup cache 30s, clear cache on submit, createdAt shown -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -3778,12 +3778,19 @@ body {
         var url  = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneWith0);
         var url2 = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneNorm);
 
-        Promise.all([
+        // Cache 30s để tránh double-tap gọi lại API
+        var _cacheKey = 'lookup_'+phoneWith0;
+        var _cached = null;
+        try{ var _cs=sessionStorage.getItem(_cacheKey); if(_cs){var _co=JSON.parse(_cs);if(Date.now()-_co.t<30000)_cached=_co.d;} }catch(e){}
+        var _lookupPromise = _cached ? Promise.resolve([_cached,[]]) : Promise.all([
             fetch(url).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
             fetch(url2).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
-        ]).then(function(results) {
+        ]);
+        _lookupPromise.then(function(results) {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
             var rows1 = results[0], rows2 = results[1];
+            // Lưu vào session cache 30s
+            try{ if(!_cached) sessionStorage.setItem(_cacheKey, JSON.stringify({t:Date.now(),d:rows1})); }catch(e){}
             var seen = new Set();
             var allRows = (Array.isArray(rows1)?rows1:[]).concat(Array.isArray(rows2)?rows2:[]).filter(function(r) {
                 var id = r.id||r.Id||JSON.stringify(r);
@@ -4203,6 +4210,8 @@ body {
                 .then(function(result) {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
                         form.reset();
+                        // Xóa cache tra cứu để kết quả luôn mới sau khi đặt lịch
+                        try{ sessionStorage.clear(); }catch(e){}
                         openModal();
 
                         /* Update counter */
