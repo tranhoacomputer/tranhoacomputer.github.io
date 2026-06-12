@@ -860,6 +860,21 @@ async function doSync(){
 var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       var rows=dataArr.filter(function(r){return!del.includes(r.id);});
       var ids=new Set(rows.map(function(r){return r.id;}));
+      // Merge: giữ lại các field local mà SheetDB không có (technician, returnDate, estimatedCost, actualCost, notes)
+      var _localMap={};
+      books.forEach(function(b){ if(b.id) _localMap[b.id]=b; });
+      rows = rows.map(function(r){
+        var loc=_localMap[r.id];
+        if(loc){
+          // Ưu tiên SheetDB nếu có, ngược lại giữ local
+          if(!r.technician   && loc.technician)   r.technician   = loc.technician;
+          if(!r.returnDate   && loc.returnDate)    r.returnDate   = loc.returnDate;
+          if(!r.estimatedCost && loc.estimatedCost) r.estimatedCost = loc.estimatedCost;
+          if(!r.actualCost   && loc.actualCost)    r.actualCost   = loc.actualCost;
+          if(!r.notes        && loc.notes)         r.notes        = loc.notes;
+        }
+        return r;
+      });
       // Giữ lại các booking cục bộ chưa có trên SheetDB (mới tạo chưa đẩy lên)
       books=rows.concat(books.filter(function(b){return!ids.has(b.id)&&b.source==='customer_form'||!ids.has(b.id)&&(b.source||'')!=='demo';}));
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
