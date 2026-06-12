@@ -3792,25 +3792,28 @@ body {
         var url  = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneWith0);
         var url2 = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneNorm);
 
-        // Cache 30s để tránh double-tap gọi lại API
+        // Cache 60s để tránh double-tap gọi lại API
         var _cacheKey = 'lookup_'+phoneWith0;
         var _cached = null;
-        try{ var _cs=sessionStorage.getItem(_cacheKey); if(_cs){var _co=JSON.parse(_cs);if(Date.now()-_co.t<30000)_cached=_co.d;} }catch(e){}
-        var _lookupPromise = _cached ? Promise.resolve([_cached,[]]) : Promise.all([
+        try{ var _cs=sessionStorage.getItem(_cacheKey); if(_cs){var _co=JSON.parse(_cs);if(Date.now()-_co.t<60000)_cached=_co.d;} }catch(e){}
+        // Gọi song song cả 2 dạng phone (có/không số 0) - SheetDB có thể lưu dạng nào cũng được
+        var _lookupPromise = _cached ? Promise.resolve([_cached,[],[],[]]) : Promise.all([
             fetch(url).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
-            fetch(url2).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
+            fetch(url2).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
+            fetch(SHEETDB_URL + '/search?Phone=+84' + encodeURIComponent(phoneNorm)).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
+            fetch(SHEETDB_URL + '/search?phone=' + encodeURIComponent(phoneWith0)).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
         ]);
         _lookupPromise.then(function(results) {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-            var rows1 = results[0], rows2 = results[1];
-            // Lưu vào session cache 30s
-            try{ if(!_cached) sessionStorage.setItem(_cacheKey, JSON.stringify({t:Date.now(),d:rows1})); }catch(e){}
+            var rows1 = results[0]||[], rows2 = results[1]||[], rows3 = results[2]||[], rows4 = results[3]||[];
             var seen = new Set();
-            var allRows = (Array.isArray(rows1)?rows1:[]).concat(Array.isArray(rows2)?rows2:[]).filter(function(r) {
+            var allRows = rows1.concat(rows2).concat(rows3).concat(rows4).filter(function(r) {
                 var id = r.id||r.Id||JSON.stringify(r);
                 if (seen.has(id)) return false;
                 seen.add(id); return true;
             });
+            // Chỉ cache khi có kết quả
+            try{ if(!_cached && allRows.length>0) sessionStorage.setItem(_cacheKey, JSON.stringify({t:Date.now(),d:allRows})); }catch(e){}
             if (allRows.length) {
                 var html = buildResultHTML(allRows);
                 if (html) { resultEl.innerHTML = html; return; }
