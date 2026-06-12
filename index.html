@@ -3750,6 +3750,7 @@ body {
                 }
                 const dt = _dtDisplay;
                 const costEst = item.estimated_cost||item.estimatedCost||item.estCost||'';
+                const returnDate = (item.return_date||item.returnDate||item.Return_date||'').trim();
                 const aNote   = item.Notes||item.notes||item.adminNote||'';
                 const cust    = item['Full name']||item.Full_name||item.customerName||item.fullName||item.name||phoneWith0;
                 const fillPct = isCancelled ? 0 : Math.min(82,(curStep/(STEPS.length-1))*72+10);
@@ -3762,10 +3763,11 @@ body {
                 if(isCancelled) step+='<div class="status-step"><div class="status-step-dot s-cancel">✕</div><div class="status-step-label">Đã hủy</div></div>';
                 step+='</div>';
                 let chips='';
-                if(dt||costEst||aNote){
+                if(dt||costEst||aNote||returnDate){
                     chips='<div class="status-extra-chips">';
                     if(dt) chips+='<span class="s-chip">📅 '+dt+'</span>';
-                    if(costEst) chips+='<span class="s-chip s-cost">💰 '+costEst+'</span>';
+                    if(returnDate) chips+='<span class="s-chip" style="background:#d1fae5;color:#065f46;font-weight:600">🔁 Hẹn trả: '+returnDate+'</span>';
+                    if(costEst) chips+='<span class="s-chip s-cost">💰 ~'+Number(costEst).toLocaleString('vi-VN')+'đ</span>';
                     if(aNote) chips+='<span class="s-chip s-note">📝 '+aNote+'</span>';
                     chips+='</div>';
                 }
@@ -3773,7 +3775,7 @@ body {
                     '<div class="status-result-row"><span class="status-result-label">Khách hàng</span><span class="status-result-value">'+cust+'</span></div>'+
                     (svc?'<div class="status-result-row"><span class="status-result-label">Dịch vụ</span><span class="status-result-value">'+svc+'</span></div>':'')+
                     '<div class="status-result-row"><span class="status-result-label">Trạng thái</span><span class="status-result-value"><span class="status-badge '+badge+'">'+(statusLabel[badge]||item.Status||item.status||'Chờ xử lý')+'</span></span></div>'+
-                    (tech?'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value">'+tech+'</span></div>':'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#f59e0b;">Chưa phân công</span></div>')+
+                    (tech?'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#059669;font-weight:600">👨‍🔧 '+tech+'</span></div>':'<div class="status-result-row"><span class="status-result-label">Kỹ thuật viên</span><span class="status-result-value" style="color:#f59e0b;font-weight:600">⏳ Chưa phân công</span></div>')+
                     step+chips+'</div>';
             });
             return outHtml;
