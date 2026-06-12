@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v29.html | Tran Hoa Computer | 2026-06-13 | v29: fetchWithRetry, debounce, svcLabel fixes, qkSt renderAll -->
+<!-- admin_v30.html | Tran Hoa Computer | 2026-06-13 | v30: svcLabel viewDet, fdt safe parse, scheduledAt ISO fix, bookingToSheetRow date -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -818,7 +818,14 @@ async function doSync(){
         if (!b.id) b.id = b.Id || b.ID || '';
         if (!b.createdAt)   b.createdAt    = b.createdAt || '';
         if (!b.scheduledAt && b.Date) {
-          b.scheduledAt = b.Time_slot ? (b.Date + 'T' + b.Time_slot) : b.Date;
+          // Đảm bảo format đầy đủ HH:MM:SS để tránh Invalid Date trên Safari/iOS
+          if (b.Time_slot) {
+            var ts = b.Time_slot.trim();
+            if (/^\d{1,2}:\d{2}$/.test(ts)) ts = ts + ':00';
+            b.scheduledAt = b.Date + 'T' + ts;
+          } else {
+            b.scheduledAt = b.Date;
+          }
         }
         var statusMap = {
           'chờ xử lý':'pending','cho xu ly':'pending','pending':'pending',
@@ -875,9 +882,15 @@ function setSL(t,x){
   }
 }
 function bookingToSheetRow(b) {
-  var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
-  var dateStr = d ? d.toISOString().slice(0,10) : '';
-  var timeStr = d ? d.toTimeString().slice(0,5) : '';
+  var d = null;
+  if(b.scheduledAt){
+    var _s = String(b.scheduledAt).replace(' ','T');
+    if(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(_s)) _s += ':00';
+    d = new Date(_s);
+    if(isNaN(d.getTime())) d = null;
+  }
+  var dateStr = d ? d.toISOString().slice(0,10) : (b.Date||'');
+  var timeStr = d ? d.toTimeString().slice(0,5) : (b.Time_slot||'');
   return {
     Id:           b.id || '',
     'Full name':  b.customerName || '',
@@ -1011,7 +1024,20 @@ var SVC_MAP={
   'cuu-data':'Cứu dữ liệu','bao-duong':'Vệ sinh / bảo dưỡng','tu-van':'Tư vấn linh kiện','khac':'Dịch vụ khác'
 };
 function svcLabel(v){return SVC_MAP[v]||v||'--';}
-function fdt(v){return v?new Date(v).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'}):'--';}
+function fdt(v){
+  if(!v) return '--';
+  var d = new Date(v);
+  if(isNaN(d.getTime())){
+    // Thử parse "YYYY-MM-DD HH:MM" hoặc "YYYY-MM-DDTHH:MM" không có seconds
+    var s = String(v).replace(' ','T');
+    if(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(s)) s += ':00';
+    d = new Date(s);
+  }
+  if(isNaN(d.getTime())) return v;
+  // Nếu là date-only (không có time info), chỉ hiện ngày
+  if(/^\d{4}-\d{2}-\d{2}$/.test(String(v))) return d.toLocaleDateString('vi-VN',{dateStyle:'short'});
+  return d.toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
+}):'--';}
 function ini(n){return n?n.trim().split(' ').map(function(w){return w[0];}).slice(-2).join('').toUpperCase():'?';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 var SM={
@@ -1236,7 +1262,7 @@ function viewDet(id){
     +'</div>'
     +'<div class="det-block">'
     +'<h4>💻 Thông tin thiết bị</h4>'
-    +'<div class="det-row"><span class="det-label">Loại thiết bị</span><span class="det-val hi">'+esc(b.deviceType||'—')+'</span></div>'
+    +'<div class="det-row"><span class="det-label">Loại thiết bị</span><span class="det-val hi">'+esc(svcLabel(b.deviceType)||'—')+'</span></div>'
     +(b.brand?'<div class="det-row"><span class="det-label">Thương hiệu</span><span class="det-val">'+esc(b.brand)+(b.model?' <span style="color:var(--muted)">· '+esc(b.model)+'</span>':'')+'</span></div>':'')
     +(b.issue?'<div class="det-row"><span class="det-label">Mô tả vấn đề</span><span class="det-val" style="line-height:1.5">'+esc(b.issue)+'</span></div>':'')
     +'</div>'
