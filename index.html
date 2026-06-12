@@ -2116,6 +2116,15 @@ body {
     [data-theme="dark"] .s-chip.s-note{background:#1e1040;border-color:#5b21b6;color:#c4b5fd;}
 
     </style>
+    <!-- ── Áp dụng theme NGAY LẬP TỨC để tránh nhấp nháy sáng/tối khi tải trang ── -->
+    <script>
+    (function(){
+        var t = localStorage.getItem('themeOverride');
+        if (t === 'dark' || t === 'light') {
+            document.documentElement.setAttribute('data-theme', t);
+        }
+    })();
+    </script>
 </head>
 <body>
     <div id="scrollProgressBar"></div>
@@ -3651,7 +3660,10 @@ body {
 
             </div>
         </div>
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;"><p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p></div>
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;">
+            <p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p>
+            <p style="margin-top:8px;"><a href="admin-1.html" style="color:#475569;text-decoration:none;font-size:11px;">⚙️ Trang quản trị</a></p>
+        </div>
     </footer>
     <div class="bottom-nav">
         <a href="tel:0963284044" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.62 10.79z"/></svg><span>Gọi Ngay</span></a>
@@ -3748,29 +3760,13 @@ body {
         }
 
         function matchPhone(row) {
-            const p = (row.Phone||row.phone||row.customerPhone||'').replace(/\D/g,'');
+            // Hỗ trợ cả "Phone" và "Phone " (có dấu cách thừa trong Google Sheet)
+            const p = (row.Phone || row['Phone '] || row.phone || row.customerPhone || '').replace(/\D/g,'');
             return p === phoneNorm || p === phoneWith0.replace(/\D/g,'');
         }
 
-        // 1) Ưu tiên: đọc từ localStorage thc_books (cùng kho dữ liệu với trang quản trị)
-        var localRows = [];
-        try {
-            var stored = localStorage.getItem('thc_books');
-            if (stored) {
-                var parsed = JSON.parse(stored);
-                if (Array.isArray(parsed)) {
-                    localRows = parsed.filter(matchPhone);
-                }
-            }
-        } catch(e) {}
-
-        if (localRows.length > 0) {
-            btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-            var html = buildResultHTML(localRows);
-            if (html) { resultEl.innerHTML = html; return; }
-        }
-
-        // 2) Dự phòng: gọi SheetDB API
+        // 1) Ưu tiên: gọi SheetDB API để lấy trạng thái MỚI NHẤT từ admin
+        //    (admin cập nhật trên SheetDB, không cập nhật localStorage của khách hàng)
         var url  = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneWith0);
         var url2 = SHEETDB_URL + '/search?Phone=' + encodeURIComponent(phoneNorm);
 
@@ -3782,18 +3778,42 @@ body {
             var rows1 = results[0], rows2 = results[1];
             var seen = new Set();
             var allRows = (Array.isArray(rows1)?rows1:[]).concat(Array.isArray(rows2)?rows2:[]).filter(function(r) {
-                var id = r.Id||r.id||JSON.stringify(r);
+                var id = r.id||r.Id||JSON.stringify(r);
                 if (seen.has(id)) return false;
                 seen.add(id); return true;
             });
-            if (!allRows.length) {
-                resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</span></div>';
-                return;
+            if (allRows.length) {
+                var html = buildResultHTML(allRows);
+                if (html) { resultEl.innerHTML = html; return; }
             }
-            var html = buildResultHTML(allRows);
-            if (html) resultEl.innerHTML = html;
+            // 2) Dự phòng: dùng localStorage nếu SheetDB không trả kết quả (offline / mới đặt)
+            var localRows = [];
+            try {
+                var stored = localStorage.getItem('thc_books');
+                if (stored) {
+                    var parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) localRows = parsed.filter(matchPhone);
+                }
+            } catch(e) {}
+            if (localRows.length > 0) {
+                var html2 = buildResultHTML(localRows);
+                if (html2) { resultEl.innerHTML = html2; return; }
+            }
+            resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</span></div>';
         }).catch(function() {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
+            var localRows = [];
+            try {
+                var stored = localStorage.getItem('thc_books');
+                if (stored) {
+                    var parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) localRows = parsed.filter(matchPhone);
+                }
+            } catch(e) {}
+            if (localRows.length > 0) {
+                var html = buildResultHTML(localRows);
+                if (html) { resultEl.innerHTML = html; return; }
+            }
             resultEl.innerHTML = '<div class="status-not-found">⚠️ Không thể kết nối lúc này. Vui lòng gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</div>';
         });
     }
@@ -4090,6 +4110,78 @@ body {
                 var ph = document.getElementById('inputPhone');
                 if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
 
+                /* ── Lưu booking vào localStorage NGAY LẬP TỨC (trước khi gửi email)
+                   → đảm bảo tra cứu & admin panel hoạt động kể cả khi mạng chậm/lỗi ── */
+                var _lsBookingId = 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
+                try {
+                  var _lsBooking = {
+                    id:           _lsBookingId,
+                    customerName: obj['fullname'] || '',
+                    'Full name':  obj['fullname'] || '',
+                    Phone:        obj['phone'] || '',
+                    phone:        obj['phone'] || '',
+                    Service:      obj['service'] || '',
+                    service:      obj['service'] || '',
+                    deviceType:   obj['service'] || '',
+                    Date:         obj['date'] || '',
+                    date:         obj['date'] || '',
+                    scheduledAt:  obj['date'] ? (obj['date'] + (obj['time-slot'] ? 'T' + obj['time-slot'] : '')) : '',
+                    Time_slot:    obj['time-slot'] || '',
+                    timeSlot:     obj['time-slot'] || '',
+                    Note:         obj['note'] || '',
+                    note:         obj['note'] || '',
+                    issue:        obj['note'] || '',
+                    Status:       'pending',
+                    status:       'pending',
+                    createdAt:    new Date().toISOString(),
+                    source:       'customer_form'
+                  };
+                  var _lsRaw = localStorage.getItem('thc_books');
+                  var _lsArr = _lsRaw ? JSON.parse(_lsRaw) : [];
+                  if (!Array.isArray(_lsArr)) _lsArr = [];
+                  _lsArr.unshift(_lsBooking);
+                  localStorage.setItem('thc_books', JSON.stringify(_lsArr));
+                } catch(lsErr) {}
+
+                /* ── Đẩy booking lên SheetDB & Google Apps Script NGAY LẬP TỨC
+                   (độc lập với kết quả gửi email — đảm bảo tra cứu hoạt động trên mọi thiết bị) ── */
+                try {
+                  var sdbUrl = typeof SHEETDB_URL !== 'undefined' ? SHEETDB_URL : null;
+                  if (sdbUrl && obj['phone']) {
+                    fetch(sdbUrl, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({ data: [{
+                        'id':        _lsBookingId,
+                        'Full name': obj['fullname'] || '',
+                        'Phone':     obj['phone'] || '',
+                        'Service':   obj['service'] || '',
+                        'Date':      obj['date'] || '',
+                        'Time_slot': obj['time-slot'] || '',
+                        'Note':      obj['note'] || '',
+                        'Status':    'pending',
+                        'createdAt': new Date().toISOString()
+                      }]})
+                    }).catch(function(){});
+                  }
+                  var gsUrl = typeof GOOGLE_SCRIPT_URL !== 'undefined' ? GOOGLE_SCRIPT_URL : null;
+                  if (gsUrl && obj['phone']) {
+                    fetch(gsUrl, {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({ action:'addBooking', data:{
+                        name:    obj['fullname'] || '',
+                        phone:   obj['phone'] || '',
+                        service: obj['service'] || '',
+                        date:    obj['date'] || '',
+                        time:    obj['time-slot'] || '',
+                        note:    obj['note'] || '',
+                        status:  'pending'
+                      }})
+                    }).catch(function(){});
+                  }
+                } catch(pushErr) {}
+
                 fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -4104,76 +4196,6 @@ body {
                     if (result.status === "success" || result.success === "true" || result.success === true) {
                         form.reset();
                         openModal();
-
-                        /* ── Lưu booking vào localStorage để admin panel và tra cứu hoạt động ngay ── */
-                        try {
-                          var newBooking = {
-                            id: 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
-                            customerName: obj['fullname'] || '',
-                            'Full name':  obj['fullname'] || '',
-                            Phone:        obj['phone'] || '',
-                            phone:        obj['phone'] || '',
-                            Service:      obj['service'] || '',
-                            service:      obj['service'] || '',
-                            Date:         obj['date'] || '',
-                            date:         obj['date'] || '',
-                            Time_slot:    obj['time-slot'] || '',
-                            timeSlot:     obj['time-slot'] || '',
-                            Note:         obj['note'] || '',
-                            note:         obj['note'] || '',
-                            Status:       'pending',
-                            status:       'pending',
-                            createdAt:    new Date().toISOString(),
-                            source:       'customer_form'
-                          };
-                          var existingRaw = localStorage.getItem('thc_books');
-                          var existingArr = existingRaw ? JSON.parse(existingRaw) : [];
-                          if (!Array.isArray(existingArr)) existingArr = [];
-                          existingArr.unshift(newBooking);
-                          localStorage.setItem('thc_books', JSON.stringify(existingArr));
-                        } catch(lsErr) {}
-
-                        /* ── Đẩy booking lên Google Sheet qua Apps Script ── */
-                        try {
-                          var gsData = {
-                            action: 'addBooking',
-                            data: {
-                              name:    obj['fullname'] || '',
-                              phone:   obj['phone'] || '',
-                              service: obj['service'] || '',
-                              date:    obj['date'] || '',
-                              time:    obj['time-slot'] || '',
-                              note:    obj['note'] || '',
-                              status:  'pending'
-                            }
-                          };
-                          var gsUrl = typeof GOOGLE_SCRIPT_URL !== 'undefined' ? GOOGLE_SCRIPT_URL : null;
-                          if (gsUrl && gsData.data.phone) {
-                            fetch(gsUrl, {
-                              method: 'POST',
-                              headers: {'Content-Type': 'application/json'},
-                              body: JSON.stringify(gsData)
-                            }).catch(function(){});  /* Silent fail — FormSubmit already sent email */
-                          }
-                          /* ── Đẩy booking lên SheetDB ── */
-                          var sdbUrl = typeof SHEETDB_URL !== 'undefined' ? SHEETDB_URL : null;
-                          if (sdbUrl && obj['phone']) {
-                            fetch(sdbUrl, {
-                              method: 'POST',
-                              headers: {'Content-Type': 'application/json'},
-                              body: JSON.stringify({ data: [{
-                                'Full name': obj['fullname'] || '',
-                                'Phone':     obj['phone'] || '',
-                                'Service':   obj['service'] || '',
-                                'Date':      obj['date'] || '',
-                                'Time_slot': obj['time-slot'] || '',
-                                'Note':      obj['note'] || '',
-                                'Status':    'pending',
-                                'createdAt': new Date().toISOString()
-                              }]})
-                            }).catch(function(){});  /* Silent fail */
-                          }
-                        } catch(gsErr) {}
 
                         /* Update counter */
                         fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
@@ -4313,13 +4335,11 @@ body {
 
     <script>
     // ── Theme: mặc định sáng, người dùng có thể chuyển thủ công, lưu vào localStorage ──
-    (function initTheme() {
-        var saved = localStorage.getItem('themeOverride'); // 'dark' | 'light' | null
-        applyTheme(saved || 'light');
-    })();
+    // (data-theme đã được set sớm trong <head> để tránh nhấp nháy — xem script inline trên)
 
     function applyTheme(t) {
         document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('themeOverride', t);
         var dIcon = document.getElementById('darkIcon');
         var lIcon = document.getElementById('lightIcon');
         if (dIcon && lIcon) {
@@ -4330,10 +4350,14 @@ body {
 
     function toggleDarkMode() {
         var cur = document.documentElement.getAttribute('data-theme') || 'light';
-        var next = (cur === 'dark') ? 'light' : 'dark';
-        localStorage.setItem('themeOverride', next);
-        applyTheme(next);
+        applyTheme(cur === 'dark' ? 'light' : 'dark');
     }
+
+    // Đồng bộ icon trạng thái sau khi DOM sẵn sàng
+    document.addEventListener('DOMContentLoaded', function () {
+        var saved = localStorage.getItem('themeOverride') || 'light';
+        applyTheme(saved);
+    });
     </script>
 <!-- ══ FLOATING CIRCLES — call + Zalo only ══ -->
 <div id="floatBtnGroup">

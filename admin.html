@@ -655,13 +655,12 @@ var books=[],editId=null,cfg={},sch=null,_sortK='scheduledAt',_sortD=1,_autoSync
 
 function initAfterAuth(){
   loadBooks();
-  // Nếu không có dữ liệu, tạo demo
-  if(books.length===0) initDemoData();
   startClk();renderDash();renderBT();
   var _modal=document.getElementById('modov');
   if(_modal)_modal.addEventListener('click',function(e){if(e.target===_modal)cMod();});
+  // Luôn đồng bộ từ SheetDB khi khởi động (ưu tiên dữ liệu thực từ Google Sheets)
+  doSync();
   if(cfg.autoSync){startAutoSync();}
-  if(books.length===0 && cfg.autoSync){ doSync(); }
 }
 
 function startAutoSync(){
@@ -806,8 +805,10 @@ async function doSync(){
         if (!b.notes        && b.Notes)       b.notes        = b.Notes;
         if (!b.estimatedCost && b.estimated_cost) b.estimatedCost = b.estimated_cost;
         if (!b.actualCost   && b.actual_cost) b.actualCost   = b.actual_cost;
-        if (!b.id           && b.Id)          b.id           = b.Id;
-        if (!b.createdAt    && b.createdAt)   b.createdAt    = b.createdAt;
+        // Hỗ trợ cả 'id' (chữ thường - header Google Sheet) và 'Id'
+        if (!b.id && (b.id === undefined || b.id === '')) b.id = b.Id || b.ID || '';
+        if (!b.id) b.id = b.Id || b.ID || '';
+        if (!b.createdAt)   b.createdAt    = b.createdAt || '';
         if (!b.scheduledAt && b.Date) {
           b.scheduledAt = b.Time_slot ? (b.Date + 'T' + b.Time_slot) : b.Date;
         }
@@ -830,19 +831,23 @@ async function doSync(){
       }
       dataArr = dataArr.map(normalizeBooking);
       dataArr = dataArr.map(function(b, idx) {
-        if (!b.id) {
+        if (!b.id || b.id === '') {
           b.id = 'sdb_' + (b.phone||b.Phone||'').replace(/\D/g,'') + '_' + (b.Date||b.date||'').replace(/\D/g,'') + '_' + idx;
-          b.Id = b.id;
         }
+        // Luôn đồng bộ cả hai biến để tương thích
+        b.Id = b.id;
         return b;
       });
 var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       var rows=dataArr.filter(function(r){return!del.includes(r.id);});
       var ids=new Set(rows.map(function(r){return r.id;}));
-      books=rows.concat(books.filter(function(b){return!ids.has(b.id);}));
+      // Giữ lại các booking cục bộ chưa có trên SheetDB (mới tạo chưa đẩy lên)
+      books=rows.concat(books.filter(function(b){return!ids.has(b.id)&&b.source==='customer_form'||!ids.has(b.id)&&(b.source||'')!=='demo';}));
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
       toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
     }else{
+      // SheetDB trả về dữ liệu rỗng — chỉ dùng dữ liệu cục bộ
+      if(books.length===0) initDemoData();
       setSL('ok','Dùng dữ liệu cục bộ');
       renderAll();
     }
@@ -866,7 +871,7 @@ function bookingToSheetRow(b) {
   var dateStr = d ? d.toISOString().slice(0,10) : '';
   var timeStr = d ? d.toTimeString().slice(0,5) : '';
   return {
-    Id:           b.id || '',
+    id:           b.id || '',
     'Full name':  b.customerName || '',
     Phone:        b.phone || '',
     Service:      b.deviceType || '',
@@ -899,7 +904,7 @@ async function pushToSheets(b, isNew){
         body: JSON.stringify({ data: [row] })
       });
     } else {
-      res = await fetch(SHEETDB_URL + '/Id/' + encodeURIComponent(b.id), {
+      res = await fetch(SHEETDB_URL + '/id/' + encodeURIComponent(b.id), {
         method: 'PATCH',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ data: row })
@@ -912,7 +917,7 @@ async function pushToSheets(b, isNew){
 
 async function deleteFromSheets(id){
   try{
-    var res = await fetch(SHEETDB_URL + '/Id/' + encodeURIComponent(id), { method: 'DELETE' });
+    var res = await fetch(SHEETDB_URL + '/id/' + encodeURIComponent(id), { method: 'DELETE' });
     if (!res.ok) toast('Lỗi xóa trên SheetDB: '+res.status,'err');
   }catch(e){ toast('Lỗi khi xóa trên SheetDB','err'); }
 }
