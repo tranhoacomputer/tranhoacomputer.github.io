@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v31.html | Tran Hoa Computer | 2026-06-13 | v31: fix JS syntax (fdt remnant + trailing backtick), all features restored -->
+<!-- admin_v32.html | Tran Hoa Computer | 2026-06-13 | v32: quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -581,6 +581,9 @@ tr:hover td{background:#f8fafc}
     </div>
     <div class="fr">
       <div class="fd"><label>Kỹ thuật viên</label><input id="fw_tc" placeholder="Tên KTV..."/></div>
+      <div class="fd"><label>📅 Ngày hẹn trả máy</label><input id="fw_rd" type="date"/></div>
+    </div>
+    <div class="fr">
       <div class="fd"><label>Ghi chú nội bộ</label><input id="fw_nt" placeholder="Ghi chú..."/></div>
     </div>
   </div>
@@ -813,6 +816,7 @@ async function doSync(){
         if (!b.notes        && b.Notes)       b.notes        = b.Notes;
         if (!b.estimatedCost && b.estimated_cost) b.estimatedCost = b.estimated_cost;
         if (!b.actualCost   && b.actual_cost) b.actualCost   = b.actual_cost;
+        if (!b.returnDate   && b.return_date) b.returnDate   = b.return_date;
         // Hỗ trợ cả 'id' (chữ thường - header Google Sheet) và 'Id'
         if (!b.id && (b.id === undefined || b.id === '')) b.id = b.Id || b.ID || '';
         if (!b.id) b.id = b.Id || b.ID || '';
@@ -909,6 +913,7 @@ function bookingToSheetRow(b) {
     estimated_cost: b.estimatedCost || '',
     actual_cost:    b.actualCost || '',
     Notes:          b.notes || '',
+    return_date:    b.returnDate || '',
     createdAt:      b.createdAt || '',
     updatedAt:      b.updatedAt || new Date().toISOString()
   };
@@ -958,14 +963,14 @@ async function pushToSheets(b, isNew){
           var r2 = await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone0), {
             method: 'PATCH',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', Id: b.id} })
+            body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id} })
           });
           if (!r2.ok) {
             // Thử không có số 0
             await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phoneNorm), {
               method: 'PATCH',
               headers: {'Content-Type':'application/json'},
-              body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', Id: b.id} })
+              body: JSON.stringify({ data: {Status: b.status || row.Status, Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id} })
             });
           }
         }
@@ -1145,9 +1150,13 @@ function safeStr(s) {
         +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">'
         +'<div style="display:flex;flex-direction:column;gap:6px;flex:1">'
         +(b.scheduledAt?'<div style="font-size:12px;color:var(--muted)">📅 '+fdt(b.scheduledAt)+'</div>':'')
+        +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">👨‍🔧 '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">⏳ Chưa phân công KTV</div>')
+        +(b.returnDate?'<div style="font-size:12px;color:#10b981;font-weight:600">🔁 Hẹn trả: '+esc(b.returnDate)+'</div>':'')
+        +(b.estimatedCost?'<div style="font-size:12px;color:#f59e0b;font-weight:600">💰 ~'+fmt(b.estimatedCost)+'đ</div>':'')
         +'<select class="ssel" style="font-size:13px;padding:5px 8px;max-width:160px" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select>'
         +'</div>'
         +'<div style="display:flex;gap:6px;flex-shrink:0">'
+        +'<button class="btn b-sec" style="padding:7px 10px;font-size:13px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏️</button>'
         +'<button class="btn" style="padding:7px 10px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button>'
         +'<a class="btn b-ok" style="padding:7px 10px;font-size:13px;text-decoration:none" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'
         +'<button class="btn b-dan" style="padding:7px 10px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button>'
@@ -1171,8 +1180,44 @@ function safeStr(s) {
 }
 function qkSt(id,val){var b=books.find(function(x){return x.id===id;});if(b){b.status=val;b.updatedAt=new Date().toISOString();saveBooks();pushToSheets(b,false);renderAll();toast('Cập nhật: '+SM[val].l,'ok');}}
 
+// Quick-edit inline: KTV, ngày trả, chi phí ước tính
+function qkEdit(id){
+  var b=books.find(function(x){return x.id===id;}); if(!b) return;
+  var ov=document.getElementById('modov'); if(!ov) return;
+  ov.style.display='flex';
+  ov.innerHTML='<div class="modw" style="max-width:400px;width:94%;padding:0;border-radius:16px;overflow:hidden">'
+    +'<div style="background:var(--primary);color:#fff;padding:14px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center">'
+    +'<span>✏️ Cập nhật nhanh</span>'
+    +'<button onclick="cMod()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>'
+    +'</div>'
+    +'<div style="padding:18px;background:var(--surface)">'
+    +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lịch hẹn <b>'+esc(b.customerName)+'</b> – <span style="color:var(--primary)">'+esc(b.id)+'</span></div>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">👨‍🔧 Kỹ thuật viên</label>'
+    +'<input id="qe_tc" value="'+esc(b.technician||'')+'" placeholder="Nhập tên KTV..." style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">📅 Ngày hẹn trả máy</label>'
+    +'<input id="qe_rd" type="date" value="'+esc(b.returnDate||'')+'" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
+    +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">💰 Chi phí ước tính (VND)</label>'
+    +'<input id="qe_ec" type="number" value="'+esc(b.estimatedCost||'')+'" placeholder="150000" min="0" step="10000" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
+    +'<div style="display:flex;gap:10px">'
+    +'<button onclick="cMod()" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);font-size:14px;cursor:pointer;font-family:inherit">Huỷ</button>'
+    +'<button onclick="qkEditSave(\''+id+'\')" style="flex:2;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">💾 Lưu</button>'
+    +'</div>'
+    +'</div></div>';
+}
+
+function qkEditSave(id){
+  var b=books.find(function(x){return x.id===id;}); if(!b) return;
+  var tc=(document.getElementById('qe_tc').value||'').trim();
+  var rd=(document.getElementById('qe_rd').value||'').trim();
+  var ec=Number(document.getElementById('qe_ec').value)||null;
+  b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec;
+  b.updatedAt=new Date().toISOString();
+  saveBooks(); pushToSheets(b,false); renderAll(); cMod();
+  toast('Đã cập nhật thông tin kỹ thuật','ok');
+}
+
 function resetForm(){
-  ['cN','ph','em','ad','br','md','sr','is','tc','nt'].forEach(function(f){var el=document.getElementById('fw_'+f);if(el)el.value='';});
+  ['cN','ph','em','ad','br','md','sr','is','tc','nt','rd'].forEach(function(f){var el=document.getElementById('fw_'+f);if(el)el.value='';});
   document.getElementById('fw_dt').value='Laptop';document.getElementById('fw_pr').value='normal';
   document.getElementById('fw_sa').value='';document.getElementById('fw_ec').value='';document.getElementById('fw_ac').value='';
   ['cN','ph','br','is'].forEach(function(f){clE(f);});
@@ -1190,6 +1235,7 @@ function doEdit(id){
   document.getElementById('fw_sa').value=b.scheduledAt?b.scheduledAt.slice(0,16):'';
   document.getElementById('fw_ec').value=b.estimatedCost||'';
   document.getElementById('fw_ac').value=b.actualCost||'';
+  var _rd=document.getElementById('fw_rd'); if(_rd) _rd.value=b.returnDate||'';
   document.getElementById('ftit').innerHTML='✏️ Chỉnh sửa lịch hẹn';
   document.getElementById('svbtn').innerHTML='💾 Cập nhật';
 }
@@ -1218,6 +1264,7 @@ function doSave(){
     estimatedCost:Number(document.getElementById('fw_ec').value)||null,
     actualCost:Number(document.getElementById('fw_ac').value)||null,
     technician:document.getElementById('fw_tc').value.trim(),
+    returnDate:document.getElementById('fw_rd')?document.getElementById('fw_rd').value||null:null,
     notes:document.getElementById('fw_nt').value.trim()};
   if(editId){
     var b=books.find(function(x){return x.id===editId;});
@@ -1269,14 +1316,10 @@ function viewDet(id){
     +'<div class="det-block">'
     +'<h4>📅 Lịch hẹn & Chi phí</h4>'
     +'<div class="det-row"><span class="det-label">Ngày hẹn</span><span class="det-val" style="color:var(--primary);font-weight:700;font-size:14px">'+fdt(b.scheduledAt)+'</span></div>'
-    +(b.technician?'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val">👨‍🔧 '+esc(b.technician)+'</span></div>':'')
+    +(b.technician?'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val">👨‍🔧 '+esc(b.technician)+'</span></div>':'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val" style="color:var(--amber)">⏳ Chưa phân công</span></div>')
+    +(b.returnDate?'<div class="det-row"><span class="det-label">📅 Ngày hẹn trả</span><span class="det-val" style="color:var(--primary);font-weight:700">'+b.returnDate+'</span></div>':'')
     +(b.estimatedCost?'<div class="det-row"><span class="det-label">Chi phí ước tính</span><span class="det-val" style="color:var(--amber);font-weight:600">~'+fmt(b.estimatedCost)+'đ</span></div>':'')
-    +(b.actualCost?'<div class="det-row"><span class="det-label">Chi phí thực tế</span><span class="det-val" style="color:var(--green);font-weight:700;font-size:15px">'+fmt(b.actualCost)+'đ</span></div>':'')
-    +'</div>'
-    +'<div class="det-block" style="grid-column:1/-1">'
-    +'<h4>📊 Tiến trình xử lý</h4>'
-    +'<div class="timeline">'+buildTimeline(b)+'</div>'
-    +(b.notes?'<div style="margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:8px;border-left:3px solid var(--amber)">'
+    +(b.actualCost?'<div class="det-row"><span class="det-label">Chi phí thực tế</span><span class="det-val" style="color:var(--green);font-weight:700;font-size:15px">'+fmt(b.actualCost)+'đ</span></div>':'')    +(b.notes?'<div style="margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:8px;border-left:3px solid var(--amber)">'
       +'<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">📝 Ghi chú</div>'
       +'<div style="font-size:13px;line-height:1.6">'+esc(b.notes)+'</div></div>':'')
     +'</div>';
@@ -1369,7 +1412,7 @@ function doExport(){
   var rows=books.map(function(b){
     return [b.id,b.customerName,b.phone,b.email||'',svcLabel(b.deviceType),b.brand,b.model||'',
       '"'+(b.issue||'').replace(/"/g,'""')+'"',SM[b.status]?SM[b.status].l:b.status,
-      fdt(b.scheduledAt),b.actualCost||'',b.technician||'',b.notes||'',fdt(b.createdAt)].join(',');
+      fdt(b.scheduledAt),b.returnDate||'',b.technician||'',b.estimatedCost||'',b.actualCost||'',b.notes||'',fdt(b.createdAt)].join(',');
   });
   var csv='\uFEFF'+headers.join(',')+'\n'+rows.join('\n');
   var a=document.createElement('a');
