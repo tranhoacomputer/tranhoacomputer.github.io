@@ -654,7 +654,22 @@ tr:hover td{background:#f8fafc}
 </div>
 <div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico">✅</span><span id="tmsg"></span></div>
 <script>
-var SHEETDB_URL='https://sheetdb.io/api/v1/lzhr8x88wpa5q';
+var SHEETDB_URL='https://sheetdb.io/api/v1/lzhr8x88wpa5q'; // legacy fallback
+var GAS_URL='https://script.google.com/macros/s/AKfycbz-UvXzzt2JCnfIy8L1BKoKg50FfLEnDZKbzAReCoTN79aUkPhS9Oa0FlfM27XN3mif3w/exec'; // Google Apps Script - unlimited
+var USE_GAS=true; // dùng Google Apps Script
+async function gasCall(params){
+  var qs=Object.entries(params).map(function(e){return encodeURIComponent(e[0])+'='+encodeURIComponent(e[1]||'');}).join('&');
+  var r=await fetch(GAS_URL+'?'+qs);
+  var d=await r.json();
+  if(!d.success) throw new Error(d.error||'GAS error');
+  return d;
+}
+async function gasPost(body){
+  var r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  var d=await r.json();
+  if(!d.success) throw new Error(d.error||'GAS error');
+  return d;
+}
 var books=[],editId=null,cfg={},sch=null,_sortK='scheduledAt',_sortD=1,_autoSyncInterval=null,_slTimer=null;
 
 function initAfterAuth(){
@@ -794,10 +809,33 @@ async function doSync(){
   if(_si)_si.classList.add('syncing');
   setSL('ing','Đang đồng bộ...');
   try{
-    var r=await fetch(SHEETDB_URL);
-    if(!r.ok){ throw new Error('HTTP '+r.status); }
-    var rawData=await r.json();
-    var dataArr = Array.isArray(rawData) ? rawData : (Array.isArray(rawData.data) ? rawData.data : null);
+    var dataArr;
+    if(USE_GAS){
+      var gasRes=await gasCall({action:'getAll'});
+      var raw=gasRes.data||[];
+      // GAS trả về field names từ script - map sang format chuẩn
+      dataArr=raw.map(function(b){
+        var p=String(b.phone||b.Phone||'').replace(/\D/g,'');
+        return {
+          Id: b.id||b.Id||'', 'Full name': b.customerName||b['Full name']||'',
+          Phone: p.startsWith('0')?p.slice(1):p,
+          Service: b.deviceType||b.Service||'', Date:(b.scheduledAt||b.Date||'').split('T')[0],
+          Time_slot:b.Time_slot||b.timeSlot||'', Note:b.issue||b.Note||'',
+          Status:b.status||b.Status||'pending', technician:b.technician||'',
+          estimated_cost:b.estimatedCost||b.estimated_cost||'',
+          actual_cost:b.actualCost||b.actual_cost||'',
+          return_date:b.returnDate||b.return_date||'',
+          Notes:b.notes||b.Notes||'', Brand:b.brand||b.Brand||'',
+          Model:b.model||b.Model||'', Priority:b.priority||b.Priority||'normal',
+          updatedAt:b.updatedAt||''
+        };
+      });
+    } else {
+      var r=await fetch(SHEETDB_URL);
+      if(!r.ok){ throw new Error('HTTP '+r.status); }
+      var rawData=await r.json();
+      dataArr = Array.isArray(rawData) ? rawData : (Array.isArray(rawData.data) ? rawData.data : null);
+    }
     if(dataArr !== null){
       function normalizeBooking(b) {
         if (!b) return b;
@@ -956,6 +994,11 @@ async function pushToSheets(b, isNew){
   try{
     var row = bookingToSheetRow(b);
     var res;
+    if (USE_GAS) {
+      var action = isNew ? 'create' : 'update';
+      await gasPost({action:action, id:b.id, data:row});
+      setSL('ok','Đã lưu lên Google Sheet'); saveBooks(); return b.id;
+    }
     if (isNew) {
       res = await fetchWithRetry(SHEETDB_URL, {
         method: 'POST',
@@ -1005,6 +1048,10 @@ async function pushToSheets(b, isNew){
 
 async function deleteFromSheets(id, bData){
   try{
+    if(USE_GAS){
+      await gasPost({action:'delete',id:id});
+      return;
+    }
     var res = await fetch(SHEETDB_URL + '/Id/' + encodeURIComponent(id), { method: 'DELETE' });
     if (!res.ok) {
       // Nếu Id không khớp, thử xóa theo Phone (fallback cho record Id rỗng)
