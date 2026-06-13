@@ -781,17 +781,8 @@ function updBdg(){
   var sn=document.getElementById("sb-shopname");if(sn&&cfg.name)sn.textContent=cfg.name;
 }
 
-// Thêm dữ liệu mẫu nếu chưa có
-function initDemoData(){
-  var demo = [
-    {id:'BK'+Date.now()+'_1', customerName:'Nguyễn Văn A', phone:'0987654321', deviceType:'Laptop', brand:'Dell', issue:'Không lên nguồn', status:'pending', scheduledAt:new Date().toISOString(), priority:'urgent', createdAt:new Date().toISOString(), actualCost:0, technician:'Kỹ thuật 1', source:'demo'},
-    {id:'BK'+Date.now()+'_2', customerName:'Trần Thị B', phone:'0912345678', deviceType:'PC Desktop', brand:'HP', issue:'Máy chạy chậm', status:'in_progress', scheduledAt:new Date(Date.now()+86400000).toISOString(), priority:'normal', createdAt:new Date().toISOString(), actualCost:0, technician:'Kỹ thuật 2', source:'demo'},
-    {id:'BK'+Date.now()+'_3', customerName:'Lê Văn C', phone:'0977777777', deviceType:'Laptop', brand:'ASUS', issue:'Màn hình vỡ', status:'pending', scheduledAt:new Date(Date.now()+172800000).toISOString(), priority:'urgent', createdAt:new Date().toISOString(), actualCost:0, technician:'', source:'demo'}
-  ];
-  books = demo;
-  saveBooks();
-  toast('Đã tạo dữ liệu mẫu để quản trị','ok');
-}
+// Dữ liệu mẫu đã bị vô hiệu hóa - dùng GAS làm nguồn dữ liệu thực
+function initDemoData(){ /* disabled */ }
 
 function getStats(){
   var s={total:books.length,pending:0,assigned:0,inProgress:0,completed:0,cancelled:0,revenue:0};
@@ -921,14 +912,12 @@ var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
       toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
     }else{
-      // SheetDB trả về dữ liệu rỗng — chỉ dùng dữ liệu cục bộ
-      if(books.length===0) initDemoData();
-      setSL('ok','Dùng dữ liệu cục bộ');
+      // GAS trả về dữ liệu rỗng — hiện danh sách trống
+      setSL('ok','Dữ liệu trống - chưa có lịch hẹn nào');
       renderAll();
     }
   }catch(e){
-    setSL('ok','Offline — dùng dữ liệu cục bộ');
-    if(books.length===0) initDemoData();
+    setSL('err','Lỗi kết nối — dùng dữ liệu cục bộ');
     renderAll();
   }
   finally{if(_si)_si.classList.remove('syncing');}
