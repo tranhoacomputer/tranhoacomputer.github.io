@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v33.html | Tran Hoa Computer | 2026-06-13 | v34: Fix auth bug (display:flex!important), Enter key login, call+WA buttons desktop, overdue alert, GAS URL setting, empty state, SheetDB renamed -->
+<!-- admin_v32.html | Tran Hoa Computer | 2026-06-13 | v32: quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 :root{
@@ -26,7 +26,7 @@
   --hover:#f1f5f9;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;display:flex;min-width:0;max-width:100%;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh;display:flex;min-width:0;max-width:100%;overflow-x:hidden}
 html{min-width:0;max-width:100%;overflow-x:hidden}
 .app{min-width:0;width:100%}
 a{color:inherit;text-decoration:none}
@@ -34,40 +34,45 @@ a{color:inherit;text-decoration:none}
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
 .sb-overlay.vis{display:block}
 .auth-overlay{display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:999}
-.auth-box{background:var(--surface);padding:24px;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:360px;max-width:92%;text-align:left}
-.auth-box h3{margin-bottom:8px;font-size:18px;font-weight:800;letter-spacing:-.3px}
-.auth-box .f{display:flex;flex-direction:column;gap:10px}
-.auth-box input{padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Be Vietnam Pro',sans-serif;transition:border-color .15s}
-.auth-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.12);outline:none}
+.auth-box{background:var(--surface);padding:18px;border-radius:12px;box-shadow:var(--sh-lg);width:360px;max-width:92%;text-align:left}
+.auth-box h3{margin-bottom:8px;font-size:16px}
+.auth-box .f{display:flex;flex-direction:column;gap:8px}
+.auth-box input{padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px}
 .auth-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-.auth-box .actions .btn{padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;cursor:pointer;font-weight:700;font-family:'Be Vietnam Pro',sans-serif;box-shadow:0 2px 8px rgba(59,130,246,.3)}
-.sidebar{width:var(--sbw);min-height:100vh;background:linear-gradient(180deg,#1a2744 0%,#1e293b 45%,#172032 100%);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:2px 0 20px rgba(0,0,0,.2)}
-.sb-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(139,92,246,.1))}
-.sb-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 12px rgba(59,130,246,.4)}
-.sb-logo-text{font-weight:800;color:#fff;font-size:15px;line-height:1.3;letter-spacing:-.2px}
-.sb-logo-sub{font-size:11px;color:var(--sidebar-text);margin-top:2px;font-weight:400}
-.sb-section{padding:16px 14px 5px;font-size:9.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px}
-.sb-link{display:flex;align-items:center;gap:10px;padding:10px 14px;color:var(--sidebar-text);cursor:pointer;border-radius:10px;margin:2px 8px;transition:all .18s cubic-bezier(.4,0,.2,1);font-size:13.5px;font-weight:500;position:relative}
-.sb-link:hover{background:rgba(255,255,255,.07);color:#cbd5e1;transform:translateX(2px)}
-.sb-link.active{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-weight:600;box-shadow:0 4px 12px rgba(59,130,246,.35)}
-.sb-link .sl-badge{background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:10px;min-width:18px;text-align:center;margin-left:auto}
+.auth-box .actions .btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--primary);color:#fff;cursor:pointer}
+.sidebar{width:var(--sbw);min-height:100vh;background:var(--sidebar);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+.sb-logo-icon{width:38px;height:38px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-logo-text{font-weight:700;color:#fff;font-size:14px;line-height:1.3}
+.sb-logo-sub{font-size:11px;color:var(--sidebar-text);margin-top:1px}
+.sb-section{padding:10px 14px 3px;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 14px;color:var(--sidebar-text);cursor:pointer;border-radius:10px;margin:2px 8px;transition:all .2s;font-size:13.5px;position:relative}
+.sb-link:hover{background:rgba(255,255,255,.09);color:#e2e8f0;transform:translateX(2px)}
+.sb-link.active{background:linear-gradient(90deg,var(--sidebar-active) 0%,#6366f1 100%);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(59,130,246,.35)}
+.sb-link .sl-badge{background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center;margin-left:auto}
 .sb-footer{margin-top:auto;padding:14px;border-top:1px solid rgba(255,255,255,.06)}
 .sb-user{display:flex;align-items:center;gap:10px}
-.sb-avatar{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0;box-shadow:0 2px 8px rgba(59,130,246,.3)}
-.sb-user-name{font-size:13px;font-weight:700;color:#fff}
+.sb-avatar{width:32px;height:32px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;flex-shrink:0}
+.sb-user-name{font-size:13px;font-weight:600;color:#fff}
 .sb-user-role{font-size:11px;color:var(--sidebar-text)}
 /* MAIN */
-.main{margin-left:var(--sbw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main{margin-left:var(--sbw);flex:1;display:flex;flex-direction:column;min-height:100vh;transition:margin-left .3s cubic-bezier(.4,0,.2,1)}
+.sidebar{transition:transform .3s cubic-bezier(.4,0,.2,1)}
+/* Desktop collapsible sidebar */
+@media(min-width:769px){
+  .sidebar.collapsed{transform:translateX(-100%)}
+  .main.sb-wide{margin-left:0}
+}
 /* TOPBAR */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;min-height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:90;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.tb-menu{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text);padding:4px;border-radius:6px}
+.tb-menu{display:flex;align-items:center;justify-content:center;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text);padding:4px;border-radius:6px}
 .tb-menu:hover{background:var(--bg)}
 .tb-title{font-weight:700;font-size:17px;flex:1}
 .tb-actions{display:flex;align-items:center;gap:8px}
-.tb-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text);font-weight:600;transition:all .18s;white-space:nowrap;font-family:'Be Vietnam Pro',sans-serif}
-.tb-btn:hover{background:var(--bg);border-color:#94a3b8;transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.tb-btn.primary,.tb-btn.b-pri{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(59,130,246,.3)}
-.tb-btn.primary:hover,.tb-btn.b-pri:hover{box-shadow:0 6px 16px rgba(59,130,246,.4);transform:translateY(-1px)}
+.tb-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text);font-weight:500;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{background:var(--bg);border-color:#94a3b8}
+.tb-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tb-btn.primary:hover{background:var(--primary-dark)}
 .clk{font-size:13px;color:var(--muted);background:var(--bg);padding:6px 12px;border-radius:8px;white-space:nowrap}
 /* PAGE */
 .content{padding:24px;flex:1;overflow-x:hidden}
@@ -77,76 +82,74 @@ a{color:inherit;text-decoration:none}
 .ph-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 /* STAT CARDS */
 .statg{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px;margin-bottom:24px}
-.sc{background:var(--surface);border-radius:16px;padding:18px 20px;box-shadow:0 2px 10px rgba(0,0,0,.06);border:1px solid rgba(226,232,240,.7);display:flex;align-items:center;gap:14px;transition:all .2s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden}
-.sc::after{content:'';position:absolute;top:-30px;right:-30px;width:90px;height:90px;border-radius:50%;opacity:.06;background:var(--primary)}
-.sc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-.si{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.si.c-blue{background:linear-gradient(135deg,#eff6ff,#dbeafe)}.si.c-amber{background:linear-gradient(135deg,#fffbeb,#fef3c7)}.si.c-purple{background:linear-gradient(135deg,#faf5ff,#ede9fe)}
-.si.c-green{background:linear-gradient(135deg,#f0fdf4,#d1fae5)}.si.c-red{background:linear-gradient(135deg,#fff1f2,#fee2e2)}.si.c-cyan{background:linear-gradient(135deg,#ecfeff,#cffafe)}
+.sc{background:var(--surface);border-radius:var(--r);padding:16px;box-shadow:var(--sh);border:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:transform .15s,box-shadow .15s;cursor:default}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--sh-md)}
+.si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.si.c-blue{background:#eff6ff}.si.c-amber{background:#fef3c7}.si.c-purple{background:#ede9fe}
+.si.c-green{background:#d1fae5}.si.c-red{background:#fee2e2}.si.c-cyan{background:#cffafe}
 .sv{flex:1;min-width:0}
-.sl{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;letter-spacing:.5px}
-.sn{font-size:24px;font-weight:800;color:var(--text);line-height:1.1;margin-top:4px;letter-spacing:-.5px}
+.sl{font-size:11px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sn{font-size:22px;font-weight:800;color:var(--text);line-height:1.2;margin-top:2px}
 .sn.b-p{color:var(--amber)}.sn.b-i{color:var(--purple)}.sn.b-d{color:var(--green)}
 .sn.b-c{color:var(--red)}.sn.b-rev{color:var(--cyan)}
 /* DASHBOARD GRID */
 .dg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.dg .card{background:var(--surface);border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid rgba(226,232,240,.7);overflow:hidden}
-.ch{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ch h3{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.dg .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);overflow:hidden}
+.ch{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.ch h3{font-size:14px;font-weight:700}
 .cb{padding:16px}
 .cw{position:relative;height:230px}
 /* RECENT */
-.rec-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(226,232,240,.6)}
+.rec-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
 .rec-item:last-child{border-bottom:none}
-.rec-dot{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:#fff;font-weight:700}
+.rec-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 .rec-info{flex:1;min-width:0}
-.rec-name{font-weight:700;font-size:13px}
+.rec-name{font-weight:600;font-size:13px}
 .rec-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* FILTER BAR */
-.fb{display:flex;align-items:center;gap:8px;margin-bottom:16px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);padding:12px 14px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid rgba(226,232,240,.7);flex-wrap:wrap}
-.sw{display:flex;align-items:center;gap:8px;flex:1;min-width:160px;background:var(--bg);border-radius:10px;padding:8px 12px;border:1.5px solid var(--border);transition:border-color .15s}
-.sw:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
-.sw input{border:none;background:none;outline:none;width:100%;font-size:13px;color:var(--text);font-family:'Be Vietnam Pro',sans-serif}
+.fb{display:flex;align-items:center;gap:8px;margin-bottom:16px;background:var(--surface);padding:12px 14px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);flex-wrap:wrap}
+.sw{display:flex;align-items:center;gap:8px;flex:1;min-width:160px;background:var(--bg);border-radius:8px;padding:7px 12px;border:1px solid var(--border)}
+.sw input{border:none;background:none;outline:none;width:100%;font-size:13px;color:var(--text)}
 .sw-i{color:var(--muted);font-size:14px}
-.fsel{padding:8px 10px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;color:var(--text);cursor:pointer;outline:none;font-family:'Be Vietnam Pro',sans-serif;transition:border-color .15s}
+.fsel{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:13px;color:var(--text);cursor:pointer;outline:none}
 .fsel:focus{border-color:var(--primary)}
-.fcnt{font-size:12px;color:var(--muted);white-space:nowrap;padding:4px 10px;background:var(--bg);border-radius:8px;border:1px solid var(--border);font-weight:500}
-.tbb{padding:8px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text);white-space:nowrap;transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;font-weight:500}
-.tbb:hover{background:var(--bg);border-color:#94a3b8;transform:translateY(-1px)}
+.fcnt{font-size:12px;color:var(--muted);white-space:nowrap;padding:4px 8px;background:var(--bg);border-radius:6px;border:1px solid var(--border)}
+.tbb{padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text);white-space:nowrap;transition:all .15s}
+.tbb:hover{background:var(--bg);border-color:#94a3b8}
 /* TABLE */
-.twrap{overflow-x:auto;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.twrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--sh)}
 table{border-collapse:collapse;width:100%;background:var(--surface)}
-th{padding:11px 14px;text-align:left;font-size:11.5px;font-weight:700;color:var(--muted);background:#f8fafc;border-bottom:2px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer;text-transform:uppercase;letter-spacing:.4px}
+th{padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--muted);background:#f8fafc;border-bottom:2px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer}
 th:hover{color:var(--primary)}
 th .sort-icon{opacity:.4;margin-left:3px;font-size:10px}
 th.sorted .sort-icon{opacity:1;color:var(--primary)}
-td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr.ur td:first-child{border-left:3px solid var(--red)}
-tr:hover td{background:rgba(59,130,246,.025)}
-.tid{font-size:11px;color:var(--muted);font-family:monospace;background:var(--bg);padding:2px 6px;border-radius:6px}
+tr:hover td{background:#f8fafc}
+.tid{font-size:11px;color:var(--muted);font-family:monospace;background:var(--bg);padding:2px 6px;border-radius:4px}
 .cc{display:flex;align-items:center;gap:10px}
-.mav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cn{font-weight:700;font-size:13px}.cp{font-size:12px;color:var(--muted)}
+.mav{width:32px;height:32px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cn{font-weight:600;font-size:13px}.cp{font-size:12px;color:var(--muted)}
 .ic{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:12px}
-.dc{font-size:12px;font-weight:600;color:var(--primary)}
+.dc{font-size:12px;font-weight:500;color:var(--primary)}
 .ca{color:var(--green);font-weight:700}.ce{color:var(--amber)}
 .ac{display:flex;gap:4px;align-items:center}
-.ib{padding:5px 10px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;transition:all .15s;white-space:nowrap;font-family:'Be Vietnam Pro',sans-serif;font-weight:500}
-.ib:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+.ib{padding:5px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;transition:all .15s;white-space:nowrap}
+.ib:hover{border-color:var(--primary);color:var(--primary)}
 .ib.del:hover{border-color:var(--red);color:var(--red);background:var(--red-light)}
 .bemp{text-align:center;padding:60px 20px}
 .emp{text-align:center;padding:60px 20px;color:var(--muted)}
 .emp-i{font-size:48px;margin-bottom:12px}
 .emp p{font-size:14px}
 /* BADGES */
-.bdg{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap;letter-spacing:.2px}
-.b-p{background:linear-gradient(135deg,#fffbeb,#fef3c7);color:#92400e;border:1px solid #fde68a}
-.b-a{background:linear-gradient(135deg,#eff6ff,#dbeafe);color:var(--primary-dark);border:1px solid #bfdbfe}
-.b-i{background:linear-gradient(135deg,#faf5ff,#ede9fe);color:#5b21b6;border:1px solid #ddd6fe}
-.b-d{background:linear-gradient(135deg,#f0fdf4,#d1fae5);color:#065f46;border:1px solid #a7f3d0}
-.b-c{background:linear-gradient(135deg,#fff1f2,#fee2e2);color:#991b1b;border:1px solid #fecaca}
-.b-w{background:#f3f4f6;color:#374151;border:1px solid #e5e7eb}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-p{background:var(--amber-light);color:#92400e}
+.b-a{background:var(--primary-light);color:var(--primary-dark)}
+.b-i{background:var(--purple-light);color:#5b21b6}
+.b-d{background:var(--green-light);color:#065f46}
+.b-c{background:var(--red-light);color:#991b1b}
+.b-w{background:#f3f4f6;color:#374151}
 .ssel{padding:5px 8px;border-radius:8px;border:1px solid var(--border);font-size:12px;background:var(--surface);cursor:pointer;outline:none}
 .pr-urg{display:inline-flex;align-items:center;gap:4px;background:var(--red-light);color:var(--red);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;margin-left:6px}
 /* CARD */
@@ -165,10 +168,10 @@ tr:hover td{background:rgba(59,130,246,.025)}
 .ferr{font-size:11px;color:var(--red);margin-top:3px;min-height:14px}
 .he input,.he textarea,.he select{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(239,68,68,.1)!important}
 /* BUTTONS */
-.btn{padding:8px 16px;border-radius:10px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .18s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-family:'Be Vietnam Pro',sans-serif}
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn-sm{padding:6px 12px;font-size:12px}
 .btn-lg{padding:11px 22px;font-size:15px}
-.b-pri{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.3)}.b-pri:hover{box-shadow:0 6px 16px rgba(59,130,246,.4);transform:translateY(-1px)}
+.b-pri{background:var(--primary);color:#fff}.b-pri:hover{background:var(--primary-dark)}
 .b-sec{background:var(--bg);color:var(--text);border:1px solid var(--border)}.b-sec:hover{background:var(--border)}
 .b-ok{background:var(--green-light);color:#065f46}.b-ok:hover{background:#a7f3d0}
 .b-dan{background:var(--red-light);color:var(--red)}.b-dan:hover{background:#fecaca}
@@ -211,7 +214,7 @@ tr:hover td{background:rgba(59,130,246,.025)}
 .sl-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 /* MODAL */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.mov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.mov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
 .modal-box{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh-lg);max-width:420px;width:100%;padding:24px;animation:mbIn .2s ease}
 @keyframes mbIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-box h3{font-size:17px;font-weight:700;margin-bottom:10px}
@@ -374,7 +377,7 @@ tr:hover td{background:rgba(59,130,246,.025)}
 .nbdg{background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px}
 .sb-br{flex:1}.sb-bn{font-weight:700;color:#fff;font-size:14px}.sb-bs{font-size:11px;color:var(--sidebar-text)}
 .sb-tog{display:none}
-.sb-section{padding:14px 14px 4px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.8px}
+.sb-section{padding:10px 14px 3px;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px}
 
 
 .sbbtn.on,.sbbtn.active{background:#3b82f6!important;color:#fff!important;font-weight:600!important}
@@ -429,113 +432,25 @@ tr:hover td{background:rgba(59,130,246,.025)}
     .cust-chips{gap:4px}
   }
 
-/* ══════════════════════════════════════════
-   V33 — UI NÂNG CẤP TOÀN DIỆN
-══════════════════════════════════════════ */
 
-/* Be Vietnam Pro font weight enforcement */
-h1,h2,h3,h4,.page-title,.brand,.stat-val,.auth-box h3{font-family:'Be Vietnam Pro',sans-serif}
 
-/* Background nền gradient nhẹ */
-body{background:linear-gradient(135deg,#f0f4f8 0%,#e8edf5 100%)}
-
-/* ── Sidebar nâng cấp ── */
-.sidebar{background:linear-gradient(180deg,#1a2744 0%,#1e293b 40%,#172032 100%);box-shadow:2px 0 20px rgba(0,0,0,.18)}
-.sb-logo{background:linear-gradient(135deg,rgba(59,130,246,.18),rgba(139,92,246,.12));border-bottom:1px solid rgba(255,255,255,.08);padding:20px 16px 16px}
-.sb-logo-icon{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 4px 12px rgba(59,130,246,.45);border-radius:12px;width:42px;height:42px;font-size:20px}
-.sb-logo-text{font-size:15px;font-weight:800;letter-spacing:-.2px}
-.sb-link{border-radius:10px;margin:2px 8px;padding:10px 14px;font-weight:500;transition:all .18s cubic-bezier(.4,0,.2,1)}
-.sb-link:hover{background:rgba(255,255,255,.08);color:#e2e8f0;transform:translateX(2px)}
-.sb-link.active{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;box-shadow:0 4px 12px rgba(59,130,246,.35);font-weight:600}
-.sb-link .sb-ico{font-size:16px;width:20px;text-align:center}
-
-/* ── Topbar nâng cấp ── */
-.topbar{background:rgba(255,255,255,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(226,232,240,.8);box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.page-title{font-size:17px;font-weight:800;letter-spacing:-.3px;color:#1e293b}
-.tb-btn{font-family:'Be Vietnam Pro',sans-serif;font-weight:600;border-radius:10px;transition:all .18s;font-size:13px}
-.tb-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.1)}
-.tb-btn.b-pri{background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.35)}
-.tb-btn.b-pri:hover{box-shadow:0 6px 16px rgba(59,130,246,.45)}
-
-/* ── Stat cards nâng cấp ── */
-.stat-card{border-radius:16px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid rgba(255,255,255,.8);transition:all .2s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;background:#fff}
-.stat-card::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.08}
-.stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-.stat-card.c-blue{border-left:4px solid #3b82f6}.stat-card.c-blue::before{background:#3b82f6}
-.stat-card.c-amber{border-left:4px solid #f59e0b}.stat-card.c-amber::before{background:#f59e0b}
-.stat-card.c-purple{border-left:4px solid #8b5cf6}.stat-card.c-purple::before{background:#8b5cf6}
-.stat-card.c-green{border-left:4px solid #10b981}.stat-card.c-green::before{background:#10b981}
-.stat-card.c-cyan{border-left:4px solid #06b6d4}.stat-card.c-cyan::before{background:#06b6d4}
-.stat-card.c-red{border-left:4px solid #ef4444}.stat-card.c-red::before{background:#ef4444}
-.stat-icon-box{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.stat-card.c-blue .stat-icon-box{background:linear-gradient(135deg,#eff6ff,#dbeafe)}
-.stat-card.c-amber .stat-icon-box{background:linear-gradient(135deg,#fffbeb,#fef3c7)}
-.stat-card.c-purple .stat-icon-box{background:linear-gradient(135deg,#faf5ff,#ede9fe)}
-.stat-card.c-green .stat-icon-box{background:linear-gradient(135deg,#f0fdf4,#d1fae5)}
-.stat-card.c-cyan .stat-icon-box{background:linear-gradient(135deg,#ecfeff,#cffafe)}
-.stat-card.c-red .stat-icon-box{background:linear-gradient(135deg,#fff1f2,#fee2e2)}
-.stat-val{font-size:24px;font-weight:800;letter-spacing:-.5px;line-height:1.1;margin-top:2px}
-.stat-lbl{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:4px}
-
-/* ── Badges đẹp hơn ── */
-.badge{border-radius:8px;font-size:11.5px;font-weight:600;letter-spacing:.2px;padding:3px 10px}
-
-/* ── Cards/sections ── */
-.card,.dash-card{border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid rgba(226,232,240,.6)}
-.sec-hd{font-weight:700;font-size:14.5px;letter-spacing:-.2px}
-
-/* ── Buttons global ── */
-.btn{font-family:'Be Vietnam Pro',sans-serif;font-weight:600;border-radius:10px;transition:all .18s;letter-spacing:.1px}
-.btn.b-pri{background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;box-shadow:0 2px 8px rgba(59,130,246,.3)}
-.btn.b-pri:hover{box-shadow:0 6px 16px rgba(59,130,246,.4);transform:translateY(-1px)}
-.btn.b-sec{border-radius:10px;font-weight:500}
-.btn.b-danger{background:linear-gradient(135deg,#ef4444,#dc2626)}
-
-/* ── Table rows ── */
-tr.brow{transition:background .12s}
-tr.brow:hover{background:rgba(59,130,246,.04)!important}
-
-/* ── Form inputs ── */
-.fd input:focus,.fd textarea:focus,.fd select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.12);outline:none}
-.setit input:focus,.setit select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.12);outline:none}
-
-/* ── Alert banner ── */
-.alert-banner{border-radius:12px;padding:12px 16px;font-weight:500}
-
-/* Auth overlay - JS controls visibility via inline style */
-.auth-overlay{align-items:center;justify-content:center;background:rgba(0,0,0,.55)}
-.auth-box{border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-
-/* ── Toast ── */
-.toast{border-radius:12px;font-family:'Be Vietnam Pro',sans-serif;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.15)}
-
-/* ── Modal ── */
-.modal-box{border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-
-/* ── Scroll bar nhỏ ── */
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
-::-webkit-scrollbar-thumb:hover{background:#94a3b8}
-
-/* ── Page fade-in ── */
-@keyframes fadeSlideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.page-wrap>*{animation:fadeSlideUp .25s ease both}
-.stat-grid .stat-card:nth-child(1){animation-delay:.03s}
-.stat-grid .stat-card:nth-child(2){animation-delay:.06s}
-.stat-grid .stat-card:nth-child(3){animation-delay:.09s}
-.stat-grid .stat-card:nth-child(4){animation-delay:.12s}
-.stat-grid .stat-card:nth-child(5){animation-delay:.15s}
-.stat-grid .stat-card:nth-child(6){animation-delay:.18s}
-
-/* ── Mobile bottom tabs improvement ── */
-@media(max-width:768px){
-  .topbar{border-radius:0 0 16px 16px}
-  .stat-card{border-radius:14px}
-  .page-title{font-size:15px}
-}
-/* ── END V33 ══════════════════════════════ */
-
+/* ── SETTINGS CARDS ── */
+.cfg-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.cfg-card-hd{display:flex;align-items:center;gap:14px;padding:16px 20px 14px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--bg) 0%,var(--surface) 100%)}
+.cfg-ic{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:10px;border:1px solid var(--border);flex-shrink:0}
+.cfg-title{font-size:14px;font-weight:700;color:var(--text)}
+.cfg-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.cfg-field{padding:12px 20px 0}
+.cfg-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.cfg-field input,.cfg-field select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s;background:var(--surface);color:var(--text);box-sizing:border-box}
+.cfg-field input:focus,.cfg-field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.cfg-field:last-child{padding-bottom:0}
+.cfg-toggle{padding:10px 20px;display:flex;align-items:center}
+.cfg-toggle label{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text)}
+.cfg-toggle input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);cursor:pointer}
+.cfg-actions{padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap}
+.cfg-card-danger .cfg-card-hd{background:linear-gradient(90deg,#fff5f5 0%,var(--surface) 100%)}
+.cfg-card-danger{border-color:#fecaca}
 </style>
 </head>
 <body>
@@ -544,8 +459,8 @@ tr.brow:hover{background:rgba(59,130,246,.04)!important}
     <div class="auth-box">
       <h3>Đăng nhập quản trị</h3>
       <div class="f">
-        <input id="adm_user" placeholder="Tài khoản" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('adm_pass').focus()" />
-        <input id="adm_pass" type="password" placeholder="Mật khẩu" autocomplete="current-password" onkeydown="if(event.key==='Enter')tryLogin()" />
+        <input id="adm_user" placeholder="Tài khoản" autocomplete="username" />
+        <input id="adm_pass" type="password" placeholder="Mật khẩu" autocomplete="current-password" />
       </div>
       <div class="actions">
         <button onclick="tryLogin()" class="btn">Đăng nhập</button>
@@ -738,24 +653,46 @@ tr.brow:hover{background:rgba(59,130,246,.04)!important}
 <!-- SETTINGS -->
 <div class="pg" id="pg-cfg">
 <div class="setwrap">
-  <h3>🔗 Kết nối Google Apps Script</h3>
-  <h3 style="margin-top:24px">🏪 Thông tin cửa hàng</h3>
-  <div class="setit"><label>Tên cửa hàng</label><input id="s_name" placeholder="Tran Hoa Computer" oninput="savCfg('name',this.value)"/></div>
-  <div class="setit"><label>Đ&#x1ECBa chỉ</label><input id="s_addr" placeholder="Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên" oninput="savCfg('addr',this.value)"/></div>
-  <div class="setit"><label>Số điện thoại</label><input id="s_phone" placeholder="0963.284.044" oninput="savCfg('phone',this.value)"/></div>
-  <h3 style="margin-top:24px">🔒 Bảo mật</h3>
-  <div class="setit"><label>Google Apps Script URL</label><input id="s_gas_url" placeholder="https://script.google.com/macros/s/..." oninput="savCfg('gasUrl',this.value)" style="font-size:12px"/></div>
-  <div class="setit"><label>Tài khoản quản trị</label><input id="s_admin_user" placeholder="admin" oninput="savCfg('adminUser',this.value)"/></div>
-  <div class="setit"><label>Mật khẩu quản trị</label><input id="s_admin_pass" placeholder="password" oninput="savCfg('adminPass',this.value)"/></div>
-  <div class="setit"><label><input type="checkbox" id="s_auth_en" onchange="savCfg('authEnabled',this.checked)"/> Yêu cầu đăng nhập</label></div>
-  <div class="setit"><label><input type="checkbox" id="s_auto_sync" onchange="savCfg('autoSync',this.checked)"/> Tự động đồng bộ từ Google Sheets</label></div>
-  <div style="margin-top:8px"><button class="btn b-dan" onclick="logoutAdmin()">🔓 Đăng xuất</button></div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px">
-    <button class="btn b-pri" onclick="doSync()">🔄 Đồng bộ GGSheet</button>
-    <button class="btn b-gho" onclick="doExport()">📥 Xuất CSV</button>
-    <a class="btn" href="index.html" target="_blank" style="text-decoration:none">🌐 Web khách hàng</a>
-    <button class="btn b-dan btn-sm" onclick="doClear()">⚠️ Xoá toàn bộ dữ liệu</button>
+
+  <!-- CARD: Kết nối -->
+  <div class="cfg-card">
+    <div class="cfg-card-hd"><span class="cfg-ic">🔗</span><div><div class="cfg-title">Kết nối Google Apps Script</div><div class="cfg-sub">URL đồng bộ dữ liệu từ Google Sheets</div></div></div>
+    <div class="cfg-field"><label>URL Google Apps Script (chỉ đọc)</label><input id="s_sheetdb" readonly style="opacity:.7;cursor:default;background:var(--bg)" title="GAS URL đang dùng"/></div>
+    <div class="cfg-actions">
+      <button class="btn b-pri" onclick="doSync()">🔄 Đồng bộ GGSheet</button>
+      <a class="btn b-gho" href="index.html" target="_blank" style="text-decoration:none">🌐 Web khách hàng</a>
+      <button class="btn b-gho" onclick="doExport()">📥 Xuất CSV</button>
+    </div>
   </div>
+
+  <!-- CARD: Thông tin cửa hàng -->
+  <div class="cfg-card">
+    <div class="cfg-card-hd"><span class="cfg-ic">🏪</span><div><div class="cfg-title">Thông tin cửa hàng</div><div class="cfg-sub">Hiển thị trên biên lai in</div></div></div>
+    <div class="cfg-field"><label>Tên cửa hàng</label><input id="s_name" placeholder="Tran Hoa Computer" oninput="savCfg('name',this.value)"/></div>
+    <div class="cfg-field"><label>Địa chỉ</label><input id="s_addr" placeholder="Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên" oninput="savCfg('addr',this.value)"/></div>
+    <div class="cfg-field"><label>Số điện thoại</label><input id="s_phone" placeholder="0963.284.044" oninput="savCfg('phone',this.value)"/></div>
+  </div>
+
+  <!-- CARD: Bảo mật -->
+  <div class="cfg-card">
+    <div class="cfg-card-hd"><span class="cfg-ic">🔒</span><div><div class="cfg-title">Bảo mật & Đăng nhập</div><div class="cfg-sub">Tài khoản quản trị hệ thống</div></div></div>
+    <div class="cfg-field"><label>Tài khoản quản trị</label><input id="s_admin_user" placeholder="admin" oninput="savCfg('adminUser',this.value)"/></div>
+    <div class="cfg-field"><label>Mật khẩu quản trị</label><input id="s_admin_pass" type="password" placeholder="••••••••" oninput="savCfg('adminPass',this.value)"/></div>
+    <div class="cfg-toggle"><label><input type="checkbox" id="s_auth_en" onchange="savCfg('authEnabled',this.checked)"/><span>Yêu cầu đăng nhập</span></label></div>
+    <div class="cfg-toggle"><label><input type="checkbox" id="s_auto_sync" onchange="savCfg('autoSync',this.checked)"/><span>Tự động đồng bộ từ Google Sheets</span></label></div>
+    <div class="cfg-actions" style="margin-top:12px">
+      <button class="btn b-dan" onclick="logoutAdmin()">🔓 Đăng xuất</button>
+    </div>
+  </div>
+
+  <!-- CARD: Nguy hiểm -->
+  <div class="cfg-card cfg-card-danger">
+    <div class="cfg-card-hd"><span class="cfg-ic">⚠️</span><div><div class="cfg-title">Khu vực nguy hiểm</div><div class="cfg-sub">Hành động không thể hoàn tác</div></div></div>
+    <div class="cfg-actions">
+      <button class="btn b-dan" onclick="doClear()">🗑️ Xoá toàn bộ dữ liệu cục bộ</button>
+    </div>
+  </div>
+
 </div>
 </div>
 </div></div></div>
@@ -764,8 +701,7 @@ tr.brow:hover{background:rgba(59,130,246,.04)!important}
 </div>
 <div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico">✅</span><span id="tmsg"></span></div>
 <script>
-var SHEETDB_URL='https://sheetdb.io/api/v1/lzhr8x88wpa5q'; // legacy fallback
-var GAS_URL='https://script.google.com/macros/s/AKfycbwZ__BaYliJdbHK94kIfv0mzr8V14kyb-ymp1M4Ip6o62jELsQfG7G6zUHAc2M6kWsvdw/exec'; // Google Apps Script - unlimited
+var GAS_URL='https://script.google.com/macros/s/AKfycbyJNMFVJc71g2bAXOrjINWYcHyIZSDyahjSrkVOIKRMwJYQ2cEcCME2OT8uBiomkx-j9g/exec'; // Google Apps Script - unlimited
 var USE_GAS=true; // dùng Google Apps Script
 async function gasCall(params){
   var qs=Object.entries(params).map(function(e){return encodeURIComponent(e[0])+'='+encodeURIComponent(e[1]||'');}).join('&');
@@ -852,8 +788,6 @@ function startClk(){
 }
 function loadCfg(){
   cfg=JSON.parse(localStorage.getItem('thc_cfg')||'{}');
-  cfg.sheetdbUrl=cfg.sheetdbUrl||'https://sheetdb.io/api/v1/lzhr8x88wpa5q';
-  SHEETDB_URL=cfg.sheetdbUrl;
   cfg.name=cfg.name||'Tran Hoa Computer';
   cfg.addr=cfg.addr||'Xom 6, Phu Thinh, Dai Tu, Thai Nguyen';
   cfg.phone=cfg.phone||'0963.284.044';
@@ -864,9 +798,8 @@ function loadCfg(){
   ['name','addr','phone'].forEach(function(k){
     var el=document.getElementById('s_'+k);if(el)el.value=cfg[k]||'';
   });
-  var sdb=document.getElementById('s_sheetdb'); if(sdb) sdb.value=cfg.sheetdbUrl||'';
+  var sdb=document.getElementById('s_sheetdb'); if(sdb) sdb.value=GAS_URL;
 
-  var gasF=document.getElementById('s_gas_url'); if(gasF) gasF.value=GAS_URL||'';
   var au=document.getElementById('s_admin_user'); if(au) au.value=cfg.adminUser||'';
   var ap=document.getElementById('s_admin_pass'); if(ap) ap.value=cfg.adminPass||'';
   var ae=document.getElementById('s_auth_en'); if(ae) ae.checked=!!cfg.authEnabled;
@@ -880,8 +813,6 @@ function savCfg(k,v){cfg[k]=v;localStorage.setItem('thc_cfg',JSON.stringify(cfg)
     if(cfg.autoSync) startAutoSync();
     else stopAutoSync();
   }
-  if(k==='sheetdbUrl'){ SHEETDB_URL=cfg.sheetdbUrl||SHEETDB_URL; if(cfg.autoSync) startAutoSync(); }
-  if(k==='gasUrl' && v){ GAS_URL=v; toast('Đã cập nhật GAS URL','ok'); }
 }
 function loadBooks(){books=JSON.parse(localStorage.getItem('thc_books')||'[]');updBdg();}
 function saveBooks(){localStorage.setItem('thc_books',JSON.stringify(books));updBdg();}
@@ -936,11 +867,6 @@ async function doSync(){
           updatedAt:b.updatedAt||''
         };
       });
-    } else {
-      var r=await fetch(SHEETDB_URL);
-      if(!r.ok){ throw new Error('HTTP '+r.status); }
-      var rawData=await r.json();
-      dataArr = Array.isArray(rawData) ? rawData : (Array.isArray(rawData.data) ? rawData.data : null);
     }
     if(dataArr !== null){
       function normalizeBooking(b) {
@@ -1154,11 +1080,19 @@ function goP(id,btn){
   if(id==='dash')renderDash();if(id==='books')renderBT();if(id==='cust')renderCust();
   if(id==='add'&&!editId)resetForm();if(id==='cfg')loadCfg();
 }
+function closeSB(){var sb=document.querySelector(".sidebar");var ov=document.getElementById("sbo");if(sb)sb.classList.remove("open");if(ov)ov.classList.remove("vis");}
 function togSB(){
   var sb=document.querySelector('.sidebar');
   var ov=document.getElementById('sbo');
-  sb.classList.toggle('open');
-  if(ov)ov.classList.toggle('vis');
+  var main=document.querySelector('.main');
+  var isMobile=window.innerWidth<=768;
+  if(isMobile){
+    sb.classList.toggle('open');
+    if(ov)ov.classList.toggle('vis');
+  } else {
+    sb.classList.toggle('collapsed');
+    if(main)main.classList.toggle('sb-wide');
+  }
 }
 function doAdd(){editId=null;goP('add',document.querySelector('[data-pg=add]'));}
 function renderAll(){renderDash();renderBT();}
@@ -1205,112 +1139,19 @@ var SM={
 function sbdg(s){var m=SM[s]||{l:s,c:'b-p'};return '<span class="bdg '+m.c+'">'+m.l+'</span>';}
 
 
-/* ── Revenue management ── */
-function getRevResetDate(){ return localStorage.getItem('thc_rev_reset')||null; }
-function getRevBase(){ return parseFloat(localStorage.getItem('thc_rev_base')||'0')||0; }
-
-function calcRevenue(){
-  var resetDate = getRevResetDate();
-  var base = getRevBase();
-  var fromBooks = books.reduce(function(s,b){
-    if(!b.actualCost) return s;
-    if(resetDate){
-      var bd = new Date(b.updatedAt||b.scheduledAt||b.createdAt||0);
-      if(bd < new Date(resetDate)) return s;
-    }
-    return s + (parseFloat(b.actualCost)||0);
-  },0);
-  return base + fromBooks;
-}
-
-function clearRevReset(){
-  localStorage.removeItem('thc_rev_reset');
-  localStorage.removeItem('thc_rev_base');
-  renderDash();renderCust&&renderCust();
-  toast('Đã xóa mốc — hiển thị toàn bộ doanh thu','ok');
-}
-
-function updateRevResetLabel(){
-  document.querySelectorAll('.rev_reset_lbl').forEach(function(el){
-    var d=getRevResetDate(), base=getRevBase();
-    var parts=[];
-    if(d){ var dt=new Date(d); parts.push('Từ '+dt.toLocaleDateString('vi-VN')); }
-    if(base>0){ parts.push('Gốc: +'+new Intl.NumberFormat('vi-VN').format(base)+'đ'); }
-    if(parts.length){
-      el.innerHTML=parts.join(' · ')+' <a href="#" onclick="clearRevReset();return false" style="color:var(--primary);font-weight:600">Xóa</a>';
-    } else { el.innerHTML=''; }
-  });
-}
-
 function resetRevenue(){
-  var ov=document.getElementById('modov'); if(!ov) return;
-  var today=new Date().toISOString().slice(0,10);
-  var curDate=getRevResetDate()?new Date(getRevResetDate()).toISOString().slice(0,10):today;
-  var curBase=getRevBase();
-  ov.style.display='flex';
-  ov.innerHTML=
-    '<div class="modw" style="max-width:420px;width:94%;padding:0;border-radius:16px;overflow:hidden">'+
-    '<div style="background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;padding:14px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center">'+
-    '<span>💰 Quản lý doanh thu</span>'+
-    '<button onclick="cMod()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>'+
-    '</div>'+
-    '<div style="padding:20px;background:var(--surface);display:flex;flex-direction:column;gap:14px">'+
-    '<div>'+
-    '<label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:6px">📅 TÍNH TỪ NGÀY</label>'+
-    '<input type="date" id="rev_from_date" value="'+curDate+'" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"/>'+
-    '<div style="font-size:11px;color:var(--muted);margin-top:4px">Chỉ tính các đơn hoàn thành SAU ngày này</div>'+
-    '</div>'+
-    '<div>'+
-    '<label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:6px">💵 DOANH THU GỐC (carry-over)</label>'+
-    '<input type="number" id="rev_base_val" value="'+(curBase||'')+'" placeholder="0" min="0" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;box-sizing:border-box"/>'+
-    '<div style="font-size:11px;color:var(--muted);margin-top:4px">Số doanh thu mang sang từ trước (để trống = 0)</div>'+
-    '</div>'+
-    '<div style="background:var(--bg);border-radius:10px;padding:12px 14px">'+
-    '<div style="font-size:12px;color:var(--muted);margin-bottom:4px">Xem trước</div>'+
-    '<div id="rev_preview" style="font-size:18px;font-weight:800;color:#3b82f6">—</div>'+
-    '</div>'+
-    '<div style="display:flex;gap:8px;justify-content:flex-end;padding-top:4px">'+
-    '<button onclick="clearRevReset();cMod()" style="padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600">🗑 Xóa mốc</button>'+
-    '<button onclick="saveRevSettings()" style="padding:9px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;box-shadow:0 2px 8px rgba(59,130,246,.3)">✅ Lưu</button>'+
-    '</div>'+
-    '</div>'+
-    '</div>';
-  // Wire up live preview
-  function updatePreview(){
-    var fromDate = document.getElementById('rev_from_date').value;
-    var base = parseFloat(document.getElementById('rev_base_val').value)||0;
-    var resetDt = fromDate ? new Date(fromDate+'T00:00:00') : null;
-    var fromBooks = books.reduce(function(s,b){
-      if(!b.actualCost) return s;
-      if(resetDt){
-        var bd = new Date(b.updatedAt||b.scheduledAt||b.createdAt||0);
-        if(bd < resetDt) return s;
-      }
-      return s + (parseFloat(b.actualCost)||0);
-    },0);
-    var total = base + fromBooks;
-    var el = document.getElementById('rev_preview');
-    if(el) el.textContent = new Intl.NumberFormat('vi-VN').format(total)+'đ';
-  }
-  setTimeout(function(){
-    var d=document.getElementById('rev_from_date');
-    var b=document.getElementById('rev_base_val');
-    if(d)d.addEventListener('input',updatePreview);
-    if(b)b.addEventListener('input',updatePreview);
-    updatePreview();
-  },50);
-}
-
-function saveRevSettings(){
-  var fromDate = (document.getElementById('rev_from_date')||{}).value;
-  var base = parseFloat((document.getElementById('rev_base_val')||{}).value)||0;
-  if(fromDate){ localStorage.setItem('thc_rev_reset', new Date(fromDate+'T00:00:00').toISOString()); }
-  else { localStorage.removeItem('thc_rev_reset'); }
-  if(base>0){ localStorage.setItem('thc_rev_base', String(base)); }
-  else { localStorage.removeItem('thc_rev_base'); }
-  cMod();
+  if(!confirm('Đặt lại mốc tính doanh thu từ bây giờ?\nDoanh thu trước thời điểm này sẽ không được tính.')) return;
+  localStorage.setItem('thc_rev_reset', new Date().toISOString());
   renderDash();
-  toast('Đã lưu cài đặt doanh thu','ok');
+  toast('Đã đặt lại mốc doanh thu','ok');
+}
+function getRevResetDate(){ return localStorage.getItem('thc_rev_reset')||null; }
+function clearRevReset(){ localStorage.removeItem('thc_rev_reset'); renderDash(); toast('Đã xóa mốc đặt lại doanh thu','ok'); }
+function updateRevResetLabel(){
+  var el=document.getElementById('rev_reset_lbl'); if(!el) return;
+  var d=getRevResetDate();
+  if(d){ var dt=new Date(d); el.innerHTML='Từ '+dt.toLocaleDateString('vi-VN')+' <a href="#" onclick="clearRevReset();return false" style="color:var(--primary)">Xóa</a>'; }
+  else { el.innerHTML=''; }
 }
 
 function renderDash(){
@@ -1320,14 +1161,7 @@ function renderDash(){
   var done=books.filter(function(b){return b.status==='completed';}).length;
   var canc=books.filter(function(b){return b.status==='cancelled';}).length;
   var urg=books.filter(function(b){return b.priority==='urgent';}).length;
-  var rev=calcRevenue();
-  var now=new Date(); now.setHours(0,0,0,0);
-  var overdue=books.filter(function(b){
-    if(b.status==='completed'||b.status==='cancelled') return false;
-    if(!b.returnDate) return false;
-    var rd=new Date(b.returnDate); rd.setHours(0,0,0,0);
-    return rd<now;
-  }).length;
+  var rev=books.reduce(function(s,b){return s+(parseFloat(b.actualCost)||0);},0);
   var today=books.filter(function(b){var d=new Date(b.scheduledAt||'');var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}).length;
   var el=document.getElementById('dashg');
   if(!el)return;
@@ -1339,10 +1173,8 @@ function renderDash(){
     +sc('✅','Hoàn thành',done,'b-d','c-green')
     +sc('❌','Đã hủy',canc,'b-c','c-red')
     +sc('🚨','Ưu tiên cao',urg,urg>0?'b-p':'','c-red')
-    +(overdue>0?sc('⚠️','Quá hạn trả',overdue,'b-c','c-red'):'')
-    +sc('💰','Doanh thu<div class="rev_reset_lbl" style="font-size:11px;color:var(--muted);margin-top:2px"></div><button onclick="resetRevenue()" style="margin-top:5px;font-size:11px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;font-family:inherit">⚙️ Cài đặt</button>',fmt(rev),'b-rev','c-cyan');
+    +sc('💰','Doanh thu',fmt(rev),'b-rev','c-cyan');
   renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();
-  setTimeout(updateRevResetLabel,0);
 }
 
 function sc(icon,label,val,cls,icls){
@@ -1382,16 +1214,7 @@ function safeStr(s) {
   var tb=document.getElementById('btbody'), em=document.getElementById('bemp'), mwrap=document.getElementById('bwrap');
   if(isMob){ if(tb) tb.style.display='none'; if(mwrap) mwrap.style.display='block'; }
   else { if(tb) tb.style.display='table-row-group'; if(mwrap) mwrap.style.display='none'; }
-  if(!filtered.length){
-    if(tb)tb.innerHTML='';
-    if(mwrap) mwrap.innerHTML='';
-    if(em){
-      em.style.display='';
-      em.innerHTML='<div style="text-align:center;padding:48px 20px"><div style="font-size:48px;margin-bottom:16px">📋</div><div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px">Không tìm thấy lịch hẹn</div><div style="font-size:13px;color:var(--muted)">Thử thay đổi bộ lọc hoặc thêm lịch hẹn mới</div></div>';
-    }
-    return;
-  }
-  if(em)em.style.display='none';
+  if(!filtered.length){ if(tb)tb.innerHTML=''; if(mwrap) mwrap.innerHTML=''; if(em)em.style.display=''; return; } if(em)em.style.display='none';
   var rows=filtered.map(function(b){
     var u=b.priority==='urgent';
     var opts=Object.keys(SM).map(function(k){return '<option value="'+k+'"'+(b.status===k?' selected':'')+'>'+SM[k].l+'</option>';}).join('');
@@ -1420,7 +1243,6 @@ function safeStr(s) {
         +'<button class="btn b-sec" style="padding:7px 10px;font-size:13px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏️</button>'
         +'<button class="btn" style="padding:7px 10px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button>'
         +'<a class="btn b-ok" style="padding:7px 10px;font-size:13px;text-decoration:none" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'
-        +'<a class="btn" style="padding:7px 10px;font-size:13px;text-decoration:none;color:#25d366;border:1.5px solid #25d366;border-radius:10px" href="https://wa.me/84'+esc((b.phone||'').replace(/^0/,'').replace(/\D/g,''))+'" target="_blank" title="WhatsApp">💬</a>'
         +'<button class="btn b-dan" style="padding:7px 10px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button>'
         +'</div>'
         +'</div>'
@@ -1434,7 +1256,7 @@ function safeStr(s) {
       +'<td><div class="dc">'+fdt(b.scheduledAt)+'</div></td>'
       +'<td><select class="ssel" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select></td>'
       +'<td>'+(b.actualCost?'<span class="ca">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span class="ce">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</span></td>'
-      +'<td><div class="ac"><button class="ib edt" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="ib edt" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="ib" href="tel:'+esc(b.phone||'')+'" title="Gọi điện">📞</a><a class="ib" href="https://wa.me/84'+esc((b.phone||'').replace(/^0/,'').replace(/\D/g,''))+'" target="_blank" title="WhatsApp" style="color:#25d366">💬</a><button class="ib del" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
+      +'<td><div class="ac"><button class="ib edt" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="ib edt" onclick="doEdit(\''+b.id+'\')" title="Sua">✏</button><button class="ib del" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
       +'</tr>';
   }).join('');
   if(isMob && mwrap) mwrap.innerHTML = rows;
@@ -1613,59 +1435,131 @@ function doPrint(id){
     }
   }
   if(!b){window.print();return;}
-  var win=window.open('','_blank','width=800,height=920');
+  var win=window.open('','_blank','width=820,height:1000');
   var shop=cfg.name||'Trần Hoa Computer';
   var phone=cfg.phone||'0963.284.044';
-  var addr=cfg.addr||'';
+  var addr=cfg.addr||'Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên';
+  var printNow=new Date().toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
   function _esc(s){return esc(s||'—');}
-  function _row(l,v){return '<div class="row"><div class="l">'+l+'</div><div class="v">'+v+'</div></div>';}
+  function _row(l,v,highlight){return '<div class="row'+(highlight?' hi':'')+'"><div class="l">'+l+'</div><div class="v">'+v+'</div></div>';}
+  function _sec(t){return '<div class="sec-head">'+t+'</div>';}
   function _fmtDate(v){return v?new Date(v).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'}):'—';}
-  var html = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-    +'<title>Biên Lai - '+b.id+'</title>'
-    +'<style>body{font-family:Inter, system-ui, -apple-system, Roboto, "Be Vietnam Pro", sans-serif;color:#111;margin:0;padding:20px;background:#f7f7fb}'
-    +'.paper{max-width:720px;margin:0 auto;background:#fff;padding:24px;border-radius:8px;box-shadow:0 6px 30px rgba(18,38,63,.08);border:1px solid #eef2ff}'
-    +'.hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f1f5f9;padding-bottom:12px}'
-    +'.shop{font-size:20px;font-weight:800;color:#0f172a}'
-    +'.meta{font-size:13px;color:#475569;text-align:right}'
-    +'.title{text-align:center;margin:18px 0 8px;font-size:16px;font-weight:700;letter-spacing:1px}'
-    +'.rows{margin-top:6px}'
-    +'.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eef2ff}'
-    +'.row .l{color:#475569;font-weight:600}'
-    +'.row .v{color:#0b1220;text-align:right;max-width:60%;word-break:break-word}'
-    +'.total{font-size:18px;font-weight:800;color:#0b1220}'
-    +'.notes{margin-top:10px;font-size:13px;color:#475569}'
-    +'.foot{margin-top:18px;border-top:1px solid #f1f5f9;padding-top:12px;font-size:12px;color:#6b7280;text-align:center}'
-    +'.no-print{display:inline-block;margin-top:14px;padding:10px 18px;background:#2563eb;color:#fff;border-radius:8px;border:none;cursor:pointer}'
-    +'@media print{body{background:#fff} .no-print{display:none} .paper{box-shadow:none;border:none;margin:0;padding:0;border-radius:0}}'
+  function _fmtDateOnly(v){return v?new Date(v).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';}
+  var priMap={urgent:'🔴 Khẩn cấp',high:'🟠 Cao',medium:'🟡 Trung bình',low:'🟢 Thấp'};
+  var prioLabel=priMap[b.priority]||(b.priority||'Thông thường');
+  var statusLabel=SM[b.status]?SM[b.status].l:(b.status||'—');
+  var deviceStr=_esc((b.deviceType?svcLabel(b.deviceType):'') + (b.brand?' — '+b.brand:'') + (b.model?' '+b.model:''));
+  var schedAt='—';
+  if(b.scheduledAt){try{schedAt=new Date(b.scheduledAt).toLocaleDateString('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});}catch(e){schedAt=b.scheduledAt;}}
+  if(b.timeSlot&&b.timeSlot!=='—')schedAt+=' — '+b.timeSlot;
+  var phcss = '<!doctype html><html><head><meta charset="utf-8"><title>Phiếu Sửa Chữa #'+b.id+'</title>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{font-family:"Be Vietnam Pro",Inter,system-ui,-apple-system,sans-serif;color:#111;background:#f0f4f8;padding:20px 16px}'
+    +'.paper{max-width:720px;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 8px 32px rgba(15,23,42,.12)}'
+    +'/* HEADER */'
+    +'.hdr{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);padding:20px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}'
+    +'.hdr-left{}'
+    +'.shop-name{font-size:20px;font-weight:800;color:#fff;letter-spacing:.3px}'
+    +'.shop-info{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;line-height:1.6}'
+    +'.hdr-right{text-align:right;flex-shrink:0}'
+    +'.receipt-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:2px;text-transform:uppercase}'
+    +'.receipt-id{font-size:22px;font-weight:900;color:#fff;margin-top:2px}'
+    +'.receipt-date{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px}'
+    +'/* STATUS BADGE */'
+    +'.status-row{background:#f8faff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8eef8}'
+    +'.status-badge{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;padding:5px 12px;border-radius:20px;background:#dbeafe;color:#1d4ed8}'
+    +'.prio-badge{font-size:12px;font-weight:600;color:#475569}'
+    +'/* SECTIONS */'
+    +'.body{padding:0 24px 20px}'
+    +'.sec-head{font-size:10px;font-weight:800;color:#3b82f6;text-transform:uppercase;letter-spacing:1px;padding:16px 0 6px;border-bottom:2px solid #dbeafe;margin-bottom:2px}'
+    +'.row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f5f9}'
+    +'.row:last-child{border-bottom:none}'
+    +'.l{color:#64748b;font-weight:600;font-size:13px;flex-shrink:0;padding-right:12px;min-width:130px}'
+    +'.v{color:#0f172a;font-size:13px;text-align:right;word-break:break-word;flex:1}'
+    +'.row.hi .v{font-size:20px;font-weight:800;color:#0f172a}'
+    +'.row.hi .l{color:#1e293b;font-weight:700}'
+    +'/* NOTES BOX */'
+    +'.notes-box{background:#fffbf0;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;margin:14px 0 0}'
+    +'.notes-box .nt{font-size:11px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}'
+    +'.notes-box p{font-size:13px;color:#78350f;line-height:1.6}'
+    +'/* SIGNATURE */'
+    +'.sig-row{display:flex;gap:24px;margin-top:20px}'
+    +'.sig-box{flex:1;text-align:center}'
+    +'.sig-label{font-size:11px;font-weight:700;color:#475569;letter-spacing:.5px;text-transform:uppercase}'
+    +'.sig-line{height:48px;border-bottom:1px dashed #94a3b8;margin:8px 4px 4px}'
+    +'.sig-name{font-size:11px;color:#94a3b8;font-style:italic}'
+    +'/* FOOTER */'
+    +'.foot{background:#f8faff;border-top:1px solid #e2e8f0;padding:12px 24px;text-align:center;font-size:12px;color:#64748b}'
+    +'/* PRINT */'
+    +'.no-print{display:flex;gap:12px;justify-content:center;padding:16px 24px;background:#fff}'
+    +'.btn-print{padding:10px 24px;background:linear-gradient(135deg,#2563eb,#6366f1);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600}'
+    +'.btn-close{padding:10px 18px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;cursor:pointer;font-size:14px}'
+    +'@media print{'
+    +'  body{background:#fff;padding:0}'
+    +'  .paper{box-shadow:none;border-radius:0}'
+    +'  .no-print{display:none}'
+    +'  .hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'  .status-row{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'}'
     +'</style></head><body>'
     +'<div class="paper">'
-      +'<div class="hdr">'
-        +'<div class="shop">'+_esc(shop)+'</div>'
-        +'<div class="meta">'+_esc(addr)+'<br/>'+(phone?_esc(phone):'')+'</div>'
-      +'</div>'
-      +'<div class="title">BIÊN LAI SỬA CHỮA</div>'
-      +'<div class="rows">'
-        +_row('Mã phiếu', b.id)
-        +_row('Ngày tạo', b.createdAt?_fmtDate(b.createdAt):'—')
-        +_row('Khách hàng', _esc(b.customerName||'—'))
-        +_row('Điện thoại', _esc(b.phone||'—'))
-        +_row('Địa chỉ', _esc(b.address||'—'))
-        +_row('Thiết bị', _esc((b.deviceType?svcLabel(b.deviceType)+' · ':'') + (b.brand||'') + (b.model? ' '+b.model: '')))
-        +_row('Serial/IMEI', _esc(b.serial||'—'))
-        +_row('Vấn đề', _esc(b.issue||'—'))
-        +_row('Kỹ thuật viên', _esc(b.technician||'—'))
-        +_row('Trạng thái', (SM[b.status]?SM[b.status].l:b.status))
-        +'<div class="row"><div class="l">Chi phí ước tính</div><div class="v">'+fmt(b.estimatedCost)+'</div></div>'
-        +'<div class="row"><div class="l">Chi phí thực tế</div><div class="v total">'+fmt(b.actualCost)+'</div></div>'
-      +'</div>'
-      +'<div class="notes">Ghi chú: '+(b.notes?_esc(b.notes):'—')+'</div>'
-      +'<div style="text-align:center">'
-        +'<button class="no-print" onclick="window.print()">🖨 In biên lai</button>'
-      +'</div>'
-      +'<div class="foot">Cảm ơn quý khách đã tin tưởng sử dụng dịch vụ — '+_esc(shop)+'</div>'
+    // ── HEADER
+    +'<div class="hdr">'
+    +'<div class="hdr-left">'
+    +'<div class="shop-name">🖥️ '+_esc(shop)+'</div>'
+    +'<div class="shop-info">📍 '+_esc(addr)+'<br/>📞 '+_esc(phone)+'</div>'
     +'</div>'
-  +'</body></html>';
-  win.document.write(html);
+    +'<div class="hdr-right">'
+    +'<div class="receipt-title">Phiếu sửa chữa</div>'
+    +'<div class="receipt-id">#'+b.id+'</div>'
+    +'<div class="receipt-date">In: '+printNow+'</div>'
+    +'</div>'
+    +'</div>'
+    // ── STATUS BAR
+    +'<div class="status-row">'
+    +'<div><span class="status-badge">📌 '+statusLabel+'</span></div>'
+    +'<div class="prio-badge">'+prioLabel+'</div>'
+    +'</div>'
+    // ── BODY
+    +'<div class="body">'
+    // ── SECTION: Khách hàng
+    +_sec('👤 Thông tin khách hàng')
+    +_row('Họ tên',_esc(b.customerName||'—'))
+    +_row('Số điện thoại',_esc(b.phone||'—'))
+    +_row('Địa chỉ',_esc(b.address||'—'))
+    // ── SECTION: Thiết bị
+    +_sec('🖥️ Thiết bị')
+    +_row('Loại thiết bị',deviceStr)
+    +_row('Serial / IMEI',_esc(b.serial||'—'))
+    +_row('Vấn đề',_esc(b.issue||'—'))
+    // ── SECTION: Lịch hẹn
+    +_sec('📅 Lịch hẹn & sửa chữa')
+    +_row('Ngày hẹn',schedAt)
+    +_row('Ngày nhận máy',b.createdAt?_fmtDate(b.createdAt):'—')
+    +_row('Ngày trả dự kiến',b.returnDate?_fmtDateOnly(b.returnDate):'—')
+    +_row('Kỹ thuật viên',_esc(b.technician||'—'))
+    // ── SECTION: Chi phí
+    +_sec('💰 Chi phí')
+    +_row('Ước tính',fmt(b.estimatedCost))
+    +_row('Thực tế',fmt(b.actualCost),true)
+    +'</div>'
+    // ── NOTES
+    +(b.notes?'<div class="body"><div class="notes-box"><div class="nt">📝 Ghi chú</div><p>'+_esc(b.notes)+'</p></div></div>':'')
+    // ── SIGNATURE
+    +'<div class="body"><div class="sig-row">'
+    +'<div class="sig-box"><div class="sig-label">Khách hàng ký tên</div><div class="sig-line"></div><div class="sig-name">(Xác nhận nhận máy)</div></div>'
+    +'<div class="sig-box"><div class="sig-label">Kỹ thuật viên</div><div class="sig-line"></div><div class="sig-name">'+_esc(b.technician||'')+'</div></div>'
+    +'</div></div>'
+    // ── FOOTER
+    +'<div class="foot">Cảm ơn quý khách đã tin tưởng dịch vụ sửa chữa của <strong>'+_esc(shop)+'</strong> 🙏</div>'
+    +'<div class="no-print">'
+    +'<button class="btn-close" onclick="window.close()">✕ Đóng</button>'
+    +'<button class="btn-print" onclick="window.print()">🖨️ In phiếu</button>'
+    +'</div>'
+    +'</div>'
+    +'</body></html>';
+  win.document.write(phcss);
   win.document.close();
 }
 
@@ -1864,14 +1758,13 @@ function renderCust() {
 
   var total = customers.length;
   var repeat = customers.filter(function(c){return c.orders > 1;}).length;
-  var totalRev = calcRevenue();
+  var totalRev = customers.reduce(function(s,c){return s+c.revenue;},0);
   var se = document.getElementById('custstatg');
   if (se) se.innerHTML =
     sc('👥','Tổng khách hàng', total, '', 'c-blue') +
     sc('🔁','Khách quay lại', repeat, repeat>0?'b-p':'', 'c-purple') +
     sc('✅','Đã hoàn thành', customers.reduce(function(s,c){return s+c.completed;},0), 'b-d', 'c-green') +
-    sc('💰','Tổng doanh thu<div class="rev_reset_lbl" style="font-size:11px;color:var(--muted);margin-top:2px"></div><button onclick="resetRevenue()" style="margin-top:5px;font-size:11px;padding:3px 9px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;font-family:inherit">⚙️ Cài đặt</button>', fmt(totalRev), 'b-rev', 'c-cyan');
-  setTimeout(updateRevResetLabel,0);
+    sc('💰','Tổng doanh thu<div style="font-size:11px;color:var(--muted);margin-top:2px" id="rev_reset_lbl"></div><button onclick="resetRevenue()" style="margin-top:4px;font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer" title="Đặt lại mốc doanh thu">↺ Đặt lại</button>', fmt(totalRev), 'b-rev', 'c-cyan');
 
   var cnt = document.getElementById('custcnt');
   if (cnt) cnt.textContent = total + ' khách';
@@ -2053,6 +1946,7 @@ function renderTechSummary() {
 </script>
 </main>
 </div>
-<!-- bottom nav removed -->
+
+
 </body>
 </html>
