@@ -665,8 +665,11 @@ async function gasCall(params){
   return d;
 }
 async function gasPost(body){
-  var r=await fetch(GAS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  var d=await r.json();
+  // GAS Web App bị CORS với Content-Type: application/json
+  // Giải pháp: encode toàn bộ body thành 1 query param và gọi GET
+  var encoded = encodeURIComponent(JSON.stringify(body));
+  var r = await fetch(GAS_URL + '?method=POST&body=' + encoded);
+  var d = await r.json();
   if(!d.success) throw new Error(d.error||'GAS error');
   return d;
 }
