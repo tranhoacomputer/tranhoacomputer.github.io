@@ -3755,19 +3755,13 @@ body {
                 const returnDate = (function(v){
                     v = (v||'').trim();
                     if(!v) return '';
-                    // Nếu date-only (YYYY-MM-DD), hiển thị ngày không giờ
-                    if(/^\d{4}-\d{2}-\d{2}$/.test(v)){
-                        var p=v.split('-');
+                    // Lấy phần ngày YYYY-MM-DD (10 ký tự đầu), bỏ giờ dù SheetDB trả gì
+                    var dateOnly = v.substring(0, 10);
+                    if(/^\d{4}-\d{2}-\d{2}$/.test(dateOnly)){
+                        var p = dateOnly.split('-');
                         return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
                     }
-                    // ISO string / có T hoặc Z → parse rồi convert sang UTC+7
-                    var d=new Date(v.replace(' ','T'));
-                    if(isNaN(d.getTime())) return v;
-                    return d.toLocaleString('vi-VN',{
-                        timeZone:'Asia/Ho_Chi_Minh',
-                        day:'2-digit',month:'2-digit',year:'numeric',
-                        hour:'2-digit',minute:'2-digit',hour12:false
-                    });
+                    return v;
                 })(item.return_date||item.returnDate||item.Return_date||'');
                 const aNote   = item.Notes||item.notes||item.adminNote||'';
                 const cust    = item['Full name']||item.Full_name||item.customerName||item.fullName||item.name||phoneWith0;
