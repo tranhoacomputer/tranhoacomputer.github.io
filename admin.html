@@ -46,6 +46,9 @@ a{color:inherit;text-decoration:none}
 .sb-logo-text{font-weight:700;color:#fff;font-size:14px;line-height:1.3}
 .sb-logo-sub{font-size:11px;color:var(--sidebar-text);margin-top:1px}
 .sb-section{padding:10px 14px 3px;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px}
+.sl-icon{width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;color:rgba(255,255,255,.8);transition:background .2s}
+.sb-link.active .sl-icon{background:rgba(255,255,255,.25);color:#fff}
+.sb-link:hover .sl-icon{background:rgba(255,255,255,.18)}
 .sb-link{display:flex;align-items:center;gap:10px;padding:9px 14px;color:var(--sidebar-text);cursor:pointer;border-radius:10px;margin:2px 8px;transition:all .2s;font-size:13.5px;position:relative}
 .sb-link:hover{background:rgba(255,255,255,.09);color:#e2e8f0;transform:translateX(2px)}
 .sb-link.active{background:linear-gradient(90deg,var(--sidebar-active) 0%,#6366f1 100%);color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(59,130,246,.35)}
@@ -470,7 +473,7 @@ tr:hover td{background:#f8fafc}
 <nav class="sidebar" id="sb">
 <div class="sb-hd">
   <div class="sb-logo">
-    <div class="sb-logo-icon">🖥️</div>
+    
     <div>
       <div class="sb-logo-text" id="sb-shopname">Trần Hoà Computer</div>
       <div class="sb-logo-sub">Quản lý lịch hẹn</div>
@@ -479,14 +482,14 @@ tr:hover td{background:#f8fafc}
 </div>
 <div class="sb-nav">
   <div class="sb-section">Tổng quan</div>
-  <button class="sb-link active" onclick="goP('dash',this)" data-pg="dash"><span class="sl-icon">📊</span><span class="sl-label">Tổng quan</span></button>
+  <button class="sb-link active" onclick="goP('dash',this)" data-pg="dash"><span class="sl-icon">TQ</span><span class="sl-label">Tổng quan</span></button>
   <div class="sb-section">Lịch hẹn</div>
-  <button class="sb-link" onclick="goP('books',this)" data-pg="books"><span class="sl-icon">📋</span><span class="sl-label">Danh sách lịch hẹn</span><span class="sl-badge" id="pbadge" style="display:none">0</span></button>
-  <button class="sb-link" onclick="doAdd()" data-pg="add"><span class="sl-icon">➕</span><span class="sl-label">Thêm lịch hẹn</span></button>
+  <button class="sb-link" onclick="goP('books',this)" data-pg="books"><span class="sl-icon">LH</span><span class="sl-label">Danh sách lịch hẹn</span><span class="sl-badge" id="pbadge" style="display:none">0</span></button>
+  <button class="sb-link" onclick="doAdd()" data-pg="add"><span class="sl-icon">＋</span><span class="sl-label">Thêm lịch hẹn</span></button>
   <div class="sb-section">Khách hàng</div>
-  <button class="sb-link" onclick="goP('cust',this)" data-pg="cust"><span class="sl-icon">👥</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
+  <button class="sb-link" onclick="goP('cust',this)" data-pg="cust"><span class="sl-icon">KH</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
   <div class="sb-section">Hệ thống</div>
-  <button class="sb-link" onclick="goP('cfg',this)" data-pg="cfg"><span class="sl-icon">⚙️</span><span class="sl-label">Cài đặt</span></button>
+  <button class="sb-link" onclick="goP('cfg',this)" data-pg="cfg"><span class="sl-icon">CD</span><span class="sl-label">Cài đặt</span></button>
 </div>
 <div class="sb-ft">
   <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-user-name">Admin</div><div class="sb-user-role">Quản trị viên</div></div></div>
@@ -499,10 +502,10 @@ tr:hover td{background:#f8fafc}
   <div class="tb-title" id="pgtit">Tổng quan</div>
   <div class="tb-actions">
     <div class="clk" id="clk"></div>
-    <span class="sl s-ok" id="slbl">✅ Cục bộ</span>
-    <button class="tb-btn" id="synbtn" onclick="if(!_autoSyncInterval||true){doSync();}"><span id="synicon">🔄</span> Đồng bộ GGSheet</button>
-    <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none">🌐 Web KH</a>
-    <button class="tb-btn primary" onclick="doAdd()">➕ Thêm lịch hẹn</button>
+    <span class="sl s-ok" id="slbl">Cục bộ</span>
+    <button class="tb-btn" id="synbtn" onclick="doSync()"><span id="synicon">🔄</span> Đồng bộ GGSheet</button>
+    <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none">Web KH</a>
+    <button class="tb-btn primary" onclick="doAdd()">Thêm lịch hẹn</button>
   </div>
 </header>
 <div class="content">
@@ -510,15 +513,15 @@ tr:hover td{background:#f8fafc}
 <div class="pg active" id="pg-dash">
 <div class="statg" id="dashg"></div>
 <div class="dg">
-  <div class="card"><div class="ch"><h3>📈 Thống kê trạng thái</h3></div><div class="cb"><div class="cw"><canvas id="sch"></canvas></div></div></div>
-  <div class="card"><div class="ch"><h3>💰 Doanh thu 6 tháng gần nhất</h3></div><div class="cb"><div class="rev-chart-wrap"><canvas id="rev-chart"></canvas><div class="chart-no-data" id="rev-nodata" style="display:none">📊<span>Chưa có đơn hoàn thành</span></div></div></div></div>
+  <div class="card"><div class="ch"><h3>Thống kê trạng thái</h3></div><div class="cb"><div class="cw"><canvas id="sch"></canvas></div></div></div>
+  <div class="card"><div class="ch"><h3>Doanh thu 6 tháng gần nhất</h3></div><div class="cb"><div class="rev-chart-wrap"><canvas id="rev-chart"></canvas><div class="chart-no-data" id="rev-nodata" style="display:none"><span>Chưa có đơn hoàn thành</span></div></div></div></div>
 </div>
 <div class="dg">
-  <div class="card"><div class="ch"><h3>🕐 Lịch hẹn gần đây</h3></div><div class="cb" id="recl"></div></div>
-  <div class="card" id="toptech-card"><div class="ch"><h3>👨‍🔧 Kỹ thuật viên</h3></div><div class="cb" id="toptech-body"></div></div>
+  <div class="card"><div class="ch"><h3>Lịch hẹn gần đây</h3></div><div class="cb" id="recl"></div></div>
+  <div class="card" id="toptech-card"><div class="ch"><h3>Kỹ thuật viên</h3></div><div class="cb" id="toptech-body"></div></div>
 </div>
 <div class="card" id="urgc" style="display:none">
-  <div class="ch" style="background:#fff5f5"><h3 style="color:var(--red)">🚨 Lịch hẹn khẩn cấp chưa xử lý</h3></div>
+  <div class="ch" style="background:#fff5f5"><h3 style="color:var(--red)">Lịch hẹn khẩn cấp chưa xử lý</h3></div>
   <div class="cb" id="urgl"></div>
 </div>
 </div>
@@ -546,7 +549,7 @@ tr:hover td{background:#f8fafc}
     <option>Điện thoại</option><option>Máy tính bảng</option>
     <option>Màn hình</option><option>Thiết bị khác</option>
   </select>
-  <button class="tbb" onclick="doExport()">📥 Xuất CSV</button>
+  <button class="tbb" onclick="doExport()">Xuất CSV</button>
   <span class="rc" id="rcnt" style="font-size:12px;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:6px;border:1px solid var(--border)"></span>
 </div>
 <div class="twrap">
@@ -564,12 +567,12 @@ tr:hover td{background:#f8fafc}
 <div class="card" style="padding:16px 20px">
   <div style="display:flex;align-items:center;gap:16px">
     <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
-    <h2 id="ftit" style="font-size:18px;font-weight:700">➕ Thêm lịch hẹn mới</h2>
+    <h2 id="ftit" style="font-size:18px;font-weight:700">Thêm lịch hẹn mới</h2>
   </div>
 </div>
 <div class="ffg">
   <div class="ffs">
-    <h3>👤 Thông tin khách hàng</h3>
+    <h3>Thông tin khách hàng</h3>
     <div class="fr">
       <div class="fd" id="fww-cN"><label>Họ và tên *</label><input id="fw_cN" placeholder="Nguyễn Văn A" oninput="clE('cN')"/><div class="ferr" id="fe_cN"></div></div>
       <div class="fd" id="fww-ph"><label>Số điện thoại *</label><input id="fw_ph" placeholder="0901234567" oninput="clE('ph')"/><div class="ferr" id="fe_ph"></div></div>
@@ -579,7 +582,7 @@ tr:hover td{background:#f8fafc}
     </div>
   </div>
   <div class="ffs">
-    <h3>🖥️ Thông tin thiết bị</h3>
+    <h3>Thông tin thiết bị</h3>
     <div class="fr">
       <div class="fd"><label>Loại thiết bị</label>
         <select id="fw_dt"><option>Laptop</option><option>PC Desktop</option><option>Máy tính bảng</option><option>Điện thoại</option><option>Màn hình</option><option>Thiết bị khác</option></select>
@@ -589,33 +592,41 @@ tr:hover td{background:#f8fafc}
     <div class="fr">
       <div class="fd"><label>Model / Dòng máy</label><input id="fw_md" placeholder="Inspiron 15, VivoBook..."/></div>
       <div class="fd"><label>Số serial / IMEI</label><input id="fw_sr" placeholder="SN hoặc IMEI..."/></div>
+      <div class="fd"><label>Mật khẩu thiết bị</label><input id="fw_pw" placeholder="PIN, mật khẩu mở máy..."/></div>
     </div>
   </div>
   <div class="ffs" style="grid-column:1/-1">
-    <h3>🔧 Chi tiết yêu cầu</h3>
+    <h3>Chi tiết yêu cầu</h3>
     <div class="fd" id="fww-is"><label>Mô tả vấn đề *</label><textarea id="fw_is" rows="3" placeholder="Mô tả triệu chứng, lỗi cụ thể..." oninput="clE('is')"></textarea><div class="ferr" id="fe_is"></div></div>
     <div class="fr">
       <div class="fd"><label>Mức độ ưu tiên</label>
         <select id="fw_pr"><option value="urgent">🚨 Khẩn cấp</option><option value="normal" selected>⚡ Bình thường</option></select>
       </div>
-      <div class="fd"><label>Ngày &amp; giờ hẹn</label><input id="fw_sa" type="datetime-local"/></div>
+      <div class="fd"><label>Ngày hẹn</label><input id="fw_sa" type="date"/></div>
+      <div class="fd"><label>Trạng thái</label>
+        <select id="fw_st"><option value="pending">Chờ xử lý</option><option value="assigned">Đã phân công</option><option value="in_progress">Đang sửa</option><option value="completed">Hoàn thành</option><option value="cancelled">Đã hủy</option></select>
+      </div>
     </div>
     <div class="fr">
       <div class="fd"><label>Chi phí ước tính (VND)</label><input id="fw_ec" type="number" min="0" step="10000" placeholder="150000"/></div>
       <div class="fd"><label>Chi phí thực tế (VND)</label><input id="fw_ac" type="number" min="0" step="10000" placeholder="0"/></div>
     </div>
     <div class="fr">
-      <div class="fd"><label>Kỹ thuật viên</label><input id="fw_tc" placeholder="Tên KTV..."/></div>
-      <div class="fd"><label>📅 Ngày hẹn trả máy</label><input id="fw_rd" type="date"/></div>
+      <div class="fd"><label>Kỹ thuật viên</label><input id="fw_tc" list="ktv-datalist" placeholder="Chọn hoặc nhập KTV..." autocomplete="off"/><datalist id="ktv-datalist"></datalist></div>
+      <div class="fd"><label>Ngày nhận máy</label><input id="fw_cr" type="date"/></div>
     </div>
     <div class="fr">
-      <div class="fd"><label>Ghi chú nội bộ</label><input id="fw_nt" placeholder="Ghi chú..."/></div>
+      <div class="fd"><label>Ngày hẹn trả máy</label><input id="fw_rd" type="date"/></div>
+    </div>
+    <div class="fr">
+      <div class="fd"><label>Phụ kiện kèm theo</label><input id="fw_acc" placeholder="Sạc, túi, chuột, bao..."/></div>
+      <div class="fd"><label>Ghi chú nội bộ</label><input id="fw_nt" placeholder="Ghi chú nội bộ..."/></div>
     </div>
   </div>
 </div>
 <div class="ffoot">
   <button class="btn b-sec" onclick="goP('books',document.querySelector('[data-pg=books]'))">Huỷ</button>
-  <button class="btn b-pri" onclick="doSave()" id="svbtn">💾 Lưu lịch hẹn</button>
+  <button class="btn b-pri" onclick="doSave()" id="svbtn">Lưu lịch hẹn</button>
 </div>
 </div>
 <!-- DETAIL -->
@@ -625,9 +636,9 @@ tr:hover td{background:#f8fafc}
     <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
     <div style="flex:1;display:flex;align-items:center;gap:12px"><h2 style="font-size:18px;font-weight:700" id="detid"></h2><span id="detbdg"></span></div>
     <div style="display:flex;gap:8px">
-      <button class="btn b-gho btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">🖨️ In phiếu</button>
-      <button class="btn b-sec btn-sm" id="detedit">✏️ Chỉnh sửa</button>
-      <button class="btn b-dan btn-sm" id="detdel">🗑️ Xoá</button>
+      <button class="btn b-gho btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">In phiếu</button>
+      <button class="btn b-sec btn-sm" id="detedit">Chỉnh sửa</button>
+      <button class="btn b-dan btn-sm" id="detdel">Xoá</button>
     </div>
   </div>
 </div>
@@ -657,11 +668,11 @@ tr:hover td{background:#f8fafc}
   <!-- CARD: Kết nối -->
   <div class="cfg-card">
     <div class="cfg-card-hd"><span class="cfg-ic">🔗</span><div><div class="cfg-title">Kết nối Google Apps Script</div><div class="cfg-sub">URL đồng bộ dữ liệu từ Google Sheets</div></div></div>
-    <div class="cfg-field"><label>URL Google Apps Script (chỉ đọc)</label><input id="s_sheetdb" readonly style="opacity:.7;cursor:default;background:var(--bg)" title="GAS URL đang dùng"/></div>
+    <div class="cfg-field"><label>URL Google Apps Script</label><input id="s_sheetdb" placeholder="https://script.google.com/macros/s/..." oninput="updateGasUrl(this.value)" style="font-size:12px"/><div style="font-size:11px;color:var(--muted);margin-top:4px;padding:0 2px">Thay đổi URL sẽ được lưu và dùng ngay</div></div>
     <div class="cfg-actions">
-      <button class="btn b-pri" onclick="doSync()">🔄 Đồng bộ GGSheet</button>
-      <a class="btn b-gho" href="index.html" target="_blank" style="text-decoration:none">🌐 Web khách hàng</a>
-      <button class="btn b-gho" onclick="doExport()">📥 Xuất CSV</button>
+      <button class="btn b-pri" onclick="doSync()">Đồng bộ GGSheet</button>
+      <a class="btn b-gho" href="index.html" target="_blank" style="text-decoration:none">Web khách hàng</a>
+      <button class="btn b-gho" onclick="doExport()">Xuất CSV</button>
     </div>
   </div>
 
@@ -681,7 +692,31 @@ tr:hover td{background:#f8fafc}
     <div class="cfg-toggle"><label><input type="checkbox" id="s_auth_en" onchange="savCfg('authEnabled',this.checked)"/><span>Yêu cầu đăng nhập</span></label></div>
     <div class="cfg-toggle"><label><input type="checkbox" id="s_auto_sync" onchange="savCfg('autoSync',this.checked)"/><span>Tự động đồng bộ từ Google Sheets</span></label></div>
     <div class="cfg-actions" style="margin-top:12px">
-      <button class="btn b-dan" onclick="logoutAdmin()">🔓 Đăng xuất</button>
+      <button class="btn b-dan" onclick="logoutAdmin()">Đăng xuất</button>
+    </div>
+  </div>
+
+
+  <!-- CARD: Kỹ thuật viên -->
+  <div class="cfg-card">
+    <div class="cfg-card-hd"><span class="cfg-ic">🔧</span><div><div class="cfg-title">Kỹ thuật viên</div><div class="cfg-sub">Danh sách KTV để chọn nhanh khi tạo lịch hẹn</div></div></div>
+    <div class="cfg-field">
+      <label>Thêm kỹ thuật viên</label>
+      <div style="display:flex;gap:8px">
+        <input id="s_ktv_new" placeholder="Tên kỹ thuật viên..." style="flex:1" onkeydown="if(event.key==='Enter')addKtv()"/>
+        <button class="btn b-pri" onclick="addKtv()" style="white-space:nowrap">Thêm</button>
+      </div>
+    </div>
+    <div id="s_ktv_list" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
+
+  <!-- CARD: Cảnh báo hẹn trả -->
+  <div class="cfg-card">
+    <div class="cfg-card-hd"><span class="cfg-ic">⏰</span><div><div class="cfg-title">Cảnh báo hẹn trả máy</div><div class="cfg-sub">Cảnh báo các lịch hẹn trả gần đến hạn</div></div></div>
+    <div class="cfg-field" style="display:flex;align-items:center;gap:12px">
+      <label style="white-space:nowrap;margin-bottom:0">Cảnh báo trước</label>
+      <input id="s_alert_days" type="number" min="1" max="30" value="3" style="width:70px;text-align:center" oninput="savCfg('returnAlertDays',parseInt(this.value)||3)"/>
+      <span style="color:var(--muted);font-size:13px">ngày</span>
     </div>
   </div>
 
@@ -689,7 +724,7 @@ tr:hover td{background:#f8fafc}
   <div class="cfg-card cfg-card-danger">
     <div class="cfg-card-hd"><span class="cfg-ic">⚠️</span><div><div class="cfg-title">Khu vực nguy hiểm</div><div class="cfg-sub">Hành động không thể hoàn tác</div></div></div>
     <div class="cfg-actions">
-      <button class="btn b-dan" onclick="doClear()">🗑️ Xoá toàn bộ dữ liệu cục bộ</button>
+      <button class="btn b-dan" onclick="doClear()">Xoá toàn bộ dữ liệu cục bộ</button>
     </div>
   </div>
 
@@ -699,10 +734,11 @@ tr:hover td{background:#f8fafc}
 <div class="mov" id="modov" style="display:none" onclick="if(event.target===this)cMod()">
   <div class="modal-box" style="max-width:380px;padding:24px"><div class="m-i" id="mi" style="font-size:32px;margin-bottom:8px"></div><h3 id="mt" style="font-size:17px;font-weight:700;margin-bottom:8px"></h3><p id="mb" style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.6"></p><div class="macts" id="ma" style="display:flex;gap:10px;justify-content:flex-end"></div></div>
 </div>
-<div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico">✅</span><span id="tmsg"></span></div>
+<div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico"></span><span id="tmsg"></span></div>
 <script>
 var GAS_URL='https://script.google.com/macros/s/AKfycbyJNMFVJc71g2bAXOrjINWYcHyIZSDyahjSrkVOIKRMwJYQ2cEcCME2OT8uBiomkx-j9g/exec'; // Google Apps Script - unlimited
 var USE_GAS=true; // dùng Google Apps Script
+(function(){var _g=localStorage.getItem('thc_gasUrl');if(_g&&_g.startsWith('https://'))GAS_URL=_g;})();
 async function gasCall(params){
   var qs=Object.entries(params).map(function(e){return encodeURIComponent(e[0])+'='+encodeURIComponent(e[1]||'');}).join('&');
   var r=await fetch(GAS_URL+'?'+qs);
@@ -726,8 +762,7 @@ function initAfterAuth(){
   startClk();renderDash();renderBT();
   var _modal=document.getElementById('modov');
   if(_modal)_modal.addEventListener('click',function(e){if(e.target===_modal)cMod();});
-  // Luôn đồng bộ từ SheetDB khi khởi động (ưu tiên dữ liệu thực từ Google Sheets)
-  doSync();
+  // Chỉ đồng bộ tự động khi cài đặt cho phép
   if(cfg.autoSync){startAutoSync();}
 }
 
@@ -789,15 +824,21 @@ function startClk(){
 function loadCfg(){
   cfg=JSON.parse(localStorage.getItem('thc_cfg')||'{}');
   cfg.name=cfg.name||'Tran Hoa Computer';
-  cfg.addr=cfg.addr||'Xom 6, Phu Thinh, Dai Tu, Thai Nguyen';
+  cfg.addr=cfg.addr||'Xom 6, Phú Thịnh, Dai Tu, Thai Nguyen';
   cfg.phone=cfg.phone||'0963.284.044';
   cfg.adminUser=cfg.adminUser||'Tranhoacomputer';
   cfg.adminPass=cfg.adminPass||'Hoa29903';
   if(typeof cfg.authEnabled==='undefined')cfg.authEnabled=true;
   if(typeof cfg.autoSync==='undefined')cfg.autoSync=true;
+  if(!cfg.ktvList)cfg.ktvList=[];
+  if(typeof cfg.returnAlertDays==='undefined')cfg.returnAlertDays=3;
   ['name','addr','phone'].forEach(function(k){
     var el=document.getElementById('s_'+k);if(el)el.value=cfg[k]||'';
   });
+  var _savedGas=localStorage.getItem('thc_gasUrl');
+  renderKtvList();
+  var sad=document.getElementById('s_alert_days'); if(sad) sad.value=cfg.returnAlertDays||3;
+  if(_savedGas && _savedGas.startsWith('https://')) GAS_URL=_savedGas;
   var sdb=document.getElementById('s_sheetdb'); if(sdb) sdb.value=GAS_URL;
 
   var au=document.getElementById('s_admin_user'); if(au) au.value=cfg.adminUser||'';
@@ -813,6 +854,42 @@ function savCfg(k,v){cfg[k]=v;localStorage.setItem('thc_cfg',JSON.stringify(cfg)
     if(cfg.autoSync) startAutoSync();
     else stopAutoSync();
   }
+}
+function updateGasUrl(v){
+  if(v && v.trim().startsWith('https://')){
+    GAS_URL=v.trim();
+    localStorage.setItem('thc_gasUrl',GAS_URL);
+  }
+}
+function renderKtvList(){
+  var el=document.getElementById('s_ktv_list'); if(!el) return;
+  var list=cfg.ktvList||[];
+  if(!list.length){el.innerHTML='<span style="font-size:12px;color:var(--muted)">Chưa có kỹ thuật viên nào</span>';return;}
+  el.innerHTML=list.map(function(k,i){
+    return '<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:13px">'
+      +k+'<button onclick="removeKtv('+i+')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:0;line-height:1;margin-left:2px">×</button></span>';
+  }).join('');
+  refreshKtvDatalist();
+}
+function addKtv(){
+  var inp=document.getElementById('s_ktv_new'); if(!inp) return;
+  var v=inp.value.trim(); if(!v) return;
+  if(!cfg.ktvList) cfg.ktvList=[];
+  if(cfg.ktvList.indexOf(v)<0) cfg.ktvList.push(v);
+  inp.value='';
+  localStorage.setItem('thc_cfg',JSON.stringify(cfg));
+  renderKtvList();
+}
+function removeKtv(i){
+  if(!cfg.ktvList) return;
+  cfg.ktvList.splice(i,1);
+  localStorage.setItem('thc_cfg',JSON.stringify(cfg));
+  renderKtvList();
+}
+function refreshKtvDatalist(){
+  var dl=document.getElementById('ktv-datalist'); if(!dl) return;
+  var list=cfg.ktvList||[];
+  dl.innerHTML=list.map(function(k){return '<option value="'+k.replace(/"/g,'&quot;')+'">';}).join('');
 }
 function loadBooks(){books=JSON.parse(localStorage.getItem('thc_books')||'[]');updBdg();}
 function saveBooks(){localStorage.setItem('thc_books',JSON.stringify(books));updBdg();}
@@ -1043,7 +1120,11 @@ async function pushToSheets(b, isNew){
       notes:         b.notes || b.Notes || '',
       brand:         b.brand || b.Brand || '',
       model:         b.model || b.Model || '',
-      priority:      b.priority || b.Priority || 'normal'
+      priority:      b.priority || b.Priority || 'normal',
+      address:       b.address || '',
+      serial:        b.serial || b.Serial || '',
+      devicePassword:b.devicePassword || '',
+      accessories:   b.accessories || ''
     };
     if(!gasData.id) gasData.id = 'BK'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
     var action = isNew ? 'create' : 'update';
@@ -1161,20 +1242,39 @@ function renderDash(){
   var done=books.filter(function(b){return b.status==='completed';}).length;
   var canc=books.filter(function(b){return b.status==='cancelled';}).length;
   var urg=books.filter(function(b){return b.priority==='urgent';}).length;
-  var rev=books.reduce(function(s,b){return s+(parseFloat(b.actualCost)||0);},0);
+  var alertDays=cfg.returnAlertDays||3;
+  var _now2=new Date(); _now2.setHours(0,0,0,0);
+  var _limit=new Date(_now2.getTime()+alertDays*86400000);
+  var returnSoon=books.filter(function(b){
+    if(!b.returnDate||b.status==='completed'||b.status==='cancelled') return false;
+    var parts=b.returnDate.split('-');
+    var rd=new Date(+parts[0],+parts[1]-1,+parts[2]);
+    return rd>=_now2 && rd<=_limit;
+  }).length;
+  var returnOverdue=books.filter(function(b){
+    if(!b.returnDate||b.status==='completed'||b.status==='cancelled') return false;
+    var parts=b.returnDate.split('-');
+    var rd=new Date(+parts[0],+parts[1]-1,+parts[2]);
+    return rd<_now2;
+  }).length;
+  var _revReset=getRevResetDate();
+  var _revBooks=_revReset?books.filter(function(b){return b.status==='completed'&&(b.createdAt||'')>=_revReset;}):books.filter(function(b){return b.status==='completed';});
+  var rev=_revBooks.reduce(function(s,b){return s+(parseFloat(b.actualCost)||0);},0);
   var today=books.filter(function(b){var d=new Date(b.scheduledAt||'');var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}).length;
   var el=document.getElementById('dashg');
   if(!el)return;
   el.innerHTML=
-    sc('📋','Tổng lịch hẹn',tot,'','c-blue')
-    +sc('📅','Hôm nay',today,'','c-cyan')
-    +sc('⏳','Chờ xử lý',pend,'b-p','c-amber')
-    +sc('🔧','Đang sửa',prog,'b-i','c-purple')
-    +sc('✅','Hoàn thành',done,'b-d','c-green')
-    +sc('❌','Đã hủy',canc,'b-c','c-red')
-    +sc('🚨','Ưu tiên cao',urg,urg>0?'b-p':'','c-red')
-    +sc('💰','Doanh thu',fmt(rev),'b-rev','c-cyan');
-  renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();
+    sc('','Tổng lịch hẹn',tot,'','c-blue')
+    +sc('','Hôm nay',today,'','c-cyan')
+    +sc('','Chờ xử lý',pend,'b-p','c-amber')
+    +sc('','Đang sửa',prog,'b-i','c-purple')
+    +sc('','Hoàn thành',done,'b-d','c-green')
+    +sc('','Đã hủy',canc,'b-c','c-red')
+    +sc('','Ưu tiên cao',urg,urg>0?'b-p':'','c-red')
+    +sc('','Doanh thu',fmt(rev),'b-rev','c-cyan')
+    +(returnOverdue>0?sc('','Trễ hẹn trả',returnOverdue,'b-c','c-red'):'')
+    +(returnSoon>0?sc('','Sắp đến hẹn trả',returnSoon,'b-p','c-amber'):'');
+  renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
 }
 
 function sc(icon,label,val,cls,icls){
@@ -1223,40 +1323,40 @@ function safeStr(s) {
       var stLabel=SM[b.status]?SM[b.status].l:b.status;
       return '<div style="border:1px solid var(--border);border-left:4px solid '+sColor+';border-radius:12px;margin-bottom:12px;padding:14px 12px;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.06)">'
         +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">'
-        +'<div><div style="font-weight:700;font-size:15px;line-height:1.3">'+esc(b.customerName||'—')+(u?' 🚨':'')+'</div>'
-        +'<div style="font-size:13px;color:var(--muted);margin-top:2px">📞 '+esc(b.phone||'—')+'</div></div>'
+        +'<div><div style="font-weight:700;font-size:15px;line-height:1.3">'+esc(b.customerName||'—')+(u?' (!!)':'')+'</div>'
+        +'<div style="font-size:13px;color:var(--muted);margin-top:2px">'+esc(b.phone||'—')+'</div></div>'
         +'<span style="font-size:10px;color:var(--muted);background:var(--hover);padding:2px 6px;border-radius:6px">'+esc(b.id)+'</span>'
         +'</div>'
         +'<div style="border-top:1px solid var(--border);padding-top:8px;margin-bottom:8px">'
-        +'<div style="font-size:13px;margin-bottom:4px"><span style="color:var(--muted)">💻 Thiết bị: </span><strong>'+esc((svcLabel(b.deviceType)||'')+(b.brand?' · '+b.brand:'')+(b.model?' '+b.model:''))+'</strong></div>'
+        +'<div style="font-size:13px;margin-bottom:4px"><span style="color:var(--muted)">Thiết bị: </span><strong>'+esc((svcLabel(b.deviceType)||'')+(b.brand?' · '+b.brand:'')+(b.model?' '+b.model:''))+'</strong></div>'
         +(b.issue?'<div style="font-size:12px;color:var(--muted);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">📝 '+esc(b.issue)+'</div>':'')
         +'</div>'
         +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">'
         +'<div style="display:flex;flex-direction:column;gap:6px;flex:1">'
-        +(b.scheduledAt?'<div style="font-size:12px;color:var(--muted)">📅 '+fdt(b.scheduledAt)+'</div>':'')
-        +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">👨‍🔧 '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">⏳ Chưa phân công KTV</div>')
-        +(b.returnDate?'<div style="font-size:12px;color:#10b981;font-weight:600">🔁 Hẹn trả: '+fdt(b.returnDate)+'</div>':'')
-        +(b.estimatedCost?'<div style="font-size:12px;color:#f59e0b;font-weight:600">💰 ~'+fmt(b.estimatedCost)+'đ</div>':'')
+        +(b.scheduledAt?'<div style="font-size:12px;color:var(--muted)">'+fdt(b.scheduledAt)+'</div>':'')
+        +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">KTV: '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">⏳ Chưa phân công KTV</div>')
+        +(b.returnDate?'<div style="font-size:12px;color:#10b981;font-weight:600">Hẹn trả: '+fdt(b.returnDate)+'</div>':'')
+        +(b.estimatedCost?'<div style="font-size:12px;color:#f59e0b;font-weight:600">~'+fmt(b.estimatedCost)+'đ</div>':'')
         +'<select class="ssel" style="font-size:13px;padding:5px 8px;max-width:160px" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select>'
         +'</div>'
         +'<div style="display:flex;gap:6px;flex-shrink:0">'
-        +'<button class="btn b-sec" style="padding:7px 10px;font-size:13px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏️</button>'
-        +'<button class="btn" style="padding:7px 10px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button>'
+        +'<button class="btn b-sec" style="padding:7px 10px;font-size:13px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏ Sửa</button>'
+        +'<button class="btn" style="padding:7px 10px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁 Xem</button>'
         +'<a class="btn b-ok" style="padding:7px 10px;font-size:13px;text-decoration:none" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'
-        +'<button class="btn b-dan" style="padding:7px 10px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button>'
+        +'<button class="btn b-dan" style="padding:7px 10px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑 Xoá</button>'
         +'</div>'
         +'</div>'
         +'</div>';
     }
     return '<tr class="'+(u?'ur':'')+'">'
       +'<td><span class="tid">'+esc(b.id)+'</span></td>'
-      +'<td><div class="cc"><div class="mav">'+ini(b.customerName||'?')+'</div><div><div class="cn">'+esc(b.customerName||'—')+(u?' 🚨':'')+'</div><div class="cp">'+esc(b.phone||'')+'</div></div></div></td>'
+      +'<td><div class="cc"><div class="mav">'+ini(b.customerName||'?')+'</div><div><div class="cn">'+esc(b.customerName||'—')+(u?' (!!)':'')+'</div><div class="cp">'+esc(b.phone||'')+'</div></div></div></td>'
       +'<td><div style="font-size:13px;font-weight:600">'+esc(svcLabel(b.deviceType)||'')+'</div><div class="cp">'+esc(b.brand||'')+(b.model?' &middot; '+esc(b.model):'')+'</div></td>'
       +'<td><div class="ic" title="'+esc(b.issue||'')+'">'+esc(b.issue||'—')+'</div></td>'
       +'<td><div class="dc">'+fdt(b.scheduledAt)+'</div></td>'
       +'<td><select class="ssel" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select></td>'
       +'<td>'+(b.actualCost?'<span class="ca">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span class="ce">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</span></td>'
-      +'<td><div class="ac"><button class="ib edt" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="ib edt" onclick="doEdit(\''+b.id+'\')" title="Sua">✏</button><button class="ib del" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
+      +'<td><div class="ac"><button class="ib edt" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="ib edt" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="ib" href="tel:'+esc(b.phone||'')+ '" title="Gọi" style="text-decoration:none;display:inline-flex;align-items:center">📞</a>'+'<button class="ib del" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
       +'</tr>';
   }).join('');
   if(isMob && mwrap) mwrap.innerHTML = rows;
@@ -1271,20 +1371,20 @@ function qkEdit(id){
   ov.style.display='flex';
   ov.innerHTML='<div class="modw" style="max-width:400px;width:94%;padding:0;border-radius:16px;overflow:hidden">'
     +'<div style="background:var(--primary);color:#fff;padding:14px 18px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center">'
-    +'<span>✏️ Cập nhật nhanh</span>'
+    +'<span>Cập nhật nhanh</span>'
     +'<button onclick="cMod()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>'
     +'</div>'
     +'<div style="padding:18px;background:var(--surface)">'
     +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lịch hẹn <b>'+esc(b.customerName)+'</b> – <span style="color:var(--primary)">'+esc(b.id)+'</span></div>'
     +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">👨‍🔧 Kỹ thuật viên</label>'
     +'<input id="qe_tc" value="'+esc(b.technician||'')+'" placeholder="Nhập tên KTV..." style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
-    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">📅 Ngày hẹn trả máy</label>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
     +'<input id="qe_rd" type="date" value="'+esc(b.returnDate||'')+'" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">💰 Chi phí ước tính (VND)</label>'
     +'<input id="qe_ec" type="number" value="'+esc(b.estimatedCost||'')+'" placeholder="150000" min="0" step="10000" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="display:flex;gap:10px">'
     +'<button onclick="cMod()" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);font-size:14px;cursor:pointer;font-family:inherit">Huỷ</button>'
-    +'<button onclick="qkEditSave(\''+id+'\')" style="flex:2;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">💾 Lưu</button>'
+    +'<button onclick="qkEditSave(\''+id+'\')" style="flex:2;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Lưu</button>'
     +'</div>'
     +'</div></div>';
 }
@@ -1301,12 +1401,15 @@ function qkEditSave(id){
 }
 
 function resetForm(){
-  ['cN','ph','em','ad','br','md','sr','is','tc','nt','rd'].forEach(function(f){var el=document.getElementById('fw_'+f);if(el)el.value='';});
+  ['cN','ph','em','ad','br','md','sr','pw','acc','is','tc','nt','rd','cr'].forEach(function(f){var el=document.getElementById('fw_'+f);if(el)el.value='';});
+  var _cr=document.getElementById('fw_cr'); if(_cr) _cr.value=new Date().toISOString().slice(0,10);
+  refreshKtvDatalist();
   document.getElementById('fw_dt').value='Laptop';document.getElementById('fw_pr').value='normal';
+  var _fwst=document.getElementById('fw_st');if(_fwst)_fwst.value='pending';
   document.getElementById('fw_sa').value='';document.getElementById('fw_ec').value='';document.getElementById('fw_ac').value='';
   ['cN','ph','br','is'].forEach(function(f){clE(f);});
-  document.getElementById('ftit').innerHTML='➕ Thêm lịch hẹn mới';
-  document.getElementById('svbtn').innerHTML='💾 Lưu lịch hẹn';
+  document.getElementById('ftit').innerHTML='Thêm lịch hẹn mới';
+  document.getElementById('svbtn').innerHTML='Lưu lịch hẹn';
 }
 function clE(f){var fw=document.getElementById('fww-'+f);if(fw)fw.classList.remove('he');var fe=document.getElementById('fe_'+f);if(fe)fe.textContent='';}
 function doEdit(id){
@@ -1316,12 +1419,14 @@ function doEdit(id){
   Object.keys(map).forEach(function(k){var el=document.getElementById('fw_'+k);if(el)el.value=b[map[k]]||'';});
   document.getElementById('fw_dt').value=b.deviceType||'Laptop';
   document.getElementById('fw_pr').value=b.priority||'normal';
-  document.getElementById('fw_sa').value=b.scheduledAt?b.scheduledAt.slice(0,16):'';
+  var _fwst2=document.getElementById('fw_st');if(_fwst2)_fwst2.value=b.status||'pending';
+  document.getElementById('fw_sa').value=b.scheduledAt?b.scheduledAt.slice(0,10):'';
   document.getElementById('fw_ec').value=b.estimatedCost||'';
   document.getElementById('fw_ac').value=b.actualCost||'';
   var _rd=document.getElementById('fw_rd'); if(_rd) _rd.value=b.returnDate||'';
-  document.getElementById('ftit').innerHTML='✏️ Chỉnh sửa lịch hẹn';
-  document.getElementById('svbtn').innerHTML='💾 Cập nhật';
+  var _cr2=document.getElementById('fw_cr'); if(_cr2) _cr2.value=b.createdAt?b.createdAt.slice(0,10):(new Date().toISOString().slice(0,10));
+  document.getElementById('ftit').textContent='Chỉnh sửa lịch hẹn';
+  document.getElementById('svbtn').innerHTML='Cập nhật';
 }
 function doSave(){
   var errs={};
@@ -1344,6 +1449,8 @@ function doSave(){
     brand:br,model:document.getElementById('fw_md').value.trim(),
     serial:document.getElementById('fw_sr').value.trim(),
     issue:is,priority:document.getElementById('fw_pr').value,
+    devicePassword:(document.getElementById('fw_pw')||{}).value||undefined,
+    accessories:(document.getElementById('fw_acc')||{}).value||undefined,
     scheduledAt:document.getElementById('fw_sa').value||null,
     estimatedCost:Math.abs(Number(document.getElementById('fw_ec').value)||0)||null,
     actualCost:Number(document.getElementById('fw_ac').value)||null,
@@ -1352,14 +1459,15 @@ function doSave(){
     notes:document.getElementById('fw_nt').value.trim()};
   if(editId){
     var b=books.find(function(x){return x.id===editId;});
-    if(b){Object.assign(b,obj);b.updatedAt=now;}
+    if(b){Object.assign(b,obj);var _est=document.getElementById('fw_st');if(_est&&_est.value)b.status=_est.value;b.updatedAt=now;}
     var saved=b;
     editId=null;saveBooks();renderAll();
     if(saved)pushToSheets(saved,false);
     toast('Đã cập nhật lịch hẹn','ok');
   }else{
     var id='BK'+Date.now();
-    var nb=Object.assign({id:id,status:'pending',createdAt:now,source:'admin'},obj);
+    var _crVal=document.getElementById('fw_cr');var _crDate=_crVal&&_crVal.value?new Date(_crVal.value).toISOString():now;
+    var _stEl2=document.getElementById('fw_st'); var nb=Object.assign({id:id,status:(_stEl2&&_stEl2.value?_stEl2.value:'pending'),createdAt:_crDate,source:'admin'},obj);
     books.unshift(nb);saveBooks();renderAll();
     pushToSheets(nb,true).then(function(ret){
       if(ret && typeof ret==='string' && ret!==id){
@@ -1379,29 +1487,34 @@ function viewDet(id){
   document.getElementById('detid').textContent='#'+b.id;
   document.getElementById('detbdg').innerHTML=
     '<span class="bdg '+sm.c+'">'+sm.l+'</span>'
-    +(b.priority==='urgent'?'<span class="pr-urg">🚨 Khẩn cấp</span>':'');
+    +(b.priority==='urgent'?'<span class="pr-urg">Khẩn cấp</span>':'');
   document.getElementById('detedit').onclick=function(){doEdit(id);};
   document.getElementById('detdel').onclick=function(){askDel(id);};
   var cont=document.getElementById('detcont');
-  cont.innerHTML=
+  var statusOpts=['pending','assigned','in_progress','completed','cancelled'];
+  var statusSelHtml='<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg);border-radius:10px;margin-bottom:12px;flex-wrap:wrap">'    +'<span style="font-size:13px;font-weight:600;color:var(--muted)">Trạng thái:</span>'    +'<select id="det_status_sel" onchange="changeDetStatus(\'' + id + '\',this.value)" style="padding:5px 10px;border-radius:7px;border:1.5px solid var(--border);font-size:13px;font-family:inherit;cursor:pointer">'    +statusOpts.map(function(s){var sm2=SM[s]||{l:s};return '<option value="'+s+'"'+(b.status===s?' selected':'')+'>'+sm2.l+'</option>';}).join('')    +'</select></div>';
+  cont.innerHTML= statusSelHtml +
     '<div class="det-block">'
-    +'<h4>👤 Thông tin khách hàng</h4>'
+    +'<h4>Thông tin khách hàng</h4>'
     +'<div class="det-row"><span class="det-label">Họ và tên</span><span class="det-val hi">'+esc(b.customerName||'—')+'</span></div>'
     +'<div class="det-row"><span class="det-label">Số điện thoại</span>'
     +'<span class="det-val"><a href="tel:'+esc(b.phone||'')+'" style="color:var(--primary);font-weight:600">📞 '+esc(b.phone||'—')+'</a></span></div>'
     +(b.address?'<div class="det-row"><span class="det-label">Địa chỉ</span><span class="det-val">'+esc(b.address)+'</span></div>':'')
     +'</div>'
     +'<div class="det-block">'
-    +'<h4>💻 Thông tin thiết bị</h4>'
+    +'<h4>Thông tin thiết bị</h4>'
     +'<div class="det-row"><span class="det-label">Loại thiết bị</span><span class="det-val hi">'+esc(svcLabel(b.deviceType)||'—')+'</span></div>'
+    +(b.devicePassword?'<div class="det-row"><span class="det-label">Mật khẩu thiết bị</span><span class="det-val" style="font-family:monospace;background:var(--bg);padding:2px 8px;border-radius:5px">'+esc(b.devicePassword)+'</span></div>':'')
+    +(b.accessories?'<div class="det-row"><span class="det-label">Phụ kiện kèm</span><span class="det-val">'+esc(b.accessories)+'</span></div>':'')
     +(b.brand?'<div class="det-row"><span class="det-label">Thương hiệu</span><span class="det-val">'+esc(b.brand)+(b.model?' <span style="color:var(--muted)">· '+esc(b.model)+'</span>':'')+'</span></div>':'')
     +(b.issue?'<div class="det-row"><span class="det-label">Mô tả vấn đề</span><span class="det-val" style="line-height:1.5">'+esc(b.issue)+'</span></div>':'')
     +'</div>'
     +'<div class="det-block">'
-    +'<h4>📅 Lịch hẹn & Chi phí</h4>'
+    +'<h4>Lịch hẹn & Chi phí</h4>'
     +'<div class="det-row"><span class="det-label">Ngày hẹn</span><span class="det-val" style="color:var(--primary);font-weight:700;font-size:14px">'+fdt(b.scheduledAt)+'</span></div>'
-    +(b.technician?'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val">👨‍🔧 '+esc(b.technician)+'</span></div>':'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val" style="color:var(--amber)">⏳ Chưa phân công</span></div>')
-    +(b.returnDate?'<div class="det-row"><span class="det-label">📅 Ngày hẹn trả</span><span class="det-val" style="color:var(--primary);font-weight:700">'+fdt(b.returnDate)+'</span></div>':'')
+    +'<div class="det-row"><span class="det-label">Mức độ ưu tiên</span><span class="det-val">'+({urgent:'Khẩn cấp',normal:'Bình thường'}[b.priority]||b.priority||'Bình thường')+'</span></div>'
+    +(b.technician?'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val">KTV: '+esc(b.technician)+'</span></div>':'<div class="det-row"><span class="det-label">Kỹ thuật viên</span><span class="det-val" style="color:var(--amber)">Chưa phân công</span></div>')
+    +(b.returnDate?'<div class="det-row"><span class="det-label">Ngày hẹn trả</span><span class="det-val" style="color:var(--primary);font-weight:700">'+fdt(b.returnDate)+'</span></div>':'')
     +(b.estimatedCost?'<div class="det-row"><span class="det-label">Chi phí ước tính</span><span class="det-val" style="color:var(--amber);font-weight:600">~'+fmt(b.estimatedCost)+'đ</span></div>':'')
     +(b.actualCost?'<div class="det-row"><span class="det-label">Chi phí thực tế</span><span class="det-val" style="color:var(--green);font-weight:700;font-size:15px">'+fmt(b.actualCost)+'đ</span></div>':'')    +(b.notes?'<div style="margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:8px;border-left:3px solid var(--amber)">'
       +'<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">📝 Ghi chú</div>'
@@ -1411,6 +1524,19 @@ function viewDet(id){
 }
 
 
+function changeDetStatus(id, newStatus){
+  var b=books.find(function(x){return x.id===id;});
+  if(!b||b.status===newStatus) return;
+  b.status=newStatus;
+  b.updatedAt=new Date().toISOString();
+  saveBooks(); renderAll();
+  pushToSheets(b, false);
+  // update badge in header
+  var sm=SM[newStatus]||{l:newStatus,c:'b-p'};
+  var bdg=document.getElementById('detbdg');
+  if(bdg) bdg.innerHTML='<span class="bdg '+sm.c+'">'+sm.l+'</span>'+(newStatus==='urgent'?'<span class="pr-urg">Khẩn cấp</span>':'');
+  toast('Đã cập nhật trạng thái: '+sm.l, 'ok');
+}
 function askDel(id){
   showMod('🗑️','Xác nhận xóa?','Bạn có chắc muốn xóa lịch hẹn này? Hành động này không thể hoàn tác.',
     '<button class="btn b-dan" onclick="doDel(\''+id+'\')">Được, xóa</button>'
@@ -1524,7 +1650,7 @@ function doPrint(id){
     // ── BODY
     +'<div class="body">'
     // ── SECTION: Khách hàng
-    +_sec('👤 Thông tin khách hàng')
+    +_sec('Thông tin khách hàng')
     +_row('Họ tên',_esc(b.customerName||'—'))
     +_row('Số điện thoại',_esc(b.phone||'—'))
     +_row('Địa chỉ',_esc(b.address||'—'))
@@ -1555,7 +1681,7 @@ function doPrint(id){
     +'<div class="foot">Cảm ơn quý khách đã tin tưởng dịch vụ sửa chữa của <strong>'+_esc(shop)+'</strong> 🙏</div>'
     +'<div class="no-print">'
     +'<button class="btn-close" onclick="window.close()">✕ Đóng</button>'
-    +'<button class="btn-print" onclick="window.print()">🖨️ In phiếu</button>'
+    +'<button class="btn-print" onclick="window.print()">In phiếu</button>'
     +'</div>'
     +'</div>'
     +'</body></html>';
@@ -1728,7 +1854,7 @@ function buildCustMap() {
     c.orders++;
     if (b.status === 'completed') {
       c.completed++;
-      c.revenue += parseFloat(b.actualCost) || 0;
+      var _rr2=getRevResetDate(); if(!_rr2||(b.createdAt||'')>=_rr2) c.revenue += parseFloat(b.actualCost) || 0;
     }
     var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
     if (d && (!c.lastDate || d > c.lastDate)) c.lastDate = d;
@@ -1761,11 +1887,12 @@ function renderCust() {
   var totalRev = customers.reduce(function(s,c){return s+c.revenue;},0);
   var se = document.getElementById('custstatg');
   if (se) se.innerHTML =
-    sc('👥','Tổng khách hàng', total, '', 'c-blue') +
+    sc('','Tổng khách hàng', total, '', 'c-blue') +
     sc('🔁','Khách quay lại', repeat, repeat>0?'b-p':'', 'c-purple') +
     sc('✅','Đã hoàn thành', customers.reduce(function(s,c){return s+c.completed;},0), 'b-d', 'c-green') +
     sc('💰','Tổng doanh thu<div style="font-size:11px;color:var(--muted);margin-top:2px" id="rev_reset_lbl"></div><button onclick="resetRevenue()" style="margin-top:4px;font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer" title="Đặt lại mốc doanh thu">↺ Đặt lại</button>', fmt(totalRev), 'b-rev', 'c-cyan');
 
+  updateRevResetLabel();
   var cnt = document.getElementById('custcnt');
   if (cnt) cnt.textContent = total + ' khách';
   var badge = document.getElementById('custbadge');
