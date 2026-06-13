@@ -3677,7 +3677,9 @@ body {
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwfXBsPA5173jjCTtAKu-qoid3Sldzd5Y6LInug1Q_SStS90uJ14uJSiuXqspeMZGpidA/exec";
 
     /* ── Tra cứu tình trạng sửa máy (SheetDB) ── */
-    var SHEETDB_URL = 'https://sheetdb.io/api/v1/lzhr8x88wpa5q';
+    var SHEETDB_URL = 'https://sheetdb.io/api/v1/lzhr8x88wpa5q'; // fallback
+    var GAS_URL = 'https://script.google.com/macros/s/AKfycbz-UvXzzt2JCnfIy8L1BKoKg50FfLEnDZKbzAReCoTN79aUkPhS9Oa0FlfM27XN3mif3w/exec';
+    var USE_GAS = true;
 
     function lookupRepairStatus() {
         const phone = (document.getElementById('statusPhone').value || '').trim().replace(/\D/g,'');
@@ -3796,21 +3798,52 @@ body {
         var _cacheKey = 'lookup_'+phoneWith0;
         var _cached = null;
         try{ var _cs=sessionStorage.getItem(_cacheKey); if(_cs){var _co=JSON.parse(_cs);if(Date.now()-_co.t<60000)_cached=_co.d;} }catch(e){}
-        // Gọi song song cả 2 dạng phone (có/không số 0) - SheetDB có thể lưu dạng nào cũng được
-        var _lookupPromise = _cached ? Promise.resolve([_cached,[],[],[]]) : Promise.all([
-            fetch(url).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
-            fetch(url2).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
-            fetch(SHEETDB_URL + '/search?Phone=+84' + encodeURIComponent(phoneNorm)).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }),
-            fetch(SHEETDB_URL + '/search?phone=' + encodeURIComponent(phoneWith0)).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; })
-        ]);
-        _lookupPromise.then(function(results) {
+        // Lookup qua GAS hoặc SheetDB
+        var _lookupFetch;
+        if(USE_GAS && !_cached){
+          _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0))
+            .then(function(r){ return r.json(); })
+            .then(function(d){ return d.success ? (d.data||[]) : []; })
+            .catch(function(){
+              // GAS thất bại → fallback SheetDB
+              return Promise.all([
+                fetch(url).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}),
+                fetch(url2).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];})
+              ]).then(function(rr){ return (rr[0]||[]).concat(rr[1]||[]); });
+            });
+        } else if(_cached){
+          _lookupFetch = Promise.resolve(_cached);
+        } else {
+          _lookupFetch = Promise.all([
+            fetch(url).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];}),
+            fetch(url2).then(function(r){return r.ok?r.json():[];}).catch(function(){return [];})
+          ]).then(function(rr){ return (rr[0]||[]).concat(rr[1]||[]); });
+        }
+        _lookupFetch.then(function(rawRows) {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-            var rows1 = results[0]||[], rows2 = results[1]||[], rows3 = results[2]||[], rows4 = results[3]||[];
-            var seen = new Set();
-            var allRows = rows1.concat(rows2).concat(rows3).concat(rows4).filter(function(r) {
-                var id = r.id||r.Id||JSON.stringify(r);
-                if (seen.has(id)) return false;
-                seen.add(id); return true;
+            // GAS trả về camelCase → normalize sang SheetDB format để render được
+            var allRows = (Array.isArray(rawRows)?rawRows:[]).map(function(r){
+              if(r.customerName || r.deviceType) {
+                // GAS format → convert
+                var p=String(r.phone||r.Phone||'').replace(/\D/g,'');
+                return {
+                  Id: r.id||r.Id||'',
+                  'Full name': r.customerName||r['Full name']||'',
+                  Phone: p, Service: r.deviceType||r.Service||'',
+                  Date:(r.scheduledAt||r.Date||'').split('T')[0],
+                  Time_slot:r.Time_slot||r.timeSlot||'', Note:r.issue||r.Note||'',
+                  Status:r.status||r.Status||'pending',
+                  technician:r.technician||'',
+                  estimated_cost:r.estimatedCost||r.estimated_cost||'',
+                  return_date:r.returnDate||r.return_date||'',
+                  Notes:r.notes||r.Notes||''
+                };
+              }
+              return r; // SheetDB format, giữ nguyên
+            });
+            // Dedup
+            var seen = new Set(); allRows = allRows.filter(function(r){
+              var id=r.id||r.Id||JSON.stringify(r); if(seen.has(id))return false; seen.add(id); return true;
             });
             // Chỉ cache khi có kết quả
             try{ if(!_cached && allRows.length>0) sessionStorage.setItem(_cacheKey, JSON.stringify({t:Date.now(),d:allRows})); }catch(e){}
