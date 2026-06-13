@@ -3724,7 +3724,7 @@ body {
                 });
                 const isCancelled = badge === 'cancelled';
                 const curStep = isCancelled ? -1 : (stepIdx[badge] !== undefined ? stepIdx[badge] : 0);
-                const tech  = (item.Technician||item['Technician ']||item.technician||'').trim();
+                const tech  = (item.technician||item.Technician||item['Technician ']||item['technician ']||'').trim();
                 const _svcMap = {
                   'sua-laptop':'Sửa Laptop','sua-pc':'Sửa máy tính bàn','sua-mainboard':'Sửa bo mạch / IC nguồn',
                   'thay-pin':'Thay pin Laptop','thay-man-hinh':'Thay màn hình Laptop',
@@ -3749,7 +3749,7 @@ body {
                     }
                 }
                 const dt = _dtDisplay;
-                const costEst = item.estimated_cost||item.estimatedCost||item.estCost||'';
+                const costEst = (item.estimated_cost||item.estimatedCost||item.estCost||'').toString().replace(/[^0-9]/g,'');
                 const returnDate = (item.return_date||item.returnDate||item.Return_date||'').trim();
                 const aNote   = item.Notes||item.notes||item.adminNote||'';
                 const cust    = item['Full name']||item.Full_name||item.customerName||item.fullName||item.name||phoneWith0;
@@ -3767,7 +3767,7 @@ body {
                     chips='<div class="status-extra-chips">';
                     if(dt) chips+='<span class="s-chip">📅 '+dt+'</span>';
                     if(returnDate) chips+='<span class="s-chip" style="background:#d1fae5;color:#065f46;font-weight:600">🔁 Hẹn trả: '+returnDate+'</span>';
-                    if(costEst) chips+='<span class="s-chip s-cost">💰 ~'+Number(costEst).toLocaleString('vi-VN')+'đ</span>';
+                    if(costEst) chips+='<span class="s-chip s-cost">💰 ~'+Math.abs(Number(costEst)||0).toLocaleString('vi-VN')+'đ</span>';
                     if(aNote) chips+='<span class="s-chip s-note">📝 '+aNote+'</span>';
                     chips+='</div>';
                 }
