@@ -992,80 +992,51 @@ async function fetchWithRetry(url, opts, maxRetry){
 }
 async function pushToSheets(b, isNew){
   try{
-    var row = bookingToSheetRow(b);
-    var res;
-    if (USE_GAS) {
-      var action = isNew ? 'create' : 'update';
-      await gasPost({action:action, id:b.id, data:row});
-      setSL('ok','Đã lưu lên Google Sheet'); saveBooks(); return b.id;
-    }
-    if (isNew) {
-      res = await fetchWithRetry(SHEETDB_URL, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ data: [row] })
-      });
-      if (res.ok) { setSL('ok','Đã lưu lên Sheets'); b.Id = b.id; saveBooks(); return b.id; }
-      else { setSL('err','Lỗi lưu Sheets'); toast('Lỗi lưu SheetDB: '+res.status,'err'); return false; }
-    } else {
-      // Thử PATCH theo Id trước
-      var patchRes = await fetchWithRetry(SHEETDB_URL + '/Id/' + encodeURIComponent(b.id), {
-        method: 'PATCH',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ data: row })
-      });
-      var patchJson = null;
-      try { patchJson = await patchRes.json(); } catch(e) {}
-      // Nếu Id không tìm thấy (Id rỗng hoặc auto-gen), fallback sang PATCH theo Phone
-      if (!patchRes.ok || (patchJson && patchJson.error) || (patchJson && patchJson.updated === 0)) {
-        if (b.phone) {
-          var phone = (b.phone||'').replace(/\D/g,'');
-          var phone0 = phone.startsWith('0') ? phone : '0'+phone;
-          var phoneNorm = phone.replace(/^0/,'');
-          // Thử patch theo phone với số 0
-          var r2 = await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone0), {
-            method: 'PATCH',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', technician: row.Technician||row.technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
-          });
-          if (!r2.ok) {
-            // Thử không có số 0
-            await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phoneNorm), {
-              method: 'PATCH',
-              headers: {'Content-Type':'application/json'},
-              body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', technician: row.Technician||row.technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
-            });
-          }
-        }
-        setSL('ok','Đã cập nhật Sheets');
-        return b.id;
-      }
-      if (patchRes.ok) { setSL('ok','Đã lưu lên Sheets'); return b.id; }
-      else { setSL('err','Lỗi lưu Sheets'); toast('Lỗi lưu SheetDB: '+patchRes.status,'err'); return false; }
-    }
-  }catch(e){ setSL('err','Lỗi kết nối'); toast('Lỗi đẩy dữ liệu lên SheetDB','err'); return false; }
+    // Tạo GAS data object từ booking object
+    var gasData = {
+      id:            b.id || '',
+      customerName:  b.customerName || b['Full name'] || '',
+      phone:         String(b.phone||'').replace(/\D/g,''),
+      deviceType:    b.deviceType || b.Service || '',
+      scheduledAt:   (function(){
+        if(b.scheduledAt){ var s=String(b.scheduledAt).replace(' ','T'); return s; }
+        if(b.Date){ return b.Date; }
+        return '';
+      })(),
+      timeSlot:      b.timeSlot || b.Time_slot || '',
+      issue:         b.issue || b.Note || '',
+      status:        b.status || b.Status || 'pending',
+      technician:    b.technician || '',
+      estimatedCost: b.estimatedCost || b.estimated_cost || '',
+      actualCost:    b.actualCost || b.actual_cost || '',
+      returnDate:    b.returnDate || b.return_date || '',
+      notes:         b.notes || b.Notes || '',
+      brand:         b.brand || b.Brand || '',
+      model:         b.model || b.Model || '',
+      priority:      b.priority || b.Priority || 'normal'
+    };
+    if(!gasData.id) gasData.id = 'BK'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+    var action = isNew ? 'create' : 'update';
+    await gasPost({action: action, id: gasData.id, data: gasData});
+    b.id = gasData.id;
+    setSL('ok','Đã lưu lên Google Sheet');
+    saveBooks();
+    return b.id;
+  }catch(e){
+    setSL('err','Lỗi kết nối GAS');
+    toast('Lỗi đẩy dữ liệu: '+e.message,'err');
+    console.error('pushToSheets error:', e);
+    return false;
+  }
 }
 
 async function deleteFromSheets(id, bData){
   try{
-    if(USE_GAS){
-      await gasPost({action:'delete',id:id});
-      return;
-    }
-    var res = await fetch(SHEETDB_URL + '/Id/' + encodeURIComponent(id), { method: 'DELETE' });
-    if (!res.ok) {
-      // Nếu Id không khớp, thử xóa theo Phone (fallback cho record Id rỗng)
-      var b = bData || books.find(function(x){return x.id===id;});
-      if (b && b.phone) {
-        var phone = (b.phone||'').replace(/\D/g,'');
-        var phone0 = phone.startsWith('0') ? phone : '0'+phone;
-        var r2 = await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone0), { method: 'DELETE' });
-        if (!r2.ok) {
-          await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone.replace(/^0/,'')), { method: 'DELETE' });
-        }
-      }
-    }
-  }catch(e){ toast('Lỗi khi xóa trên SheetDB','err'); }
+    await gasPost({action:'delete', id:id});
+  }catch(e){
+    toast('Lỗi khi xóa: '+e.message,'err');
+    console.error('deleteFromSheets error:', e);
+  }
 }
 function goP(id,btn){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
