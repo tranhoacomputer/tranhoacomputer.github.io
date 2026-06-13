@@ -928,6 +928,7 @@ function bookingToSheetRow(b) {
     Serial:       b.serial || '',
     Address:      b.address || '',
     Technician:   b.technician || '',
+    technician:   b.technician || '',
     Priority:     b.priority || 'normal',
     estimated_cost: b.estimatedCost || '',
     actual_cost:    b.actualCost || '',
@@ -982,14 +983,14 @@ async function pushToSheets(b, isNew){
           var r2 = await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phone0), {
             method: 'PATCH',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
+            body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', technician: row.Technician||row.technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
           });
           if (!r2.ok) {
             // Thử không có số 0
             await fetch(SHEETDB_URL + '/Phone/' + encodeURIComponent(phoneNorm), {
               method: 'PATCH',
               headers: {'Content-Type':'application/json'},
-              body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
+              body: JSON.stringify({ data: {Status: row.Status||'', Technician: row.Technician||'', technician: row.Technician||row.technician||'', Notes: row.Notes||'', estimated_cost: row.estimated_cost||'', actual_cost: row.actual_cost||'', return_date: row.return_date||'', Id: b.id||'', 'Full name': row['Full name']||''} })
             });
           }
         }
@@ -1039,7 +1040,7 @@ function togSB(){
 }
 function doAdd(){editId=null;goP('add',document.querySelector('[data-pg=add]'));}
 function renderAll(){renderDash();renderBT();}
-function fmt(v){return v?new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(v):'--';}
+function fmt(v){if(!v&&v!==0)return '--'; var n=Math.abs(Number(v)||0); return new Intl.NumberFormat('vi-VN').format(n)+'đ';}
 var SVC_MAP={
   'sua-laptop':'Sửa Laptop','sua-pc':'Sửa máy tính bàn','sua-mainboard':'Sửa bo mạch / IC nguồn',
   'thay-pin':'Thay pin Laptop','thay-man-hinh':'Thay màn hình Laptop',
@@ -1228,7 +1229,7 @@ function qkEditSave(id){
   var b=books.find(function(x){return x.id===id;}); if(!b) return;
   var tc=(document.getElementById('qe_tc').value||'').trim();
   var rd=(document.getElementById('qe_rd').value||'').trim();
-  var ec=Number(document.getElementById('qe_ec').value)||null;
+  var ec=Math.abs(Number(document.getElementById('qe_ec').value)||0)||null;
   b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec;
   b.updatedAt=new Date().toISOString();
   saveBooks(); pushToSheets(b,false); renderAll(); cMod();
@@ -1280,7 +1281,7 @@ function doSave(){
     serial:document.getElementById('fw_sr').value.trim(),
     issue:is,priority:document.getElementById('fw_pr').value,
     scheduledAt:document.getElementById('fw_sa').value||null,
-    estimatedCost:Number(document.getElementById('fw_ec').value)||null,
+    estimatedCost:Math.abs(Number(document.getElementById('fw_ec').value)||0)||null,
     actualCost:Number(document.getElementById('fw_ac').value)||null,
     technician:document.getElementById('fw_tc').value.trim(),
     returnDate:document.getElementById('fw_rd')?document.getElementById('fw_rd').value||null:null,
