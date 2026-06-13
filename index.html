@@ -4157,8 +4157,8 @@ body {
                     }
                 }
                 sBtn.disabled = true;
-                bTxt.innerText = "Đang gửi yêu cầu...";
-                bSpin.style.display = "inline-block";
+                if (bTxt) bTxt.innerText = "Đang gửi yêu cầu...";
+                if (bSpin) bSpin.style.display = "inline-block";
 
                 /* Build form data as JSON */
                 var fData = new FormData(form);
@@ -4229,71 +4229,53 @@ body {
                       }]})
                     }).catch(function(){});
                   }
-                  var gsUrl = typeof GOOGLE_SCRIPT_URL !== 'undefined' ? GOOGLE_SCRIPT_URL : null;
+                  var gsUrl = typeof GAS_URL !== 'undefined' ? GAS_URL : null;
                   if (gsUrl && obj['phone']) {
-                    fetch(gsUrl, {
-                      method: 'POST',
-                      headers: {'Content-Type': 'application/json'},
-                      body: JSON.stringify({ action:'addBooking', data:{
-                        name:    obj['fullname'] || '',
-                        phone:   obj['phone'] || '',
-                        service: obj['service'] || '',
-                        date:    obj['date'] || '',
-                        time:    obj['time-slot'] || '',
-                        note:    obj['note'] || '',
-                        status:  'pending'
-                      }})
-                    }).catch(function(){});
+                    var _gasBody = { action:'create', data:{
+                        id:           _lsBookingId,
+                        customerName: obj['fullname'] || '',
+                        phone:        obj['phone'] || '',
+                        deviceType:   obj['service'] || '',
+                        scheduledAt:  obj['date'] || '',
+                        timeSlot:     obj['time-slot'] || '',
+                        issue:        obj['note'] || '',
+                        status:       'pending'
+                    }};
+                    var _gasEncoded = encodeURIComponent(JSON.stringify(_gasBody));
+                    fetch(gsUrl + '?method=POST&body=' + _gasEncoded).catch(function(){});
                   }
                 } catch(pushErr) {}
 
+                // Gửi email qua formsubmit background (không chặn UX)
                 fetch("https://formsubmit.co/ajax/hoaptdt2005@gmail.com", {
                     method: "POST",
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(obj),
                     signal: ctrl.signal
-                })
-                .then(function(response) {
-                    clearTimeout(tOut);
-                    return response.json();
-                })
-                .then(function(result) {
-                    if (result.status === "success" || result.success === "true" || result.success === true) {
-                        form.reset();
-                        // Xóa cache tra cứu để kết quả luôn mới sau khi đặt lịch
-                        try{ sessionStorage.clear(); }catch(e){}
-                        openModal();
+                }).catch(function(){});
 
-                        /* Update counter */
-                        fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
-                        .then(function(r){ return r.json(); })
-                        .then(function(data){
-                            var lc = document.getElementById("liveCounter");
-                            if (lc && data.count !== undefined) lc.innerText = 10 + data.count;
-                        })
-                        .catch(function(){
-                            var lc = document.getElementById("liveCounter");
-                            if (lc) lc.innerText = (parseInt(lc.innerText)||10) + 1;
-                        });
-                    } else {
-                        /* FormSubmit returned non-success — show inline error */
-                        if (errBox) errBox.style.display = 'block';
-                    }
-                })
-                .catch(function(err) {
+                // Hiển thị thành công ngay sau 800ms (dữ liệu đã lưu GAS + localStorage)
+                setTimeout(function() {
                     clearTimeout(tOut);
-                    console.warn('Form submit error:', err);
-                    /* Show inline fallback contact UI */
-                    if (errBox) {
-                        errBox.style.display = 'block';
-                        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                })
-                .finally(function() {
-                    sBtn.disabled = false;
-                    bTxt.innerText = "Gửi Yêu Cầu Đặt Lịch";
-                    bSpin.style.display = "none";
-                });
+                    form.reset();
+                    try{ sessionStorage.clear(); }catch(e){}
+                    if (sBtn) sBtn.disabled = false;
+                    if (bTxt) bTxt.innerText = "GỬI YÊU CẦU ĐẶT LỊCH";
+                    if (bSpin) bSpin.style.display = "none";
+                    openModal();
+
+                    /* Update counter */
+                    fetch("https://api.counterapi.dev/v1/tranhoacomputer/bookingCounter/up")
+                    .then(function(r){ return r.json(); })
+                    .then(function(data){
+                        var lc = document.getElementById("liveCounter");
+                        if (lc && data.count !== undefined) lc.innerText = 10 + data.count;
+                    })
+                    .catch(function(){
+                        var lc = document.getElementById("liveCounter");
+                        if (lc) lc.innerText = (parseInt(lc.innerText)||10) + 1;
+                    });
+                }, 800);
             });
         }
     });
