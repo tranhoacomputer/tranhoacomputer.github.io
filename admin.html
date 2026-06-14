@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v38.html | Tran Hoa Computer | 2026-06-15 | v38: fix booking desktop — sticky action col, clickable rows, remove dup CSV btn, breakpoint 768→767 daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
+<!-- admin_v39.html | Tran Hoa Computer | 2026-06-15 | v39: fix revenue 0đ (actualCost||estimatedCost fallback); fix stats table empty (DD/MM/YYYY date parsing) fix booking desktop — sticky action col, clickable rows, remove dup CSV btn, breakpoint 768→767 daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -1730,7 +1730,7 @@ function renderDash(){
   }).length;
   var _revReset=getRevResetDate();
   var _revBooks=_revReset?books.filter(function(b){return b.status==='completed'&&(b.createdAt||'')>=_revReset;}):books.filter(function(b){return b.status==='completed';});
-  var rev=_revBooks.reduce(function(s,b){return s+(parseFloat(b.actualCost)||0);},0);
+  var rev=_revBooks.reduce(function(s,b){return s+(parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0);},0);
   var today=books.filter(function(b){var d=new Date(b.scheduledAt||'');var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}).length;
   var el=document.getElementById('dashg');
   if(!el)return;
@@ -2321,16 +2321,27 @@ function renderStatsTable() {
     var dateObj = null;
 
     // Use scheduledAt first, fallback createdAt
-    var raw = b.scheduledAt || b.createdAt || '';
-    if (raw) {
-      try {
-        dateObj = new Date(raw);
-        if (!isNaN(dateObj)) {
-          dateStr = dateObj.getFullYear() + '-' +
-            String(dateObj.getMonth()+1).padStart(2,'0') + '-' +
-            String(dateObj.getDate()).padStart(2,'0');
-        }
-      } catch(e) {}
+    // parseDateStr: handles ISO, YYYY-MM-DD, DD/MM/YYYY, DD/MM/YYYYTHH:MM
+    function parseDateStr(s) {
+      if (!s) return null;
+      s = String(s).trim();
+      // DD/MM/YYYY or DD/MM/YYYYTxx
+      var m1 = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+      if (m1) return new Date(+m1[3], +m1[2]-1, +m1[1]);
+      // YYYY-MM-DD
+      var m2 = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (m2) return new Date(+m2[1], +m2[2]-1, +m2[3]);
+      // ISO / other
+      var d = new Date(s.replace(' ','T'));
+      return isNaN(d.getTime()) ? null : d;
+    }
+    var raw1 = b.scheduledAt || '';
+    var raw2 = b.createdAt || '';
+    dateObj = (raw1 ? parseDateStr(raw1) : null) || (raw2 ? parseDateStr(raw2) : null);
+    if (dateObj && !isNaN(dateObj.getTime())) {
+      dateStr = dateObj.getFullYear() + '-' +
+        String(dateObj.getMonth()+1).padStart(2,'0') + '-' +
+        String(dateObj.getDate()).padStart(2,'0');
     }
     if (!dateStr) return;
 
@@ -2348,7 +2359,7 @@ function renderStatsTable() {
     d.total++;
     if (b.status === 'pending') d.pending++;
     else if (b.status === 'in_progress' || b.status === 'assigned') d.prog++;
-    else if (b.status === 'completed') { d.completed++; d.revenue += parseFloat(b.actualCost) || 0; }
+    else if (b.status === 'completed') { d.completed++; d.revenue += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0; }
     else if (b.status === 'cancelled') d.cancelled++;
   });
 
@@ -2525,7 +2536,7 @@ function buildCustMap() {
     c.orders++;
     if (b.status === 'completed') {
       c.completed++;
-      var _rr2=getRevResetDate(); if(!_rr2||(b.createdAt||'')>=_rr2) c.revenue += parseFloat(b.actualCost) || 0;
+      var _rr2=getRevResetDate(); if(!_rr2||(b.createdAt||'')>=_rr2) c.revenue += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
     }
     var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
     if (d && (!c.lastDate || d > c.lastDate)) c.lastDate = d;
@@ -2661,7 +2672,7 @@ function renderRevChart() {
     var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
     if (!d) return;
     var m = months.find(function(x){ return x.year === d.getFullYear() && x.month === d.getMonth(); });
-    if (m) m.rev += parseFloat(b.actualCost) || 0;
+    if (m) m.rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
   });
   var noData = months.every(function(m){ return m.rev === 0; });
   var noEl = document.getElementById('rev-nodata');
