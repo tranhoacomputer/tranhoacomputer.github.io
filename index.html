@@ -4227,100 +4227,6 @@ body {
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
     }
 
-    /* ── chatLookupStatus: tra cứu tình trạng ngay trong chat ── */
-    function chatLookupStatus(uid) {
-      var inp = document.getElementById('csp_'+uid);
-      var res = document.getElementById('csr_'+uid);
-      if (!inp || !res) return;
-      var phone = (inp.value||'').trim().replace(/\D/g,'');
-      if (!phone || phone.length < 9) {
-        res.innerHTML = '<div style="color:#ef4444;font-size:12px">⚠️ Nhập số điện thoại ít nhất 9 chữ số</div>';
-        return;
-      }
-      res.innerHTML = '<div style="color:#3b82f6;font-size:12px">⏳ Đang tra cứu...</div>';
-      inp.disabled = true;
-      var btn = inp.parentElement ? inp.parentElement.querySelector('button') : null;
-      if (btn) { btn.disabled=true; btn.textContent='⏳...'; }
-
-      var phoneNorm  = phone.replace(/^(\+84|84|0)/, '');
-      var phoneWith0 = '0' + phoneNorm;
-      var STEPS = [
-        {key:'waiting', icon:'📋', label:'Chờ xử lý'},
-        {key:'assigned',icon:'👨\u200D🔧',label:'Nhận máy'},
-        {key:'fixing',  icon:'🔧', label:'Đang sửa'},
-        {key:'done',    icon:'✅', label:'Hoàn thành'}
-      ];
-      var statusMap = {
-        'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
-        'da phan cong':'assigned','đã phân công':'assigned',
-        'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned',
-        'dang sua':'fixing','đang sửa':'fixing','fixing':'fixing','in_progress':'fixing',
-        'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','completed':'done',
-        'da huy':'cancelled','đã hủy':'cancelled','cancelled':'cancelled'
-      };
-      var stepIdx = {'waiting':0,'assigned':1,'fixing':2,'done':3};
-
-      var gasUrl = (typeof GAS_URL !== 'undefined') ? GAS_URL : '';
-      if (!gasUrl) { res.innerHTML='<div style="color:#ef4444;font-size:12px">❌ Không kết nối được máy chủ.</div>'; return; }
-
-      fetch(gasUrl+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0))
-        .then(function(r){ return r.json(); })
-        .then(function(d){
-          var rows = [];
-          if(d&&d.success&&d.data&&d.data.length) rows=d.data;
-          else if(d&&d.results&&d.results.length) rows=d.results;
-          else if(Array.isArray(d)&&d.length) rows=d;
-          if (!rows.length) {
-            res.innerHTML='<div style="font-size:12px;color:#64748b">❌ Không tìm thấy đơn sửa với số <b>'+phoneWith0+'</b>.<br>Vui lòng kiểm tra lại số điện thoại hoặc gọi <a href=\"tel:0963284044\" style=\"color:#2563eb;font-weight:700\">0963.284.044</a>.</div>';
-          } else {
-            var out='';
-            rows.slice(0,2).forEach(function(item,i){
-              var rawNorm=(item.Status||item.status||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-              var badge='waiting';
-              Object.keys(statusMap).forEach(function(k){
-                if(rawNorm.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,'')))badge=statusMap[k];
-              });
-              var isCan=badge==='cancelled';
-              var cs=isCan?-1:(stepIdx[badge]!==undefined?stepIdx[badge]:0);
-              var svcMap={'sua-laptop':'Sửa Laptop','sua-pc':'Sửa máy bàn','cai-win':'Cài Windows','diet-virus':'Diệt virus','bao-duong':'Vệ sinh','nang-cap-ram':'Nâng RAM','nang-cap-ssd':'Nâng SSD','lap-pc-gaming':'Lắp PC Gaming','cuu-data':'Cứu dữ liệu','khac':'Dịch vụ khác'};
-              var rawSvc=item.Service||item.service||'';
-              var svc=svcMap[rawSvc]||rawSvc||item.Note||'';
-              var cust=item['Full name']||item.Full_name||item.customerName||phoneWith0;
-              var aNote=item.Notes||item.notes||item.adminNote||'';
-              var costEst=(item.estimated_cost||item.estimatedCost||'').toString().replace(/[^0-9]/g,'');
-              var statusLbl={'waiting':'⏳ Chờ xử lý','assigned':'📥 Đã nhận máy','fixing':'🔧 Đang sửa','done':'✅ Hoàn thành','cancelled':'🚫 Đã hủy'};
-              out+='<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;'+(i>0?'margin-top:8px':'')+'">';
-              out+='<div style="font-size:12px;margin-bottom:4px"><b>'+cust+'</b>';
-              if(svc) out+=' · '+svc;
-              out+='</div>';
-              out+='<div style="font-size:13px;font-weight:700;color:'+(badge==='done'?'#16a34a':badge==='cancelled'?'#dc2626':'#2563eb')+'">'+
-                   (statusLbl[badge]||badge)+'</div>';
-              if(!isCan){
-                out+='<div style="display:flex;gap:4px;margin-top:6px">';
-                STEPS.forEach(function(s,idx){
-                  var col=idx<cs?'#16a34a':idx===cs?'#2563eb':'#cbd5e1';
-                  out+='<div style="flex:1;text-align:center;font-size:10px;color:'+col+'">';
-                  out+='<div style="width:22px;height:22px;border-radius:50%;background:'+col+';color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px">'+s.icon+'</div>';
-                  out+='<div style="margin-top:2px">'+s.label+'</div></div>';
-                });
-                out+='</div>';
-              }
-              if(aNote) out+='<div style="font-size:11px;color:#64748b;margin-top:4px">📝 '+aNote+'</div>';
-              if(costEst) out+='<div style="font-size:11px;color:#7c3aed;margin-top:3px;font-weight:600">💰 ~'+Number(costEst).toLocaleString('vi-VN')+'đ</div>';
-              out+='</div>';
-            });
-            res.innerHTML=out;
-          }
-        })
-        .catch(function(){
-          res.innerHTML='<div style="font-size:12px;color:#ef4444">❌ Lỗi kết nối. Thử lại hoặc gọi <a href="tel:0963284044" style="color:#2563eb">0963.284.044</a>.</div>';
-        })
-        .finally(function(){
-          inp.disabled=false;
-          if(btn){btn.disabled=false;btn.innerHTML='🔍 Kiểm tra';}
-        });
-    }
-
     function productZaloInquiry(btn, name, price) {
       var msg = 'Xin chào! Tôi muốn hỏi mua sản phẩm: ' + name +
                 (price ? ' — Giá: ' + price : '') +
@@ -4768,6 +4674,173 @@ var msgs=document.getElementById('cbMsgs');
 var qrDiv=document.getElementById('cbQR');
 
 /* ── KNOWLEDGE BASE ── */
+/* ══ TRA CỨU + SẢN PHẨM HELPERS ══ */
+function _mkStatusForm() {
+  var uid = 'cs' + Date.now();
+  return [
+    '<b>🔍 Tra cứu tình trạng sửa máy</b><br><br>',
+    'Nhập số điện thoại đã đặt lịch:<br>',
+    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">',
+    '<input id="csp_' + uid + '" type="tel" inputmode="numeric" ',
+    'placeholder="VD: 0963284044" maxlength="11" ',
+    'style="flex:1;min-width:140px;padding:7px 10px;border:1.5px solid #cbd5e1;',
+    'border-radius:8px;font-size:13px">',
+    '<button onclick="chatLookupStatus(' + "'" + uid + "'" + ')" ',
+    'style="padding:7px 14px;background:#2563eb;color:#fff;border:none;',
+    'border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">',
+    '🔍 Kiểm tra</button></div>',
+    '<div id="csr_' + uid + '" style="margin-top:10px"></div>'
+  ].join('');
+}
+
+function _mkProductsAns() {
+  var prods = window._allProducts || [];
+  var scrollLink = '<a href="#san-pham-section" onclick="var el=document.getElementById(\'san-pham-section\');'
+    + 'if(el){event.preventDefault();var h=document.getElementById(\'headerNav\');'
+    + 'var o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:\'smooth\'});}" '
+    + 'style="color:#2563eb;font-weight:700;text-decoration:underline">';
+  if (prods.length > 0) {
+    var cats = {};
+    prods.forEach(function(p) { if (p.category) cats[p.category] = (cats[p.category] || 0) + 1; });
+    var catLines = Object.keys(cats).map(function(c) {
+      return '• <b>' + c + '</b> (' + cats[c] + ' sản phẩm)';
+    }).join('<br>');
+    var featLines = prods.slice(0, 4).map(function(p) {
+      return '🔹 <b>' + p.name + '</b>' + (p.price ? ' — <span style="color:#2563eb;font-weight:700">' + p.price + '</span>' : '');
+    }).join('<br>');
+    return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
+      + '<b>📂 Danh mục:</b><br>' + catLines + '<br><br>'
+      + '<b>⭐ Nổi bật:</b><br>' + featLines + '<br><br>'
+      + scrollLink + '👉 Xem tất cả sản phẩm →</a>';
+  }
+  return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
+    + 'Cửa hàng cung cấp:<br>'
+    + '• 💻 Laptop văn phòng &amp; gaming<br>'
+    + '• 🖥️ PC Desktop, PC Gaming<br>'
+    + '• 📱 iPad / MacBook<br>'
+    + '• 💾 RAM, SSD, Ổ cứng<br>'
+    + '• 🖨️ Màn hình, Máy in<br>'
+    + '• 🔌 Phụ kiện &amp; linh kiện chính hãng<br><br>'
+    + scrollLink + '👉 Xem sản phẩm nổi bật →</a><br>'
+    + '📞 Gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để hỏi trực tiếp!';
+}
+
+function chatLookupStatus(uid) {
+  var inp = document.getElementById('csp_' + uid);
+  var res = document.getElementById('csr_' + uid);
+  if (!inp || !res) return;
+  var phone = (inp.value || '').trim().replace(/\D/g, '');
+  if (!phone || phone.length < 9) {
+    res.innerHTML = '<div style="color:#ef4444;font-size:12px">⚠️ Nhập số điện thoại ít nhất 9 chữ số</div>';
+    return;
+  }
+  res.innerHTML = '<div style="color:#3b82f6;font-size:12px">⏳ Đang tra cứu...</div>';
+  inp.disabled = true;
+  var submitBtn = inp.parentElement ? inp.parentElement.querySelector('button') : null;
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳...'; }
+
+  var phoneNorm  = phone.replace(/^(\+84|84|0)/, '');
+  var phoneWith0 = '0' + phoneNorm;
+
+  var STEPS = [
+    { key: 'waiting',  icon: '📋', label: 'Chờ xử lý' },
+    { key: 'assigned', icon: '📥', label: 'Nhận máy'  },
+    { key: 'fixing',   icon: '🔧', label: 'Đang sửa'  },
+    { key: 'done',     icon: '✅', label: 'Hoàn thành' }
+  ];
+  var statusMap = {
+    'cho xu ly': 'waiting', 'chờ xử lý': 'waiting', 'chờ': 'waiting', 'pending': 'waiting',
+    'da phan cong': 'assigned', 'đã phân công': 'assigned',
+    'dang xu ly': 'assigned', 'đang xử lý': 'assigned', 'assigned': 'assigned',
+    'dang sua': 'fixing', 'đang sửa': 'fixing', 'fixing': 'fixing', 'in_progress': 'fixing',
+    'hoan thanh': 'done', 'hoàn thành': 'done', 'xong': 'done', 'done': 'done', 'completed': 'done',
+    'da huy': 'cancelled', 'đã hủy': 'cancelled', 'cancelled': 'cancelled'
+  };
+  var stepIdx = { waiting: 0, assigned: 1, fixing: 2, done: 3 };
+  var statusLbl = {
+    waiting: '⏳ Chờ xử lý', assigned: '📥 Đã nhận máy',
+    fixing: '🔧 Đang sửa', done: '✅ Hoàn thành', cancelled: '🚫 Đã hủy'
+  };
+  var svcMap = {
+    'sua-laptop': 'Sửa Laptop', 'sua-pc': 'Sửa máy bàn', 'cai-win': 'Cài Windows',
+    'diet-virus': 'Diệt virus', 'bao-duong': 'Vệ sinh', 'nang-cap-ram': 'Nâng RAM',
+    'nang-cap-ssd': 'Nâng SSD', 'lap-pc-gaming': 'Lắp PC Gaming',
+    'cuu-data': 'Cứu dữ liệu', 'khac': 'Dịch vụ khác'
+  };
+
+  var gasUrl = (typeof GAS_URL !== 'undefined') ? GAS_URL : '';
+  if (!gasUrl) {
+    res.innerHTML = '<div style="color:#ef4444;font-size:12px">❌ Không kết nối được máy chủ.</div>';
+    inp.disabled = false;
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '🔍 Kiểm tra'; }
+    return;
+  }
+
+  fetch(gasUrl + '?action=searchByPhone&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var rows = [];
+      if (d && d.success && d.data && d.data.length) rows = d.data;
+      else if (d && d.results && d.results.length) rows = d.results;
+      else if (Array.isArray(d) && d.length) rows = d;
+
+      if (!rows.length) {
+        res.innerHTML = '<div style="font-size:12px;color:#64748b">❌ Không tìm thấy đơn với số <b>' + phoneWith0 + '</b>.'
+          + '<br>Kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>.</div>';
+        return;
+      }
+
+      var out = '';
+      rows.slice(0, 2).forEach(function(item, i) {
+        var rawNorm = (item.Status || item.status || '').toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var badge = 'waiting';
+        Object.keys(statusMap).forEach(function(k) {
+          if (rawNorm.indexOf(k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')) > -1) badge = statusMap[k];
+        });
+        var isCan = badge === 'cancelled';
+        var cs    = isCan ? -1 : (stepIdx[badge] !== undefined ? stepIdx[badge] : 0);
+        var rawSvc  = item.Service || item.service || '';
+        var svc     = svcMap[rawSvc] || rawSvc || item.Note || '';
+        var cust    = item['Full name'] || item.Full_name || item.customerName || phoneWith0;
+        var aNote   = item.Notes || item.notes || item.adminNote || '';
+        var costEst = (item.estimated_cost || item.estimatedCost || '').toString().replace(/[^0-9]/g, '');
+        var badgeColor = badge === 'done' ? '#16a34a' : badge === 'cancelled' ? '#dc2626' : '#2563eb';
+
+        out += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;'
+          + (i > 0 ? 'margin-top:8px' : '') + '">';
+        out += '<div style="font-size:12px;margin-bottom:4px"><b>' + cust + '</b>' + (svc ? ' · ' + svc : '') + '</div>';
+        out += '<div style="font-size:13px;font-weight:700;color:' + badgeColor + '">' + (statusLbl[badge] || badge) + '</div>';
+
+        if (!isCan) {
+          out += '<div style="display:flex;gap:4px;margin-top:6px">';
+          STEPS.forEach(function(s, idx) {
+            var col = idx < cs ? '#16a34a' : (idx === cs ? '#2563eb' : '#cbd5e1');
+            out += '<div style="flex:1;text-align:center;font-size:10px;color:' + col + '">'
+              + '<div style="width:22px;height:22px;border-radius:50%;background:' + col
+              + ';color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px">'
+              + s.icon + '</div>'
+              + '<div style="margin-top:2px">' + s.label + '</div></div>';
+          });
+          out += '</div>';
+        }
+        if (aNote)   out += '<div style="font-size:11px;color:#64748b;margin-top:4px">📝 ' + aNote + '</div>';
+        if (costEst) out += '<div style="font-size:11px;color:#7c3aed;margin-top:3px;font-weight:600">💰 ~'
+          + Number(costEst).toLocaleString('vi-VN') + 'đ</div>';
+        out += '</div>';
+      });
+      res.innerHTML = out;
+    })
+    .catch(function() {
+      res.innerHTML = '<div style="font-size:12px;color:#ef4444">❌ Lỗi kết nối. Gọi '
+        + '<a href="tel:0963284044" style="color:#2563eb">0963.284.044</a>.</div>';
+    })
+    .finally(function() {
+      inp.disabled = false;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '🔍 Kiểm tra'; }
+    });
+}
+
 var KB=[
  {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
   a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
@@ -5505,49 +5578,18 @@ var KB=[
   q:['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa']},
 
  /* ── TRA CỨU TÌNH TRẠNG SỬA MÁY ── */
- {k:['tra cứu','tình trạng','máy tôi','máy của tôi','kiểm tra tình trạng','biết máy chưa','máy xong chưa','sửa xong chưa','máy đâu rồi','xem tiến độ','tiến độ sửa','đã nhận máy chưa','máy đến đâu rồi','theo dõi đơn','check máy','máy hôm nay','xong chưa'],
-  a:function(){
-    var uid='cs'+Date.now();
-    return '<b>🔍 Tra cứu tình trạng sửa máy</b><br><br>Nhập số điện thoại đã đặt lịch:<br>'+
-    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">'+
-    '<input id="csp_'+uid+'" type="tel" inputmode="numeric" placeholder="VD: 0963284044" maxlength="11" '+
-    'style="flex:1;min-width:140px;padding:7px 10px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;outline:none" '+
-    'oninput="this.value=this.value.replace(/\D/g,'')" '+
-    'onkeydown="if(event.key==='Enter')chatLookupStatus(''+uid+'')" />'+
-    '<button onclick="chatLookupStatus(''+uid+'')" '+
-    'style="padding:7px 14px;background:var(--primary,#2563eb);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">'+
-    '🔍 Kiểm tra</button></div>'+
-    '<div id="csr_'+uid+'" style="margin-top:10px"></div>';
-  },
+ {k:['tra cứu','tình trạng','máy tôi','máy của tôi','kiểm tra tình trạng','biết máy chưa','máy xong chưa',
+     'sửa xong chưa','máy đâu rồi','xem tiến độ','tiến độ sửa','đã nhận máy chưa','máy đến đâu rồi',
+     'theo dõi đơn','check máy','máy hôm nay','xong chưa','tra cuu','tinh trang'],
+  a: _mkStatusForm,
   q:['Đặt lịch sửa','Liên hệ ngay','Giá dịch vụ']},
 
  /* ── SẢN PHẨM & LINH KIỆN ── */
- {k:['sản phẩm','linh kiện','có bán','cửa hàng bán','mua hàng','mua linh kiện','mua laptop','mua pc','mua ram','mua ssd','mua màn hình','mua máy','hàng bán','bán gì','shop bán','có laptop không','có pc không','có sẵn hàng','xem sản phẩm','danh sách sản phẩm','sản phẩm nổi bật','hàng có sẵn'],
-  a:function(){
-    var prods = window._allProducts || [];
-    if (prods.length > 0) {
-      var cats = {}; prods.forEach(function(p){ if(p.category) cats[p.category]=(cats[p.category]||0)+1; });
-      var catList = Object.keys(cats).map(function(c){ return '• <b>'+c+'</b> ('+cats[c]+' sản phẩm)'; }).join('<br>');
-      var featured = prods.slice(0,4).map(function(p){
-        return '🔹 <b>'+p.name+'</b>'+(p.price?' — <span style="color:#2563eb;font-weight:700">'+p.price+'</span>':'');
-      }).join('<br>');
-      return '🛍️ <b>Sản phẩm & linh kiện tại Tran Hoa Computer</b><br><br>'+
-             '<b>📂 Danh mục:</b><br>'+catList+'<br><br>'+
-             '<b>⭐ Nổi bật:</b><br>'+featured+'<br><br>'+
-             '👉 <a href="#san-pham-section" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(el){var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});}})();" style="color:#2563eb;font-weight:700;text-decoration:underline;">Xem tất cả sản phẩm →</a>';
-    } else {
-      return '🛍️ <b>Sản phẩm & linh kiện tại Tran Hoa Computer</b><br><br>'+
-             'Cửa hàng cung cấp:<br>'+
-             '• 💻 Laptop văn phòng & gaming<br>'+
-             '• 🖥️ PC Desktop, PC Gaming<br>'+
-             '• 📱 iPad / MacBook<br>'+
-             '• 💾 RAM, SSD, Ổ cứng<br>'+
-             '• 🖨️ Màn hình, Máy in<br>'+
-             '• 🔌 Phụ kiện & linh kiện chính hãng<br><br>'+
-             '👉 <a href="#san-pham-section" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(el){var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});}})();" style="color:#2563eb;font-weight:700;text-decoration:underline;">Xem sản phẩm nổi bật →</a><br>'+
-             '📞 Hoặc gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để hỏi hàng trực tiếp!';
-    }
-  })(),
+ {k:['sản phẩm','linh kiện','có bán','cửa hàng bán','mua hàng','mua linh kiện','mua laptop','mua pc',
+     'mua ram','mua ssd','mua màn hình','mua máy','hàng bán','bán gì','shop bán','có laptop không',
+     'có pc không','có sẵn hàng','xem sản phẩm','danh sách sản phẩm','sản phẩm nổi bật','hàng có sẵn',
+     'san pham','linh kien','co ban'],
+  a: _mkProductsAns,
   q:['Xem sản phẩm','Hỏi giá linh kiện','Đặt lịch sửa','Zalo tư vấn']},
 
 ];
