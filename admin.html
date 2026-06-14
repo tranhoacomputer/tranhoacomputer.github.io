@@ -45,6 +45,33 @@ a{color:inherit;text-decoration:none}
 .sb-logo-icon{width:38px;height:38px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .sb-logo-text{font-weight:700;color:#fff;font-size:14px;line-height:1.3}
 .sb-logo-sub{font-size:11px;color:var(--sidebar-text);margin-top:1px}
+
+/* ══ ADMIN PRODUCTS ══ */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
+.prod-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1)}
+.prod-card-img{width:100%;aspect-ratio:4/3;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:36px;color:#94a3b8;overflow:hidden}
+.prod-card-img img{width:100%;height:100%;object-fit:cover}
+.prod-card-body{padding:10px 12px 12px}
+.prod-card-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--primary);margin-bottom:3px}
+.prod-card-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4}
+.prod-card-price{font-size:14px;font-weight:900;color:#dc2626}
+.prod-card-note{font-size:11px;color:var(--muted)}
+.prod-card-actions{display:flex;gap:6px;margin-top:8px}
+.prod-card-actions button{flex:1;padding:5px 0;font-size:11px;font-weight:600;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text);transition:all .15s}
+.prod-card-actions .b-edit:hover{background:#eff6ff;border-color:var(--primary);color:var(--primary)}
+.prod-card-actions .b-del:hover{background:#fee2e2;border-color:#ef4444;color:#ef4444}
+.prod-inactive{opacity:.45}
+.prod-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.prod-add-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:20px;display:none}
+.prod-add-form.open{display:block}
+.prod-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.prod-form-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}}
+.prod-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.prod-field input,.prod-field select,.prod-field textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:var(--surface);color:var(--text);box-sizing:border-box}
+.prod-field input:focus,.prod-field select:focus,.prod-field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.prod-field textarea{min-height:60px;resize:vertical}
+
 .sb-section{padding:10px 14px 3px;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px}
 .sl-icon{width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;color:rgba(255,255,255,.8);transition:background .2s}
 .sb-link.active .sl-icon{background:rgba(255,255,255,.25);color:#fff}
@@ -380,6 +407,33 @@ tr:hover td{background:#f8fafc}
 .nbdg{background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px}
 .sb-br{flex:1}.sb-bn{font-weight:700;color:#fff;font-size:14px}.sb-bs{font-size:11px;color:var(--sidebar-text)}
 .sb-tog{display:none}
+
+/* ══ ADMIN PRODUCTS ══ */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px}
+.prod-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s}
+.prod-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1)}
+.prod-card-img{width:100%;aspect-ratio:4/3;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:36px;color:#94a3b8;overflow:hidden}
+.prod-card-img img{width:100%;height:100%;object-fit:cover}
+.prod-card-body{padding:10px 12px 12px}
+.prod-card-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--primary);margin-bottom:3px}
+.prod-card-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4}
+.prod-card-price{font-size:14px;font-weight:900;color:#dc2626}
+.prod-card-note{font-size:11px;color:var(--muted)}
+.prod-card-actions{display:flex;gap:6px;margin-top:8px}
+.prod-card-actions button{flex:1;padding:5px 0;font-size:11px;font-weight:600;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text);transition:all .15s}
+.prod-card-actions .b-edit:hover{background:#eff6ff;border-color:var(--primary);color:var(--primary)}
+.prod-card-actions .b-del:hover{background:#fee2e2;border-color:#ef4444;color:#ef4444}
+.prod-inactive{opacity:.45}
+.prod-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.prod-add-form{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:20px;display:none}
+.prod-add-form.open{display:block}
+.prod-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.prod-form-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}}
+.prod-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.prod-field input,.prod-field select,.prod-field textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:var(--surface);color:var(--text);box-sizing:border-box}
+.prod-field input:focus,.prod-field select:focus,.prod-field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.prod-field textarea{min-height:60px;resize:vertical}
+
 .sb-section{padding:10px 14px 3px;font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.8px}
 
 
@@ -488,6 +542,8 @@ tr:hover td{background:#f8fafc}
   <button class="sb-link" onclick="doAdd()" data-pg="add"><span class="sl-icon">＋</span><span class="sl-label">Thêm lịch hẹn</span></button>
   <div class="sb-section">Khách hàng</div>
   <button class="sb-link" onclick="goP('cust',this)" data-pg="cust"><span class="sl-icon">KH</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
+  <div class="sb-section">Sản phẩm</div>
+  <button class="sb-link" onclick="goP('products',this)" data-pg="products"><span class="sl-icon">SP</span><span class="sl-label">Quản lý sản phẩm</span></button>
   <div class="sb-section">Hệ thống</div>
   <button class="sb-link" onclick="goP('cfg',this)" data-pg="cfg"><span class="sl-icon">CD</span><span class="sl-label">Cài đặt</span></button>
 </div>
@@ -731,6 +787,58 @@ tr:hover td{background:#f8fafc}
 </div>
 </div>
 </div></div></div>
+<div class="pg" id="pg-products">
+<div class="prod-toolbar">
+  <div>
+    <div style="font-size:18px;font-weight:800;color:var(--text)">Quản lý sản phẩm</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px">Thêm, sửa, xóa sản phẩm hiển thị trên website</div>
+  </div>
+  <button class="btn b-pri" onclick="toggleProdForm()">＋ Thêm sản phẩm</button>
+</div>
+
+<!-- Form thêm/sửa sản phẩm -->
+<div class="prod-add-form" id="prodAddForm">
+  <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px" id="prodFormTitle">➕ Thêm sản phẩm mới</div>
+  <div class="prod-form-grid">
+    <div class="prod-field"><label>Tên sản phẩm *</label><input id="pf_name" placeholder="VD: Laptop Dell Inspiron 15"/></div>
+    <div class="prod-field"><label>Danh mục</label>
+      <select id="pf_cat">
+        <option value="">-- Chọn danh mục --</option>
+        <option>Laptop văn phòng</option>
+        <option>Laptop Gaming</option>
+        <option>PC Desktop</option>
+        <option>iPad / MacBook</option>
+        <option>RAM / SSD</option>
+        <option>Màn hình</option>
+        <option>Phụ kiện</option>
+        <option>Linh kiện</option>
+      </select>
+    </div>
+    <div class="prod-field"><label>Giá bán</label><input id="pf_price" placeholder="VD: 8.500.000đ"/></div>
+    <div class="prod-field"><label>Ghi chú giá</label><input id="pf_priNote" placeholder="VD: Liên hệ để được tư vấn"/></div>
+    <div class="prod-field" style="grid-column:1/-1"><label>URL hình ảnh</label><input id="pf_img" placeholder="https://... (dán link ảnh từ GitHub hoặc bất kỳ URL ảnh nào)" oninput="prevProdImg(this.value)"/></div>
+    <div class="prod-field" style="grid-column:1/-1;text-align:center" id="pf_img_prev"></div>
+    <div class="prod-field" style="grid-column:1/-1"><label>Mô tả ngắn</label><textarea id="pf_desc" placeholder="VD: Core i5-12th, 8GB RAM, 256GB SSD, màn 15.6 FHD"></textarea></div>
+    <div class="prod-field"><label>Thứ tự hiển thị</label><input id="pf_order" type="number" placeholder="0" min="0" value="0"/></div>
+    <div class="prod-field" style="display:flex;align-items:center;gap:8px;padding-top:18px">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0">
+        <input type="checkbox" id="pf_active" checked style="width:15px;height:15px;accent-color:var(--primary)"> Hiển thị trên website
+      </label>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+    <button class="btn b-gho" onclick="cancelProdForm()">Hủy</button>
+    <button class="btn b-pri" onclick="saveProd()">💾 Lưu sản phẩm</button>
+  </div>
+  <input type="hidden" id="pf_id"/>
+</div>
+
+<!-- Grid sản phẩm -->
+<div id="prodGrid" class="prod-grid">
+  <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted)">⏳ Đang tải...</div>
+</div>
+</div>
+
 <div class="mov" id="modov" style="display:none" onclick="if(event.target===this)cMod()">
   <div class="modal-box" style="max-width:380px;padding:24px"><div class="m-i" id="mi" style="font-size:32px;margin-bottom:8px"></div><h3 id="mt" style="font-size:17px;font-weight:700;margin-bottom:8px"></h3><p id="mb" style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.6"></p><div class="macts" id="ma" style="display:flex;gap:10px;justify-content:flex-end"></div></div>
 </div>
@@ -1159,7 +1267,7 @@ function goP(id,btn){
   var T={dash:'Tổng quan',books:'Danh sách lịch hẹn',add:'Thêm lịch hẹn',det:'Chi tiết lịch hẹn',cfg:'Cài đặt'};
   document.getElementById('pgtit').textContent=T[id]||id;
   if(id==='dash')renderDash();if(id==='books')renderBT();if(id==='cust')renderCust();
-  if(id==='add'&&!editId)resetForm();if(id==='cfg')loadCfg();
+  if(id==='add'&&!editId)resetForm();if(id==='cfg')loadCfg();if(id==='products')loadProducts();
 }
 function closeSB(){var sb=document.querySelector(".sidebar");var ov=document.getElementById("sbo");if(sb)sb.classList.remove("open");if(ov)ov.classList.remove("vis");}
 function togSB(){
@@ -2069,6 +2177,151 @@ function renderTechSummary() {
     '</div>';
   }).join('');
 }
+
+
+
+/* ══════════════════════════════════════════════
+   PRODUCT MANAGER
+══════════════════════════════════════════════ */
+var _products = [];
+var _editProdId = null;
+
+function loadProducts() {
+  fetch(GAS_URL + '?action=getProducts')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      _products = d.success ? (d.data || []) : [];
+      renderProdGrid();
+    })
+    .catch(function(){ renderProdGrid(); });
+}
+
+function renderProdGrid() {
+  var grid = document.getElementById('prodGrid');
+  if (!grid) return;
+  if (!_products.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Chưa có sản phẩm nào. Nhấn <b>+ Thêm sản phẩm</b> để bắt đầu.</div>';
+    return;
+  }
+  grid.innerHTML = _products.map(function(p) {
+    var imgHtml = p.imageUrl
+      ? '<div class="prod-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" onerror="this.parentElement.innerHTML=\'🖥️\'"></div>'
+      : '<div class="prod-card-img">🖥️</div>';
+    var inactive = (p.isActive === false || p.isActive === 'false') ? ' prod-inactive' : '';
+    var activeLabel = (p.isActive === false || p.isActive === 'false') ? '🔴 Ẩn' : '🟢 Hiển thị';
+    return '<div class="prod-card' + inactive + '">' + imgHtml +
+      '<div class="prod-card-body">' +
+      (p.category ? '<div class="prod-card-cat">' + p.category + '</div>' : '') +
+      '<div class="prod-card-name">' + p.name + '</div>' +
+      (p.price ? '<div class="prod-card-price">' + p.price + '</div>' : '') +
+      (p.priceNote ? '<div class="prod-card-note">' + p.priceNote + '</div>' : '') +
+      '<div style="font-size:10px;color:var(--muted);margin-top:4px">' + activeLabel + '</div>' +
+      '<div class="prod-card-actions">' +
+        '<button class="b-edit" data-id="' + p.id + '" onclick="editProd(this.dataset.id)">✏️ Sửa</button>' +
+        '<button class="b-del" data-id="' + p.id + '" onclick="deleteProd(this.dataset.id)">🗑 Xóa</button>' +
+      '</div></div></div>';
+  }).join('');
+}
+
+function toggleProdForm() {
+  _editProdId = null;
+  document.getElementById('pf_id').value = '';
+  document.getElementById('pf_name').value = '';
+  document.getElementById('pf_cat').value = '';
+  document.getElementById('pf_price').value = '';
+  document.getElementById('pf_priNote').value = '';
+  document.getElementById('pf_img').value = '';
+  document.getElementById('pf_img_prev').innerHTML = '';
+  document.getElementById('pf_desc').value = '';
+  document.getElementById('pf_order').value = '0';
+  document.getElementById('pf_active').checked = true;
+  document.getElementById('prodFormTitle').textContent = '➕ Thêm sản phẩm mới';
+  var form = document.getElementById('prodAddForm');
+  form.classList.toggle('open');
+  if (form.classList.contains('open')) form.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function cancelProdForm() {
+  document.getElementById('prodAddForm').classList.remove('open');
+  _editProdId = null;
+}
+
+function prevProdImg(url) {
+  var prev = document.getElementById('pf_img_prev');
+  if (!prev) return;
+  if (url && url.trim()) {
+        prev.innerHTML = '<img src="' + url + '" style="max-height:120px;border-radius:8px;border:1px solid #e2e8f0;object-fit:contain" onerror="this.style.display=\'none\'">'
+  } else {
+    prev.innerHTML = '';
+  }
+}
+
+function editProd(id) {
+  var p = _products.find(function(x){ return x.id === id; });
+  if (!p) return;
+  _editProdId = id;
+  document.getElementById('pf_id').value = p.id;
+  document.getElementById('pf_name').value = p.name || '';
+  document.getElementById('pf_cat').value = p.category || '';
+  document.getElementById('pf_price').value = p.price || '';
+  document.getElementById('pf_priNote').value = p.priceNote || '';
+  document.getElementById('pf_img').value = p.imageUrl || '';
+  prevProdImg(p.imageUrl || '');
+  document.getElementById('pf_desc').value = p.description || '';
+  document.getElementById('pf_order').value = p.sortOrder || '0';
+  document.getElementById('pf_active').checked = (p.isActive !== false && p.isActive !== 'false');
+  document.getElementById('prodFormTitle').textContent = '✏️ Sửa sản phẩm: ' + p.name;
+  var form = document.getElementById('prodAddForm');
+  form.classList.add('open');
+  form.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function saveProd() {
+  var name = (document.getElementById('pf_name').value || '').trim();
+  if (!name) { toast('Vui lòng nhập tên sản phẩm!','⚠️'); return; }
+  var data = {
+    name:        name,
+    category:    document.getElementById('pf_cat').value || '',
+    price:       document.getElementById('pf_price').value || '',
+    priceNote:   document.getElementById('pf_priNote').value || '',
+    imageUrl:    document.getElementById('pf_img').value || '',
+    description: document.getElementById('pf_desc').value || '',
+    sortOrder:   document.getElementById('pf_order').value || '0',
+    isActive:    document.getElementById('pf_active').checked
+  };
+  var action, body;
+  if (_editProdId) {
+    data.id = _editProdId;
+    action = 'updateProduct';
+    body = JSON.stringify({ action: action, id: _editProdId, data: data });
+  } else {
+    action = 'createProduct';
+    body = JSON.stringify({ action: action, data: data });
+  }
+  var url = GAS_URL + '?method=POST&body=' + encodeURIComponent(body);
+  toast('Đang lưu...', '⏳');
+  fetch(url).then(function(r){ return r.json(); }).then(function(d){
+    if (d.success) {
+      toast(_editProdId ? '✅ Đã cập nhật sản phẩm!' : '✅ Đã thêm sản phẩm!', '✅');
+      cancelProdForm();
+      loadProducts();
+    } else {
+      toast('Lỗi: ' + (d.error || 'Không xác định'), '❌');
+    }
+  }).catch(function(){ toast('Lỗi kết nối GAS!', '❌'); });
+}
+
+function deleteProd(id) {
+  var p = _products.find(function(x){ return x.id === id; });
+  if (!p) return;
+  if (!confirm('Xóa sản phẩm "' + p.name + '"?')) return;
+  var url = GAS_URL + '?method=POST&body=' + encodeURIComponent(JSON.stringify({ action: 'deleteProduct', id: id }));
+  fetch(url).then(function(r){ return r.json(); }).then(function(d){
+    if (d.success) { toast('✅ Đã xóa!', '✅'); loadProducts(); }
+    else toast('Lỗi xóa: ' + (d.error||''), '❌');
+  }).catch(function(){ toast('Lỗi kết nối!', '❌'); });
+}
+/* ══ END PRODUCT MANAGER ══ */
 
 </script>
 </main>
