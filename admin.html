@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v37.html | Tran Hoa Computer | 2026-06-15 | v37: daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
+<!-- admin_v38.html | Tran Hoa Computer | 2026-06-15 | v38: fix booking desktop — sticky action col, clickable rows, remove dup CSV btn, breakpoint 768→767 daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -395,7 +395,7 @@ tr:hover td{background:#fafafa}
   .prod-form-grid{grid-template-columns:1fr 1fr}
   .twrap table{min-width:auto}
 }
-@media(max-width:768px){
+@media(max-width:767px){
   :root{--sbw:240px}
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
@@ -447,6 +447,7 @@ tr:hover td{background:#fafafa}
 @media(max-width:767px){
   #bwrap{display:block}
   .twrap{display:none!important}
+  .ph-actions{display:none}
 }
 /* Fix products page whitespace */
 #pg-products .ph{margin-bottom:12px}
@@ -577,12 +578,12 @@ body { background: #f1f5f9; }
 .cb { padding: 14px 18px; }
 
 /* ── table ── */
-.twrap { border-radius: 14px; border: 1px solid rgba(226,232,240,.8); overflow: hidden; }
-table { border-collapse: collapse; width: 100%; }
+.twrap { border-radius: 14px; border: 1px solid rgba(226,232,240,.8); overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 700px; }
 thead { position: sticky; top: 0; z-index: 2; }
 th {
   background: #f8fafc;
-  padding: 11px 14px;
+  padding: 9px 10px;
   font-size: 11.5px;
   font-weight: 700;
   color: #64748b;
@@ -592,14 +593,24 @@ th {
 }
 th:hover { color: var(--primary); background: #f1f5f9; }
 td {
-  padding: 10px 14px;
+  padding: 8px 10px;
   font-size: 13px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
 }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: #f8fafc; }
+tr.dt-row { cursor: pointer; }
+tr.dt-row:hover td { background: #eff6ff; }
 tr.ur td:first-child { border-left: 3px solid var(--red); }
+/* Sticky last column (Thao tác) */
+.dt th:last-child, .dt td:last-child {
+  position: sticky;
+  right: 0;
+  background: #f8fafc;
+  box-shadow: -2px 0 6px rgba(0,0,0,.06);
+  z-index: 1;
+}
+.dt tr.dt-row:hover td:last-child { background: #eff6ff; }
 
 /* ── filter bar ── */
 .fb {
@@ -946,7 +957,6 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
     <option>Điện thoại</option><option>Máy tính bảng</option>
     <option>Màn hình</option><option>Thiết bị khác</option>
   </select>
-  <button class="tbb" onclick="doExport()">Xuất CSV</button>
   <span class="rc" id="rcnt" style="font-size:12px;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:6px;border:1px solid var(--border)"></span>
 </div>
 <div class="twrap">
@@ -1876,7 +1886,7 @@ function safeStr(s) {
         +'</div>'
         +'</div>';
     }
-    return '<tr class="'+(u?'ur':'')+'">'
+    return '<tr class="dt-row'+(u?' ur':'')+' " onclick="viewDet(\''+b.id+'\')" style="cursor:pointer">'
       +'<td><span class="tid">'+esc(b.id)+'</span></td>'
       +'<td><div class="cc"><div class="mav">'+ini(b.customerName||'?')+'</div><div><div class="cn">'+esc(b.customerName||'—')+(u?' (!!)':'')+'</div><div class="cp">'+esc(b.phone||'')+'</div></div></div></td>'
       +'<td><div style="font-size:13px;font-weight:600">'+esc(svcLabel(b.deviceType)||'')+'</div><div class="cp">'+esc(b.brand||'')+(b.model?' &middot; '+esc(b.model):'')+'</div></td>'
