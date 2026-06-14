@@ -1058,9 +1058,15 @@
 #san-pham-section { margin: 48px 0 32px; }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
   margin-top: 20px;
+}
+@media(min-width:600px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media(min-width:900px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 .product-card {
   background: var(--surface, #fff);
@@ -1068,40 +1074,69 @@
   border: 1px solid var(--border-color, #e2e8f0);
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  transition: transform .2s, box-shadow .2s;
-  cursor: default;
+  transition: transform .22s, box-shadow .22s;
+  cursor: pointer;
+  display: flex; flex-direction: column;
 }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(37,99,235,.13); }
 .product-card-img {
   width: 100%; aspect-ratio: 4/3; object-fit: cover;
   background: #f1f5f9;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px; color: #94a3b8;
+  font-size: 40px; color: #94a3b8; flex-shrink: 0;
 }
 .product-card-img img { width:100%; height:100%; object-fit:cover; }
 .product-card-img.no-img::after { content: '🖥️'; font-size: 44px; }
-.product-card-body { padding: 12px 14px 14px; }
+.product-card-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; }
 .product-card-cat {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
   letter-spacing: .6px; color: var(--primary, #3b82f6);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .product-card-name {
-  font-size: 14px; font-weight: 700; color: var(--text-main, #1e293b);
-  margin-bottom: 6px; line-height: 1.4;
+  font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
+  margin-bottom: 5px; line-height: 1.4; flex: 1;
+}
+@media(min-width:900px) {
+  .product-card-body { padding: 12px 16px 14px; }
+  .product-card-name { font-size: 15px; }
 }
 .product-card-price {
-  font-size: 16px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
+  font-size: 15px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
 }
-.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 6px; }
-.product-card-desc { font-size: 12px; color: #64748b; line-height: 1.5; }
+@media(min-width:900px) { .product-card-price { font-size: 17px; } }
+.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 5px; }
+.product-card-desc { font-size: 11.5px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+
+/* Zalo inquiry button */
+.product-card-zalo {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 8px 10px;
+  background: linear-gradient(135deg,#0068ff,#0052cc);
+  color: #fff; font-size: 12px; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer;
+  text-decoration: none; margin-top: auto;
+  transition: opacity .15s, transform .12s;
+}
+.product-card-zalo:hover { opacity: .88; transform: scale(1.02); }
+.product-card-zalo svg { flex-shrink: 0; }
+@media(min-width:900px) {
+  .product-card-zalo { font-size: 13px; padding: 9px 12px; }
+}
+
+/* Tab bar — horizontal scroll on mobile */
 .product-section-tabs {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+  display: flex; gap: 8px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap; padding-bottom: 4px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
 }
+.product-section-tabs::-webkit-scrollbar { display: none; }
 .product-tab-btn {
   padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border-color,#e2e8f0);
   background: transparent; font-size: 13px; font-weight: 600; cursor: pointer;
-  color: var(--text-main,#1e293b); transition: all .15s;
+  color: var(--text-main,#1e293b); transition: all .15s; white-space: nowrap; flex-shrink: 0;
 }
 .product-tab-btn.active {
   background: var(--primary,#3b82f6); color: #fff; border-color: var(--primary,#3b82f6);
@@ -1111,10 +1146,7 @@
 [data-theme="dark"] .product-card { background:#1e293b; border-color:#334155; }
 [data-theme="dark"] .product-card-img { background:#0f172a; }
 [data-theme="dark"] .product-card-name { color:#f1f5f9; }
-@media(max-width:600px){
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .product-card-body { padding: 10px; }
-}
+[data-theme="dark"] .product-card-zalo { background: linear-gradient(135deg,#1a7aff,#0052cc); }
 
 /* Lưu ý info boxes (inline-style boxes in pricing tabs) */
 [data-theme="dark"] .pricing-note-box{background:linear-gradient(135deg,#0f2340,#0d2218)!important;border-color:#1e3a5f!important;}
@@ -3973,10 +4005,13 @@ body {
       var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
       var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
       var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
+      // Zalo inquiry button — sends product name + page link
+      var zaloMsg = encodeURIComponent('Xin chào! Tôi quan tâm đến sản phẩm: ' + p.name + '. Vui lòng tư vấn giúp tôi! Xem thêm: https://tranhoacomputer.github.io/#san-pham-section');
+      var zaloBtn = '<a class="product-card-zalo" href="https://zalo.me/0963284044?text=' + zaloMsg + '" target="_blank" rel="noopener" onclick="event.stopPropagation()"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</a>';
       return '<div class="product-card">' + imgHtml +
         '<div class="product-card-body">' + catHtml +
         '<div class="product-card-name">' + p.name + '</div>' +
-        priceHtml + noteHtml + descHtml + '</div></div>';
+        priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
     }).join('');
   }
 
