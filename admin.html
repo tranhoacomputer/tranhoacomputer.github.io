@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v34.html | Tran Hoa Computer | 2026-06-15 | v34: clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
+<!-- admin_v35.html | Tran Hoa Computer | 2026-06-15 | v35: quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -950,16 +950,16 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 <!-- DETAIL -->
 <div class="pg" id="pg-det">
 <div class="card" style="padding:12px 16px;margin-bottom:12px">
-  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-    <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
-    <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0">
-      <h2 style="font-size:16px;font-weight:800;white-space:nowrap" id="detid"></h2>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;align-items:center;gap:8px;min-width:0">
+      <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
+      <h2 style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="detid"></h2>
       <span id="detbdg"></span>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn b-pri btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">🖨️ In phiếu</button>
-      <button class="btn b-sec btn-sm" id="detedit">✏️ Sửa</button>
-      <button class="btn b-dan btn-sm" id="detdel">🗑️ Xóa</button>
+      <button class="btn b-pri btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">In phiếu</button>
+      <button class="btn b-sec btn-sm" id="detedit">Sửa</button>
+      <button class="btn b-dan btn-sm" id="detdel">Xóa</button>
     </div>
   </div>
 </div>
@@ -1761,7 +1761,7 @@ function qkEdit(id){
     +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lịch hẹn <b>'+esc(b.customerName)+'</b> – <span style="color:var(--primary)">'+esc(b.id)+'</span></div>'
     +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">👨‍🔧 Kỹ thuật viên</label>'
     +'<input id="qe_tc" value="'+esc(b.technician||'')+'" placeholder="Nhập tên KTV..." style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
-    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Mức độ ưu tiên</label>'+'<select id="qe_pr" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff">'+'<option value="normal">Bình thường</option>'+'<option value="urgent">🚨 Khẩn cấp</option>'+'<option value="high">Cao</option>'+'<option value="low">Thấp</option>'+'</select></div>'+'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
     +'<input id="qe_rd" type="date" value="'+esc(b.returnDate||'')+'" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">💰 Chi phí ước tính (VND)</label>'
     +'<input id="qe_ec" type="number" value="'+esc(b.estimatedCost||'')+'" placeholder="150000" min="0" step="10000" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
@@ -1770,6 +1770,7 @@ function qkEdit(id){
     +'<button onclick="qkEditSave(\''+id+'\')" style="flex:2;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Lưu</button>'
     +'</div>'
     +'</div></div>';
+  var _qepr=document.getElementById('qe_pr'); if(_qepr) _qepr.value=b.priority||'normal';
 }
 
 function qkEditSave(id){
@@ -1777,7 +1778,8 @@ function qkEditSave(id){
   var tc=(document.getElementById('qe_tc').value||'').trim();
   var rd=(document.getElementById('qe_rd').value||'').trim();
   var ec=Math.abs(Number(document.getElementById('qe_ec').value)||0)||null;
-  b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec;
+  var pr=(document.getElementById('qe_pr')||{}).value||'normal';
+  b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec; b.priority=pr||'normal';
   b.updatedAt=new Date().toISOString();
   saveBooks(); pushToSheets(b,false); renderAll(); cMod();
   toast('Đã cập nhật thông tin kỹ thuật','ok');
@@ -1944,7 +1946,7 @@ function doPrint(id){
     }
   }
   if(!b){window.print();return;}
-  var win=window.open('','_blank','width=820,height=1000');
+  var _blobUrl=null; var win=null; // blob approach below
   var shop=cfg.name||'Trần Hoa Computer';
   var phone=cfg.phone||'0963.284.044';
   var addr=cfg.addr||'Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên';
@@ -2068,8 +2070,21 @@ function doPrint(id){
     +'</div>'
     +'</div>'
     +'</body></html>';
-  win.document.write(phcss);
-  win.document.close();
+  try{
+    var _blob=new Blob([phcss],{type:'text/html;charset=utf-8'});
+    _blobUrl=URL.createObjectURL(_blob);
+    win=window.open(_blobUrl,'_blank');
+    if(!win){
+      // popup blocked — open in same tab via anchor click
+      var _a=document.createElement('a');
+      _a.href=_blobUrl; _a.target='_blank'; _a.rel='noopener';
+      document.body.appendChild(_a); _a.click(); document.body.removeChild(_a);
+    }
+  }catch(e){
+    // final fallback: open blank window and write
+    win=window.open('','_blank');
+    if(win){win.document.write(phcss);win.document.close();}
+  }
 }
 
 function doExport(){
