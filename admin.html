@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v36.html | Tran Hoa Computer | 2026-06-15 | v36: dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
+<!-- admin_v37.html | Tran Hoa Computer | 2026-06-15 | v37: daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -893,9 +893,16 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 <!-- DASHBOARD -->
 <div class="pg active" id="pg-dash">
 <div class="statg" id="dashg"></div>
-<div class="dg">
-  <div class="card"><div class="ch"><h3>Thống kê trạng thái</h3></div><div class="cb"><div class="cw"><canvas id="sch"></canvas></div></div></div>
-  <div class="card"><div class="ch"><h3>Doanh thu 6 tháng gần nhất</h3></div><div class="cb"><div class="rev-chart-wrap"><canvas id="rev-chart"></canvas><div class="chart-no-data" id="rev-nodata" style="display:none"><span>Chưa có đơn hoàn thành</span></div></div></div></div>
+<div class="card" style="margin-bottom:14px">
+  <div class="ch" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+    <h3 style="margin:0">📊 Thống kê theo ngày</h3>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="btn btn-sm b-sec" id="sr7" onclick="setStatRange(7)">7 ngày</button>
+      <button class="btn btn-sm b-pri" id="sr30" onclick="setStatRange(30)">30 ngày</button>
+      <button class="btn btn-sm b-sec" id="sr0" onclick="setStatRange(0)">Tất cả</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch" id="stats-tbl-wrap"></div>
 </div>
 <div class="dg">
   <div class="card"><div class="ch"><h3>Lịch hẹn gần đây</h3></div><div class="cb" id="recl"></div></div>
@@ -1794,7 +1801,7 @@ function renderDash(){
   var alertHtml='<div class="dash-sec">Theo dõi</div><div class="dash-alerts">'+alerts.join('')+'</div>';
 
   el.innerHTML = primaryHtml + alertHtml + statusHtml;
-  renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
+  renderStatsTable();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
 }
 
 function sc(icon,label,val,cls,icls){
@@ -2276,26 +2283,144 @@ function doCSV(){
 }
 
 
-function renderChart(){
-  if(typeof Chart==='undefined')return;
-  var ctx=document.getElementById('sch');if(!ctx)return;
-  var labels=Object.keys(SM).map(function(k){return SM[k].l;});
-  var data=Object.keys(SM).map(function(k){return books.filter(function(b){return b.status===k;}).length;});
-  var colors=Object.keys(SM).map(function(k){return SM[k].col;});
-  if(window._chart)window._chart.destroy();
-  window._chart=new Chart(ctx,{
-    type:'doughnut',
-    data:{labels:labels,datasets:[{data:data,backgroundColor:colors,borderWidth:2,borderColor:'#fff',hoverOffset:6}]},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{
-        legend:{position:'right',labels:{font:{size:12},boxWidth:12,padding:12}},
-        tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+' lịch';}}}
-      },
-      cutout:'62%'
-    }
+var _statRange = 30;
+
+function setStatRange(n) {
+  _statRange = n;
+  [7, 30, 0].forEach(function(v) {
+    var btn = document.getElementById('sr' + v);
+    if (btn) btn.className = 'btn btn-sm ' + (v === n ? 'b-pri' : 'b-sec');
   });
+  renderStatsTable();
 }
+
+function renderStatsTable() {
+  var el = document.getElementById('stats-tbl-wrap');
+  if (!el) return;
+
+  var now = new Date();
+  var cutoff = null;
+  if (_statRange > 0) {
+    cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate() - _statRange + 1);
+  }
+
+  var dayMap = {};
+
+  books.forEach(function(b) {
+    var dateStr = '';
+    var dateObj = null;
+
+    // Use scheduledAt first, fallback createdAt
+    var raw = b.scheduledAt || b.createdAt || '';
+    if (raw) {
+      try {
+        dateObj = new Date(raw);
+        if (!isNaN(dateObj)) {
+          dateStr = dateObj.getFullYear() + '-' +
+            String(dateObj.getMonth()+1).padStart(2,'0') + '-' +
+            String(dateObj.getDate()).padStart(2,'0');
+        }
+      } catch(e) {}
+    }
+    if (!dateStr) return;
+
+    // Filter by range
+    if (cutoff) {
+      var parts0 = dateStr.split('-');
+      var rowDate = new Date(+parts0[0], +parts0[1]-1, +parts0[2]);
+      if (rowDate < cutoff) return;
+    }
+
+    if (!dayMap[dateStr]) {
+      dayMap[dateStr] = { date: dateStr, total: 0, pending: 0, prog: 0, completed: 0, cancelled: 0, revenue: 0 };
+    }
+    var d = dayMap[dateStr];
+    d.total++;
+    if (b.status === 'pending') d.pending++;
+    else if (b.status === 'in_progress' || b.status === 'assigned') d.prog++;
+    else if (b.status === 'completed') { d.completed++; d.revenue += parseFloat(b.actualCost) || 0; }
+    else if (b.status === 'cancelled') d.cancelled++;
+  });
+
+  var days = Object.keys(dayMap).sort(function(a, b) { return b.localeCompare(a); });
+
+  if (!days.length) {
+    el.innerHTML = '<p style="text-align:center;color:var(--muted);padding:32px 16px;font-size:13px">Chưa có dữ liệu trong khoảng thời gian này</p>';
+    return;
+  }
+
+  // Today string
+  var todayStr = now.getFullYear() + '-' +
+    String(now.getMonth()+1).padStart(2,'0') + '-' +
+    String(now.getDate()).padStart(2,'0');
+  var yesterdayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
+  var yestStr = yesterdayObj.getFullYear() + '-' +
+    String(yesterdayObj.getMonth()+1).padStart(2,'0') + '-' +
+    String(yesterdayObj.getDate()).padStart(2,'0');
+
+  var daysVN = ['CN','T2','T3','T4','T5','T6','T7'];
+  function _fmtDay(ds) {
+    var p = ds.split('-');
+    var d = new Date(+p[0], +p[1]-1, +p[2]);
+    var lbl = ds === todayStr ? '<span style="font-size:10px;background:#2563eb;color:#fff;border-radius:4px;padding:1px 5px">Hôm nay</span>'
+            : ds === yestStr ? '<span style="font-size:10px;color:#64748b">Hôm qua</span>'
+            : '<span style="font-size:10px;color:var(--muted)">' + daysVN[d.getDay()] + '</span>';
+    return '<div style="font-weight:700;font-size:13px">' + p[2] + '/' + p[1] + '</div>' + lbl;
+  }
+
+  // Totals
+  var tot = { total:0, pending:0, prog:0, completed:0, cancelled:0, revenue:0 };
+  days.forEach(function(d) {
+    var r = dayMap[d];
+    tot.total += r.total; tot.pending += r.pending; tot.prog += r.prog;
+    tot.completed += r.completed; tot.cancelled += r.cancelled; tot.revenue += r.revenue;
+  });
+
+  var thStyle = 'padding:9px 8px;font-size:11px;font-weight:700;white-space:nowrap;border-bottom:2px solid var(--border);background:var(--bg)';
+  var tdStyle = 'padding:8px 6px;border-bottom:1px solid var(--border);font-size:13px;text-align:center';
+  var tfStyle = 'padding:9px 6px;font-weight:800;font-size:13px;text-align:center;border-top:2px solid var(--primary);background:var(--surface)';
+
+  var rows = days.map(function(ds) {
+    var r = dayMap[ds];
+    var isTd = (ds === todayStr);
+    var bg = isTd ? 'background:#eff6ff;' : '';
+    return '<tr style="' + bg + '">'
+      + '<td style="' + tdStyle + ';text-align:left;padding-left:12px">' + _fmtDay(ds) + '</td>'
+      + '<td style="' + tdStyle + ';font-weight:700">' + r.total + '</td>'
+      + '<td style="' + tdStyle + ';color:#d97706">' + (r.pending || '<span style="color:#cbd5e1">—</span>') + '</td>'
+      + '<td style="' + tdStyle + ';color:#7c3aed">' + (r.prog || '<span style="color:#cbd5e1">—</span>') + '</td>'
+      + '<td style="' + tdStyle + ';color:#059669">' + (r.completed || '<span style="color:#cbd5e1">—</span>') + '</td>'
+      + '<td style="' + tdStyle + ';color:#94a3b8">' + (r.cancelled || '<span style="color:#cbd5e1">—</span>') + '</td>'
+      + '<td style="' + tdStyle + ';text-align:right;padding-right:12px;font-weight:600;color:#059669;white-space:nowrap">'
+        + (r.revenue > 0 ? fmt(r.revenue) : '<span style="color:#cbd5e1">—</span>') + '</td>'
+      + '</tr>';
+  }).join('');
+
+  el.innerHTML =
+    '<table style="width:100%;border-collapse:collapse">'
+    + '<thead><tr>'
+    + '<th style="' + thStyle + ';text-align:left;padding-left:12px">Ngày</th>'
+    + '<th style="' + thStyle + ';text-align:center">Đơn</th>'
+    + '<th style="' + thStyle + ';text-align:center;color:#d97706">⏳ Chờ</th>'
+    + '<th style="' + thStyle + ';text-align:center;color:#7c3aed">🔧 Sửa</th>'
+    + '<th style="' + thStyle + ';text-align:center;color:#059669">✅ Xong</th>'
+    + '<th style="' + thStyle + ';text-align:center;color:#94a3b8">🚫 Huỷ</th>'
+    + '<th style="' + thStyle + ';text-align:right;padding-right:12px;color:#059669">💰 Doanh thu</th>'
+    + '</tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+    + '<tfoot><tr style="background:var(--surface)">'
+    + '<td style="' + tfStyle + ';text-align:left;padding-left:12px">Tổng (' + days.length + ' ngày)</td>'
+    + '<td style="' + tfStyle + '">' + tot.total + '</td>'
+    + '<td style="' + tfStyle + ';color:#d97706">' + tot.pending + '</td>'
+    + '<td style="' + tfStyle + ';color:#7c3aed">' + tot.prog + '</td>'
+    + '<td style="' + tfStyle + ';color:#059669">' + tot.completed + '</td>'
+    + '<td style="' + tfStyle + ';color:#94a3b8">' + tot.cancelled + '</td>'
+    + '<td style="' + tfStyle + ';text-align:right;padding-right:12px;color:#059669;white-space:nowrap">' + (tot.revenue > 0 ? fmt(tot.revenue) : '—') + '</td>'
+    + '</tr></tfoot>'
+    + '</table>';
+}
+
+function renderChart() { /* replaced by renderStatsTable */ }
 
 
 function renderRecent(){
