@@ -3662,7 +3662,7 @@ body {
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;">
             <p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p>
-            <p style="margin-top:8px;"><a href="admin-1.html" style="color:#475569;text-decoration:none;font-size:11px;">⚙️ Trang quản trị</a></p>
+            <p style="margin-top:8px;"><a href="admin.html" style="color:#475569;text-decoration:none;font-size:11px;">⚙️ Quản trị</a></p>
         </div>
     </footer>
     <div class="bottom-nav">
@@ -3670,14 +3670,11 @@ body {
         <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>Chat Zalo</span></a>
         <a href="#datlich-sua-chua" class="nav-item active-booking" onclick="event.preventDefault(); (function(){var _e=document.getElementById('datlich-sua-chua'),_h=document.getElementById('headerNav'),_o=_h?_h.offsetHeight+4:72;window.scrollTo({top:_e.getBoundingClientRect().top+window.pageYOffset-_o,behavior:'smooth'});})();"><div class="booking-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div><span style="margin-top:2px;">Đặt Lịch</span></a>
         <a href="#muc-bang-gia" class="nav-item" onclick="event.preventDefault(); document.getElementById('muc-bang-gia').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg><span>Bảng Giá</span></a>
-        <a href="#hoat-dong-thuc-te" class="nav-item" onclick="event.preventDefault(); document.getElementById('hoat-dong-thuc-te').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Hình Ảnh</span></a>
+
     </div>
     <button id="backToTop">↑</button>
         <script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwuzXgGyLqgCNwxiBEyVZbj32XfC3dRdoEzjvrvxxpZFhB9Pui0gduqLMCURMhEDrrugw/exec";
-
-    /* ── Tra cứu tình trạng sửa máy (SheetDB) ── */
-    // SheetDB đã bị loại bỏ - chỉ dùng GAS_URL
+    /* ── GAS Backend URL (Google Apps Script) ── */
     var GAS_URL = 'https://script.google.com/macros/s/AKfycbwuzXgGyLqgCNwxiBEyVZbj32XfC3dRdoEzjvrvxxpZFhB9Pui0gduqLMCURMhEDrrugw/exec';
     var USE_GAS = true;
 
@@ -5321,6 +5318,36 @@ var offT=[
   '😄 Câu hỏi này ngoài chuyên môn máy tính của mình rồi 😅<br>Nhưng về <b>máy tính & công nghệ</b> thì mình biết hết! Bạn có thắc mắc gì về thiết bị không?',
   '🤖 Ồ, mình chỉ giỏi về máy tính thôi, không phải mọi thứ 😄<br>Có vấn đề gì với laptop hay PC không? Mình sẵn sàng hỗ trợ!',
   '🤔 Haha, câu này hơi ngoài vùng phủ sóng của mình! Mình chuyên về <b>sửa chữa & tư vấn máy tính</b>.<br>Bạn cần hỗ trợ gì về thiết bị không?',
+,
+ {k:['giá cài win','chi phí cài windows','bao nhiêu tiền cài win','giá cài lại win','phí cài windows'],
+  a:'💰 <b>Giá cài đặt Windows tại Tran Hoa Computer:</b><br><br>🪟 <b>Cài Windows 10/11:</b> 100.000 – 150.000đ<br>📦 <b>Cài kèm Office:</b> +50.000đ<br>🛡️ <b>Cài phần mềm diệt virus:</b> +30.000đ<br><br>✅ Bao gồm: cài driver đầy đủ, tối ưu hệ thống<br>⏱️ Thời gian: 30–60 phút<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a> để đặt lịch!'},
+
+ {k:['giá thay pin','bao nhiêu tiền thay pin','chi phí thay pin laptop','pin laptop giá bao nhiêu','pin hết pin'],
+  a:'🔋 <b>Giá thay pin Laptop tại Tran Hoa Computer:</b><br><br>💻 <b>Pin laptop phổ thông:</b> 350.000 – 600.000đ<br>🎮 <b>Pin laptop gaming:</b> 600.000 – 1.200.000đ<br>🍎 <b>Pin Macbook:</b> 800.000 – 1.500.000đ<br><br>✅ Bảo hành pin: 3–6 tháng<br>✅ Linh kiện chính hãng, có hóa đơn<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['giá thay màn hình','chi phí thay màn laptop','màn hình vỡ giá bao nhiêu','thay lcd','thay màn'],
+  a:'🖥️ <b>Giá thay màn hình Laptop:</b><br><br>📺 <b>Màn HD (14"/15"):</b> 800.000 – 1.500.000đ<br>📺 <b>Màn FHD IPS:</b> 1.200.000 – 2.500.000đ<br>📺 <b>Màn 4K / OLED:</b> 2.500.000 – 5.000.000đ<br><br>✅ Bảo hành màn: 3 tháng<br>✅ Kiểm tra miễn phí trước khi báo giá<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['giá nâng cấp ram','thêm ram bao nhiêu tiền','ram 8gb giá bao nhiêu','nâng ram','mua ram'],
+  a:'💾 <b>Giá nâng cấp RAM Laptop:</b><br><br>🟢 <b>RAM 8GB DDR4:</b> 250.000 – 400.000đ<br>🔵 <b>RAM 16GB DDR4:</b> 450.000 – 700.000đ<br>🟣 <b>RAM 16GB DDR5:</b> 600.000 – 900.000đ<br>⚫ <b>RAM 32GB:</b> 900.000 – 1.500.000đ<br><br>✅ Kiểm tra tương thích miễn phí<br>✅ Bảo hành 12 tháng<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi ngay!</a>'},
+
+ {k:['giá vệ sinh','bao nhiêu tiền vệ sinh','giá bảo dưỡng laptop','vệ sinh máy bao nhiêu','thay keo tản nhiệt'],
+  a:'🧹 <b>Giá vệ sinh / bảo dưỡng Laptop:</b><br><br>🔧 <b>Vệ sinh cơ bản (thổi bụi):</b> 80.000đ<br>⚙️ <b>Vệ sinh toàn bộ + thay keo tản nhiệt:</b> 150.000 – 200.000đ<br>❄️ <b>Vệ sinh + thay compound cao cấp:</b> 250.000đ<br><br>✅ Máy chạy mát hơn, tăng tuổi thọ CPU<br>⏱️ Thời gian: 30–45 phút<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['máy tính bị đơ','laptop đơ','máy treo','không phản hồi','máy bị lag nặng','máy chậm quá','sao máy chậm'],
+  a:'🐢 <b>Máy chậm/đơ có thể do:</b><br><br>1️⃣ <b>RAM thiếu</b> → Nâng cấp RAM 8GB hoặc 16GB<br>2️⃣ <b>Ổ cứng HDD cũ</b> → Thay SSD chạy nhanh gấp 5 lần<br>3️⃣ <b>Nhiễm virus/malware</b> → Diệt virus, dọn rác<br>4️⃣ <b>Nhiệt độ cao</b> → Vệ sinh, thay keo tản nhiệt<br>5️⃣ <b>Windows bị lỗi</b> → Cài lại Windows<br><br>💡 Mang máy đến <b>kiểm tra miễn phí</b>, báo giá trước khi sửa!<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>'},
+
+ {k:['máy không lên nguồn','laptop không bật được','bật không lên','không khởi động được','ấn nút không lên'],
+  a:'⚡ <b>Laptop không lên nguồn:</b><br><br>🔍 <b>Nguyên nhân thường gặp:</b><br>• Pin hết/hỏng → Thử cắm sạc trực tiếp<br>• Lỗi bo mạch chủ / IC nguồn<br>• Màn hình hỏng (máy vẫn chạy, không hiển thị)<br>• Ram/SSD lỏng kết nối<br><br>⚠️ Không nên tự mở máy nếu chưa có kinh nghiệm!<br>✅ Mang đến <b>kiểm tra miễn phí</b> tại Tran Hoa Computer<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['mất dữ liệu','xóa nhầm file','cứu data','khôi phục file','ổ cứng chết','cứu ổ cứng'],
+  a:'💾 <b>Cứu dữ liệu / khôi phục file:</b><br><br>✅ Tỷ lệ thành công: <b>70–90%</b> tùy mức độ<br><br>📋 <b>Các trường hợp xử lý được:</b><br>• Xóa nhầm file, format nhầm ổ<br>• Ổ cứng bị lỗi bad sector<br>• Laptop chết nhưng ổ cứng còn tốt<br>• Phân vùng bị mất<br><br>⚠️ <b>Lưu ý:</b> Dừng dùng máy ngay để tránh ghi đè dữ liệu!<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi ngay: 0963.284.044</a>'},
+
+ {k:['có bảo hành không','bảo hành bao lâu','chính sách bảo hành','bảo hành sửa chữa'],
+  a:'🛡️ <b>Chính sách bảo hành Tran Hoa Computer:</b><br><br>🔧 <b>Dịch vụ sửa chữa:</b> Bảo hành <b>1–3 tháng</b><br>🔋 <b>Linh kiện (pin, màn, RAM, SSD):</b> Bảo hành <b>3–12 tháng</b><br>💻 <b>Lắp ráp PC:</b> Bảo hành theo hãng linh kiện<br>🪟 <b>Cài Windows/phần mềm:</b> Hỗ trợ <b>30 ngày</b> nếu lỗi do cài đặt<br><br>✅ <b>Cam kết:</b> Minh bạch giá, báo trước khi làm<br>✅ Có hóa đơn, biên lai đầy đủ'},
+
+ {k:['lấy máy bao lâu','sửa mấy ngày','bao lâu xong','thời gian sửa','khi nào lấy máy'],
+  a:'⏱️ <b>Thời gian sửa chữa tại Tran Hoa Computer:</b><br><br>⚡ <b>Cài Win / cài phần mềm:</b> 30–60 phút<br>🧹 <b>Vệ sinh / bảo dưỡng:</b> 30–45 phút<br>🔋 <b>Thay pin / màn hình:</b> 30–60 phút<br>💾 <b>Nâng cấp RAM / SSD:</b> 20–30 phút<br>🔧 <b>Sửa mainboard / phần cứng phức tạp:</b> 1–3 ngày<br><br>📞 Gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để được báo thời gian cụ thể!'}
 ];
 var offIdx=0;
 
