@@ -425,6 +425,47 @@ tr:hover td{background:#fafafa}
 .ic{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:12.5px;max-width:200px}
 .dc{font-size:12.5px;white-space:nowrap}
 
+
+/* ─── MISSING CLASSES FIX ─── */
+.btn-sm{padding:5px 12px;font-size:12.5px}
+.pr-urg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;background:#fee2e2;color:var(--red);font-size:11px;font-weight:700;margin-left:6px}
+.det-block{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh)}
+.det-block h4{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--primary-light)}
+.det-row{display:flex;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);gap:10px}
+.det-row:last-child{border-bottom:none}
+.det-label{width:140px;font-size:12px;font-weight:600;color:var(--text2);flex-shrink:0}
+.det-val{font-size:13px;color:var(--text);flex:1;word-break:break-word}
+.det-val.hi{font-weight:700;font-size:14px}
+.detg{display:flex;flex-direction:column;gap:0;margin-top:12px}
+/* Customer page */
+.cust-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.cust-search-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.cust-grid{display:flex;flex-direction:column;gap:0}
+/* Fix bwrap visibility */
+#bwrap{display:none}
+/* Fix mobile: show bwrap, hide twrap */
+@media(max-width:767px){
+  #bwrap{display:block}
+  .twrap{display:none!important}
+}
+/* Fix products page whitespace */
+#pg-products .ph{margin-bottom:12px}
+/* Fix stat cards sl label */
+.sl-lbl,.sv .sl-lbl{font-size:11px}
+
+
+/* ─── DETAIL PAGE EXTRA ─── */
+.detg{display:flex;flex-direction:column;gap:0}
+@media(min-width:769px){
+  .detg{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+}
+/* Products page: remove extra top space */
+#pg-products{padding-top:0!important}
+/* Cust page */
+.cust-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:769px){.cust-stat-row{grid-template-columns:repeat(4,1fr)}}
+.cust-search-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;background:#fff;padding:10px 12px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border)}
+
 </style>
 </head>
 <body>
@@ -542,9 +583,9 @@ tr:hover td{background:#fafafa}
       <th>Vấn đề</th><th onclick="sortBy('scheduledAt')" data-sort="scheduledAt">Ngày hẹn<span class="sort-icon"> ↕</span></th><th onclick="sortBy('status')" data-sort="status">Trạng thái<span class="sort-icon"> ↕</span></th>
       <th onclick="sortBy('actualCost')" data-sort="actualCost">Chi phí<span class="sort-icon"> ↕</span></th><th>Thao tác</th>
     </tr></thead><tbody id="btbody"></tbody></table>
-    <div id="bwrap"></div>
-    <div class="emp" id="bemp" style="display:none"><div class="emp-i">📭</div><p>Chưa có lịch hẹn nào</p></div>
 </div>
+<div id="bwrap" style="display:none"></div>
+<div class="emp" id="bemp" style="display:none"><div class="emp-i">📭</div><p>Chưa có lịch hẹn nào</p></div>
 </div>
 <!-- ADD/EDIT -->
 <div class="pg" id="pg-add">
@@ -615,14 +656,17 @@ tr:hover td{background:#fafafa}
 </div>
 <!-- DETAIL -->
 <div class="pg" id="pg-det">
-<div class="card" style="padding:16px 20px">
-  <div style="display:flex;align-items:center;gap:16px">
+<div class="card" style="padding:12px 16px;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
     <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
-    <div style="flex:1;display:flex;align-items:center;gap:12px"><h2 style="font-size:18px;font-weight:700" id="detid"></h2><span id="detbdg"></span></div>
-    <div style="display:flex;gap:8px">
-      <button class="btn b-gho btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">In phiếu</button>
-      <button class="btn b-sec btn-sm" id="detedit">Chỉnh sửa</button>
-      <button class="btn b-dan btn-sm" id="detdel">Xoá</button>
+    <div style="flex:1;display:flex;align-items:center;gap:8px;min-width:0">
+      <h2 style="font-size:16px;font-weight:800;white-space:nowrap" id="detid"></h2>
+      <span id="detbdg"></span>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn b-pri btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">🖨️ In phiếu</button>
+      <button class="btn b-sec btn-sm" id="detedit">✏️ Sửa</button>
+      <button class="btn b-dan btn-sm" id="detdel">🗑️ Xóa</button>
     </div>
   </div>
 </div>
@@ -715,7 +759,7 @@ tr:hover td{background:#fafafa}
 </div>
 </div>
 </div></div></div>
-<div class="pg" id="pg-products">
+<div class="pg" id="pg-products" style="padding-top:0">
 <div class="ph">
   <div>
     <h2><span>📦</span> Quản lý sản phẩm</h2>
@@ -1358,8 +1402,9 @@ function safeStr(s) {
   var _bdg=document.getElementById('pbadge'); if(_bdg){_bdg.textContent=_pb>0?_pb:'';_bdg.style.display=_pb>0?'block':'none';}
   document.getElementById('rcnt').textContent=filtered.length+' kết quả';
   var tb=document.getElementById('btbody'), em=document.getElementById('bemp'), mwrap=document.getElementById('bwrap');
-  if(isMob){ if(tb) tb.style.display='none'; if(mwrap) mwrap.style.display='block'; }
-  else { if(tb) tb.style.display='table-row-group'; if(mwrap) mwrap.style.display='none'; }
+  // CSS media query handles show/hide; JS just fills content
+  if(isMob && mwrap) mwrap.style.display='block';
+  if(!isMob){ if(mwrap) mwrap.style.display='none'; if(tb) tb.style.display=''; }
   if(!filtered.length){ if(tb)tb.innerHTML=''; if(mwrap) mwrap.innerHTML=''; if(em)em.style.display=''; return; } if(em)em.style.display='none';
   var rows=filtered.map(function(b){
     var u=b.priority==='urgent';
@@ -1607,7 +1652,7 @@ function doPrint(id){
     }
   }
   if(!b){window.print();return;}
-  var win=window.open('','_blank','width=820,height:1000');
+  var win=window.open('','_blank','width=820,height=1000');
   var shop=cfg.name||'Trần Hoa Computer';
   var phone=cfg.phone||'0963.284.044';
   var addr=cfg.addr||'Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên';
@@ -1674,7 +1719,7 @@ function doPrint(id){
     +'  .hdr{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
     +'  .status-row{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
     +'}'
-    +'></head><body>'
+    +'</head><body>'
     +'<div class="paper">'
     // ── HEADER
     +'<div class="hdr">'
