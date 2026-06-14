@@ -782,7 +782,7 @@
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
         position: fixed; left: 20px; bottom: 90px; z-index: 9400;
-        width: 330px; max-height: 510px;
+        width: 420px; max-height: 620px;
         background: #fff; border-radius: 16px;
         box-shadow: 0 8px 40px rgba(0,0,0,.2);
         display: flex; flex-direction: column; overflow: hidden;
@@ -2002,8 +2002,8 @@ body {
         right: 8px !important;
         left: auto !important;
         bottom: 310px !important;
-        max-height: min(510px, calc(100vh - 340px)) !important;
-        width: 330px !important;
+        max-height: min(620px, calc(100vh - 340px)) !important;
+        width: 420px !important;
     }
 
     /* 4. cb-hint label hiển thị bên trái button */
@@ -2262,6 +2262,7 @@ body {
             <div class="nav-menu" id="menuNavbar">
                 <a href="#dich-vu">Dịch vụ</a>
                 <a href="#datlich-sua-chua">Đặt lịch</a>
+                <a href="#san-pham-section" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(!el)return;var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});})();">Sản Phẩm</a>
                 <a href="#muc-bang-gia">Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">Bảo hành</a>
                 <a href="#danh-gia-khach-hang">Đánh giá</a>
