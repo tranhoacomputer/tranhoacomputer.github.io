@@ -758,7 +758,6 @@ tr:hover td{background:#fafafa}
 
 </div>
 </div>
-</div></div></div>
 <div class="pg" id="pg-products" style="padding-top:0">
 <div class="ph">
   <div>
@@ -1025,7 +1024,7 @@ async function doSync(){
         };
       });
     }
-    if(dataArr !== null){
+    if(dataArr != null){
       function normalizeBooking(b) {
         if (!b) return b;
         if (!b.customerName && (b['Full name']||b['full name']||b.name)) b.customerName = b['Full name']||b['full name']||b.name;
@@ -1403,8 +1402,8 @@ function safeStr(s) {
   document.getElementById('rcnt').textContent=filtered.length+' kết quả';
   var tb=document.getElementById('btbody'), em=document.getElementById('bemp'), mwrap=document.getElementById('bwrap');
   // CSS media query handles show/hide; JS just fills content
-  if(isMob && mwrap) mwrap.style.display='block';
-  if(!isMob){ if(mwrap) mwrap.style.display='none'; if(tb) tb.style.display=''; }
+  if(isMob && mwrap){ mwrap.style.display='block'; if(tb) tb.innerHTML=''; }
+  if(!isMob){ if(mwrap){ mwrap.style.display='none'; mwrap.innerHTML=''; } if(tb) tb.style.display=''; }
   if(!filtered.length){ if(tb)tb.innerHTML=''; if(mwrap) mwrap.innerHTML=''; if(em)em.style.display=''; return; } if(em)em.style.display='none';
   var rows=filtered.map(function(b){
     var u=b.priority==='urgent';
@@ -1447,7 +1446,7 @@ function safeStr(s) {
       +'<td><div class="dc">'+fdt(b.scheduledAt)+'</div></td>'
       +'<td><select class="ssel" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select></td>'
       +'<td>'+(b.actualCost?'<span style="font-weight:700;color:#065f46">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span style="color:var(--amber);font-weight:600">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</span></td>'
-      +'<td><div class="act-btns"><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="btn b-sec" style="padding:5px 9px;font-size:13px" href="tel:'+esc(b.phone||'')+ '" title="Gọi" style="text-decoration:none;display:inline-flex;align-items:center">📞</a>'+'<button class="btn b-dan" style="padding:5px 9px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
+      +'<td><div class="act-btns"><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="btn b-sec" style="padding:5px 9px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'+'<button class="btn b-dan" style="padding:5px 9px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
       +'</tr>';
   }).join('');
   if(isMob && mwrap) mwrap.innerHTML = rows;
@@ -2307,6 +2306,7 @@ function deleteProd(id) {
 /* ══ END PRODUCT MANAGER ══ */
 
 </script>
+</div>
 </main>
 </div>
 
