@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v35.html | Tran Hoa Computer | 2026-06-15 | v35: quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
+<!-- admin_v36.html | Tran Hoa Computer | 2026-06-15 | v36: dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
 <title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -758,6 +758,78 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 /* ── content area ── */
 .content { padding: 18px; }
 @media (min-width:769px) { .content { padding: 22px 24px; } }
+
+
+/* ═══════════════════════════
+   DASHBOARD v36 — redesign
+   ═══════════════════════════ */
+
+/* section label */
+.dash-sec {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: #94a3b8; margin: 0 0 8px;
+}
+
+/* primary KPI cards — 2-col on mobile */
+.dash-primary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.sc-kpi {
+  background: #fff; border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  border: 1px solid rgba(226,232,240,.7);
+  padding: 14px 14px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+  transition: transform .18s, box-shadow .18s;
+}
+.sc-kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.10); }
+.sc-kpi-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; margin-bottom: 6px; flex-shrink: 0;
+}
+.sc-kpi-val {
+  font-size: 26px; font-weight: 800; line-height: 1.1;
+  color: var(--text);
+}
+.sc-kpi-lbl { font-size: 11.5px; font-weight: 600; color: var(--text2); }
+.sc-kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+
+/* compact status mini-cards — 4-col grid */
+.dash-status { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+.sc-mini {
+  background: #fff; border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0,0,0,.06);
+  border: 1px solid rgba(226,232,240,.7);
+  padding: 10px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.sc-mini-icon { font-size: 15px; }
+.sc-mini-val {
+  font-size: 20px; font-weight: 800; line-height: 1;
+  color: var(--text);
+}
+.sc-mini-lbl { font-size: 10px; font-weight: 600; color: var(--text2); text-align: center; line-height: 1.3; }
+.sc-mini-bar { width: 100%; height: 3px; background: #f1f5f9; border-radius: 4px; margin-top: 5px; overflow: hidden; }
+.sc-mini-bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
+
+/* alert strip */
+.dash-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.sc-alert {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 12px; border-radius: 10px;
+  font-size: 12.5px; font-weight: 600;
+  border: 1.5px solid;
+  flex: 1; min-width: 120px;
+}
+.sc-alert-val { font-size: 16px; font-weight: 800; flex-shrink: 0; }
+.sc-alert-lbl { font-size: 11.5px; line-height: 1.3; }
+.sc-alert.red   { background: #fff5f5; border-color: #fca5a5; color: #991b1b; }
+.sc-alert.amber { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
+.sc-alert.blue  { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+.sc-alert.green { background: #f0fdf4; border-color: #86efac; color: #166534; }
+.sc-alert.gray  { background: #f8fafc; border-color: #e2e8f0; color: #475569; }
+
+/* hide old dashg from v35 layout; statg is replaced */
+#dashg .statg { display: none; }
 
 </style>
 </head>
@@ -1645,17 +1717,83 @@ function renderDash(){
   var today=books.filter(function(b){var d=new Date(b.scheduledAt||'');var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}).length;
   var el=document.getElementById('dashg');
   if(!el)return;
-  el.innerHTML=
-    sc('','Tổng lịch hẹn',tot,'','c-blue')
-    +sc('','Hôm nay',today,'','c-cyan')
-    +sc('','Chờ xử lý',pend,'b-p','c-amber')
-    +sc('','Đang sửa',prog,'b-i','c-purple')
-    +sc('','Hoàn thành',done,'b-d','c-green')
-    +sc('','Đã hủy',canc,'b-c','c-red')
-    +sc('','Ưu tiên cao',urg,urg>0?'b-p':'','c-red')
-    +sc('','Doanh thu',fmt(rev),'b-rev','c-cyan')
-    +(returnOverdue>0?sc('','Trễ hẹn trả',returnOverdue,'b-c','c-red'):'')
-    +(returnSoon>0?sc('','Sắp đến hẹn trả',returnSoon,'b-p','c-amber'):'');
+  var active=pend+prog; // active (not done/cancelled)
+  var total_nonzero=tot||1;
+  function _pct(n){ return Math.round(n/total_nonzero*100); }
+  function _bar(n,color){ return '<div class="sc-mini-bar"><div class="sc-mini-bar-fill" style="width:'+_pct(n)+'%;background:'+color+'"></div></div>'; }
+
+  // ── Primary KPIs (2 big cards)
+  var primaryHtml=
+    '<div class="dash-primary">'
+    +'<div class="sc-kpi">'
+    +'<div class="sc-kpi-icon" style="background:#dbeafe">📋</div>'
+    +'<div class="sc-kpi-val">'+tot+'</div>'
+    +'<div class="sc-kpi-lbl">Tổng lịch hẹn</div>'
+    +'<div class="sc-kpi-sub">'+(today>0?today+' lịch hôm nay':'Không có lịch hôm nay')+'</div>'
+    +'</div>'
+    +'<div class="sc-kpi">'
+    +'<div class="sc-kpi-icon" style="background:#d1fae5">💰</div>'
+    +'<div class="sc-kpi-val" style="color:var(--green);font-size:'+(rev>=1000000?'20px':'26px')+'">'+fmt(rev)+'</div>'
+    +'<div class="sc-kpi-lbl">Doanh thu</div>'
+    +'<div class="sc-kpi-sub">'+done+' đơn hoàn thành</div>'
+    +'</div>'
+    +'</div>';
+
+  // ── Status mini-cards (4 col)
+  var statusHtml=
+    '<div class="dash-sec">Trạng thái đơn</div>'
+    +'<div class="dash-status">'
+    +'<div class="sc-mini">'
+    +'<span class="sc-mini-icon">⏳</span>'
+    +'<span class="sc-mini-val" style="color:#d97706">'+pend+'</span>'
+    +'<span class="sc-mini-lbl">Chờ xử lý</span>'
+    +_bar(pend,'#f59e0b')
+    +'</div>'
+    +'<div class="sc-mini">'
+    +'<span class="sc-mini-icon">🔧</span>'
+    +'<span class="sc-mini-val" style="color:#7c3aed">'+prog+'</span>'
+    +'<span class="sc-mini-lbl">Đang sửa</span>'
+    +_bar(prog,'#8b5cf6')
+    +'</div>'
+    +'<div class="sc-mini">'
+    +'<span class="sc-mini-icon">✅</span>'
+    +'<span class="sc-mini-val" style="color:#059669">'+done+'</span>'
+    +'<span class="sc-mini-lbl">Hoàn thành</span>'
+    +_bar(done,'#10b981')
+    +'</div>'
+    +'<div class="sc-mini">'
+    +'<span class="sc-mini-icon">🚫</span>'
+    +'<span class="sc-mini-val" style="color:#94a3b8">'+canc+'</span>'
+    +'<span class="sc-mini-lbl">Đã hủy</span>'
+    +_bar(canc,'#94a3b8')
+    +'</div>'
+    +'</div>';
+
+  // ── Alert/watch strip
+  var alerts=[];
+  alerts.push(
+    '<div class="sc-alert '+(today>0?'blue':'gray')+'">'
+    +'<span style="font-size:15px">📅</span>'
+    +'<div><div class="sc-alert-val">'+today+'</div><div class="sc-alert-lbl">Hôm nay</div></div>'
+    +'</div>'
+  );
+  alerts.push(
+    '<div class="sc-alert '+(urg>0?'red':'gray')+'">'
+    +'<span style="font-size:15px">🚨</span>'
+    +'<div><div class="sc-alert-val">'+urg+'</div><div class="sc-alert-lbl">Ưu tiên cao</div></div>'
+    +'</div>'
+  );
+  alerts.push(
+    '<div class="sc-alert '+(returnOverdue>0?'red':returnSoon>0?'amber':'gray')+'">'
+    +'<span style="font-size:15px">'+(returnOverdue>0?'⚠️':'⏰')+'</span>'
+    +'<div>'
+    +'<div class="sc-alert-val">'+(returnOverdue+returnSoon)+'</div>'
+    +'<div class="sc-alert-lbl">'+(returnOverdue>0?returnOverdue+' trễ hẹn'+(returnSoon>0?', '+returnSoon+' sắp đến':''):returnSoon>0?returnSoon+' sắp đến hẹn':'Hẹn trả')+'</div>'
+    +'</div></div>'
+  );
+  var alertHtml='<div class="dash-sec">Theo dõi</div><div class="dash-alerts">'+alerts.join('')+'</div>';
+
+  el.innerHTML = primaryHtml + alertHtml + statusHtml;
   renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
 }
 
