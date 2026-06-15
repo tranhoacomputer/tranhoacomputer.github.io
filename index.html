@@ -782,7 +782,7 @@
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
         position: fixed; left: 20px; bottom: 90px; z-index: 9400;
-        width: 420px; max-height: 620px;
+        width: 440px; max-height: 680px;
         background: #fff; border-radius: 16px;
         box-shadow: 0 8px 40px rgba(0,0,0,.2);
         display: flex; flex-direction: column; overflow: hidden;
@@ -832,7 +832,7 @@
     .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px; }
     .cb-m.user { align-self:flex-end; }
     .cb-m.user .bub { background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;padding:9px 12px;border-radius:13px 4px 13px 13px; }
-    .cb-qr { display:flex;flex-wrap:wrap;gap:5px;padding:4px 10px 8px;flex-shrink:0;max-height:76px;overflow-y:auto; }
+    .cb-qr { display:flex;flex-wrap:wrap;gap:5px;padding:6px 10px 10px;flex-shrink:0;max-height:120px;overflow-y:auto;min-height:0;transition:all .2s; }
     .cb-qb { background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;transition: background-color .2s  , color .2s  , opacity .2s  , transform .2s  , border-color .2s  ;white-space:nowrap; }
     .cb-qb:hover { background:#6d28d9;color:#fff;border-color:#6d28d9; }
     .cb-inp { display:flex;gap:8px;padding:9px 11px 11px;border-top:1px solid #e2e8f0;flex-shrink:0; }
@@ -1080,13 +1080,21 @@
 }
 .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(37,99,235,.13); }
 .product-card-img {
-  width: 100%; aspect-ratio: 4/3; object-fit: cover;
-  background: #f1f5f9;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 40px; color: #94a3b8; flex-shrink: 0;
+  width: 100%; padding-bottom: 70%; height: 0; position: relative;
+  background: #f1f5f9; overflow: hidden; flex-shrink: 0;
+  border-radius: 12px 12px 0 0;
 }
-.product-card-img img { width:100%; height:100%; object-fit:cover; }
-.product-card-img.no-img::after { content: '🖥️'; font-size: 44px; }
+.product-card-img img {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  display: block; transition: transform .3s;
+}
+.product-card:hover .product-card-img img { transform: scale(1.04); }
+.product-card-img.no-img::after {
+  content: '🖥️'; font-size: 44px;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+}
 .product-card-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; }
 .product-card-cat {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
@@ -6075,7 +6083,7 @@ window.cbToggle=function(){
   if(_open && !_greeted){
     _greeted=true;
     var _prev2=_loadChatHistory();
-    if(_prev2.length>0){_chatHistory=_prev2;var _cbM=document.getElementById('cbMsgs');_prev2.forEach(function(m){var w=document.createElement('div');w.className='cb-m '+m.role;w.innerHTML='<div class="bub">'+m.html+'</div>';if(_cbM)_cbM.appendChild(w);});if(_cbM)_cbM.scrollTop=_cbM.scrollHeight;return;}
+    if(_prev2.length>0){_chatHistory=_prev2;var _cbM=document.getElementById('cbMsgs');_prev2.forEach(function(m){var w=document.createElement('div');w.className='cb-m '+m.role;w.innerHTML='<div class="bub">'+m.html+'</div>';if(_cbM)_cbM.appendChild(w);});if(_cbM)_cbM.scrollTop=_cbM.scrollHeight;/* Restore default QR after history */if(typeof setQR==='function')setQR(['Báo giá sửa chữa','Đặt lịch sửa','Tra cứu tình trạng','Xem sản phẩm','Gặp kỹ thuật viên']);return;}
     setTimeout(function(){
       var _h=new Date().getHours();
       var _greet=_h<12?'☀️ Chào buổi sáng!':_h<18?'🌤️ Chào buổi chiều!':'🌙 Chào buổi tối!';
