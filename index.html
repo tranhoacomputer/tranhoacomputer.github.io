@@ -781,18 +781,25 @@
 
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
-        position: fixed; left: 20px; bottom: 90px; z-index: 9400;
-        width: 440px; max-height: 680px;
-        background: #fff; border-radius: 16px;
-        box-shadow: 0 8px 40px rgba(0,0,0,.2);
+        position: fixed;
+        left: 50%; bottom: 90px; z-index: 9400;
+        transform: translateX(-50%) scale(.85) translateY(20px);
+        width: min(560px, calc(100vw - 32px)); max-height: min(750px, calc(100vh - 110px));
+        background: #fff; border-radius: 20px;
+        box-shadow: 0 12px 60px rgba(0,0,0,.22);
         display: flex; flex-direction: column; overflow: hidden;
-        transform: scale(.85) translateY(20px);
         opacity: 0; pointer-events: none;
-        transition: background-color .3s cubic-bezier (.34,1.56,.64,1), color .3s cubic-bezier (.34,1.56,.64,1), opacity .3s cubic-bezier (.34,1.56,.64,1), transform .3s cubic-bezier (.34,1.56,.64,1), border-color .3s cubic-bezier (.34,1.56,.64,1);
+        transition: opacity .3s cubic-bezier(.34,1.56,.64,1),
+                    transform .3s cubic-bezier(.34,1.56,.64,1),
+                    background-color .3s, color .3s, border-color .3s;
     }
-    #chatbotPanel.cb-open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+    #chatbotPanel.cb-open {
+        transform: translateX(-50%) scale(1) translateY(0);
+        opacity: 1; pointer-events: all;
+    }
     @media (max-width: 767px) {
-        #chatbotPanel { left: 8px; right: 8px; width: auto; max-width: calc(100vw - 16px); bottom: 140px; max-height: 60vh; min-height: 220px; }
+        #chatbotPanel { left: 8px !important; right: 8px !important; width: auto !important; max-width: calc(100vw - 16px) !important; transform: scale(.85) translateY(20px) !important; bottom: 140px; max-height: 60vh; min-height: 220px; }
+    #chatbotPanel.cb-open { transform: scale(1) translateY(0) !important; }
     }
     .cb-hdr {
         background: linear-gradient(135deg,#4c1d95,#7c3aed);
@@ -2007,11 +2014,12 @@ body {
 
     /* 3. Panel mở về phía bên trái của button, bottom gần button */
     #chatbotPanel {
-        right: 8px !important;
-        left: auto !important;
-        bottom: 310px !important;
-        max-height: min(620px, calc(100vh - 340px)) !important;
-        width: 420px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) scale(1) translateY(0) !important;
+        bottom: 90px !important;
+        max-height: min(750px, calc(100vh - 110px)) !important;
+        width: min(560px, calc(100vw - 32px)) !important;
     }
 
     /* 4. cb-hint label hiển thị bên trái button */
@@ -2047,6 +2055,10 @@ body {
             bottom: 145px !important;
             max-height: min(480px, calc(100vh - 200px)) !important;
             border-radius: 14px !important;
+            transform: scale(.85) translateY(20px) !important;
+        }
+        #chatbotPanel.cb-open {
+            transform: scale(1) translateY(0) !important;
         }
     }
 
