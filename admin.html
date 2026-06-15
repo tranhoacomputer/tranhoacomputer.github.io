@@ -3,1200 +3,729 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<!-- admin_v39.html | Tran Hoa Computer | 2026-06-15 | v39: fix revenue 0đ (actualCost||estimatedCost fallback); fix stats table empty (DD/MM/YYYY date parsing) fix booking desktop — sticky action col, clickable rows, remove dup CSV btn, breakpoint 768→767 daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
-<title>Trần Hoà Computer – Quản Trị Website</title>
+<title>Trần Hoà Computer – Quản Trị</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:["'Be Vietnam Pro'","sans-serif"]},colors:{primary:{"50":"#eff6ff","100":"#dbeafe","200":"#bfdbfe","500":"#3b82f6","600":"#2563eb","700":"#1d4ed8"},accent:{"500":"#f97316","600":"#ea580c"}}}}}
+</script>
 <style>
-/* ══════════════════════════════════════════════
-   TRAN HOA COMPUTER — Admin v3
-   Theme: Match index.html (primary #2563eb)
-   Mobile-first, fully responsive
-══════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
-:root{
-  --primary:#2563eb; --primary-h:#1d4ed8; --primary-light:#eff6ff;
-  --accent:#ea580c;  --accent-light:#fff7ed;
-  --green:#10b981;   --green-light:#d1fae5;
-  --amber:#f59e0b;   --amber-light:#fef3c7;
-  --red:#ef4444;     --red-light:#fee2e2;
-  --purple:#8b5cf6;  --purple-light:#ede9fe;
-  --cyan:#06b6d4;    --cyan-light:#cffafe;
-  --text:#1e293b;    --text2:#64748b;
-  --bg:#f1f5f9;      --surface:#fff;
-  --border:#e2e8f0;
-  --sh:0 1px 3px rgba(0,0,0,.08);
-  --sh2:0 4px 16px rgba(0,0,0,.12);
-  --sh3:0 8px 32px rgba(0,0,0,.18);
-  --r:10px; --sbw:230px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{overflow-x:hidden}
-body{font-family:'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
-a{color:inherit;text-decoration:none}
-input,select,textarea,button{font-family:inherit;font-size:13px}
-
-/* ─── SIDEBAR ─── */
-.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200}
-.sb-overlay.vis{display:block}
-.sidebar{
-  width:var(--sbw);height:100%;
-  background:linear-gradient(160deg,#0f172a 0%,#1e293b 100%);
-  position:fixed;left:0;top:0;bottom:0;z-index:201;
-  display:flex;flex-direction:column;
-  transition:transform .28s cubic-bezier(.4,0,.2,1);
-  overflow-y:auto;overflow-x:hidden;
-}
-.sb-hd{padding:0}
-.sb-logo{
-  padding:16px 14px 14px;
-  background:var(--primary);
-  display:flex;align-items:center;gap:10px;
-}
-.sb-logo-icon{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.sb-logo-text{font-size:13px;font-weight:800;color:#fff;line-height:1.3}
-.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px}
-.sb-section{padding:16px 14px 4px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px}
-.sb-link{
-  display:flex;align-items:center;gap:10px;padding:10px 14px;
-  color:#94a3b8;cursor:pointer;border-radius:8px;margin:1px 8px;
-  transition:all .18s;font-size:13px;font-weight:500;position:relative;
-}
-.sb-link:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
-.sb-link.active{background:rgba(37,99,235,.25);color:#93c5fd;font-weight:700}
-.sb-link.active::before{content:'';position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--primary);border-radius:2px}
-.sl-icon{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.sb-link.active .sl-icon{background:rgba(37,99,235,.35)}
-.sl-label{flex:1}
-.sl-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center}
-.sb-ft{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.07)}
-.sb-user{display:flex;align-items:center;gap:10px}
-.sb-avatar{width:34px;height:34px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
-.sb-user-name{font-size:13px;font-weight:700;color:#f1f5f9}
-.sb-user-role{font-size:11px;color:#64748b}
-.sb-link .sl-badge-bdg{margin-left:auto}
-
-/* ─── TOPBAR ─── */
-.main{margin-left:var(--sbw);display:flex;flex-direction:column;min-height:100vh;transition:margin-left .28s}
-.topbar{
-  background:var(--primary);height:56px;
-  display:flex;align-items:center;padding:0 16px;gap:12px;
-  position:sticky;top:0;z-index:190;
-  box-shadow:0 2px 8px rgba(37,99,235,.4);
-}
-.tb-menu{background:none;border:none;font-size:22px;cursor:pointer;color:#fff;padding:4px 6px;border-radius:6px;transition:background .15s}
-.tb-menu:hover{background:rgba(255,255,255,.18)}
-.tb-title{font-weight:800;font-size:16px;flex:1;color:#fff}
-.tb-actions{display:flex;align-items:center;gap:6px}
-.tb-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 12px;border-radius:6px;
-  border:1.5px solid rgba(255,255,255,.45);
-  background:transparent;font-size:12.5px;font-weight:600;
-  cursor:pointer;color:#fff;transition:all .15s;white-space:nowrap;
-}
-.tb-btn:hover{background:rgba(255,255,255,.18);border-color:#fff}
-.tb-btn.primary{background:#fff;color:var(--primary);border-color:#fff}
-.tb-btn.primary:hover{background:rgba(255,255,255,.9)}
-.clk{font-size:12px;color:rgba(255,255,255,.75);background:rgba(0,0,0,.15);padding:5px 10px;border-radius:6px;white-space:nowrap}
-.sl{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;color:#fff;background:rgba(0,0,0,.15)}
-.sl.s-ok{background:rgba(16,185,129,.35);color:#a7f3d0}
-.sl.s-err{background:rgba(239,68,68,.35);color:#fca5a5}
-.sl.s-ing{background:rgba(245,158,11,.3);color:#fde68a}
+/* ─── scrollbar ─── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+/* ─── animations ─── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+/* ─── page system ─── */
+.pg{display:none}
+.pg.active{display:block;animation:fadeIn .25s ease}
+/* ─── spinner ─── */
+.spinner{border:3px solid rgba(37,99,235,.1);border-left-color:#2563eb;border-radius:50%;width:22px;height:22px;animation:spin 1s linear infinite}
+/* ─── sidebar transition ─── */
+.sidebar{transition:transform .28s cubic-bezier(.4,0,.2,1)}
+/* ─── overlay ─── */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:39;backdrop-filter:blur(2px)}
+.sb-overlay.vis{display:block}
+/* ─── syncing icon ─── */
 .syncing{animation:spin 1s linear infinite;display:inline-block}
-
-/* ─── CONTENT ─── */
-.content{padding:16px;flex:1;max-width:100%;overflow-x:hidden}
-.pg{display:none}.pg.active,.pg.on{display:block}
-
-/* ─── PAGE HEADER ─── */
-.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap}
-.ph h2{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
-.ph-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.ph-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-
-/* ─── STAT CARDS ─── */
-.statg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-.sc{background:#fff;border-radius:var(--r);padding:14px 12px;box-shadow:var(--sh);border:1px solid var(--border);display:flex;align-items:center;gap:11px}
-.si{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.si.c-blue{background:#eff6ff}.si.c-amber{background:#fef3c7}.si.c-purple{background:#ede9fe}
-.si.c-green{background:#d1fae5}.si.c-red{background:#fee2e2}.si.c-cyan{background:#cffafe}
-.sv{flex:1;min-width:0}
-.sl-lbl{font-size:11px;color:var(--text2);font-weight:500;line-height:1.2}
-.sn{font-size:20px;font-weight:800;color:var(--text);line-height:1.3;margin-top:2px}
-.sn.b-p{color:var(--amber)}.sn.b-i{color:var(--purple)}.sn.b-d{color:var(--green)}
-.sn.b-c{color:var(--red)}.sn.b-rev{color:var(--cyan)}.sn.b-a{color:var(--primary)}
-
-/* ─── DASHBOARD CARDS ─── */
-.dg{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
-.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);overflow:hidden}
-.ch{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ch h3{font-size:14px;font-weight:700}
-.cb{padding:14px 16px}
-.cw{position:relative;height:200px}
-.rev-chart-wrap{position:relative;height:200px}
-.chart-no-data{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text2);flex-direction:column;gap:8px}
-.rec-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.rec-item:last-child{border-bottom:none}
-.rec-item:hover{background:var(--bg);margin:0 -16px;padding:9px 16px;border-radius:6px}
-.rec-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.rec-info{flex:1;min-width:0}
-.rec-name{font-weight:600;font-size:13px}
-.rec-sub{font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* ─── FILTER BAR ─── */
-.fb{display:flex;align-items:center;gap:8px;margin-bottom:12px;background:#fff;padding:10px 12px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border);flex-wrap:wrap}
-.sw{display:flex;align-items:center;gap:7px;flex:1;min-width:160px;background:var(--bg);border-radius:7px;padding:7px 11px;border:1.5px solid var(--border);transition:border-color .15s}
-.sw:focus-within{border-color:var(--primary)}
-.sw input{border:none;background:none;outline:none;width:100%;font-size:13px;color:var(--text)}
-.sw-i{color:var(--text2);font-size:14px}
-.fsel{padding:7px 10px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:13px;cursor:pointer;outline:none;color:var(--text)}
-.fsel:focus{border-color:var(--primary)}
-.fcnt{font-size:12px;color:var(--text2);padding:5px 9px;background:var(--bg);border-radius:6px;border:1px solid var(--border);white-space:nowrap}
-.tbb{padding:7px 12px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;color:var(--text);font-weight:500;transition:all .15s;white-space:nowrap}
-.tbb:hover{border-color:var(--primary);color:var(--primary)}
-
-/* ─── TABLE ─── */
-.twrap{overflow-x:auto;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border)}
-table{border-collapse:collapse;width:100%;background:#fff;min-width:640px}
-th{padding:10px 12px;text-align:left;font-size:12px;font-weight:700;color:var(--text2);background:#f8fafc;border-bottom:2px solid var(--border);white-space:nowrap;user-select:none;cursor:pointer}
-th:hover{color:var(--primary)}
-th .sort-icon{opacity:.4;margin-left:2px;font-size:10px}
-th.sorted .sort-icon{opacity:1;color:var(--primary)}
-td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr.ur td:first-child{border-left:3px solid var(--red)}
-tr:hover td{background:#fafafa}
-.tid{font-size:10.5px;color:var(--text2);font-family:monospace;background:var(--bg);padding:2px 5px;border-radius:4px}
-.cc{display:flex;align-items:center;gap:8px}
-.mav{width:32px;height:32px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #bfdbfe}
-.cn{font-weight:600;font-size:13px}
-.cp{font-size:12px;color:var(--text2);margin-top:1px}
-
-/* ─── MOBILE CARDS ─── */
-.mob-card{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:13px 14px;margin-bottom:8px;box-shadow:var(--sh)}
-.mob-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
-.mob-card-name{font-weight:700;font-size:14px}
-.mob-card-phone{font-size:12px;color:var(--text2);margin-top:2px}
-.mob-card-row{display:flex;align-items:center;gap:6px;font-size:12.5px;margin-bottom:3px;color:var(--text2)}
-.mob-card-row strong{color:var(--text)}
-.mob-card-actions{display:flex;gap:6px;margin-top:10px}
-.mob-card-actions button{flex:1;padding:7px 0;font-size:12px;font-weight:600;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;background:#fff;transition:all .15s}
-.mob-card-actions .mc-view:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
-.mob-card-actions .mc-edit:hover{background:var(--amber-light);border-color:var(--amber);color:#92400e}
-.mob-card-actions .mc-del:hover{background:var(--red-light);border-color:#fca5a5;color:var(--red)}
-
-/* ─── BADGES ─── */
-.bdg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;gap:4px}
+/* ─── active sidebar link ─── */
+.sb-link-active{background:rgba(37,99,235,.18)!important;color:#93c5fd!important;font-weight:700}
+/* ─── status badges ─── */
+.bdg{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .b-p{background:#fef3c7;color:#92400e}
 .b-a{background:#dbeafe;color:#1e40af}
 .b-i{background:#ede9fe;color:#5b21b6}
 .b-d{background:#d1fae5;color:#065f46}
 .b-c{background:#fee2e2;color:#991b1b}
 .b-w{background:#f1f5f9;color:#475569}
-
-/* ─── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1}
-.btn:active{transform:scale(.97)}
-.b-pri{background:var(--primary);color:#fff;border-color:var(--primary)}
-.b-pri:hover{background:var(--primary-h)}
-.b-sec{background:#fff;color:var(--text);border-color:var(--border)}
-.b-sec:hover{border-color:var(--primary);color:var(--primary)}
-.b-gho{background:transparent;color:var(--text2);border-color:var(--border)}
-.b-gho:hover{background:var(--bg);color:var(--text)}
-.b-dan{background:#fff5f5;color:var(--red);border-color:#fca5a5}
-.b-dan:hover{background:var(--red-light)}
-.b-grn{background:var(--green-light);color:#065f46;border-color:#a7f3d0}
-.b-grn:hover{background:#bbf7d0}
-.bb{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;cursor:pointer;color:var(--text2);font-weight:500;transition:all .15s}
-.bb:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
-
-/* ─── FORMS ─── */
-.ffg{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
-.ffs{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:16px;box-shadow:var(--sh)}
-.ffs-title{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--primary-light);display:flex;align-items:center;gap:7px}
-.fr{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px}
-.fr:last-child{margin-bottom:0}
-.fd{display:flex;flex-direction:column;gap:4px}
-.fd label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
-.fd input,.fd select,.fd textarea,
-.fi{padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff;color:var(--text);width:100%}
-.fd input:focus,.fd select:focus,.fd textarea:focus,.fi:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
-.fd textarea,.fi[rows]{min-height:72px;resize:vertical}
-.he .fd input,.he .fd select,.fi.err{border-color:var(--red)!important}
-.ferr,.fe{font-size:11px;color:var(--red);margin-top:2px}
-.fa{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
-
-/* ─── DETAIL PAGE ─── */
-.det-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.det-row{display:flex;padding:10px 0;border-bottom:1px solid var(--border)}
-.det-row:last-child{border-bottom:none}
-.det-k{width:140px;font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;padding-top:1px}
-.det-v{font-size:13px;flex:1;word-break:break-word}
-.timeline{display:flex;flex-direction:column;gap:0}
-.tl-item{display:flex;gap:12px;padding-bottom:16px;position:relative}
-.tl-item:last-child{padding-bottom:0}
-.tl-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--bg);border:2px solid var(--border)}
-.tl-item.cur .tl-dot{background:var(--primary-light);border-color:var(--primary)}
-.tl-body{flex:1;min-width:0;padding-top:4px}
-.tl-title{font-size:13px;font-weight:700}
-.tl-sub{font-size:12px;color:var(--text2);margin-top:3px}
-.tl-line{position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
-.tl-item:last-child .tl-line{display:none}
-
-/* ─── QUICK EDIT MODAL (bottom sheet on mobile) ─── */
-.qkm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center}
-.qkm-overlay.open{display:flex!important}
-.qkm-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:520px;max-height:82vh;overflow-y:auto;animation:su .25s ease}
-@keyframes su{from{transform:translateY(80px);opacity:.5}to{transform:none;opacity:1}}
-.qkm-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.qkm-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2);padding:4px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
-.qkm-close:hover{background:var(--bg)}
-
-/* ─── GENERAL MODAL ─── */
-.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center}
-.mov.open,.mov[style*="flex"]{display:flex!important}
-.modal-box{background:#fff;border-radius:14px;padding:24px;max-width:440px;width:92%;box-shadow:var(--sh3);animation:fi .2s ease}
-@keyframes fi{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.m-i{font-size:36px;margin-bottom:10px;text-align:center}
-.macts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
-
-/* ─── TOAST ─── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:500;display:none;align-items:center;gap:8px;min-width:200px;max-width:90vw;box-shadow:var(--sh3)}
-.toast.show{display:flex!important;animation:fi .2s ease}
+/* ─── form fields (legacy compat) ─── */
+.fd{display:flex;flex-direction:column;gap:4px;width:100%}
+.fd label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
+.fd input,.fd select,.fd textarea{padding:9px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13.5px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;background:#fff;color:#1e293b;width:100%}
+.fd input:focus,.fd select:focus,.fd textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.he .fd input,.he .fd select{border-color:#ef4444!important}
+.ferr{font-size:11px;color:#ef4444;margin-top:2px}
+/* ─── sort icon ─── */
+.sort-icon{opacity:.4;margin-left:2px;font-size:10px}
+th.sorted .sort-icon{opacity:1;color:#2563eb}
+/* ─── ssel ─── */
+.ssel{padding:4px 8px;border-radius:20px;border:1.5px solid #e2e8f0;font-size:12px;font-weight:700;cursor:pointer;outline:none;background:#fff;color:#1e293b;max-width:150px}
+.ssel:focus{border-color:#2563eb}
+/* ─── toast ─── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:11px 22px;border-radius:12px;font-size:13px;font-weight:600;z-index:600;display:none;align-items:center;gap:8px;min-width:200px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.toast.show{display:flex!important;animation:fadeIn .2s ease}
 .to.ok{color:#34d399}.to.err{color:#f87171}.to.inf{color:#60a5fa}
-
-/* ─── SETTINGS ─── */
-.setwrap{display:flex;flex-direction:column;gap:14px}
-.cfg-card{background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
-.cfg-card-hd{padding:14px 16px;background:#f8fafc;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.cfg-ic{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--primary-light);border-radius:9px;flex-shrink:0}
-.cfg-meta{flex:1}
-.cfg-title{font-size:14px;font-weight:700}
-.cfg-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.cfg-field{padding:12px 16px;border-bottom:1px solid var(--border)}
-.cfg-field:last-child{border-bottom:none}
-.cfg-field label{display:block;font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
-.cfg-field input,.cfg-field select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;outline:none;background:#fff;color:var(--text)}
-.cfg-field input:focus,.cfg-field select:focus{border-color:var(--primary)}
-.cfg-toggle{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center}
-.cfg-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:500}
-.cfg-toggle input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary);flex-shrink:0}
-.cfg-actions{padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;background:#fafafa;border-top:1px solid var(--border)}
-.ktv-list{padding:10px 16px 0;display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
-.ktv-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:var(--primary-light);color:var(--primary);border:1px solid #bfdbfe;border-radius:20px;font-size:13px;font-weight:500}
-.ktv-tag button{background:none;border:none;cursor:pointer;color:var(--text2);font-size:14px;padding:0;line-height:1;margin-left:2px}
-.ktv-add{display:flex;gap:8px;padding:10px 16px}
-.ktv-add input{flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;outline:none}
-.ktv-add input:focus{border-color:var(--primary)}
-.ktv-add button{padding:9px 16px;background:var(--primary);color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap}
-
-/* ─── CUSTOMER PAGE ─── */
-.cust-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.cust-avatar{width:42px;height:42px;border-radius:50%;background:var(--primary-light);color:var(--primary);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #bfdbfe}
-.cust-name{font-weight:700;font-size:14px;color:var(--text)}
-.cust-phone{font-size:12px;color:var(--text2);margin-top:2px}
-.cust-addr{font-size:12px;color:var(--text2);margin-bottom:8px;padding-left:2px}
-.cust-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
-.cust-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:12px;font-weight:600}
-.cust-chip.orders{background:#eff6ff;color:var(--primary)}
-.cust-chip.done{background:var(--green-light);color:#065f46}
-.cust-chip.revenue{background:var(--amber-light);color:#92400e}
-.cust-chip.date{background:var(--bg);color:var(--text2)}
-.cust-actions{display:flex;gap:8px}
-.cust-btn{flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;background:#fff;text-align:center;transition:all .15s}
-.cust-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
-.cust-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;box-shadow:var(--sh);margin-bottom:8px}
-.cust-card:hover{border-color:var(--primary);box-shadow:var(--sh2);transform:translateY(-1px)}
-/* Customer modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:350;display:flex;align-items:flex-end;justify-content:center;animation:fi .2s ease}
-.modal-overlay .modal-box{border-radius:16px 16px 0 0;max-height:80vh;overflow-y:auto;width:100%;max-width:520px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.modal-head h3{font-size:15px;font-weight:700}
-.modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2);padding:4px;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{background:var(--bg)}
-.modal-body{padding:0}
-.modal-hist-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.modal-hist-item:last-child{border-bottom:none}
+/* ─── modal ─── */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.mov.open,.mov[style*="flex"]{display:flex!important}
+.modw{background:#fff;border-radius:16px;padding:24px;max-width:420px;width:92%;box-shadow:0 16px 48px rgba(0,0,0,.2);animation:slideUp .2s ease}
+/* ─── print ─── */
+@media print{.sidebar,.topbar-wrap,header,.ph-actions,.fb-bar,.act-btns,.mob-cards,.no-print{display:none!important}.main-wrap{margin-left:0!important}}
+/* ─── detail blocks ─── */
+.det-block{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.det-block h4{font-size:11px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #eff6ff}
+.det-row{display:flex;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f1f5f9;gap:10px}
+.det-row:last-child{border-bottom:none}
+.det-label{width:140px;font-size:12px;font-weight:600;color:#64748b;flex-shrink:0}
+.det-val{font-size:13px;color:#1e293b;flex:1;word-break:break-word}
+.det-val.hi{font-weight:700;font-size:14px}
+/* ─── customer page ─── */
+.cust-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px;cursor:pointer;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.07);margin-bottom:8px}
+.cust-card:hover{border-color:#2563eb;box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
+.cust-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600}
+.cust-chip.orders{background:#eff6ff;color:#2563eb}
+.cust-chip.done{background:#d1fae5;color:#065f46}
+.cust-chip.revenue{background:#fef3c7;color:#92400e}
+.cust-chip.date{background:#f1f5f9;color:#64748b}
+.cust-avatar{width:40px;height:40px;border-radius:50%;background:#eff6ff;color:#2563eb;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #bfdbfe}
+/* ─── customer modal ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
+.modal-overlay .cust-modal-box{border-radius:16px 16px 0 0;max-height:80vh;overflow-y:auto;width:100%;max-width:520px;background:#fff;padding:20px}
 .mhi-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.mhi-info{flex:1}
-.mhi-top{font-size:13px;font-weight:600;margin-bottom:3px}
-.mhi-sub{font-size:12px;color:var(--text2)}
-
-/* ─── PRODUCT MANAGER ─── */
-.prod-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-.prod-add-form{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:16px;box-shadow:var(--sh);display:none}
-.prod-add-form.open{display:block}
-.prod-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.prod-field{display:flex;flex-direction:column;gap:4px}
-.prod-field label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
-.prod-field input,.prod-field select,.prod-field textarea{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:#fff;color:var(--text)}
-.prod-field input:focus,.prod-field select:focus,.prod-field textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.prod-field textarea{min-height:60px;resize:vertical}
-.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
-.prod-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:all .2s}
-.prod-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+/* ─── pr-urg ─── */
+.pr-urg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;background:#fee2e2;color:#ef4444;font-size:11px;font-weight:700;margin-left:6px}
+/* ─── ktv tags ─── */
+.ktv-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;border-radius:20px;font-size:13px;font-weight:500}
+/* ─── empty state ─── */
+.emp{text-align:center;padding:48px 20px;color:#94a3b8}
+.emp-i{font-size:48px;margin-bottom:12px}
+/* ─── product card ─── */
+.prod-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.07);transition:all .2s}
+.prod-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
 .prod-card-img{width:100%;aspect-ratio:4/3;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:32px;color:#cbd5e1;overflow:hidden}
 .prod-card-img img{width:100%;height:100%;object-fit:cover}
-.prod-card-body{padding:10px}
-.prod-card-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--primary);margin-bottom:2px}
-.prod-card-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4}
-.prod-card-price{font-size:14px;font-weight:900;color:var(--accent)}
-.prod-card-note{font-size:11px;color:var(--text2);margin-top:1px}
-.prod-card-actions{display:flex;gap:6px;margin-top:8px}
-.prod-card-actions button{flex:1;padding:6px 0;font-size:11.5px;font-weight:600;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;background:#fff;transition:all .15s}
-.prod-card-actions .b-edit:hover{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
-.prod-card-actions .b-del:hover{background:var(--red-light);border-color:#fca5a5;color:var(--red)}
-.prod-inactive{opacity:.45}
+/* ─── ffoot ─── */
+.ffoot{display:flex;gap:10px;justify-content:flex-end;padding:16px 0;margin-top:8px}
+/* ─── mob card (booking) ─── */
+.mob-booking-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.07);margin-bottom:10px;border-left-width:4px}
 
-/* ─── AUTH OVERLAY ─── */
-.auth-overlay{display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(15,23,42,.7);z-index:999;backdrop-filter:blur(6px)}
-.auth-box{background:#fff;padding:28px;border-radius:16px;box-shadow:var(--sh3);width:360px;max-width:92%;text-align:center}
-.auth-logo-wrap{width:64px;height:64px;background:linear-gradient(135deg,var(--primary) 0%,#7c3aed 100%);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px}
-.auth-box h3{font-size:20px;font-weight:800;margin-bottom:4px}
-.auth-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
-.auth-box .f{display:flex;flex-direction:column;gap:10px;text-align:left}
-.auth-box input{padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;outline:none;width:100%}
-.auth-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.auth-actions{margin-top:14px}
-.auth-actions .btn{width:100%;justify-content:center;padding:12px}
-
-/* ─── EMPTY STATE ─── */
-.emp{text-align:center;padding:48px 20px;color:var(--text2)}
-.emp-i{font-size:48px;margin-bottom:12px}
-.emp p{font-size:14px;font-weight:500}
-
-/* ─── ACTION BUTTONS ─── */
-.act-btns{display:flex;gap:5px;flex-wrap:nowrap}
-.act-btns button{padding:5px 10px;font-size:11.5px;font-weight:600;border-radius:6px;border:1.5px solid var(--border);cursor:pointer;background:#fff;color:var(--text);transition:all .15s;white-space:nowrap}
-.act-btns .view-btn:hover{background:var(--green-light);border-color:#6ee7b7;color:#065f46}
-.act-btns .edit-btn:hover{background:var(--amber-light);border-color:#fcd34d;color:#92400e}
-.act-btns .del-btn:hover{background:var(--red-light);border-color:#fca5a5;color:var(--red)}
-
-/* ─── PRINT ─── */
-@media print{
-  .sidebar,.topbar,.tb-actions,.ph-actions,.act-btns,.mob-card-actions,.fb{display:none!important}
-  .main{margin-left:0!important}
-  .content{padding:0!important}
-  body{background:#fff}
-}
-
-/* ─── RESPONSIVE ─── */
-@media(min-width:769px){
-  .statg{grid-template-columns:repeat(4,1fr)}
-  .dg{grid-template-columns:1fr 1fr}
-  .content{padding:20px 24px}
-  .ffg{grid-template-columns:1fr 1fr}
-  .ffg .ffs-full{grid-column:1/-1}
-  .fr{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-  .det-grid{grid-template-columns:1fr 1fr}
-  .prod-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-  .prod-form-grid{grid-template-columns:1fr 1fr}
-  .twrap table{min-width:auto}
-}
-@media(max-width:767px){
-  :root{--sbw:240px}
-  .sidebar{transform:translateX(-100%)}
-  .sidebar.open{transform:translateX(0)}
-  .main{margin-left:0}
-  .topbar{padding:0 12px}
-  .tb-title{font-size:14px}
-  .clk{display:none}
-  .topbar .tb-btn:not(.primary):not(#synbtn){display:none}
-  .content{padding:12px}
-  .twrap{display:none}
-  .mob-card{display:block}
-  .prod-form-grid{grid-template-columns:1fr}
-  .prod-grid{grid-template-columns:repeat(2,1fr)}
-  .fa{justify-content:stretch}
-  .fa .btn{flex:1;justify-content:center}
-  .ffg{grid-template-columns:1fr}
-}
-@media(min-width:769px){
-  .sidebar.collapsed{transform:translateX(-100%)}
-  .main.sb-wide{margin-left:0}
-}
-
-/* ─── SSEL (status select in table) ─── */
-.ssel{padding:4px 8px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;outline:none;background:#fff;color:var(--text);max-width:140px}
-.ssel:focus{border-color:var(--primary)}
-/* ─── INLINE CARD STYLES ─── */
-.ic{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:12.5px;max-width:200px}
-.dc{font-size:12.5px;white-space:nowrap}
-
-
-/* ─── MISSING CLASSES FIX ─── */
-.btn-sm{padding:5px 12px;font-size:12.5px}
-.pr-urg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;background:#fee2e2;color:var(--red);font-size:11px;font-weight:700;margin-left:6px}
-.det-block{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:14px 16px;margin-bottom:12px;box-shadow:var(--sh)}
-.det-block h4{font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--primary-light)}
-.det-row{display:flex;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);gap:10px}
-.det-row:last-child{border-bottom:none}
-.det-label{width:140px;font-size:12px;font-weight:600;color:var(--text2);flex-shrink:0}
-.det-val{font-size:13px;color:var(--text);flex:1;word-break:break-word}
-.det-val.hi{font-weight:700;font-size:14px}
-.detg{display:flex;flex-direction:column;gap:0;margin-top:12px}
-/* Customer page */
-.cust-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.cust-search-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.cust-grid{display:flex;flex-direction:column;gap:0}
-/* Fix bwrap visibility */
-#bwrap{display:none}
-/* Fix mobile: show bwrap, hide twrap */
-@media(max-width:767px){
-  #bwrap{display:block}
-  .twrap{display:none!important}
-  .ph-actions{display:none}
-}
-/* Fix products page whitespace */
-#pg-products .ph{margin-bottom:12px}
-/* Fix stat cards sl label */
-.sl-lbl,.sv .sl-lbl{font-size:11px}
-
-
-/* ─── DETAIL PAGE EXTRA ─── */
-.detg{display:flex;flex-direction:column;gap:0}
-@media(min-width:769px){
-  .detg{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
-}
-/* Products page: remove extra top space */
-#pg-products{padding-top:0!important}
-/* Cust page */
-.cust-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-@media(min-width:769px){.cust-stat-row{grid-template-columns:repeat(4,1fr)}}
-.cust-search-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;background:#fff;padding:10px 12px;border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--border)}
-
-
-/* ═══════════════════════════════════════════
-   ADMIN UI v34 — clean upgrade patch
-   ═══════════════════════════════════════════ */
-
-/* ── variables override ── */
+/* ─── CSS vars compat (used by JS render functions) ─── */
 :root {
-  --sh:  0 1px 4px rgba(0,0,0,.06), 0 2px 10px rgba(0,0,0,.06);
-  --sh2: 0 4px 20px rgba(0,0,0,.10);
-  --sh3: 0 12px 40px rgba(0,0,0,.16);
-  --r: 12px;
-  --sbw: 234px;
+  --muted: #94a3b8;
+  --surface: #ffffff;
+  --hover: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text2: #64748b;
+  --bg: #f1f5f9;
   --primary: #2563eb;
-  --primary-h: #1d4ed8;
   --primary-light: #eff6ff;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --green: #10b981;
+  --green-light: #d1fae5;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --purple: #8b5cf6;
+  --purple-light: #ede9fe;
+  --cyan: #06b6d4;
+  --sh: 0 1px 3px rgba(0,0,0,.08);
+  --sh2: 0 4px 16px rgba(0,0,0,.12);
+  --r: 12px;
+  --sbw: 240px;
 }
 
-/* ── scrollbar ── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+/* ─── sc() stat card styles (dashboard) ─── */
+.sc{
+  background:#fff;border-radius:18px;padding:16px 16px 14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.07),0 0 0 1px rgba(0,0,0,.04);
+  display:flex;flex-direction:column;gap:6px;
+  position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s;cursor:default;
+}
+.sc:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
+.sc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.si{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.si.c-blue{background:#eff6ff}.si.c-amber{background:#fef3c7}.si.c-purple{background:#ede9fe}
+.si.c-green{background:#d1fae5}.si.c-red{background:#fee2e2}.si.c-cyan{background:#cffafe}
+.sv{flex:1;min-width:0}
+.sl{font-size:11px;color:#64748b;font-weight:600;letter-spacing:.2px;line-height:1.3;margin-bottom:4px}
+.sn{font-size:26px;font-weight:800;color:#0f172a;line-height:1;letter-spacing:-1px}
+.sn.b-p{color:#d97706}.sn.b-i{color:#7c3aed}.sn.b-d{color:#059669}
+.sn.b-c{color:#dc2626}.sn.b-rev{color:#0891b2}.sn.b-a{color:#2563eb}
+.sc-bar{height:3px;border-radius:2px;margin-top:8px;opacity:.35}
+.si.c-blue~.sc-bar,.sc[data-col="blue"] .sc-bar{background:#2563eb}
+/* accent bar per card color */
+/* ─── recent items (dashboard) ─── */
+.rec-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:all .15s}
+.rec-item:last-child{border-bottom:none}
+.rec-item:hover{background:#f8fafc;margin:0 -16px;padding:9px 16px;border-radius:8px}
+.rec-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:#f1f5f9}
+.rec-info{flex:1;min-width:0}
+.rec-name{font-weight:600;font-size:13px}
+.rec-sub{font-size:11px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* ── body ── */
-body { background: #f1f5f9; }
+/* ─── table row styles ─── */
+.dt tbody tr:hover td{background:#f8fafc}
+.dt td{padding:10px 16px;font-size:13px;vertical-align:middle;border-bottom:1px solid #f1f5f9;color:#1e293b}
+.dt tr.ur td:first-child{border-left:3px solid #ef4444}
+.tid{font-size:10px;color:#94a3b8;font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:4px}
+.cc{display:flex;align-items:center;gap:8px}
+.mav{width:32px;height:32px;border-radius:50%;background:#eff6ff;color:#2563eb;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cn{font-weight:600;font-size:13px}
+.cp{font-size:12px;color:#64748b;margin-top:1px}
+.ic{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:12px;max-width:180px;color:#64748b}
+.dc{font-size:12px;white-space:nowrap;color:#64748b}
+.ac,.act-btns{display:flex;gap:4px;flex-wrap:nowrap}
+.act-btns button,.ac button{padding:5px 9px;font-size:11.5px;font-weight:600;border-radius:7px;border:1.5px solid #e2e8f0;cursor:pointer;background:#fff;color:#1e293b;transition:all .15s}
+.act-btns button:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+.act-btns .b-dan-btn:hover{border-color:#fca5a5;color:#ef4444;background:#fee2e2}
 
-/* ── sidebar ── */
-.sidebar {
-  background: linear-gradient(175deg, #0f172a 0%, #1e293b 100%);
-  border-right: none;
-  box-shadow: 2px 0 20px rgba(0,0,0,.15);
-}
-.sb-logo-icon { background: rgba(255,255,255,.15); border-radius: 10px; }
-.sb-logo-text  { font-size: 12.5px; letter-spacing: .2px; }
-.sb-section { color: rgba(148,163,184,.7); font-size: 9.5px; letter-spacing: 1.2px; padding: 18px 16px 4px; }
-.sb-link {
-  margin: 1px 8px;
-  border-radius: 9px;
-  padding: 9px 10px;
-  transition: background .14s, color .14s;
-}
-.sb-link:hover { background: rgba(255,255,255,.07); }
-.sb-link.active {
-  background: rgba(37,99,235,.28);
-  color: #93c5fd;
-}
-.sb-link.active::before {
-  left: -8px; height: 18px; border-radius: 0 3px 3px 0;
-}
-.sl-icon {
-  background: rgba(255,255,255,.08);
-  border-radius: 8px;
-  width: 28px; height: 28px;
-  font-size: 13px;
-}
-.sb-link.active .sl-icon { background: rgba(37,99,235,.4); }
-.sb-avatar { border: 2px solid rgba(255,255,255,.15); }
+/* ─── cust stats (in custstatg) ─── */
+.cust-stat-row,.cust-search-row{} /* handled by dashboard grid */
 
-/* ── topbar ── */
-.topbar {
-  background: linear-gradient(90deg, var(--primary) 0%, #3b82f6 100%);
-  box-shadow: 0 2px 10px rgba(37,99,235,.25);
+/* ─── product add form toggle ─── */
+.prod-add-form{display:none}
+.prod-add-form.open{display:block;animation:fadeIn .2s ease}
+
+/* ─── ffs compat ─── */
+.ffs-title{font-size:13px;font-weight:700;color:#2563eb;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #eff6ff;display:flex;align-items:center;gap:7px}
+
+/* ─── toptech ─── */
+#toptech-body .rec-item{padding:8px 0}
+
+/* ─── sidebar media ─── */
+@media(min-width:768px){
+  #sb{transform:translateX(0)!important}
+  #main-wrap{margin-left:240px!important}
+  #synbtn .hidden{display:inline!important}
 }
-
-/* ── page header ── */
-.ph h2 { font-size: 17px; font-weight: 800; }
-.ph-sub { font-size: 12px; }
-
-/* ── stat cards ── */
-@keyframes scUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: none; } }
-.sc {
-  border-radius: 14px;
-  box-shadow: var(--sh);
-  border: 1px solid rgba(226,232,240,.7);
-  transition: box-shadow .18s, transform .18s;
-  animation: scUp .3s ease backwards;
-}
-.sc:hover { box-shadow: var(--sh2); transform: translateY(-2px); }
-.statg .sc:nth-child(1) { animation-delay: .04s; }
-.statg .sc:nth-child(2) { animation-delay: .08s; }
-.statg .sc:nth-child(3) { animation-delay: .12s; }
-.statg .sc:nth-child(4) { animation-delay: .16s; }
-.statg .sc:nth-child(5) { animation-delay: .20s; }
-.si {
-  border-radius: 10px;
-  width: 42px; height: 42px;
-  font-size: 20px;
-}
-.c-blue   { background: #dbeafe; }
-.c-green  { background: #d1fae5; }
-.c-orange { background: #fef3c7; }
-.c-red    { background: #fee2e2; }
-.c-purple { background: #ede9fe; }
-.c-cyan   { background: #cffafe; }
-.sn { font-size: 22px; font-weight: 800; line-height: 1.2; }
-.sl-lbl { font-size: 11.5px; color: var(--text2); font-weight: 500; }
-
-/* ── cards ── */
-.card {
-  border-radius: 14px;
-  box-shadow: var(--sh);
-  border: 1px solid rgba(226,232,240,.7);
-}
-.ch {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-}
-.ch h3 { font-size: 13.5px; font-weight: 700; color: var(--text); }
-.cb { padding: 14px 18px; }
-
-/* ── table ── */
-.twrap { border-radius: 14px; border: 1px solid rgba(226,232,240,.8); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-table { border-collapse: collapse; width: 100%; min-width: 700px; }
-thead { position: sticky; top: 0; z-index: 2; }
-th {
-  background: #f8fafc;
-  padding: 9px 10px;
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #64748b;
-  letter-spacing: .3px;
-  border-bottom: 1.5px solid var(--border);
-  white-space: nowrap;
-}
-th:hover { color: var(--primary); background: #f1f5f9; }
-td {
-  padding: 8px 10px;
-  font-size: 13px;
-  border-bottom: 1px solid #f1f5f9;
-  vertical-align: middle;
-}
-tr:last-child td { border-bottom: none; }
-tr.dt-row { cursor: pointer; }
-tr.dt-row:hover td { background: #eff6ff; }
-tr.ur td:first-child { border-left: 3px solid var(--red); }
-/* Sticky last column (Thao tác) */
-.dt th:last-child, .dt td:last-child {
-  position: sticky;
-  right: 0;
-  background: #f8fafc;
-  box-shadow: -2px 0 6px rgba(0,0,0,.06);
-  z-index: 1;
-}
-.dt tr.dt-row:hover td:last-child { background: #eff6ff; }
-
-/* ── filter bar ── */
-.fb {
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
-  padding: 10px 14px;
-  gap: 8px;
-  box-shadow: var(--sh);
-  margin-bottom: 12px;
-}
-.sw {
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  padding: 7px 11px;
-}
-.sw:focus-within { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
-.fsel {
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  padding: 7px 10px;
-  font-size: 12.5px;
-  font-weight: 500;
-  background: #fff;
-  transition: border-color .15s;
-  cursor: pointer;
-}
-.fsel:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
-
-/* ── buttons ── */
-.btn {
-  border-radius: 8px;
-  padding: 8px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all .15s;
-  letter-spacing: .1px;
-}
-.b-pri { background: var(--primary); border-color: var(--primary); }
-.b-pri:hover { background: var(--primary-h); border-color: var(--primary-h); box-shadow: 0 3px 10px rgba(37,99,235,.25); }
-.b-sec:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-.bb { border-radius: 8px; transition: all .15s; }
-.bb:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-.btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 7px; }
-
-/* ── form inputs ── */
-.fi {
-  border-radius: 9px;
-  border: 1.5px solid var(--border);
-  padding: 10px 13px;
-  font-size: 13.5px;
-  transition: border-color .15s, box-shadow .15s;
-}
-.fi:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.08); outline: none; }
-
-/* ── status badges ── */
-.bdg {
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  letter-spacing: .1px;
-}
-.bdg-p { background: #fef9c3; color: #854d0e; }
-.bdg-a { background: #dbeafe; color: #1e40af; }
-.bdg-i { background: #fce7f3; color: #9d174d; }
-.bdg-c { background: #d1fae5; color: #065f46; }
-.bdg-x { background: #f1f5f9; color: #475569; }
-.bdg-u { background: #fee2e2; color: #991b1b; font-weight: 700; }
-.pri-badge { background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
-
-/* ── toast ── */
-@keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(16px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-.toast {
-  bottom: 28px;
-  background: #1e293b;
-  color: #f1f5f9;
-  padding: 12px 22px;
-  border-radius: 12px;
-  font-size: 13.5px;
-  font-weight: 600;
-  box-shadow: 0 8px 32px rgba(0,0,0,.22);
-  border: 1px solid rgba(255,255,255,.07);
-}
-.toast.show { animation: toastIn .22s ease; }
-
-/* ── modals ── */
-.modal-box {
-  border-radius: 16px;
-  box-shadow: var(--sh3);
-  animation: modalUp .2s ease;
-}
-@keyframes modalUp { from { opacity:0; transform: translateY(20px) scale(.97); } to { opacity:1; transform: none; } }
-.modal-head { padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
-.modal-head h3 { font-size: 16px; font-weight: 800; }
-.modal-close { border-radius: 8px; transition: background .14s; }
-.modal-close:hover { background: #fee2e2; color: var(--red); }
-
-/* ── quick edit modal ── */
-.qkm-overlay { align-items: center; }
-.qkm-overlay .modal-box { max-width: 420px; }
-
-/* ── auth overlay ── */
-.auth-overlay { background: rgba(15,23,42,.75); backdrop-filter: blur(8px); }
-.auth-box {
-  border-radius: 20px;
-  padding: 36px 32px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
-  border: 1px solid rgba(255,255,255,.1);
-  background: #fff;
-  width: 380px;
-  max-width: 94%;
-}
-.auth-logo-wrap {
-  width: 60px; height: 60px;
-  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
-  border-radius: 16px;
-  font-size: 28px;
-  margin-bottom: 18px;
-  box-shadow: 0 8px 20px rgba(37,99,235,.3);
-}
-.auth-box h3 { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
-.auth-sub { font-size: 13px; color: var(--text2); margin-bottom: 22px; }
-.auth-box input {
-  padding: 12px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-size: 14px;
-  transition: border-color .15s, box-shadow .15s;
-}
-.auth-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-.auth-actions { margin-top: 18px; }
-.auth-actions .btn { border-radius: 10px; padding: 13px; font-size: 14px; }
-
-/* ── recent list ── */
-.rec-item { padding: 10px 0; transition: background .13s; }
-.rec-item:hover { background: #f8fafc; margin: 0 -18px; padding: 10px 18px; border-radius: 8px; }
-.rec-dot { width: 30px; height: 30px; border-radius: 8px; font-size: 13px; }
-
-/* ── customer stat row ── */
-.cust-stat-row .sc { border-radius: 12px; }
-
-/* ── detail section ── */
-.det-section { border-radius: 12px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 14px; }
-.det-section .ch { background: #f8fafc; }
-
-/* ── empty state ── */
-.emp { padding: 52px 20px; }
-.emp-i { font-size: 40px; margin-bottom: 14px; opacity: .6; }
-.emp p { font-size: 14px; font-weight: 600; color: var(--text2); }
-
-/* ── content area ── */
-.content { padding: 18px; }
-@media (min-width:769px) { .content { padding: 22px 24px; } }
-
-
-/* ═══════════════════════════
-   DASHBOARD v36 — redesign
-   ═══════════════════════════ */
-
-/* section label */
-.dash-sec {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1px; color: #94a3b8; margin: 0 0 8px;
+@media(max-width:767px){
+  #sb{transform:translateX(-100%)}
+  #sb.open{transform:translateX(0)!important}
+  #bwrap{display:block!important}
+  .hidden.md\:block{display:none!important}
 }
 
-/* primary KPI cards — 2-col on mobile */
-.dash-primary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.sc-kpi {
-  background: #fff; border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.07);
-  border: 1px solid rgba(226,232,240,.7);
-  padding: 14px 14px 12px;
-  display: flex; flex-direction: column; gap: 4px;
-  transition: transform .18s, box-shadow .18s;
-}
-.sc-kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.10); }
-.sc-kpi-icon {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; margin-bottom: 6px; flex-shrink: 0;
-}
-.sc-kpi-val {
-  font-size: 26px; font-weight: 800; line-height: 1.1;
-  color: var(--text);
-}
-.sc-kpi-lbl { font-size: 11.5px; font-weight: 600; color: var(--text2); }
-.sc-kpi-sub { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+/* ─── ikb / edt table buttons ─── */
+button.ib,.ib{padding:5px 9px;font-size:12px;font-weight:600;border-radius:7px;border:1.5px solid #e2e8f0;cursor:pointer;background:#fff;color:#1e293b;transition:all .15s}
+button.ib.edt:hover,.ib.edt:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+button.ib.del:hover,.ib.del:hover{border-color:#fca5a5;color:#ef4444;background:#fee2e2}
 
-/* compact status mini-cards — 4-col grid */
-.dash-status { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
-.sc-mini {
-  background: #fff; border-radius: 12px;
-  box-shadow: 0 1px 5px rgba(0,0,0,.06);
-  border: 1px solid rgba(226,232,240,.7);
-  padding: 10px 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-}
-.sc-mini-icon { font-size: 15px; }
-.sc-mini-val {
-  font-size: 20px; font-weight: 800; line-height: 1;
-  color: var(--text);
-}
-.sc-mini-lbl { font-size: 10px; font-weight: 600; color: var(--text2); text-align: center; line-height: 1.3; }
-.sc-mini-bar { width: 100%; height: 3px; background: #f1f5f9; border-radius: 4px; margin-top: 5px; overflow: hidden; }
-.sc-mini-bar-fill { height: 100%; border-radius: 4px; transition: width .5s ease; }
+/* ─── btn compat ─── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.b-pri,.btn.b-pri{background:#2563eb;color:#fff;border-color:#2563eb}
+.b-pri:hover,.btn.b-pri:hover{background:#1d4ed8}
+.b-sec,.btn.b-sec{background:#fff;color:#1e293b;border-color:#e2e8f0}
+.b-sec:hover,.btn.b-sec:hover{border-color:#2563eb;color:#2563eb}
+.b-gho,.btn.b-gho{background:transparent;color:#64748b;border-color:#e2e8f0}
+.b-gho:hover,.btn.b-gho:hover{background:#f1f5f9}
+.b-dan,.btn.b-dan{background:#fff5f5;color:#ef4444;border-color:#fca5a5}
+.b-dan:hover,.btn.b-dan:hover{background:#fee2e2}
+.b-grn,.btn.b-grn{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
+.b-ok{background:#d1fae5;color:#065f46;border-color:#a7f3d0}
+.b-ok:hover{background:#bbf7d0}
+.bb{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;border:1.5px solid #e2e8f0;background:#fff;font-size:12.5px;cursor:pointer;color:#64748b;font-weight:500;transition:all .15s;font-family:inherit}
+.bb:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
 
-/* alert strip */
-.dash-alerts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-.sc-alert {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 8px 12px; border-radius: 10px;
-  font-size: 12.5px; font-weight: 600;
-  border: 1.5px solid;
-  flex: 1; min-width: 120px;
+/* ─── sl (sync label) in topbar ─── */
+#slbl{font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;color:#fff}
+#slbl.s-ok{background:rgba(16,185,129,.35);color:#a7f3d0}
+#slbl.s-err{background:rgba(239,68,68,.35);color:#fca5a5}
+#slbl.s-ing{background:rgba(245,158,11,.3);color:#fde68a}
+@keyframes spin{to{transform:rotate(360deg)}}
+.syncing{animation:spin 1s linear infinite;display:inline-block}
+
+
+/* ─── Dashboard KPI cards modern ─── */
+#dashg .sc { min-height: 100px; }
+#dashg .sn { font-size: 28px; margin-bottom: 2px; }
+#dashg .sl { font-size: 11.5px; color: #64748b; }
+#dashg .si { margin-bottom: 4px; }
+
+/* ─── Chart containers ─── */
+#sch, #rev-chart { border-radius: 4px; }
+
+/* Grid responsive cho KPI */
+@media(max-width:639px){
+  #dashg { grid-template-columns: repeat(2,1fr) !important; }
+  #dashg .sn { font-size: 22px; }
 }
-.sc-alert-val { font-size: 16px; font-weight: 800; flex-shrink: 0; }
-.sc-alert-lbl { font-size: 11.5px; line-height: 1.3; }
-.sc-alert.red   { background: #fff5f5; border-color: #fca5a5; color: #991b1b; }
-.sc-alert.amber { background: #fffbeb; border-color: #fcd34d; color: #92400e; }
-.sc-alert.blue  { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
-.sc-alert.green { background: #f0fdf4; border-color: #86efac; color: #166534; }
-.sc-alert.gray  { background: #f8fafc; border-color: #e2e8f0; color: #475569; }
-
-/* hide old dashg from v35 layout; statg is replaced */
-#dashg .statg { display: none; }
-
 </style>
 </head>
-<body>
-<div class="app">
-  <div class="auth-overlay" id="authOverlay" style="display:none">
-    <div class="auth-box">
-      <div class="auth-logo-wrap">🖥️</div>
-      <h3>Đăng nhập</h3>
-      <div class="auth-sub">Trần Hoà Computer — Quản trị hệ thống website</div>
-      <div class="f">
-        <input id="adm_user" placeholder="Tài khoản" autocomplete="username"/>
-        <input id="adm_pass" type="password" placeholder="Mật khẩu" autocomplete="current-password"/>
-      </div>
-      <div class="auth-actions">
-        <button onclick="tryLogin()" class="btn b-pri">🔐 Đăng nhập</button>
-      </div>
+<body class="bg-slate-100 font-sans antialiased" style="font-family:'Be Vietnam Pro',sans-serif">
+
+<!-- ═══ AUTH OVERLAY ═══ -->
+<div id="authOverlay" class="fixed inset-0 z-[999] hidden items-center justify-center" style="background:rgba(15,23,42,.75);backdrop-filter:blur(6px);display:none">
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm mx-4 text-center animate-[slideUp_.25s_ease]">
+    <div class="w-16 h-16 bg-gradient-to-br from-primary-600 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🖥️</div>
+    <h3 class="text-xl font-bold text-slate-800 mb-1">Đăng nhập</h3>
+    <p class="text-sm text-slate-500 mb-6">Trần Hoà Computer — Quản trị hệ thống</p>
+    <div class="space-y-3 text-left">
+      <input id="adm_user" placeholder="Tài khoản" autocomplete="username"
+        class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"/>
+      <input id="adm_pass" type="password" placeholder="Mật khẩu" autocomplete="current-password"
+        class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"/>
     </div>
-   </div>
-  </div>
-<nav class="sidebar" id="sb">
-<div class="sb-hd">
-  <div class="sb-logo">
-   <div class="sb-logo-icon">💗</div>
-      <div class="sb-logo-text" id="sb-shopname">Trần Hoà Computer</div>
-      <div class="sb-logo-sub">Quản Lý Lịch Hẹn - Sản Phẩm</div>
-    </div>
+    <button onclick="tryLogin()" class="mt-5 w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 rounded-xl transition text-sm">🔐 Đăng nhập</button>
   </div>
 </div>
-<div class="sb-nav">
-  <div class="sb-section">Tổng quan</div>
-  <button class="sb-link active" onclick="goP('dash',this)" data-pg="dash"><span class="sl-icon">📊</span><span class="sl-label">Tổng quan</span></button>
-  <div class="sb-section">Lịch hẹn</div>
-  <button class="sb-link" onclick="goP('books',this)" data-pg="books"><span class="sl-icon">📋</span><span class="sl-label">Danh sách lịch hẹn</span><span class="sl-badge" id="pbadge" style="display:none">0</span></button>
-  <button class="sb-link" onclick="doAdd()" data-pg="add"><span class="sl-icon">➕</span><span class="sl-label">Thêm lịch hẹn</span></button>
-  <div class="sb-section">Khách hàng</div>
-  <button class="sb-link" onclick="goP('cust',this)" data-pg="cust"><span class="sl-icon">👥</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
-  <div class="sb-section">Sản phẩm</div>
-  <button class="sb-link" onclick="goP('products',this)" data-pg="products"><span class="sl-icon">📦</span><span class="sl-label">Quản lý sản phẩm</span></button>
-  <div class="sb-section">Hệ thống</div>
-  <button class="sb-link" onclick="goP('cfg',this)" data-pg="cfg"><span class="sl-icon">⚙️</span><span class="sl-label">Cài đặt</span></button>
-</div>
-<div class="sb-ft">
-  <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-user-name">Admin</div><div class="sb-user-role">Quản trị viên</div></div></div>
-</div>
-</nav>
-<div class="sb-overlay" id="sbo" onclick="togSB()"></div>
-<main class="main">
-<header class="topbar">
-  <button class="tb-menu" onclick="togSB()" aria-label="Mở menu">☰</button>
-  <div class="tb-title" id="pgtit">Tổng quan</div>
-  <div class="tb-actions">
-    <div class="clk" id="clk"></div>
-    <span class="sl" id="slbl"></span>
-    <button class="tb-btn" id="synbtn" onclick="doSync()" title="Đồng bộ GGSheet"><span id="synicon">🔄</span> Đồng bộ</button>
-    <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none" title="Web khách hàng">🌐</a>
-    <button class="tb-btn primary" onclick="doAdd()">＋ Thêm lịch</button>
-  </div>
-</header>
-<div class="content">
-<!-- DASHBOARD -->
-<div class="pg active" id="pg-dash">
-<div class="statg" id="dashg"></div>
-<div class="card" style="margin-bottom:14px">
-  <div class="ch" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--border)">
-    <h3 style="margin:0">📊 Thống kê theo ngày</h3>
-    <div style="display:flex;gap:6px;align-items:center">
-      <button class="btn btn-sm b-sec" id="sr7" onclick="setStatRange(7)">7 ngày</button>
-      <button class="btn btn-sm b-pri" id="sr30" onclick="setStatRange(30)">30 ngày</button>
-      <button class="btn btn-sm b-sec" id="sr0" onclick="setStatRange(0)">Tất cả</button>
-    </div>
-  </div>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch" id="stats-tbl-wrap"></div>
-</div>
-<div class="dg">
-  <div class="card"><div class="ch"><h3>Lịch hẹn gần đây</h3></div><div class="cb" id="recl"></div></div>
-  <div class="card" id="toptech-card"><div class="ch"><h3>Kỹ thuật viên</h3></div><div class="cb" id="toptech-body"></div></div>
-</div>
-<div class="card" id="urgc" style="display:none">
-  <div class="ch" style="background:#fff5f5"><h3 style="color:var(--red)">Lịch hẹn khẩn cấp chưa xử lý</h3></div>
-  <div class="cb" id="urgl"></div>
-</div>
-</div>
-<!-- BOOKINGS -->
-<div class="pg" id="pg-books">
-<div class="ph">
-  <div>
-    <h2>Danh sách lịch hẹn</h2>
-  </div>
-  <div class="ph-actions">
-    <button class="btn b-sec" onclick="doExport()">📥 Xuất CSV</button>
-    <button class="btn b-pri" onclick="doAdd()">＋ Thêm lịch hẹn</button>
-  </div>
-</div>
-<div class="fb">
-  <div class="sw"><span class="sw-i">🔍</span><input id="sq" type="text" placeholder="Tìm tên, SĐT, mã lịch hẹn..." oninput="renderBT()"/>  <span class="fcnt" id="bcnt"></span>
-</div>
-  <select class="fsel" id="fst" onchange="renderBT()">
-    <option value="">Tất cả trạng thái</option>
-    <option value="pending">Chờ xử lý</option>
-    <option value="assigned">Đã phân công</option>
-    <option value="in_progress">Đang sửa</option>
-    <option value="completed">Hoàn thành</option>
-    <option value="cancelled">Đã huỷ</option>
-  </select>
-  <select class="fsel" id="fpr" onchange="renderBT()">
-    <option value="">Tất cả mức độ</option>
-    <option value="urgent">🚨 Khẩn cấp</option>
-    <option value="normal">Bình thường</option>
-  </select>
-  <select class="fsel" id="fdv" onchange="renderBT()">
-    <option value="">Tất cả thiết bị</option>
-    <option>Laptop</option><option>PC Desktop</option>
-    <option>Điện thoại</option><option>Máy tính bảng</option>
-    <option>Màn hình</option><option>Thiết bị khác</option>
-  </select>
-  <span class="rc" id="rcnt" style="font-size:12px;color:var(--muted);background:var(--bg);padding:4px 8px;border-radius:6px;border:1px solid var(--border)"></span>
-</div>
-<div class="twrap">
-    <table class="dt"><thead><tr>
-      <th>Mã ĐL</th><th onclick="sortBy('customerName')" data-sort="customerName">Khách hàng<span class="sort-icon"> ↕</span></th><th onclick="sortBy('deviceType')" data-sort="deviceType">Thiết bị<span class="sort-icon"> ↕</span></th>
-      <th>Vấn đề</th><th onclick="sortBy('scheduledAt')" data-sort="scheduledAt">Ngày hẹn<span class="sort-icon"> ↕</span></th><th onclick="sortBy('status')" data-sort="status">Trạng thái<span class="sort-icon"> ↕</span></th>
-      <th onclick="sortBy('actualCost')" data-sort="actualCost">Chi phí<span class="sort-icon"> ↕</span></th><th>Thao tác</th>
-    </tr></thead><tbody id="btbody"></tbody></table>
-</div>
-<div id="bwrap" style="display:none"></div>
-<div class="emp" id="bemp" style="display:none"><div class="emp-i">📭</div><p>Chưa có lịch hẹn nào</p></div>
-</div>
-<!-- ADD/EDIT -->
-<div class="pg" id="pg-add">
-<div class="card" style="padding:16px 20px">
-  <div style="display:flex;align-items:center;gap:16px">
-    <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
-    <h2 id="ftit" style="font-size:18px;font-weight:700">Thêm lịch hẹn mới</h2>
-  </div>
-</div>
-<div class="ffg">
-  <div class="ffs">
-    <div class="ffs-title">👤 Thông tin khách hàng</div>
-    <div class="fr">
-      <div class="fd" id="fww-cN"><label>Họ và tên *</label><input id="fw_cN" placeholder="Nguyễn Văn A" oninput="clE('cN')"/><div class="ferr" id="fe_cN"></div></div>
-      <div class="fd" id="fww-ph"><label>Số điện thoại *</label><input id="fw_ph" placeholder="0901234567" oninput="clE('ph')"/><div class="ferr" id="fe_ph"></div></div>
-    </div>
-    <div class="fr">
-      <div class="fd"><label>Đ&#x1ECBa chỉ</label><input id="fw_ad" placeholder="Số nhà, đường, xã..."/></div>
-    </div>
-  </div>
-  <div class="ffs">
-    <div class="ffs-title">💻 Thông tin thiết bị</div>
-    <div class="fr">
-      <div class="fd"><label>Loại thiết bị</label>
-        <select id="fw_dt"><option>Laptop</option><option>PC Desktop</option><option>Máy tính bảng</option><option>Điện thoại</option><option>Màn hình</option><option>Thiết bị khác</option></select>
-      </div>
-      <div class="fd" id="fww-br"><label>Thương hiệu *</label><input id="fw_br" placeholder="Dell, HP, Asus, Apple..." oninput="clE('br')"/><div class="ferr" id="fe_br"></div></div>
-    </div>
-    <div class="fr">
-      <div class="fd"><label>Model / Dòng máy</label><input id="fw_md" placeholder="Inspiron 15, VivoBook..."/></div>
-      <div class="fd"><label>Số serial / IMEI</label><input id="fw_sr" placeholder="SN hoặc IMEI..."/></div>
-      <div class="fd"><label>Mật khẩu thiết bị</label><input id="fw_pw" placeholder="PIN, mật khẩu mở máy..."/></div>
-    </div>
-  </div>
-  <div class="ffs" style="grid-column:1/-1">
-    <div class="ffs-title">🔧 Chi tiết yêu cầu</div>
-    <div class="fd" id="fww-is"><label>Mô tả vấn đề *</label><textarea id="fw_is" rows="3" placeholder="Mô tả triệu chứng, lỗi cụ thể..." oninput="clE('is')"></textarea><div class="ferr" id="fe_is"></div></div>
-    <div class="fr">
-      <div class="fd"><label>Mức độ ưu tiên</label>
-        <select id="fw_pr"><option value="urgent">🚨 Khẩn cấp</option><option value="normal" selected>⚡ Bình thường</option></select>
-      </div>
-      <div class="fd"><label>Ngày hẹn</label><input id="fw_sa" type="date"/></div>
-      <div class="fd"><label>Trạng thái</label>
-        <select id="fw_st"><option value="pending">Chờ xử lý</option><option value="assigned">Đã phân công</option><option value="in_progress">Đang sửa</option><option value="completed">Hoàn thành</option><option value="cancelled">Đã hủy</option></select>
+
+<!-- ═══ APP SHELL ═══ -->
+<div class="flex h-screen overflow-hidden" id="app-shell">
+
+  <!-- SIDEBAR OVERLAY (mobile) -->
+  <div class="sb-overlay" id="sbo" onclick="togSB()"></div>
+
+  <!-- ─── SIDEBAR ─── -->
+  <nav id="sb" class="sidebar fixed left-0 top-0 h-full w-60 z-40 flex flex-col overflow-y-auto overflow-x-hidden"
+       style="background:linear-gradient(160deg,#0f172a 0%,#1e293b 100%);transform:translateX(-100%)">
+
+    <!-- Logo -->
+    <div class="flex items-center gap-3 px-5 py-4" style="background:#2563eb">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:rgba(255,255,255,.2)">🖥️</div>
+      <div>
+        <div class="font-bold text-white text-sm leading-tight" id="sb-shopname">Trần Hoà Computer</div>
+        <div class="text-xs text-blue-200 mt-0.5">Quản lý lịch hẹn</div>
       </div>
     </div>
-    <div class="fr">
-      <div class="fd"><label>Chi phí ước tính (VND)</label><input id="fw_ec" type="number" min="0" step="10000" placeholder="150000"/></div>
-      <div class="fd"><label>Chi phí thực tế (VND)</label><input id="fw_ac" type="number" min="0" step="10000" placeholder="0"/></div>
-    </div>
-    <div class="fr">
-      <div class="fd"><label>Kỹ thuật viên</label><input id="fw_tc" list="ktv-datalist" placeholder="Chọn hoặc nhập KTV..." autocomplete="off"/><datalist id="ktv-datalist"></datalist></div>
-      <div class="fd"><label>Ngày nhận máy</label><input id="fw_cr" type="date"/></div>
-    </div>
-    <div class="fr">
-      <div class="fd"><label>Ngày hẹn trả máy</label><input id="fw_rd" type="date"/></div>
-    </div>
-    <div class="fr">
-      <div class="fd"><label>Phụ kiện kèm theo</label><input id="fw_acc" placeholder="Sạc, túi, chuột, bao..."/></div>
-      <div class="fd"><label>Ghi chú nội bộ</label><input id="fw_nt" placeholder="Ghi chú nội bộ..."/></div>
-    </div>
-  </div>
-</div>
-<div class="ffoot">
-  <button class="btn b-sec" onclick="goP('books',document.querySelector('[data-pg=books]'))">Huỷ</button>
-  <button class="btn b-pri" onclick="doSave()" id="svbtn">Lưu lịch hẹn</button>
-</div>
-</div>
-<!-- DETAIL -->
-<div class="pg" id="pg-det">
-<div class="card" style="padding:12px 16px;margin-bottom:12px">
-  <div style="display:flex;flex-direction:column;gap:10px">
-    <div style="display:flex;align-items:center;gap:8px;min-width:0">
-      <button class="bb" onclick="goP('books',document.querySelector('[data-pg=books]'))">← Quay lại</button>
-      <h2 style="font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="detid"></h2>
-      <span id="detbdg"></span>
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn b-pri btn-sm" onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))">In phiếu</button>
-      <button class="btn b-sec btn-sm" id="detedit">Sửa</button>
-      <button class="btn b-dan btn-sm" id="detdel">Xóa</button>
-    </div>
-  </div>
-</div>
-<div class="detg" id="detcont"></div>
-</div>
-<!-- CUSTOMERS -->
-<div class="pg" id="pg-cust">
-<div class="cust-stat-row" id="custstatg"></div>
-<div class="cust-search-row">
-  <div class="sw" style="flex:1;min-width:200px"><span class="sw-i">🔍</span><input id="cust_q" type="text" placeholder="Tìm tên, số điện thoại..." oninput="renderCust()"/></div>
-  <select class="fsel" id="cust_sort" onchange="renderCust()">
-    <option value="last">Mới nhất</option>
-    <option value="orders">Nhiều đơn nhất</option>
-    <option value="revenue">Doanh thu cao nhất</option>
-    <option value="name">Tên A→Z</option>
-  </select>
-  <span class="rc" id="custcnt"></span>
-</div>
-<div class="cust-grid" id="custgrid"></div>
-<div class="emp" id="custempty" style="display:none"><div class="emp-i">👥</div><p>Chưa có khách hàng nào</p></div>
-</div>
-</div>
-<!-- SETTINGS -->
-<div class="pg" id="pg-cfg">
-<div class="setwrap">
 
-  <!-- CARD: Kết nối -->
-  <div class="cfg-card">
-    <div class="cfg-card-hd"><span class="cfg-ic">🔗</span><div><div class="cfg-title">Kết nối Google Apps Script</div><div class="cfg-sub">URL đồng bộ dữ liệu từ Google Sheets</div></div></div>
-    <div class="cfg-field"><label>URL Google Apps Script</label><input id="s_gasurl" placeholder="https://script.google.com/macros/s/..." oninput="updateGasUrl(this.value)" style="font-size:12px"/><div style="font-size:11px;color:var(--muted);margin-top:4px;padding:0 2px">Thay đổi URL sẽ được lưu và dùng ngay</div></div>
-    <div class="cfg-actions">
-      <button class="btn b-pri" onclick="doSync()">Đồng bộ GGSheet</button>
-      <a class="btn b-gho" href="index.html" target="_blank" style="text-decoration:none">Web khách hàng</a>
-      <button class="btn b-gho" onclick="doExport()">Xuất CSV</button>
+    <!-- Nav -->
+    <div class="flex-1 px-3 py-4 space-y-0.5">
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mb-2">Tổng quan</p>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium sb-link-active" onclick="goP('dash',this)" data-pg="dash">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">📊</span>
+        <span>Tổng quan</span>
+      </button>
+
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mt-4 mb-2">Lịch hẹn</p>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium" onclick="goP('books',this)" data-pg="books">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">📋</span>
+        <span>Danh sách</span>
+        <span class="ml-auto bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full" id="pbadge" style="display:none">0</span>
+      </button>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium" onclick="doAdd()" data-pg="add">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">➕</span>
+        <span>Thêm lịch hẹn</span>
+      </button>
+
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mt-4 mb-2">Khách hàng</p>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium" onclick="goP('cust',this)" data-pg="cust">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">👥</span>
+        <span>Danh sách</span>
+        <span class="ml-auto bg-primary-500 text-white text-xs font-bold px-2 py-0.5 rounded-full" id="custbadge" style="display:none">0</span>
+      </button>
+
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mt-4 mb-2">Sản phẩm</p>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium" onclick="goP('products',this)" data-pg="products">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">📦</span>
+        <span>Quản lý sản phẩm</span>
+      </button>
+
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mt-4 mb-2">Hệ thống</p>
+      <button class="sb-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/8 hover:text-slate-200 transition-colors text-sm font-medium" onclick="goP('cfg',this)" data-pg="cfg">
+        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-base" style="background:rgba(255,255,255,.1)">⚙️</span>
+        <span>Cài đặt</span>
+      </button>
     </div>
-  </div>
 
-  <!-- CARD: Thông tin cửa hàng -->
-  <div class="cfg-card">
-    <div class="cfg-card-hd"><span class="cfg-ic">🏪</span><div><div class="cfg-title">Thông tin cửa hàng</div><div class="cfg-sub">Hiển thị trên biên lai in</div></div></div>
-    <div class="cfg-field"><label>Tên cửa hàng</label><input id="s_name" placeholder="Tran Hoa Computer" oninput="savCfg('name',this.value)"/></div>
-    <div class="cfg-field"><label>Địa chỉ</label><input id="s_addr" placeholder="Phú Thịnh, Đại Từ, Thái Nguyên" oninput="savCfg('addr',this.value)"/></div>
-    <div class="cfg-field"><label>Số điện thoại</label><input id="s_phone" placeholder="0963.284.044" oninput="savCfg('phone',this.value)"/></div>
-  </div>
-
-  <!-- CARD: Bảo mật -->
-  <div class="cfg-card">
-    <div class="cfg-card-hd"><span class="cfg-ic">🔒</span><div><div class="cfg-title">Bảo mật & Đăng nhập</div><div class="cfg-sub">Tài khoản quản trị hệ thống</div></div></div>
-    <div class="cfg-field"><label>Tài khoản quản trị</label><input id="s_admin_user" placeholder="admin" oninput="savCfg('adminUser',this.value)"/></div>
-    <div class="cfg-field"><label>Mật khẩu quản trị</label><input id="s_admin_pass" type="password" placeholder="••••••••" oninput="savCfg('adminPass',this.value)"/></div>
-    <div class="cfg-toggle"><label><input type="checkbox" id="s_auth_en" onchange="savCfg('authEnabled',this.checked)"/><span>Yêu cầu đăng nhập</span></label></div>
-    <div class="cfg-toggle"><label><input type="checkbox" id="s_auto_sync" onchange="savCfg('autoSync',this.checked)"/><span>Tự động đồng bộ từ Google Sheets</span></label></div>
-    <div class="cfg-actions" style="margin-top:12px">
-      <button class="btn b-dan" onclick="logoutAdmin()">Đăng xuất</button>
-    </div>
-  </div>
-
-
-  <!-- CARD: Kỹ thuật viên -->
-  <div class="cfg-card">
-    <div class="cfg-card-hd"><span class="cfg-ic">🔧</span><div><div class="cfg-title">Kỹ thuật viên</div><div class="cfg-sub">Danh sách KTV để chọn nhanh khi tạo lịch hẹn</div></div></div>
-    <div class="cfg-field">
-      <label>Thêm kỹ thuật viên</label>
-      <div style="display:flex;gap:8px">
-        <input id="s_ktv_new" placeholder="Tên kỹ thuật viên..." style="flex:1" onkeydown="if(event.key==='Enter')addKtv()"/>
-        <button class="btn b-pri" onclick="addKtv()" style="white-space:nowrap">Thêm</button>
+    <!-- Footer -->
+    <div class="px-4 py-3 border-t" style="border-color:rgba(255,255,255,.08)">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold text-sm shrink-0">A</div>
+        <div>
+          <div class="text-sm font-bold text-slate-200">Admin</div>
+          <div class="text-xs text-slate-500">Quản trị viên</div>
+        </div>
       </div>
     </div>
-    <div id="s_ktv_list" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
-  </div>
+  </nav>
 
-  <!-- CARD: Cảnh báo hẹn trả -->
-  <div class="cfg-card">
-    <div class="cfg-card-hd"><span class="cfg-ic">⏰</span><div><div class="cfg-title">Cảnh báo hẹn trả máy</div><div class="cfg-sub">Cảnh báo các lịch hẹn trả gần đến hạn</div></div></div>
-    <div class="cfg-field" style="display:flex;align-items:center;gap:12px">
-      <label style="white-space:nowrap;margin-bottom:0">Cảnh báo trước</label>
-      <input id="s_alert_days" type="number" min="1" max="30" value="3" style="width:70px;text-align:center" oninput="savCfg('returnAlertDays',parseInt(this.value)||3)"/>
-      <span style="color:var(--muted);font-size:13px">ngày</span>
-    </div>
-  </div>
+  <!-- ─── MAIN AREA ─── -->
+  <div class="flex-1 flex flex-col min-w-0 transition-all duration-300" id="main-wrap" style="margin-left:0">
 
-  <!-- CARD: Nguy hiểm -->
-  <div class="cfg-card cfg-card-danger">
-    <div class="cfg-card-hd"><span class="cfg-ic">⚠️</span><div><div class="cfg-title">Khu vực nguy hiểm</div><div class="cfg-sub">Hành động không thể hoàn tác</div></div></div>
-    <div class="cfg-actions">
-      <button class="btn b-dan" onclick="doClear()">Xoá toàn bộ dữ liệu cục bộ</button>
-    </div>
-  </div>
+    <!-- TOPBAR -->
+    <header class="h-14 bg-primary-600 flex items-center px-4 gap-3 shrink-0 z-30 sticky top-0"
+            style="box-shadow:0 2px 8px rgba(37,99,235,.4)">
+      <button onclick="togSB()" class="text-white/80 hover:text-white p-1.5 rounded-lg hover:bg-white/15 transition text-xl" aria-label="Menu">☰</button>
+      <span class="font-bold text-white text-base flex-1 truncate" id="pgtit">Tổng quan</span>
+      <div class="flex items-center gap-2">
+        <span class="text-xs px-2 py-1 rounded-md text-white/70 hidden sm:block" id="clk"></span>
+        <span class="text-xs font-semibold px-2 py-1 rounded-md" id="slbl"></span>
+        <button id="synbtn" onclick="doSync()" title="Đồng bộ Google Sheet"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/40 text-white text-xs font-semibold hover:bg-white/15 transition">
+          <span id="synicon">🔄</span> <span class="hidden sm:inline">Đồng bộ</span>
+        </button>
+        <a href="index.html" target="_blank" title="Web khách hàng"
+          class="px-3 py-1.5 rounded-lg border border-white/40 text-white text-xs font-semibold hover:bg-white/15 transition hidden sm:flex items-center gap-1.5">
+          🌐 Web
+        </a>
+        <button onclick="doAdd()"
+          class="px-3 py-1.5 rounded-lg bg-white text-primary-600 text-xs font-bold hover:bg-blue-50 transition flex items-center gap-1.5">
+          ＋ <span class="hidden sm:inline">Thêm lịch</span>
+        </button>
+      </div>
+    </header>
 
-</div>
-</div>
-<div class="pg" id="pg-products" style="padding-top:0">
-<div class="ph">
-  <div>
-    <h2><span>📦</span> Quản lý sản phẩm</h2>
-    <div class="ph-sub">Thêm, sửa, xóa sản phẩm hiển thị trên website</div>
-  </div>
-  <button class="btn b-pri" onclick="toggleProdForm()">＋ Thêm sản phẩm</button>
+    <!-- PAGE CONTENT -->
+    <div class="flex-1 overflow-auto" id="content-scroll">
+      <div class="p-4 sm:p-5 lg:p-6">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="pg active max-w-7xl mx-auto" id="pg-dash">
+
+          <!-- ── ALERT KHẨN ── -->
+          <div class="rounded-2xl p-4 mb-4 flex items-center gap-3 bg-red-50 border border-red-200" id="urgc" style="display:none">
+            <span class="text-2xl flex-shrink-0">🚨</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-red-700">Lịch hẹn khẩn cấp chưa xử lý</p>
+              <div id="urgl" class="mt-1"></div>
+            </div>
+          </div>
+
+          <!-- ── ROW 1: KPI CARDS ── -->
+          <div id="dashg" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4"></div>
+
+          <!-- ── ROW 2: BIỂU ĐỒ CỘT TRẠNG THÁI + DOANH THU ── -->
+          <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+            <!-- Biểu đồ trạng thái – bar (chiếm 3/5) -->
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                  <span class="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-base">📊</span>
+                  Thống kê trạng thái đơn
+                </h3>
+                <span id="dash-total-badge" class="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-lg"></span>
+              </div>
+              <div class="relative h-56"><canvas id="sch"></canvas></div>
+            </div>
+            <!-- Doanh thu 6 tháng (chiếm 2/5) -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                  <span class="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-base">💰</span>
+                  Doanh thu 6 tháng
+                </h3>
+              </div>
+              <div class="relative h-56">
+                <canvas id="rev-chart"></canvas>
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-sm" id="rev-nodata" style="display:none!important">
+                  <span class="text-3xl mb-2">📭</span>Chưa có đơn hoàn thành
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── ROW 3: LỊCH GẦN ĐÂY + KTV ── -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                <span class="w-7 h-7 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-base">🕐</span>
+                Lịch hẹn gần đây
+              </h3>
+              <div id="recl"></div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5" id="toptech-card">
+              <h3 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-2">
+                <span class="w-7 h-7 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-base">👨‍🔧</span>
+                Kỹ thuật viên
+              </h3>
+              <div id="toptech-body"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── BOOKINGS LIST ── -->
+        <div class="pg max-w-7xl mx-auto" id="pg-books">
+          <!-- page header -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">📋 Danh sách lịch hẹn</h2>
+            <div class="flex gap-2">
+              <button onclick="doExport()" class="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm">
+                📥 Xuất CSV
+              </button>
+              <button onclick="doAdd()" class="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition shadow-sm">
+                ＋ Thêm lịch hẹn
+              </button>
+            </div>
+          </div>
+          <!-- filter bar -->
+          <div class="flex flex-wrap items-center gap-2 mb-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex items-center gap-2 flex-1 min-w-40 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+              <span class="text-slate-400 text-sm">🔍</span>
+              <input id="sq" type="text" placeholder="Tìm tên, SĐT, mã lịch hẹn..." oninput="renderBT()"
+                class="flex-1 bg-transparent outline-none text-sm placeholder-slate-400"/>
+              <span class="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-lg font-medium" id="bcnt"></span>
+            </div>
+            <select id="fst" onchange="renderBT()" class="bg-slate-50 border border-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer">
+              <option value="">Tất cả trạng thái</option>
+              <option value="pending">Chờ xử lý</option>
+              <option value="assigned">Đã phân công</option>
+              <option value="in_progress">Đang sửa</option>
+              <option value="completed">Hoàn thành</option>
+              <option value="cancelled">Đã huỷ</option>
+            </select>
+            <select id="fpr" onchange="renderBT()" class="bg-slate-50 border border-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer">
+              <option value="">Tất cả mức độ</option>
+              <option value="urgent">🚨 Khẩn cấp</option>
+              <option value="normal">Bình thường</option>
+            </select>
+            <select id="fdv" onchange="renderBT()" class="bg-slate-50 border border-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer">
+              <option value="">Tất cả thiết bị</option>
+              <option>Laptop</option><option>PC Desktop</option>
+              <option>Điện thoại</option><option>Máy tính bảng</option>
+              <option>Màn hình</option><option>Thiết bị khác</option>
+            </select>
+            <button onclick="doExport()" class="px-3 py-2 text-xs font-semibold text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition">CSV</button>
+            <span class="text-xs text-slate-400 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg" id="rcnt"></span>
+          </div>
+          <!-- Desktop table -->
+          <div class="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[700px]">
+                <thead class="bg-slate-50 border-b border-slate-100">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Mã ĐL</th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-primary-600" onclick="sortBy('customerName')" data-sort="customerName">Khách hàng<span class="sort-icon"> ↕</span></th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-primary-600" onclick="sortBy('deviceType')" data-sort="deviceType">Thiết bị<span class="sort-icon"> ↕</span></th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Vấn đề</th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-primary-600" onclick="sortBy('scheduledAt')" data-sort="scheduledAt">Ngày hẹn<span class="sort-icon"> ↕</span></th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-primary-600" onclick="sortBy('status')" data-sort="status">Trạng thái<span class="sort-icon"> ↕</span></th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-primary-600" onclick="sortBy('actualCost')" data-sort="actualCost">Chi phí<span class="sort-icon"> ↕</span></th>
+                    <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="btbody" class="divide-y divide-slate-50"></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- Mobile cards -->
+          <div id="bwrap" class="md:hidden" style="display:none"></div>
+          <!-- Empty state -->
+          <div class="emp hidden" id="bemp" style="display:none">
+            <div class="emp-i">📭</div><p class="font-medium">Chưa có lịch hẹn nào</p>
+          </div>
+        </div>
+
+        <!-- ── ADD / EDIT ── -->
+        <div class="pg max-w-5xl mx-auto" id="pg-add">
+          <div class="flex items-center gap-3 mb-4 bg-white rounded-2xl shadow-sm border border-slate-100 px-5 py-3">
+            <button onclick="goP('books',document.querySelector('[data-pg=books]'))"
+              class="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-primary-600 transition">
+              ← Quay lại
+            </button>
+            <div class="w-px h-5 bg-slate-200"></div>
+            <h2 class="text-base font-bold text-slate-800" id="ftit">Thêm lịch hẹn mới</h2>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="form-grid">
+            <!-- Card: Khách hàng -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <h3 class="text-sm font-bold text-primary-600 border-b border-primary-50 pb-2 mb-4">👤 Thông tin khách hàng</h3>
+              <div class="space-y-3">
+                <div class="fd" id="fww-cN"><label>Họ và tên *</label><input id="fw_cN" placeholder="Nguyễn Văn A" oninput="clE('cN')"/><div class="ferr" id="fe_cN"></div></div>
+                <div class="fd" id="fww-ph"><label>Số điện thoại *</label><input id="fw_ph" placeholder="0901234567" oninput="clE('ph')"/><div class="ferr" id="fe_ph"></div></div>
+                <div class="fd"><label>Địa chỉ</label><input id="fw_ad" placeholder="Số nhà, đường, xã..."/></div>
+              </div>
+            </div>
+            <!-- Card: Thiết bị -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <h3 class="text-sm font-bold text-primary-600 border-b border-primary-50 pb-2 mb-4">💻 Thông tin thiết bị</h3>
+              <div class="space-y-3">
+                <div class="fd"><label>Loại thiết bị</label>
+                  <select id="fw_dt"><option>Laptop</option><option>PC Desktop</option><option>Máy tính bảng</option><option>Điện thoại</option><option>Màn hình</option><option>Thiết bị khác</option></select>
+                </div>
+                <div class="fd" id="fww-br"><label>Thương hiệu *</label><input id="fw_br" placeholder="Dell, HP, Asus, Apple..." oninput="clE('br')"/><div class="ferr" id="fe_br"></div></div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div class="fd"><label>Model</label><input id="fw_md" placeholder="Inspiron 15, VivoBook..."/></div>
+                  <div class="fd"><label>Số serial / IMEI</label><input id="fw_sr" placeholder="SN hoặc IMEI..."/></div>
+                </div>
+                <div class="fd"><label>Mật khẩu thiết bị</label><input id="fw_pw" placeholder="PIN, mật khẩu mở máy..."/></div>
+              </div>
+            </div>
+            <!-- Card: Chi tiết (full width) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 md:col-span-2">
+              <h3 class="text-sm font-bold text-primary-600 border-b border-primary-50 pb-2 mb-4">🔧 Chi tiết yêu cầu</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="fd sm:col-span-2 lg:col-span-3" id="fww-is">
+                  <label>Mô tả vấn đề *</label>
+                  <textarea id="fw_is" rows="2" placeholder="Mô tả chi tiết vấn đề..." oninput="clE('is')" style="min-height:64px;resize:vertical"></textarea>
+                  <div class="ferr" id="fe_is"></div>
+                </div>
+                <div class="fd"><label>Mức độ ưu tiên</label>
+                  <select id="fw_pr"><option value="urgent">🚨 Khẩn cấp</option><option value="normal" selected>⚡ Bình thường</option></select>
+                </div>
+                <div class="fd"><label>Ngày hẹn</label><input id="fw_sa" type="date"/></div>
+                <div class="fd"><label>Trạng thái</label>
+                  <select id="fw_st"><option value="pending">Chờ xử lý</option><option value="assigned">Đã phân công</option><option value="in_progress">Đang sửa</option><option value="completed">Hoàn thành</option><option value="cancelled">Đã huỷ</option></select>
+                </div>
+                <div class="fd"><label>Chi phí ước tính (VND)</label><input id="fw_ec" type="number" min="0" step="10000" placeholder="0"/></div>
+                <div class="fd"><label>Chi phí thực tế (VND)</label><input id="fw_ac" type="number" min="0" step="10000" placeholder="0"/></div>
+                <div class="fd"><label>Kỹ thuật viên</label><input id="fw_tc" list="ktv-datalist" placeholder="Chọn hoặc nhập KTV..."/><datalist id="ktv-datalist"></datalist></div>
+                <div class="fd"><label>Ngày nhận máy</label><input id="fw_cr" type="date"/></div>
+                <div class="fd"><label>Ngày hẹn trả máy</label><input id="fw_rd" type="date"/></div>
+                <div class="fd"><label>Phụ kiện kèm theo</label><input id="fw_acc" placeholder="Sạc, túi, chuột, bao..."/></div>
+                <div class="fd"><label>Ghi chú nội bộ</label><input id="fw_nt" placeholder="Ghi chú nội bộ..."/></div>
+              </div>
+            </div>
+          </div>
+          <div class="ffoot">
+            <button onclick="goP('books',document.querySelector('[data-pg=books]'))"
+              class="px-5 py-2.5 text-sm font-semibold text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition">Huỷ</button>
+            <button onclick="doSave()" id="svbtn"
+              class="px-6 py-2.5 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition shadow-sm flex items-center gap-2">💾 Lưu lịch hẹn</button>
+          </div>
+        </div>
+
+        <!-- ── DETAIL ── -->
+        <div class="pg max-w-4xl mx-auto" id="pg-det">
+          <div class="flex items-center gap-2 flex-wrap mb-4 bg-white rounded-2xl shadow-sm border border-slate-100 px-5 py-3">
+            <button onclick="goP('books',document.querySelector('[data-pg=books]'))"
+              class="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-primary-600 transition">
+              ← Quay lại
+            </button>
+            <div class="w-px h-5 bg-slate-200"></div>
+            <span class="font-bold text-slate-800 text-base" id="detid"></span>
+            <span id="detbdg"></span>
+            <div class="ml-auto flex gap-2 flex-wrap">
+              <button onclick="doPrint(document.getElementById('pg-det').getAttribute('data-id'))"
+                class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition">
+                🖨️ In phiếu
+              </button>
+              <button id="detedit"
+                class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition">
+                ✏️ Sửa
+              </button>
+              <button id="detdel"
+                class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-100 rounded-lg hover:bg-red-100 transition">
+                🗑️ Xoá
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="detcont"></div>
+        </div>
+
+        <!-- ── CUSTOMERS ── -->
+        <div class="pg max-w-7xl mx-auto" id="pg-cust">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4" id="custstatg"></div>
+          <div class="flex items-center gap-2 flex-wrap mb-4 bg-white p-3 rounded-2xl shadow-sm border border-slate-100">
+            <div class="flex items-center gap-2 flex-1 min-w-40 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+              <span class="text-slate-400 text-sm">🔍</span>
+              <input id="cust_q" type="text" placeholder="Tìm tên, số điện thoại..." oninput="renderCust()"
+                class="flex-1 bg-transparent outline-none text-sm placeholder-slate-400"/>
+            </div>
+            <select id="cust_sort" onchange="renderCust()" class="bg-slate-50 border border-slate-200 text-sm rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer">
+              <option value="last">Mới nhất</option>
+              <option value="orders">Nhiều đơn nhất</option>
+              <option value="revenue">Doanh thu cao nhất</option>
+              <option value="name">Tên A→Z</option>
+            </select>
+            <span class="text-xs text-slate-500 px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg" id="custcnt"></span>
+          </div>
+          <div id="custgrid"></div>
+          <div class="emp hidden" id="custempty" style="display:none"><div class="emp-i">👥</div><p class="font-medium">Chưa có khách hàng nào</p></div>
+        </div>
+
+        <!-- ── PRODUCTS ── -->
+        <div class="pg max-w-7xl mx-auto" id="pg-products" style="padding-top:0">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">📦 Quản lý sản phẩm</h2>
+              <p class="text-sm text-slate-500 mt-0.5">Thêm, sửa, xóa sản phẩm hiển thị trên website</p>
+            </div>
+            <button onclick="toggleProdForm()" class="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition shadow-sm">
+              ＋ Thêm sản phẩm
+            </button>
+          </div>
+          <!-- Product add form -->
+          <div class="prod-add-form bg-white rounded-2xl shadow-sm border border-slate-100 p-5 mb-4" id="prodAddForm">
+            <div class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2" id="prodFormTitle">➕ Thêm sản phẩm mới</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="fd"><label>Tên sản phẩm *</label><input id="pf_name" placeholder="VD: Laptop Dell Inspiron 15"/></div>
+              <div class="fd"><label>Danh mục</label>
+                <select id="pf_cat">
+                  <option value="">-- Chọn danh mục --</option>
+                  <option>Laptop văn phòng</option><option>Laptop Gaming</option>
+                  <option>PC Desktop</option><option>iPad / MacBook</option>
+                  <option>RAM / SSD</option><option>Màn hình</option>
+                  <option>Phụ kiện</option><option>Linh kiện</option>
+                </select>
+              </div>
+              <div class="fd"><label>Giá bán</label><input id="pf_price" placeholder="VD: 8.500.000đ"/></div>
+              <div class="fd"><label>Ghi chú giá</label><input id="pf_priNote" placeholder="VD: Liên hệ để được tư vấn"/></div>
+              <div class="fd sm:col-span-2"><label>URL hình ảnh</label><input id="pf_img" placeholder="https://... (link ảnh từ GitHub hoặc bất kỳ URL ảnh nào)" oninput="prevProdImg(this.value)"/></div>
+              <div class="sm:col-span-2 text-center" id="pf_img_prev"></div>
+              <div class="fd sm:col-span-2"><label>Mô tả ngắn</label><textarea id="pf_desc" rows="2" placeholder="VD: Core i5-12th, 8GB RAM, 256GB SSD, màn 15.6 FHD" style="min-height:56px;resize:vertical"></textarea></div>
+              <div class="fd"><label>Thứ tự hiển thị</label><input id="pf_order" type="number" placeholder="0" min="0" value="0"/></div>
+              <div class="fd" style="justify-content:flex-end;padding-top:18px">
+                <label class="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700" style="text-transform:none;letter-spacing:0">
+                  <input type="checkbox" id="pf_active" checked style="width:15px;height:15px;accent-color:#2563eb"> Hiển thị trên website
+                </label>
+              </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+              <button onclick="cancelProdForm()" class="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition">Hủy</button>
+              <button onclick="saveProd()" class="px-5 py-2 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition shadow-sm">💾 Lưu sản phẩm</button>
+            </div>
+          </div>
+          <!-- Product grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" id="prodgrid"></div>
+          <div class="emp hidden" id="prodempty" style="display:none"><div class="emp-i">📦</div><p>Chưa có sản phẩm nào</p></div>
+        </div>
+
+        <!-- ── SETTINGS ── -->
+        <div class="pg max-w-3xl mx-auto" id="pg-cfg">
+          <h2 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">⚙️ Cài đặt hệ thống</h2>
+          <div class="space-y-4" id="cfg-wrap">
+            <!-- Settings cards rendered by JS -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="flex items-center gap-3 px-5 py-4 bg-slate-50 border-b border-slate-100">
+                <div class="w-9 h-9 rounded-xl bg-primary-50 flex items-center justify-center text-xl">🏪</div>
+                <div><div class="text-sm font-bold">Thông tin cửa hàng</div><div class="text-xs text-slate-500 mt-0.5">Tên, SĐT, địa chỉ hiển thị trên phiếu in</div></div>
+              </div>
+              <div class="p-5 space-y-3">
+                <div class="fd"><label>Tên cửa hàng</label><input id="cfg_name" placeholder="Trần Hoà Computer"/></div>
+                <div class="fd"><label>Số điện thoại</label><input id="cfg_phone" placeholder="0963.284.044"/></div>
+                <div class="fd"><label>Địa chỉ</label><input id="cfg_addr" placeholder="Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên"/></div>
+                <div class="fd"><label>GAS URL (Google Apps Script)</label><input id="cfg_gas" placeholder="https://script.google.com/..."/></div>
+              </div>
+              <div class="px-5 pb-4 flex gap-2">
+                <button onclick="saveCfg()" class="px-4 py-2 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition">💾 Lưu cài đặt</button>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="flex items-center gap-3 px-5 py-4 bg-slate-50 border-b border-slate-100">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-xl">👨‍🔧</div>
+                <div><div class="text-sm font-bold">Kỹ thuật viên</div><div class="text-xs text-slate-500 mt-0.5">Quản lý danh sách KTV</div></div>
+              </div>
+              <div class="flex flex-wrap gap-2 px-5 pt-4 pb-2 min-h-12" id="ktv-list"></div>
+              <div class="flex gap-2 px-5 pb-4">
+                <input id="ktv-input" placeholder="Tên kỹ thuật viên..." class="flex-1 border border-slate-200 rounded-xl px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary-500"/>
+                <button onclick="addKtv()" class="px-4 py-2 text-sm font-bold text-white bg-primary-600 rounded-xl hover:bg-primary-700 transition">Thêm</button>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div class="flex items-center gap-3 px-5 py-4 bg-slate-50 border-b border-slate-100">
+                <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-xl">🗑️</div>
+                <div><div class="text-sm font-bold">Dữ liệu</div><div class="text-xs text-slate-500 mt-0.5">Xóa hoặc reset dữ liệu hệ thống</div></div>
+              </div>
+              <div class="px-5 py-4 flex flex-wrap gap-2">
+                <button onclick="doClear()" class="px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 border border-red-100 rounded-xl hover:bg-red-100 transition">⚠️ Xóa toàn bộ dữ liệu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /p-4 -->
+    </div><!-- /content-scroll -->
+  </div><!-- /main-wrap -->
+</div><!-- /app-shell -->
+
+<!-- ═══ GENERIC CONFIRM MODAL ═══ -->
+<div class="mov" id="modov" onclick="if(event.target===this)cMod()">
+  <div class="modw" id="modw"></div>
 </div>
 
-<!-- Form thêm/sửa sản phẩm -->
-<div class="prod-add-form" id="prodAddForm">
-  <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px" id="prodFormTitle">➕ Thêm sản phẩm mới</div>
-  <div class="prod-form-grid">
-    <div class="prod-field"><label>Tên sản phẩm *</label><input id="pf_name" placeholder="VD: Laptop Dell Inspiron 15"/></div>
-    <div class="prod-field"><label>Danh mục</label>
-      <select id="pf_cat">
-        <option value="">-- Chọn danh mục --</option>
-        <option>Laptop văn phòng</option>
-        <option>Laptop Gaming</option>
-        <option>PC Desktop</option>
-        <option>iPad / MacBook</option>
-        <option>RAM / SSD</option>
-        <option>Màn hình</option>
-        <option>Phụ kiện</option>
-        <option>Linh kiện</option>
-        <option>Khác</option>
-      </select>
-    </div>
-    <div class="prod-field"><label>Giá bán</label><input id="pf_price" placeholder="VD: 8.500.000đ"/></div>
-    <div class="prod-field"><label>Ghi chú giá</label><input id="pf_priNote" placeholder="VD: Liên hệ để được tư vấn"/></div>
-    <div class="prod-field" style="grid-column:1/-1"><label>URL hình ảnh</label><input id="pf_img" placeholder="https://... (dán link ảnh từ GitHub hoặc bất kỳ URL ảnh nào)" oninput="prevProdImg(this.value)"/></div>
-    <div class="prod-field" style="grid-column:1/-1;text-align:center" id="pf_img_prev"></div>
-    <div class="prod-field" style="grid-column:1/-1"><label>Mô tả ngắn</label><textarea id="pf_desc" placeholder="VD: Core i5-12th, 8GB RAM, 256GB SSD, màn 15.6 FHD"></textarea></div>
-    <div class="prod-field"><label>Thứ tự hiển thị</label><input id="pf_order" type="number" placeholder="0" min="0" value="0"/></div>
-    <div class="prod-field" style="display:flex;align-items:center;gap:8px;padding-top:18px">
-      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0">
-        <input type="checkbox" id="pf_active" checked style="width:15px;height:15px;accent-color:var(--primary)"> Hiển thị trên website
-      </label>
-    </div>
-  </div>
-  <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-    <button class="btn b-gho" onclick="cancelProdForm()">Hủy</button>
-    <button class="btn b-pri" onclick="saveProd()">💾 Lưu sản phẩm</button>
-  </div>
-  <input type="hidden" id="pf_id"/>
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toastEl">
+  <span class="to" id="toastIco"></span>
+  <span id="toastMsg"></span>
 </div>
-
-<!-- Grid sản phẩm -->
-<div id="prodGrid" class="prod-grid">
-  <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted)">⏳ Đang tải...</div>
-</div>
-</div>
-
-<div class="mov" id="modov" style="display:none" onclick="if(event.target===this)cMod()">
-  <div class="modal-box" style="max-width:380px;padding:24px"><div class="m-i" id="mi" style="font-size:32px;margin-bottom:8px"></div><h3 id="mt" style="font-size:17px;font-weight:700;margin-bottom:8px"></h3><p id="mb" style="color:var(--muted);font-size:14px;margin-bottom:20px;line-height:1.6"></p><div class="macts" id="ma" style="display:flex;gap:10px;justify-content:flex-end"></div></div>
-</div>
-<div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico"></span><span id="tmsg"></span></div>
 <script>
 var GAS_URL='https://script.google.com/macros/s/AKfycbzbrDlAsETWv3H57wszPhLQ2He_IOkJlsVb9oEwBSQlETwuV5hmxRJIOwxPuKGU_v5nZg/exec'; // Google Apps Script - unlimited
 var USE_GAS=true; // dùng Google Apps Script
@@ -1259,6 +788,13 @@ function logoutAdmin(){
 }
 
 window.addEventListener('DOMContentLoaded',function(){
+  // Init sidebar for desktop
+  if(window.innerWidth>=768){
+    var sb=document.getElementById('sb');
+    var mw=document.getElementById('main-wrap');
+    if(sb) sb.style.transform='translateX(0)';
+    if(mw) mw.style.marginLeft='240px';
+  }
   loadCfg();
   var authNeeded = cfg.authEnabled!==false;
   var authed = localStorage.getItem('thc_auth')==='1';
@@ -1407,7 +943,7 @@ async function doSync(){
         };
       });
     }
-    if(dataArr != null){
+    if(dataArr !== null){
       function normalizeBooking(b) {
         if (!b) return b;
         if (!b.customerName && (b['Full name']||b['full name']||b.name)) b.customerName = b['Full name']||b['full name']||b.name;
@@ -1613,11 +1149,11 @@ async function deleteFromSheets(id, bData){
 }
 function goP(id,btn){
   document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.sb-link,.bn-item').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.sb-link').forEach(function(b){b.classList.remove('sb-link-active');});
   var bni=document.querySelector('.bn-item[data-pg="'+id+'"]');
-  if(bni)bni.classList.add('active');
+  if(bni)bni.classList.add('sb-link-active');
   var pg=document.getElementById('pg-'+id);if(pg)pg.classList.add('active');
-  if(btn)btn.classList.add('active');
+  if(btn)btn.classList.add('sb-link-active');
   var T={dash:'Tổng quan',books:'Danh sách lịch hẹn',add:'Thêm lịch hẹn',det:'Chi tiết lịch hẹn',cfg:'Cài đặt'};
   document.getElementById('pgtit').textContent=T[id]||id;
   if(id==='dash')renderDash();if(id==='books')renderBT();if(id==='cust')renderCust();
@@ -1625,16 +1161,22 @@ function goP(id,btn){
 }
 function closeSB(){var sb=document.querySelector(".sidebar");var ov=document.getElementById("sbo");if(sb)sb.classList.remove("open");if(ov)ov.classList.remove("vis");}
 function togSB(){
-  var sb=document.querySelector('.sidebar');
+  var sb=document.getElementById('sb');
   var ov=document.getElementById('sbo');
-  var main=document.querySelector('.main');
-  var isMobile=window.innerWidth<=768;
+  var mw=document.getElementById('main-wrap');
+  var isMobile=window.innerWidth<768;
   if(isMobile){
     sb.classList.toggle('open');
     if(ov)ov.classList.toggle('vis');
   } else {
-    sb.classList.toggle('collapsed');
-    if(main)main.classList.toggle('sb-wide');
+    var collapsed = sb.style.transform === 'translateX(-100%)';
+    if(collapsed){
+      sb.style.transform = 'translateX(0)';
+      if(mw) mw.style.marginLeft = '240px';
+    } else {
+      sb.style.transform = 'translateX(-100%)';
+      if(mw) mw.style.marginLeft = '0';
+    }
   }
 }
 function doAdd(){editId=null;goP('add',document.querySelector('[data-pg=add]'));}
@@ -1683,11 +1225,11 @@ function fdt(v){
 function ini(n){return n?n.trim().split(' ').map(function(w){return w[0];}).slice(-2).join('').toUpperCase():'?';}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 var SM={
-  pending:   {l:'Chờ xử lý',    c:'b-p', col:'#f59e0b'},
-  assigned:  {l:'Đã phân công', c:'b-a', col:'#3b82f6'},
-  in_progress:{l:'Đang sửa',   c:'b-i', col:'#8b5cf6'},
-  completed: {l:'Hoàn thành',  c:'b-d', col:'#10b981'},
-  cancelled: {l:'Đã hủy',      c:'b-c', col:'#ef4444'}
+  pending:    {l:'Chờ xử lý',    c:'b-p', col:'#f59e0b'},
+  assigned:   {l:'Đã phân công', c:'b-a', col:'#3b82f6'},
+  in_progress:{l:'Đang sửa',     c:'b-i', col:'#8b5cf6'},
+  completed:  {l:'Hoàn thành',   c:'b-d', col:'#10b981'},
+  cancelled:  {l:'Đã hủy',       c:'b-c', col:'#ef4444'}
 };
 function sbdg(s){var m=SM[s]||{l:s,c:'b-p'};return '<span class="bdg '+m.c+'">'+m.l+'</span>';}
 
@@ -1731,93 +1273,34 @@ function renderDash(){
   }).length;
   var _revReset=getRevResetDate();
   var _revBooks=_revReset?books.filter(function(b){return b.status==='completed'&&(b.createdAt||'')>=_revReset;}):books.filter(function(b){return b.status==='completed';});
-  var rev=_revBooks.reduce(function(s,b){return s+(parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0);},0);
+  var rev=_revBooks.reduce(function(s,b){return s+(parseFloat(b.actualCost)||0);},0);
   var today=books.filter(function(b){var d=new Date(b.scheduledAt||'');var n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate();}).length;
   var el=document.getElementById('dashg');
   if(!el)return;
-  var active=pend+prog; // active (not done/cancelled)
-  var total_nonzero=tot||1;
-  function _pct(n){ return Math.round(n/total_nonzero*100); }
-  function _bar(n,color){ return '<div class="sc-mini-bar"><div class="sc-mini-bar-fill" style="width:'+_pct(n)+'%;background:'+color+'"></div></div>'; }
-
-  // ── Primary KPIs (2 big cards)
-  var primaryHtml=
-    '<div class="dash-primary">'
-    +'<div class="sc-kpi">'
-    +'<div class="sc-kpi-icon" style="background:#dbeafe">📋</div>'
-    +'<div class="sc-kpi-val">'+tot+'</div>'
-    +'<div class="sc-kpi-lbl">Tổng lịch hẹn</div>'
-    +'<div class="sc-kpi-sub">'+(today>0?today+' lịch hôm nay':'Không có lịch hôm nay')+'</div>'
-    +'</div>'
-    +'<div class="sc-kpi">'
-    +'<div class="sc-kpi-icon" style="background:#d1fae5">💰</div>'
-    +'<div class="sc-kpi-val" style="color:var(--green);font-size:'+(rev>=1000000?'20px':'26px')+'">'+fmt(rev)+'</div>'
-    +'<div class="sc-kpi-lbl">Doanh thu</div>'
-    +'<div class="sc-kpi-sub">'+done+' đơn hoàn thành</div>'
-    +'</div>'
-    +'</div>';
-
-  // ── Status mini-cards (4 col)
-  var statusHtml=
-    '<div class="dash-sec">Trạng thái đơn</div>'
-    +'<div class="dash-status">'
-    +'<div class="sc-mini">'
-    +'<span class="sc-mini-icon">⏳</span>'
-    +'<span class="sc-mini-val" style="color:#d97706">'+pend+'</span>'
-    +'<span class="sc-mini-lbl">Chờ xử lý</span>'
-    +_bar(pend,'#f59e0b')
-    +'</div>'
-    +'<div class="sc-mini">'
-    +'<span class="sc-mini-icon">🔧</span>'
-    +'<span class="sc-mini-val" style="color:#7c3aed">'+prog+'</span>'
-    +'<span class="sc-mini-lbl">Đang sửa</span>'
-    +_bar(prog,'#8b5cf6')
-    +'</div>'
-    +'<div class="sc-mini">'
-    +'<span class="sc-mini-icon">✅</span>'
-    +'<span class="sc-mini-val" style="color:#059669">'+done+'</span>'
-    +'<span class="sc-mini-lbl">Hoàn thành</span>'
-    +_bar(done,'#10b981')
-    +'</div>'
-    +'<div class="sc-mini">'
-    +'<span class="sc-mini-icon">🚫</span>'
-    +'<span class="sc-mini-val" style="color:#94a3b8">'+canc+'</span>'
-    +'<span class="sc-mini-lbl">Đã hủy</span>'
-    +_bar(canc,'#94a3b8')
-    +'</div>'
-    +'</div>';
-
-  // ── Alert/watch strip
-  var alerts=[];
-  alerts.push(
-    '<div class="sc-alert '+(today>0?'blue':'gray')+'">'
-    +'<span style="font-size:15px">📅</span>'
-    +'<div><div class="sc-alert-val">'+today+'</div><div class="sc-alert-lbl">Hôm nay</div></div>'
-    +'</div>'
-  );
-  alerts.push(
-    '<div class="sc-alert '+(urg>0?'red':'gray')+'">'
-    +'<span style="font-size:15px">🚨</span>'
-    +'<div><div class="sc-alert-val">'+urg+'</div><div class="sc-alert-lbl">Ưu tiên cao</div></div>'
-    +'</div>'
-  );
-  alerts.push(
-    '<div class="sc-alert '+(returnOverdue>0?'red':returnSoon>0?'amber':'gray')+'">'
-    +'<span style="font-size:15px">'+(returnOverdue>0?'⚠️':'⏰')+'</span>'
-    +'<div>'
-    +'<div class="sc-alert-val">'+(returnOverdue+returnSoon)+'</div>'
-    +'<div class="sc-alert-lbl">'+(returnOverdue>0?returnOverdue+' trễ hẹn'+(returnSoon>0?', '+returnSoon+' sắp đến':''):returnSoon>0?returnSoon+' sắp đến hẹn':'Hẹn trả')+'</div>'
-    +'</div></div>'
-  );
-  var alertHtml='<div class="dash-sec">Theo dõi</div><div class="dash-alerts">'+alerts.join('')+'</div>';
-
-  el.innerHTML = primaryHtml + alertHtml + statusHtml;
-  renderStatsTable();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
+  el.innerHTML=
+    sc('📋','Tổng lịch hẹn',tot,'','c-blue')
+    +sc('📅','Hôm nay',today,'','c-cyan')
+    +sc('⏳','Chờ xử lý',pend,'b-p','c-amber')
+    +sc('🔧','Đang sửa',prog,'b-i','c-purple')
+    +sc('✅','Hoàn thành',done,'b-d','c-green')
+    +sc('❌','Đã hủy',canc,'b-c','c-red')
+    +sc('🚨','Ưu tiên cao',urg,urg>0?'b-p':'','c-red')
+    +sc('💰','Doanh thu',fmt(rev),'b-rev','c-cyan')
+    +(returnOverdue>0?sc('⚠️','Trễ hẹn trả',returnOverdue,'b-c','c-red'):'')
+    +(returnSoon>0?sc('🔔','Sắp đến hẹn trả',returnSoon,'b-p','c-amber'):'');
+  renderChart();renderRevChart();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
 }
 
 function sc(icon,label,val,cls,icls){
-  return '<div class="sc"><div class="si '+(icls||'c-blue')+'">'+icon+'</div>'
-    +'<div class="sv"><div class="sl">'+label+'</div><div class="sn'+(cls?' '+cls:'')+' ">'+val+'</div></div></div>';
+  var colorMap={'c-blue':'#2563eb','c-amber':'#d97706','c-purple':'#7c3aed',
+    'c-green':'#059669','c-red':'#dc2626','c-cyan':'#0891b2'};
+  var barCol=colorMap[icls||'c-blue']||'#2563eb';
+  return '<div class="sc">'
+    +'<div class="sc-top"><div class="si '+(icls||'c-blue')+'">'+icon+'</div></div>'
+    +'<div class="sn'+(cls?' '+cls:'')+' ">'+val+'</div>'
+    +'<div class="sl">'+label+'</div>'
+    +'<div class="sc-bar" style="background:'+barCol+'"></div>'
+    +'</div>';
 }
 function safeStr(s) {
     if (!s) return s;
@@ -1851,8 +1334,8 @@ function safeStr(s) {
   document.getElementById('rcnt').textContent=filtered.length+' kết quả';
   var tb=document.getElementById('btbody'), em=document.getElementById('bemp'), mwrap=document.getElementById('bwrap');
   // CSS media query handles show/hide; JS just fills content
-  if(isMob && mwrap){ mwrap.style.display='block'; if(tb) tb.innerHTML=''; }
-  if(!isMob){ if(mwrap){ mwrap.style.display='none'; mwrap.innerHTML=''; } if(tb) tb.style.display=''; }
+  if(isMob && mwrap) mwrap.style.display='block';
+  if(!isMob){ if(mwrap) mwrap.style.display='none'; if(tb) tb.style.display=''; }
   if(!filtered.length){ if(tb)tb.innerHTML=''; if(mwrap) mwrap.innerHTML=''; if(em)em.style.display=''; return; } if(em)em.style.display='none';
   var rows=filtered.map(function(b){
     var u=b.priority==='urgent';
@@ -1887,7 +1370,7 @@ function safeStr(s) {
         +'</div>'
         +'</div>';
     }
-    return '<tr class="dt-row'+(u?' ur':'')+' " onclick="viewDet(\''+b.id+'\')" style="cursor:pointer">'
+    return '<tr class="'+(u?'ur':'')+'">'
       +'<td><span class="tid">'+esc(b.id)+'</span></td>'
       +'<td><div class="cc"><div class="mav">'+ini(b.customerName||'?')+'</div><div><div class="cn">'+esc(b.customerName||'—')+(u?' (!!)':'')+'</div><div class="cp">'+esc(b.phone||'')+'</div></div></div></td>'
       +'<td><div style="font-size:13px;font-weight:600">'+esc(svcLabel(b.deviceType)||'')+'</div><div class="cp">'+esc(b.brand||'')+(b.model?' &middot; '+esc(b.model):'')+'</div></td>'
@@ -1895,7 +1378,7 @@ function safeStr(s) {
       +'<td><div class="dc">'+fdt(b.scheduledAt)+'</div></td>'
       +'<td><select class="ssel" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select></td>'
       +'<td>'+(b.actualCost?'<span style="font-weight:700;color:#065f46">'+fmt(b.actualCost)+'</span>':(b.estimatedCost?'<span style="color:var(--amber);font-weight:600">~'+fmt(b.estimatedCost)+'</span>':'<span style="color:var(--muted)">--</span>'))+'</span></td>'
-      +'<td><div class="act-btns"><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="btn b-sec" style="padding:5px 9px;font-size:13px;text-decoration:none;display:inline-flex;align-items:center" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'+'<button class="btn b-dan" style="padding:5px 9px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
+      +'<td><div class="act-btns"><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁</button><button class="btn b-sec" style="padding:5px 9px;font-size:13px" onclick="doEdit(\''+b.id+'\')" title="Sửa">✏</button><a class="btn b-sec" style="padding:5px 9px;font-size:13px" href="tel:'+esc(b.phone||'')+ '" title="Gọi" style="text-decoration:none;display:inline-flex;align-items:center">📞</a>'+'<button class="btn b-dan" style="padding:5px 9px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑</button></div></td>'
       +'</tr>';
   }).join('');
   if(isMob && mwrap) mwrap.innerHTML = rows;
@@ -1917,7 +1400,7 @@ function qkEdit(id){
     +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lịch hẹn <b>'+esc(b.customerName)+'</b> – <span style="color:var(--primary)">'+esc(b.id)+'</span></div>'
     +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">👨‍🔧 Kỹ thuật viên</label>'
     +'<input id="qe_tc" value="'+esc(b.technician||'')+'" placeholder="Nhập tên KTV..." style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
-    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Mức độ ưu tiên</label>'+'<select id="qe_pr" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff">'+'<option value="normal">Bình thường</option>'+'<option value="urgent">🚨 Khẩn cấp</option>'+'<option value="high">Cao</option>'+'<option value="low">Thấp</option>'+'</select></div>'+'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
     +'<input id="qe_rd" type="date" value="'+esc(b.returnDate||'')+'" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">💰 Chi phí ước tính (VND)</label>'
     +'<input id="qe_ec" type="number" value="'+esc(b.estimatedCost||'')+'" placeholder="150000" min="0" step="10000" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
@@ -1926,7 +1409,6 @@ function qkEdit(id){
     +'<button onclick="qkEditSave(\''+id+'\')" style="flex:2;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">Lưu</button>'
     +'</div>'
     +'</div></div>';
-  var _qepr=document.getElementById('qe_pr'); if(_qepr) _qepr.value=b.priority||'normal';
 }
 
 function qkEditSave(id){
@@ -1934,8 +1416,7 @@ function qkEditSave(id){
   var tc=(document.getElementById('qe_tc').value||'').trim();
   var rd=(document.getElementById('qe_rd').value||'').trim();
   var ec=Math.abs(Number(document.getElementById('qe_ec').value)||0)||null;
-  var pr=(document.getElementById('qe_pr')||{}).value||'normal';
-  b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec; b.priority=pr||'normal';
+  b.technician=tc; b.returnDate=rd||null; b.estimatedCost=ec;
   b.updatedAt=new Date().toISOString();
   saveBooks(); pushToSheets(b,false); renderAll(); cMod();
   toast('Đã cập nhật thông tin kỹ thuật','ok');
@@ -2102,7 +1583,7 @@ function doPrint(id){
     }
   }
   if(!b){window.print();return;}
-  var _blobUrl=null; var win=null; // blob approach below
+  var win=window.open('','_blank','width=820,height=1000');
   var shop=cfg.name||'Trần Hoa Computer';
   var phone=cfg.phone||'0963.284.044';
   var addr=cfg.addr||'Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên';
@@ -2226,21 +1707,8 @@ function doPrint(id){
     +'</div>'
     +'</div>'
     +'</body></html>';
-  try{
-    var _blob=new Blob([phcss],{type:'text/html;charset=utf-8'});
-    _blobUrl=URL.createObjectURL(_blob);
-    win=window.open(_blobUrl,'_blank');
-    if(!win){
-      // popup blocked — open in same tab via anchor click
-      var _a=document.createElement('a');
-      _a.href=_blobUrl; _a.target='_blank'; _a.rel='noopener';
-      document.body.appendChild(_a); _a.click(); document.body.removeChild(_a);
-    }
-  }catch(e){
-    // final fallback: open blank window and write
-    win=window.open('','_blank');
-    if(win){win.document.write(phcss);win.document.close();}
-  }
+  win.document.write(phcss);
+  win.document.close();
 }
 
 function doExport(){
@@ -2294,155 +1762,74 @@ function doCSV(){
 }
 
 
-var _statRange = 30;
-
-function setStatRange(n) {
-  _statRange = n;
-  [7, 30, 0].forEach(function(v) {
-    var btn = document.getElementById('sr' + v);
-    if (btn) btn.className = 'btn btn-sm ' + (v === n ? 'b-pri' : 'b-sec');
+function renderChart(){
+  if(typeof Chart==='undefined')return;
+  var ctx=document.getElementById('sch');if(!ctx)return;
+  var labels=Object.keys(SM).map(function(k){return SM[k].l;});
+  var data=Object.keys(SM).map(function(k){return books.filter(function(b){return b.status===k;}).length;});
+  var colors=Object.keys(SM).map(function(k){return SM[k].col;});
+  var total=data.reduce(function(a,b){return a+b;},0);
+  var badge=document.getElementById('dash-total-badge');
+  if(badge)badge.textContent='Tổng '+total+' đơn';
+  if(window._chart)window._chart.destroy();
+  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  var gridCol=isDark?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+  var textCol=isDark?'#94a3b8':'#64748b';
+  /* gradient fills per bar */
+  var canvasCtx=ctx.getContext('2d');
+  var gradients=colors.map(function(col){
+    var g=canvasCtx.createLinearGradient(0,0,0,220);
+    g.addColorStop(0,col);
+    g.addColorStop(1,col+'55');
+    return g;
   });
-  renderStatsTable();
+  window._chart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[{
+        label:'Số lịch hẹn',
+        data:data,
+        backgroundColor:gradients,
+        borderColor:colors,
+        borderWidth:0,
+        borderRadius:8,
+        borderSkipped:false,
+        hoverBackgroundColor:colors,
+        barPercentage:0.62,
+        categoryPercentage:0.75
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      animation:{duration:600,easing:'easeOutQuart'},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(15,23,42,.85)',
+          padding:10,titleFont:{size:12,weight:'bold'},
+          bodyFont:{size:13},
+          callbacks:{
+            label:function(c){return '  '+c.raw+' lịch hẹn';}
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{display:false},
+          ticks:{color:textCol,font:{size:11.5,weight:'600'},maxRotation:0}
+        },
+        y:{
+          grid:{color:gridCol,lineWidth:1},
+          ticks:{color:textCol,font:{size:11},stepSize:1,
+            callback:function(v){return Number.isInteger(v)?v:'';}
+          },
+          beginAtZero:true,border:{display:false}
+        }
+      }
+    }
+  });
 }
-
-function renderStatsTable() {
-  var el = document.getElementById('stats-tbl-wrap');
-  if (!el) return;
-
-  var now = new Date();
-  var cutoff = null;
-  if (_statRange > 0) {
-    cutoff = new Date(now.getFullYear(), now.getMonth(), now.getDate() - _statRange + 1);
-  }
-
-  var dayMap = {};
-
-  books.forEach(function(b) {
-    var dateStr = '';
-    var dateObj = null;
-
-    // Use scheduledAt first, fallback createdAt
-    // parseDateStr: handles ISO, YYYY-MM-DD, DD/MM/YYYY, DD/MM/YYYYTHH:MM
-    function parseDateStr(s) {
-      if (!s) return null;
-      s = String(s).trim();
-      // DD/MM/YYYY or DD/MM/YYYYTxx
-      var m1 = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-      if (m1) return new Date(+m1[3], +m1[2]-1, +m1[1]);
-      // YYYY-MM-DD
-      var m2 = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if (m2) return new Date(+m2[1], +m2[2]-1, +m2[3]);
-      // ISO / other
-      var d = new Date(s.replace(' ','T'));
-      return isNaN(d.getTime()) ? null : d;
-    }
-    var raw1 = b.scheduledAt || '';
-    var raw2 = b.createdAt || '';
-    dateObj = (raw1 ? parseDateStr(raw1) : null) || (raw2 ? parseDateStr(raw2) : null);
-    if (dateObj && !isNaN(dateObj.getTime())) {
-      dateStr = dateObj.getFullYear() + '-' +
-        String(dateObj.getMonth()+1).padStart(2,'0') + '-' +
-        String(dateObj.getDate()).padStart(2,'0');
-    }
-    if (!dateStr) return;
-
-    // Filter by range
-    if (cutoff) {
-      var parts0 = dateStr.split('-');
-      var rowDate = new Date(+parts0[0], +parts0[1]-1, +parts0[2]);
-      if (rowDate < cutoff) return;
-    }
-
-    if (!dayMap[dateStr]) {
-      dayMap[dateStr] = { date: dateStr, total: 0, pending: 0, prog: 0, completed: 0, cancelled: 0, revenue: 0 };
-    }
-    var d = dayMap[dateStr];
-    d.total++;
-    if (b.status === 'pending') d.pending++;
-    else if (b.status === 'in_progress' || b.status === 'assigned') d.prog++;
-    else if (b.status === 'completed') { d.completed++; d.revenue += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0; }
-    else if (b.status === 'cancelled') d.cancelled++;
-  });
-
-  var days = Object.keys(dayMap).sort(function(a, b) { return b.localeCompare(a); });
-
-  if (!days.length) {
-    el.innerHTML = '<p style="text-align:center;color:var(--muted);padding:32px 16px;font-size:13px">Chưa có dữ liệu trong khoảng thời gian này</p>';
-    return;
-  }
-
-  // Today string
-  var todayStr = now.getFullYear() + '-' +
-    String(now.getMonth()+1).padStart(2,'0') + '-' +
-    String(now.getDate()).padStart(2,'0');
-  var yesterdayObj = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
-  var yestStr = yesterdayObj.getFullYear() + '-' +
-    String(yesterdayObj.getMonth()+1).padStart(2,'0') + '-' +
-    String(yesterdayObj.getDate()).padStart(2,'0');
-
-  var daysVN = ['CN','T2','T3','T4','T5','T6','T7'];
-  function _fmtDay(ds) {
-    var p = ds.split('-');
-    var d = new Date(+p[0], +p[1]-1, +p[2]);
-    var lbl = ds === todayStr ? '<span style="font-size:10px;background:#2563eb;color:#fff;border-radius:4px;padding:1px 5px">Hôm nay</span>'
-            : ds === yestStr ? '<span style="font-size:10px;color:#64748b">Hôm qua</span>'
-            : '<span style="font-size:10px;color:var(--muted)">' + daysVN[d.getDay()] + '</span>';
-    return '<div style="font-weight:700;font-size:13px">' + p[2] + '/' + p[1] + '</div>' + lbl;
-  }
-
-  // Totals
-  var tot = { total:0, pending:0, prog:0, completed:0, cancelled:0, revenue:0 };
-  days.forEach(function(d) {
-    var r = dayMap[d];
-    tot.total += r.total; tot.pending += r.pending; tot.prog += r.prog;
-    tot.completed += r.completed; tot.cancelled += r.cancelled; tot.revenue += r.revenue;
-  });
-
-  var thStyle = 'padding:9px 8px;font-size:11px;font-weight:700;white-space:nowrap;border-bottom:2px solid var(--border);background:var(--bg)';
-  var tdStyle = 'padding:8px 6px;border-bottom:1px solid var(--border);font-size:13px;text-align:center';
-  var tfStyle = 'padding:9px 6px;font-weight:800;font-size:13px;text-align:center;border-top:2px solid var(--primary);background:var(--surface)';
-
-  var rows = days.map(function(ds) {
-    var r = dayMap[ds];
-    var isTd = (ds === todayStr);
-    var bg = isTd ? 'background:#eff6ff;' : '';
-    return '<tr style="' + bg + '">'
-      + '<td style="' + tdStyle + ';text-align:left;padding-left:12px">' + _fmtDay(ds) + '</td>'
-      + '<td style="' + tdStyle + ';font-weight:700">' + r.total + '</td>'
-      + '<td style="' + tdStyle + ';color:#d97706">' + (r.pending || '<span style="color:#cbd5e1">—</span>') + '</td>'
-      + '<td style="' + tdStyle + ';color:#7c3aed">' + (r.prog || '<span style="color:#cbd5e1">—</span>') + '</td>'
-      + '<td style="' + tdStyle + ';color:#059669">' + (r.completed || '<span style="color:#cbd5e1">—</span>') + '</td>'
-      + '<td style="' + tdStyle + ';color:#94a3b8">' + (r.cancelled || '<span style="color:#cbd5e1">—</span>') + '</td>'
-      + '<td style="' + tdStyle + ';text-align:right;padding-right:12px;font-weight:600;color:#059669;white-space:nowrap">'
-        + (r.revenue > 0 ? fmt(r.revenue) : '<span style="color:#cbd5e1">—</span>') + '</td>'
-      + '</tr>';
-  }).join('');
-
-  el.innerHTML =
-    '<table style="width:100%;border-collapse:collapse">'
-    + '<thead><tr>'
-    + '<th style="' + thStyle + ';text-align:left;padding-left:12px">Ngày</th>'
-    + '<th style="' + thStyle + ';text-align:center">Đơn</th>'
-    + '<th style="' + thStyle + ';text-align:center;color:#d97706">⏳ Chờ</th>'
-    + '<th style="' + thStyle + ';text-align:center;color:#7c3aed">🔧 Sửa</th>'
-    + '<th style="' + thStyle + ';text-align:center;color:#059669">✅ Xong</th>'
-    + '<th style="' + thStyle + ';text-align:center;color:#94a3b8">🚫 Huỷ</th>'
-    + '<th style="' + thStyle + ';text-align:right;padding-right:12px;color:#059669">💰 Doanh thu</th>'
-    + '</tr></thead>'
-    + '<tbody>' + rows + '</tbody>'
-    + '<tfoot><tr style="background:var(--surface)">'
-    + '<td style="' + tfStyle + ';text-align:left;padding-left:12px">Tổng (' + days.length + ' ngày)</td>'
-    + '<td style="' + tfStyle + '">' + tot.total + '</td>'
-    + '<td style="' + tfStyle + ';color:#d97706">' + tot.pending + '</td>'
-    + '<td style="' + tfStyle + ';color:#7c3aed">' + tot.prog + '</td>'
-    + '<td style="' + tfStyle + ';color:#059669">' + tot.completed + '</td>'
-    + '<td style="' + tfStyle + ';color:#94a3b8">' + tot.cancelled + '</td>'
-    + '<td style="' + tfStyle + ';text-align:right;padding-right:12px;color:#059669;white-space:nowrap">' + (tot.revenue > 0 ? fmt(tot.revenue) : '—') + '</td>'
-    + '</tr></tfoot>'
-    + '</table>';
-}
-
-function renderChart() { /* replaced by renderStatsTable */ }
 
 
 function renderRecent(){
@@ -2537,7 +1924,7 @@ function buildCustMap() {
     c.orders++;
     if (b.status === 'completed') {
       c.completed++;
-      var _rr2=getRevResetDate(); if(!_rr2||(b.createdAt||'')>=_rr2) c.revenue += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
+      var _rr2=getRevResetDate(); if(!_rr2||(b.createdAt||'')>=_rr2) c.revenue += parseFloat(b.actualCost) || 0;
     }
     var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
     if (d && (!c.lastDate || d > c.lastDate)) c.lastDate = d;
@@ -2673,7 +2060,7 @@ function renderRevChart() {
     var d = b.scheduledAt ? new Date(b.scheduledAt) : null;
     if (!d) return;
     var m = months.find(function(x){ return x.year === d.getFullYear() && x.month === d.getMonth(); });
-    if (m) m.rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
+    if (m) m.rev += parseFloat(b.actualCost) || 0;
   });
   var noData = months.every(function(m){ return m.rev === 0; });
   var noEl = document.getElementById('rev-nodata');
@@ -2691,30 +2078,43 @@ function renderRevChart() {
   var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   var gridCol = isDark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)';
   var textCol = isDark ? '#94a3b8' : '#64748b';
+  var revGrad=ctx.getContext('2d').createLinearGradient(0,0,0,200);
+  revGrad.addColorStop(0,'#10b981');
+  revGrad.addColorStop(1,'rgba(16,185,129,.2)');
   _revChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: months.map(function(m){ return m.label; }),
       datasets: [{
-        label: 'Doanh thu (VND)',
+        label: 'Doanh thu',
         data: months.map(function(m){ return m.rev; }),
-        backgroundColor: 'rgba(16,185,129,.7)',
+        backgroundColor: revGrad,
         borderColor: '#10b981',
-        borderWidth: 1.5,
-        borderRadius: 6,
-        hoverBackgroundColor: 'rgba(16,185,129,.9)'
+        borderWidth: 0,
+        borderRadius: 8,
+        borderSkipped: false,
+        hoverBackgroundColor: '#10b981',
+        barPercentage: 0.6,
+        categoryPercentage: 0.8
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: function(ctx){ return ' ' + new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(ctx.parsed.y); } } }
+      animation:{duration:600,easing:'easeOutQuart'},
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor:'rgba(15,23,42,.85)',padding:10,
+          titleFont:{size:11},bodyFont:{size:12},
+          callbacks: { label: function(c){ return '  ' + new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(c.parsed.y); } }
+        }
       },
       scales: {
-        x: { grid: { color: gridCol }, ticks: { color: textCol, font: { size: 11 } } },
-        y: { grid: { color: gridCol }, ticks: { color: textCol, font: { size: 11 },
-          callback: function(v){ return v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v; }
-        }, beginAtZero: true }
+        x: { grid: { display:false }, ticks: { color: textCol, font: { size: 10.5 }, maxRotation:0 } },
+        y: { grid: { color: gridCol, lineWidth:1 }, border:{display:false},
+          ticks: { color: textCol, font: { size: 10.5 },
+            callback: function(v){ return v >= 1e6 ? (v/1e6).toFixed(1)+'M' : v >= 1e3 ? (v/1e3).toFixed(0)+'K' : v; }
+          }, beginAtZero: true }
       }
     }
   });
@@ -2899,10 +2299,12 @@ function deleteProd(id) {
 /* ══ END PRODUCT MANAGER ══ */
 
 </script>
-</div>
 </main>
 </div>
 
+
+</body>
+</html>
 
 </body>
 </html>
