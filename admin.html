@@ -56,11 +56,22 @@ input,select,textarea,button{font-family:inherit;font-size:13px}
 .sb-logo-icon{width:38px;height:38px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .sb-logo-text{font-size:13px;font-weight:800;color:#fff;line-height:1.3}
 .sb-logo-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px}
-.sb-section{padding:16px 14px 4px;font-size:10px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:1px}
-.sb-link{
-  display:flex;align-items:center;gap:10px;padding:10px 14px;
-  color:#94a3b8;cursor:pointer;border-radius:8px;margin:1px 8px;
-  transition:all .18s;font-size:13px;font-weight:500;position:relative;
+.sb-section { padding: 20px 20px 6px 20px; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 1.2px; }
+.sb-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 2px 10px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  justify-content: flex-start;
+  width: calc(100% - 20px);
 }
 .sb-link:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
 .sb-link.active{background:rgba(37,99,235,.25);color:#93c5fd;font-weight:700}
@@ -304,11 +315,16 @@ tr:hover td{background:#fafafa}
 .cust-chip.done{background:var(--green-light);color:#065f46}
 .cust-chip.revenue{background:var(--amber-light);color:#92400e}
 .cust-chip.date{background:var(--bg);color:var(--text2)}
-.cust-actions{display:flex;gap:8px}
+.cust-actions{display:flex;gap:8px;margin-top:12px;border-top:1px dashed var(--border);padding-top:10px}
 .cust-btn{flex:1;padding:7px 0;font-size:12.5px;font-weight:600;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;background:#fff;text-align:center;transition:all .15s}
 .cust-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-light)}
-.cust-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;box-shadow:var(--sh);margin-bottom:8px}
-.cust-card:hover{border-color:var(--primary);box-shadow:var(--sh2);transform:translateY(-1px)}
+.cust-btn{flex:1;padding:6px 0;font-size:12px;font-weight:600;border-radius:6px;border:1px solid transparent;cursor:pointer;text-align:center;transition:all .15s}
+.cust-btn:first-child{background:rgba(37,99,235,0.08);color:var(--primary)}
+.cust-btn:first-child:hover{background:var(--primary);color:#fff}
+.cust-btn:last-child{background:rgba(16,185,129,0.08);color:#065f46}
+.cust-btn:last-child:hover{background:#10b981;color:#fff}
+.cust-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .18s;box-shadow:var(--sh);display:flex;flex-direction:column;justify-content:space-between;margin-bottom:0}
+.cust-card:hover{border-color:var(--primary);box-shadow:var(--sh2);transform:translateY(-2px);background:var(--primary-light)}
 /* Customer modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:350;display:flex;align-items:flex-end;justify-content:center;animation:fi .2s ease}
 .modal-overlay .modal-box{border-radius:16px 16px 0 0;max-height:80vh;overflow-y:auto;width:100%;max-width:520px}
@@ -440,7 +456,7 @@ tr:hover td{background:#fafafa}
 /* Customer page */
 .cust-stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
 .cust-search-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.cust-grid{display:flex;flex-direction:column;gap:0}
+.cust-grid{display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:640px){.cust-grid{grid-template-columns:repeat(2,1fr)}}@media(min-width:1024px){.cust-grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:1440px){.cust-grid{grid-template-columns:repeat(4,1fr)}}
 /* Fix bwrap visibility */
 #bwrap{display:none}
 /* Fix mobile: show bwrap, hide twrap */
@@ -503,10 +519,20 @@ body { background: #f1f5f9; }
 .sb-logo-text  { font-size: 12.5px; letter-spacing: .2px; }
 .sb-section { color: rgba(148,163,184,.7); font-size: 9.5px; letter-spacing: 1.2px; padding: 18px 16px 4px; }
 .sb-link {
-  margin: 1px 8px;
-  border-radius: 9px;
-  padding: 9px 10px;
-  transition: background .14s, color .14s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  color: #94a3b8;
+  cursor: pointer;
+  border-radius: 10px;
+  margin: 2px 10px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  justify-content: flex-start;
+  width: calc(100% - 20px);
 }
 .sb-link:hover { background: rgba(255,255,255,.07); }
 .sb-link.active {
@@ -872,16 +898,16 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 </div>
 <div class="sb-nav">
   <div class="sb-section">Tổng quan</div>
-  <button class="sb-link active" onclick="goP('dash',this)" data-pg="dash"><span class="sl-icon">📊</span><span class="sl-label">Tổng quan</span></button>
+  <button class="sb-link active" onclick="goP('dash',this); closeSidebarOnMobile()" data-pg="dash"><span class="sl-icon">📊</span><span class="sl-label">Tổng quan</span></button>
   <div class="sb-section">Lịch hẹn</div>
-  <button class="sb-link" onclick="goP('books',this)" data-pg="books"><span class="sl-icon">📋</span><span class="sl-label">Danh sách lịch hẹn</span><span class="sl-badge" id="pbadge" style="display:none">0</span></button>
-  <button class="sb-link" onclick="doAdd()" data-pg="add"><span class="sl-icon">➕</span><span class="sl-label">Thêm lịch hẹn</span></button>
+  <button class="sb-link" onclick="goP('books',this); closeSidebarOnMobile()" data-pg="books"><span class="sl-icon">📋</span><span class="sl-label">Danh sách lịch hẹn</span><span class="sl-badge" id="pbadge" style="display:none">0</span></button>
+  <button class="sb-link" onclick="doAdd(); closeSidebarOnMobile()" data-pg="add"><span class="sl-icon">➕</span><span class="sl-label">Thêm lịch hẹn</span></button>
   <div class="sb-section">Khách hàng</div>
-  <button class="sb-link" onclick="goP('cust',this)" data-pg="cust"><span class="sl-icon">👥</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
+  <button class="sb-link" onclick="goP('cust',this); closeSidebarOnMobile()" data-pg="cust"><span class="sl-icon">👥</span><span class="sl-label">Danh sách khách hàng</span><span class="sl-badge" id="custbadge" style="display:none">0</span></button>
   <div class="sb-section">Sản phẩm</div>
-  <button class="sb-link" onclick="goP('products',this)" data-pg="products"><span class="sl-icon">📦</span><span class="sl-label">Quản lý sản phẩm</span></button>
+  <button class="sb-link" onclick="goP('products',this); closeSidebarOnMobile()" data-pg="products"><span class="sl-icon">📦</span><span class="sl-label">Quản lý sản phẩm</span></button>
   <div class="sb-section">Hệ thống</div>
-  <button class="sb-link" onclick="goP('cfg',this)" data-pg="cfg"><span class="sl-icon">⚙️</span><span class="sl-label">Cài đặt</span></button>
+  <button class="sb-link" onclick="goP('cfg',this); closeSidebarOnMobile()" data-pg="cfg"><span class="sl-icon">⚙️</span><span class="sl-label">Cài đặt</span></button>
 </div>
 <div class="sb-ft">
   <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-user-name">Admin</div><div class="sb-user-role">Quản trị viên</div></div></div>
@@ -897,7 +923,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
     <span class="sl" id="slbl"></span>
     <button class="tb-btn" id="synbtn" onclick="doSync()" title="Đồng bộ GGSheet"><span id="synicon">🔄</span> Đồng bộ</button>
     <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none" title="Web khách hàng">🌐</a>
-    <button class="tb-btn primary" onclick="doAdd()">＋ Thêm lịch</button>
+    <button class="tb-btn primary" onclick="doAdd(); closeSidebarOnMobile()">＋ Thêm lịch</button>
   </div>
 </header>
 <div class="content">
@@ -953,7 +979,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   </div>
   <div class="ph-actions">
     <button class="btn b-sec" onclick="doExport()">📥 Xuất CSV</button>
-    <button class="btn b-pri" onclick="doAdd()">＋ Thêm lịch hẹn</button>
+    <button class="btn b-pri" onclick="doAdd(); closeSidebarOnMobile()">＋ Thêm lịch hẹn</button>
   </div>
 </div>
 <div class="fb">
@@ -1219,6 +1245,26 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 </div>
 <div class="toast" id="toastel" style="display:none"><span class="to ok" id="tico"></span><span id="tmsg"></span></div>
 <script>
+
+// Hàm đóng sidebar khi click trên mobile
+function closeSidebarOnMobile() {
+  if (window.innerWidth <= 768) {
+    var sb = document.querySelector('.sidebar');
+    var sbo = document.getElementById('sbo');
+    if (sb) sb.classList.remove('open');
+    if (sbo) sbo.classList.remove('vis');
+  }
+}
+
+// Lưu hàm goP gốc và ghi đè
+var originalGoP = window.goP;
+if (typeof originalGoP === 'function') {
+  window.goP = function(id, btn) {
+    originalGoP(id, btn);
+    closeSidebarOnMobile();
+  };
+}
+
 var GAS_URL='https://script.google.com/macros/s/AKfycbzbrDlAsETWv3H57wszPhLQ2He_IOkJlsVb9oEwBSQlETwuV5hmxRJIOwxPuKGU_v5nZg/exec'; // Google Apps Script - unlimited
 var USE_GAS=true; // dùng Google Apps Script
 (function(){var _g=localStorage.getItem('thc_gasUrl');if(_g&&_g.startsWith('https://'))GAS_URL=_g;})();
@@ -1891,7 +1937,7 @@ function safeStr(s) {
         +'<div style="font-size:13px;margin-bottom:4px"><span style="color:var(--muted)">Thiết bị: </span><strong>'+esc((svcLabel(b.deviceType)||'')+(b.brand?' · '+b.brand:'')+(b.model?' '+b.model:''))+'</strong></div>'
         +(b.issue?'<div style="font-size:12px;color:var(--muted);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">📝 '+esc(b.issue)+'</div>':'')
         +'</div>'
-        +'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">'
+        +'<div style="display:flex;flex-direction:column;gap:8px">'
         +'<div style="display:flex;flex-direction:column;gap:6px;flex:1">'
         +(b.scheduledAt?'<div style="font-size:12px;color:var(--muted)">'+fdt(b.scheduledAt)+'</div>':'')
         +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">KTV: '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">⏳ Chưa phân công KTV</div>')
@@ -1899,11 +1945,11 @@ function safeStr(s) {
         +(b.estimatedCost?'<div style="font-size:12px;color:#f59e0b;font-weight:600">~'+fmt(b.estimatedCost)+'đ</div>':'')
         +'<select class="ssel" style="font-size:13px;padding:5px 8px;max-width:160px" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select>'
         +'</div>'
-        +'<div style="display:flex;gap:6px;flex-shrink:0">'
-        +'<button class="btn b-sec" style="padding:7px 10px;font-size:13px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏ Sửa</button>'
-        +'<button class="btn" style="padding:7px 10px;font-size:13px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁 Xem</button>'
-        +'<a class="btn b-ok" style="padding:7px 10px;font-size:13px;text-decoration:none" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞</a>'
-        +'<button class="btn b-dan" style="padding:7px 10px;font-size:13px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑 Xoá</button>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;border-top:1px solid var(--border);padding-top:12px;margin-top:4px;width:100%">'
+        +'<button class="btn b-sec" style="width:100%;padding:8px 0;font-size:12.5px" onclick="qkEdit(\''+b.id+'\')" title="Cập nhật nhanh">✏ Sửa</button>'
+        +'<button class="btn" style="width:100%;padding:8px 0;font-size:12.5px" onclick="viewDet(\''+b.id+'\')" title="Chi tiết">👁 Xem</button>'
+        +'<a class="btn b-sec" style="width:100%;padding:8px 0;font-size:12.5px;text-decoration:none" href="tel:'+esc(b.phone||'')+'" title="Gọi">📞 Gọi</a>'
+        +'<button class="btn b-dan" style="width:100%;padding:8px 0;font-size:12.5px" onclick="askDel(\''+b.id+'\')" title="Xóa">🗑 Xoá</button>'
         +'</div>'
         +'</div>'
         +'</div>';
@@ -2766,21 +2812,37 @@ function setRevRange(mode) {
 }
 
 function renderRevBarChart() {
-  if (typeof Chart === 'undefined') return;
+  if (typeof Chart === 'undefined') {
+    setTimeout(function() { renderRevBarChart(); }, 500);
+    return;
+  }
   var cvs = document.getElementById('rev-bar-chart');
+  if (!cvs) return;
+  
+  function parseDateStr(s) {
+    if (!s) return null;
+    s = String(s).trim();
+    var m1 = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (m1) return new Date(+m1[3], +m1[2]-1, +m1[1]);
+    var m2 = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m2) return new Date(+m2[1], +m2[2]-1, +m2[3]);
+    var d = new Date(s.replace(' ','T'));
+    return isNaN(d.getTime()) ? null : d;
+  }
+  
   var noEl = document.getElementById('rev-bar-nodata');
   var sumEl = document.getElementById('rev-bar-summary');
-  if (!cvs) return;
-
   var now = new Date();
-  var labels = [], data = [], colors = [];
+  var labels = [], data = [];
   var completedBooks = books.filter(function(b){ return b.status === 'completed'; });
-
+  
   if (_revRange === 'week') {
-    // 7 ngày gần nhất
     for (var i = 6; i >= 0; i--) {
-      var d = new Date(now); d.setDate(d.getDate() - i); d.setHours(0,0,0,0);
-      var dEnd = new Date(d); dEnd.setHours(23,59,59,999);
+      var d = new Date(now);
+      d.setDate(d.getDate() - i);
+      d.setHours(0,0,0,0);
+      var dEnd = new Date(d);
+      dEnd.setHours(23,59,59,999);
       var rev = 0;
       completedBooks.forEach(function(b) {
         var bd = parseDateStr(b.scheduledAt) || parseDateStr(b.createdAt);
@@ -2789,26 +2851,24 @@ function renderRevBarChart() {
       var dayNames = ['CN','T2','T3','T4','T5','T6','T7'];
       labels.push(dayNames[d.getDay()] + ' ' + d.getDate()+'/'+(d.getMonth()+1));
       data.push(rev);
-      // Weekend màu khác
-      colors.push(d.getDay()===0||d.getDay()===6 ? 'rgba(99,102,241,.75)' : 'rgba(37,99,235,.75)');
     }
   } else if (_revRange === 'month') {
-    // 4 tuần gần nhất (theo tuần)
     for (var i = 3; i >= 0; i--) {
-      var wEnd = new Date(now); wEnd.setDate(wEnd.getDate() - i*7); wEnd.setHours(23,59,59,999);
-      var wStart = new Date(wEnd); wStart.setDate(wStart.getDate() - 6); wStart.setHours(0,0,0,0);
+      var wEnd = new Date(now);
+      wEnd.setDate(wEnd.getDate() - i*7);
+      wEnd.setHours(23,59,59,999);
+      var wStart = new Date(wEnd);
+      wStart.setDate(wStart.getDate() - 6);
+      wStart.setHours(0,0,0,0);
       var rev = 0;
       completedBooks.forEach(function(b) {
         var bd = parseDateStr(b.scheduledAt) || parseDateStr(b.createdAt);
         if (bd && bd >= wStart && bd <= wEnd) rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
       });
-      var wLabel = 'T' + wStart.getDate()+'/'+(wStart.getMonth()+1) + '–' + wEnd.getDate()+'/'+(wEnd.getMonth()+1);
-      labels.push(wLabel);
+      labels.push((wStart.getDate())+'/'+(wStart.getMonth()+1) + '-' + (wEnd.getDate())+'/'+(wEnd.getMonth()+1));
       data.push(rev);
-      colors.push('rgba(37,99,235,.75)');
     }
   } else {
-    // 6 tháng gần nhất
     for (var i = 5; i >= 0; i--) {
       var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       var dEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
@@ -2819,113 +2879,73 @@ function renderRevBarChart() {
       });
       labels.push((d.getMonth()+1)+'/'+d.getFullYear());
       data.push(rev);
-      colors.push('rgba(16,185,129,.75)');
     }
   }
-
-  var total = data.reduce(function(a,b){return a+b;},0);
-  var hasData = data.some(function(v){return v > 0;});
-
-  // No data state
+  
+  var hasData = data.some(function(v){ return v > 0; });
   if (noEl) noEl.style.display = hasData ? 'none' : 'flex';
   cvs.style.display = hasData ? '' : 'none';
-
-  // Destroy old chart
-  if (_revBarChart) { _revBarChart.destroy(); _revBarChart = null; }
-  if (!hasData) { if (sumEl) sumEl.innerHTML=''; return; }
-
-  // Build gradient
-  var ctx2d = cvs.getContext('2d');
-  var maxVal = Math.max.apply(null, data) || 1;
-  var gradients = colors.map(function(col, idx2) {
-    var g = ctx2d.createLinearGradient(0, 0, 0, 200);
-    var isMax = data[idx2] === maxVal;
-    g.addColorStop(0, isMax ? col.replace('.75','.95') : col);
-    g.addColorStop(1, col.replace('.75','.15'));
-    return g;
-  });
-  // Highlight bar màu khác nếu là max
-  var borderColors = data.map(function(v) { return v === maxVal ? '#f59e0b' : 'transparent'; });
-
-  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  var gridCol = isDark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.06)';
-  var textCol = isDark ? '#94a3b8' : '#64748b';
-
-  _revBarChart = new Chart(cvs, {
+  if (!hasData) {
+    if (sumEl) sumEl.innerHTML = '';
+    return;
+  }
+  
+  if (window._revBarChart) {
+    try { window._revBarChart.destroy(); } catch(e) {}
+  }
+  
+  var total = data.reduce(function(a,b){ return a+b; }, 0);
+  var maxVal = Math.max.apply(null, data);
+  var avg = total / data.length;
+  
+  if (sumEl) {
+    sumEl.innerHTML = '<div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">' +
+      '<div><span style="color:#64748b">💰 Tổng:</span> <strong style="color:#059669;font-size:16px">' + fmt(total) + '</strong></div>' +
+      '<div><span style="color:#64748b">📈 Cao nhất:</span> <strong style="color:#f59e0b">' + fmt(maxVal) + '</strong></div>' +
+      '<div><span style="color:#64748b">📊 Trung bình:</span> <strong style="color:#2563eb">' + fmt(Math.round(avg)) + '</strong></div>' +
+      '</div>';
+  }
+  
+  var ctx = cvs.getContext('2d');
+  var colors = data.map(function(v) { return v === maxVal ? 'rgba(245,158,11,0.8)' : 'rgba(37,99,235,0.7)'; });
+  
+  window._revBarChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [{
         label: 'Doanh thu',
         data: data,
-        backgroundColor: gradients,
-        borderColor: borderColors,
-        borderWidth: 2,
-        borderRadius: { topLeft:8, topRight:8, bottomLeft:0, bottomRight:0 },
-        borderSkipped: false,
-        hoverBackgroundColor: colors.map(function(c){ return c.replace('.75','.95'); }),
-        barPercentage: 0.65,
-        categoryPercentage: 0.8
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      animation: { duration: 500, easing: 'easeOutQuart' },
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(15,23,42,.88)',
-          padding: 11, cornerRadius: 10,
-          titleFont: { size: 12, weight: '600' },
-          bodyFont: { size: 13, weight: '700' },
           callbacks: {
-            title: function(items){ return items[0].label; },
-            label: function(c){
-              return '  ' + new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(c.parsed.y);
+            label: function(ctx) {
+              return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(ctx.parsed.y);
             }
           }
         }
       },
       scales: {
-        x: {
-          grid: { display: false },
-          ticks: { color: textCol, font: { size: 10.5, weight:'600' }, maxRotation: 0 },
-          border: { display: false }
-        },
         y: {
-          grid: { color: gridCol, lineWidth: 1 },
-          border: { display: false },
+          beginAtZero: true,
           ticks: {
-            color: textCol, font: { size: 10.5 },
-            callback: function(v){ return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v; }
-          },
-          beginAtZero: true
+            callback: function(v) {
+              return v >= 1e6 ? (v/1e6).toFixed(1) + 'M' : v >= 1e3 ? (v/1e3).toFixed(0) + 'K' : v;
+            }
+          }
         }
       }
     }
   });
-
-  // Summary strip
-  if (sumEl) {
-    var maxIdx = data.indexOf(maxVal);
-    var avg = total / (data.filter(function(v){return v>0;}).length || 1);
-    sumEl.innerHTML =
-      '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
-      +'<span style="font-size:16px">💵</span>'
-      +'<div><div style="font-size:11px;color:#94a3b8">Tổng cộng</div>'
-      +'<div style="font-weight:700;color:#0f172a;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(total)+'</div></div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
-      +'<span style="font-size:16px">📈</span>'
-      +'<div><div style="font-size:11px;color:#94a3b8">Cao nhất</div>'
-      +'<div style="font-weight:700;color:#059669;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(maxVal)+'</div></div>'
-      +'</div>'
-      +'<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
-      +'<span style="font-size:16px">📊</span>'
-      +'<div><div style="font-size:11px;color:#94a3b8">Trung bình</div>'
-      +'<div style="font-weight:700;color:#2563eb;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(Math.round(avg))+'</div></div>'
-      +'</div>';
-  }
 }
 
 function renderTechSummary() {
