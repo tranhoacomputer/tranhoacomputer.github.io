@@ -915,6 +915,27 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   </div>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch" id="stats-tbl-wrap"></div>
 </div>
+<!-- ── BIỂU ĐỒ DOANH THU ── -->
+<div class="card" style="margin-bottom:14px">
+  <div class="ch" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <h3 style="margin:0;display:flex;align-items:center;gap:6px">💰 Doanh thu</h3>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="btn btn-sm b-sec" id="rv-wk" onclick="setRevRange('week')">Tuần</button>
+      <button class="btn btn-sm b-pri" id="rv-mo" onclick="setRevRange('month')">Tháng</button>
+      <button class="btn btn-sm b-sec" id="rv-6m" onclick="setRevRange('6month')">6 Tháng</button>
+    </div>
+  </div>
+  <div class="cb">
+    <div style="position:relative;height:220px">
+      <canvas id="rev-bar-chart"></canvas>
+      <div id="rev-bar-nodata" style="display:none;position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;gap:6px">
+        <span style="font-size:30px">📭</span><span>Chưa có đơn hoàn thành</span>
+      </div>
+    </div>
+    <div id="rev-bar-summary" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)"></div>
+  </div>
+</div>
+
 <div class="dg">
   <div class="card"><div class="ch"><h3>Lịch hẹn gần đây</h3></div><div class="cb" id="recl"></div></div>
   <div class="card" id="toptech-card"><div class="ch"><h3>Kỹ thuật viên</h3></div><div class="cb" id="toptech-body"></div></div>
@@ -1812,7 +1833,7 @@ function renderDash(){
   var alertHtml='<div class="dash-sec">Theo dõi</div><div class="dash-alerts">'+alerts.join('')+'</div>';
 
   el.innerHTML = primaryHtml + alertHtml + statusHtml;
-  renderStatsTable();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
+  renderStatsTable();renderRevBarChart();renderTechSummary();renderRecent();renderUrgent();updateRevResetLabel();
 }
 
 function sc(icon,label,val,cls,icls){
@@ -2721,6 +2742,191 @@ function renderRevChart() {
   });
 }
 
+
+/* ════════════════════════════════════════
+   REVENUE BAR CHART (tuần / tháng / 6 tháng)
+════════════════════════════════════════ */
+var _revRange = 'month'; // default: tháng
+var _revBarChart = null;
+
+function setRevRange(mode) {
+  _revRange = mode;
+  // Update button states
+  ['rv-wk','rv-mo','rv-6m'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.className = el.className.replace(' b-pri','').replace('b-pri','b-sec');
+  });
+  var activeMap = { week:'rv-wk', month:'rv-mo', '6month':'rv-6m' };
+  var activeEl = document.getElementById(activeMap[mode]);
+  if (activeEl) {
+    activeEl.className = activeEl.className.replace('b-sec','b-pri');
+  }
+  renderRevBarChart();
+}
+
+function renderRevBarChart() {
+  if (typeof Chart === 'undefined') return;
+  var cvs = document.getElementById('rev-bar-chart');
+  var noEl = document.getElementById('rev-bar-nodata');
+  var sumEl = document.getElementById('rev-bar-summary');
+  if (!cvs) return;
+
+  var now = new Date();
+  var labels = [], data = [], colors = [];
+  var completedBooks = books.filter(function(b){ return b.status === 'completed'; });
+
+  if (_revRange === 'week') {
+    // 7 ngày gần nhất
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(now); d.setDate(d.getDate() - i); d.setHours(0,0,0,0);
+      var dEnd = new Date(d); dEnd.setHours(23,59,59,999);
+      var rev = 0;
+      completedBooks.forEach(function(b) {
+        var bd = parseDateStr(b.scheduledAt) || parseDateStr(b.createdAt);
+        if (bd && bd >= d && bd <= dEnd) rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
+      });
+      var dayNames = ['CN','T2','T3','T4','T5','T6','T7'];
+      labels.push(dayNames[d.getDay()] + ' ' + d.getDate()+'/'+(d.getMonth()+1));
+      data.push(rev);
+      // Weekend màu khác
+      colors.push(d.getDay()===0||d.getDay()===6 ? 'rgba(99,102,241,.75)' : 'rgba(37,99,235,.75)');
+    }
+  } else if (_revRange === 'month') {
+    // 4 tuần gần nhất (theo tuần)
+    for (var i = 3; i >= 0; i--) {
+      var wEnd = new Date(now); wEnd.setDate(wEnd.getDate() - i*7); wEnd.setHours(23,59,59,999);
+      var wStart = new Date(wEnd); wStart.setDate(wStart.getDate() - 6); wStart.setHours(0,0,0,0);
+      var rev = 0;
+      completedBooks.forEach(function(b) {
+        var bd = parseDateStr(b.scheduledAt) || parseDateStr(b.createdAt);
+        if (bd && bd >= wStart && bd <= wEnd) rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
+      });
+      var wLabel = 'T' + wStart.getDate()+'/'+(wStart.getMonth()+1) + '–' + wEnd.getDate()+'/'+(wEnd.getMonth()+1);
+      labels.push(wLabel);
+      data.push(rev);
+      colors.push('rgba(37,99,235,.75)');
+    }
+  } else {
+    // 6 tháng gần nhất
+    for (var i = 5; i >= 0; i--) {
+      var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      var dEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
+      var rev = 0;
+      completedBooks.forEach(function(b) {
+        var bd = parseDateStr(b.scheduledAt) || parseDateStr(b.createdAt);
+        if (bd && bd >= d && bd <= dEnd) rev += parseFloat(b.actualCost)||parseFloat(b.estimatedCost)||0;
+      });
+      labels.push((d.getMonth()+1)+'/'+d.getFullYear());
+      data.push(rev);
+      colors.push('rgba(16,185,129,.75)');
+    }
+  }
+
+  var total = data.reduce(function(a,b){return a+b;},0);
+  var hasData = data.some(function(v){return v > 0;});
+
+  // No data state
+  if (noEl) noEl.style.display = hasData ? 'none' : 'flex';
+  cvs.style.display = hasData ? '' : 'none';
+
+  // Destroy old chart
+  if (_revBarChart) { _revBarChart.destroy(); _revBarChart = null; }
+  if (!hasData) { if (sumEl) sumEl.innerHTML=''; return; }
+
+  // Build gradient
+  var ctx2d = cvs.getContext('2d');
+  var maxVal = Math.max.apply(null, data) || 1;
+  var gradients = colors.map(function(col, idx2) {
+    var g = ctx2d.createLinearGradient(0, 0, 0, 200);
+    var isMax = data[idx2] === maxVal;
+    g.addColorStop(0, isMax ? col.replace('.75','.95') : col);
+    g.addColorStop(1, col.replace('.75','.15'));
+    return g;
+  });
+  // Highlight bar màu khác nếu là max
+  var borderColors = data.map(function(v) { return v === maxVal ? '#f59e0b' : 'transparent'; });
+
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  var gridCol = isDark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.06)';
+  var textCol = isDark ? '#94a3b8' : '#64748b';
+
+  _revBarChart = new Chart(cvs, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Doanh thu',
+        data: data,
+        backgroundColor: gradients,
+        borderColor: borderColors,
+        borderWidth: 2,
+        borderRadius: { topLeft:8, topRight:8, bottomLeft:0, bottomRight:0 },
+        borderSkipped: false,
+        hoverBackgroundColor: colors.map(function(c){ return c.replace('.75','.95'); }),
+        barPercentage: 0.65,
+        categoryPercentage: 0.8
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 500, easing: 'easeOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(15,23,42,.88)',
+          padding: 11, cornerRadius: 10,
+          titleFont: { size: 12, weight: '600' },
+          bodyFont: { size: 13, weight: '700' },
+          callbacks: {
+            title: function(items){ return items[0].label; },
+            label: function(c){
+              return '  ' + new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(c.parsed.y);
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { color: textCol, font: { size: 10.5, weight:'600' }, maxRotation: 0 },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: gridCol, lineWidth: 1 },
+          border: { display: false },
+          ticks: {
+            color: textCol, font: { size: 10.5 },
+            callback: function(v){ return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v; }
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Summary strip
+  if (sumEl) {
+    var maxIdx = data.indexOf(maxVal);
+    var avg = total / (data.filter(function(v){return v>0;}).length || 1);
+    sumEl.innerHTML =
+      '<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
+      +'<span style="font-size:16px">💵</span>'
+      +'<div><div style="font-size:11px;color:#94a3b8">Tổng cộng</div>'
+      +'<div style="font-weight:700;color:#0f172a;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(total)+'</div></div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
+      +'<span style="font-size:16px">📈</span>'
+      +'<div><div style="font-size:11px;color:#94a3b8">Cao nhất</div>'
+      +'<div style="font-weight:700;color:#059669;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(maxVal)+'</div></div>'
+      +'</div>'
+      +'<div style="display:flex;align-items:center;gap:5px;font-size:12px;color:#64748b">'
+      +'<span style="font-size:16px">📊</span>'
+      +'<div><div style="font-size:11px;color:#94a3b8">Trung bình</div>'
+      +'<div style="font-weight:700;color:#2563eb;font-size:13px">'+new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(Math.round(avg))+'</div></div>'
+      +'</div>';
+  }
+}
 
 function renderTechSummary() {
   var el = document.getElementById('toptech-body');
