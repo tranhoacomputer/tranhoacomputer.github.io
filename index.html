@@ -2520,6 +2520,19 @@ body {
 
 
 
+
+        <section id="san-pham-section" class="reveal">
+          <div class="section-title-wrap"><span class="section-badge">SẢN PHẨM</span></div>
+          <div class="section-title">SẢN PHẨM & LINH KIỆN NỔI BẬT</div>
+          <p class="section-subtitle">Linh kiện chính hãng — giá công khai — bảo hành đầy đủ</p>
+          <div class="product-section-tabs" id="productTabBar">
+            <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
+          </div>
+          <div class="product-grid" id="productGrid">
+            <div class="product-loading">⏳ Đang tải sản phẩm...</div>
+          </div>
+        </section>
+        <!-- ══ END SẢN PHẨM ══ -->
         <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai — không phát sinh</p>
         <div class="tab-container reveal" id="priceTabContainer">
             <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
@@ -3521,18 +3534,6 @@ body {
         </div><!-- end #priceTabsWrapper -->
 
         <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
-        <section id="san-pham-section" class="reveal">
-          <div class="section-title-wrap"><span class="section-badge">SẢN PHẨM</span></div>
-          <div class="section-title">SẢN PHẨM & LINH KIỆN NỔI BẬT</div>
-          <p class="section-subtitle">Linh kiện chính hãng — giá công khai — bảo hành đầy đủ</p>
-          <div class="product-section-tabs" id="productTabBar">
-            <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
-          </div>
-          <div class="product-grid" id="productGrid">
-            <div class="product-loading">⏳ Đang tải sản phẩm...</div>
-          </div>
-        </section>
-        <!-- ══ END SẢN PHẨM ══ -->
 
                 <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG VÀNG</div>
         <div class="commit-list reveal">
@@ -5499,7 +5500,8 @@ var TOPICS = [
   /* SẢN PHẨM NỔI BẬT */
   {k:['san pham noi bat','hang noi bat','san pham ban chay','hang hot','co gi ban','ban gi','co san pham'],
    a:'🏆 <b>Sản phẩm nổi bật tại Trần Hoà Computer:</b><br><br>💻 <b>Laptop văn phòng</b> — Dell, Asus, Lenovo: từ <b>10 triệu</b><br>🎮 <b>Laptop Gaming</b> — Asus TUF, Acer Nitro, MSI: từ <b>15 triệu</b><br>📱 <b>iPad / MacBook Air</b> — chính hãng Apple: từ <b>9 triệu</b><br>🖥️ <b>Màn hình</b> — Dell, LG, Samsung 24–27": từ <b>2.5 triệu</b><br>⚙️ <b>RAM / SSD nâng cấp</b>: từ <b>300K</b><br>🖨️ <b>Máy in</b> — HP, Canon, Epson<br><br>👉 Nhắn Zalo để báo giá mới nhất!',
-   q:['Laptop văn phòng','Laptop gaming','iPad/MacBook','Ráp PC Gaming','Zalo tư vấn']},
+   q:['Laptop văn phòng','Laptop gaming','iPad/MacBook','Ráp PC Gaming','Zalo tư vấn'],
+   rt:'products'},
 
   /* SẢN PHẨM (chung) */
   {k:['san pham','linh kien','hang hoa','danh muc','co nhung gi'],
@@ -5665,7 +5667,155 @@ var TOPICS = [
   {k:['kiem tra mien phi','mien phi','free check','kiem tra may','chan doan'],
    a:'🆓 <b>Kiểm tra máy HOÀN TOÀN MIỄN PHÍ!</b><br><br>KTV sẽ kiểm tra:<br>✅ Phần cứng: RAM, SSD, nhiệt độ, nguồn<br>✅ Phần mềm: Windows, driver, virus<br>✅ Báo cáo: lỗi gì, sửa thế nào, giá bao nhiêu<br><br>🚫 <b>Không ép sửa</b> — chỉ tư vấn thật!<br>Mang máy đến hoặc đặt lịch ngay!',
    q:['Đặt lịch sửa','Địa chỉ cửa hàng','Hotline gọi ngay']},
+
+  /* TRA CỨU LỊCH HẸN */
+  {k:['tra cuu','kiem tra lich','lich hen cua toi','check lich','so dien thoai','ket qua sua'],
+   rt:'lookup', a:'', q:[]},
 ];
+
+
+/* ══ CHATBOT: TRA CỨU LỊCH HẸN & SẢN PHẨM THỰC TẾ ══ */
+
+/* -- State tra cứu -- */
+var _cbLookupMode = false; /* đang chờ user nhập SĐT */
+
+/* -- Tra cứu lịch hẹn từ GAS -- */
+function _cbLookupPhone(phone) {
+  var phoneClean = phone.replace(/\D/g,'');
+  if(phoneClean.length < 9){
+    ty_then('⚠️ Số điện thoại không hợp lệ. Vui lòng nhập lại (ít nhất 9 chữ số).', []);
+    _cbLookupMode = true; return;
+  }
+  _cbLookupMode = false;
+  var norm = phoneClean.replace(/^(84|0)/,'');
+  var with0 = '0'+norm;
+  var with84 = '+84'+norm;
+
+  ty_then('🔍 Đang tra cứu lịch hẹn của số <b>'+with0+'</b>...', []);
+
+  var url = (typeof GAS_URL!=='undefined'?GAS_URL:'') +
+    '?action=getAppointments&phone='+encodeURIComponent(with0);
+
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var rows = [];
+      if(d.success && d.data && d.data.length){
+        rows = d.data.filter(function(row){
+          var p = (row.phone||row.Phone||row.SoDienThoai||'').replace(/\D/g,'').replace(/^(84|0)/,'');
+          return p === norm;
+        });
+      }
+      if(!rows.length){
+        bS('❌ <b>Không tìm thấy lịch hẹn</b> cho số <b>'+with0+'</b>.<br><br>Có thể:<br>• Số điện thoại chưa đặt lịch<br>• Đặt bằng số khác<br><br>💬 Nhắn Zalo <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để kiểm tra!',
+          ['Đặt lịch sửa','Zalo tư vấn','Hotline gọi ngay']);
+        return;
+      }
+
+      var statusMap = {
+        'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
+        'da phan cong':'assigned','đã phân công':'assigned','nhan may':'assigned',
+        'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned',
+        'dang sua':'fixing','đang sửa':'fixing','fixing':'fixing','in_progress':'fixing',
+        'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','completed':'done',
+        'da huy':'cancelled','đã hủy':'cancelled','cancelled':'cancelled'
+      };
+      var statusIcon = {waiting:'⏳',assigned:'👨‍🔧',fixing:'🔧',done:'✅',cancelled:'❌'};
+      var statusLabel = {waiting:'Chờ xử lý',assigned:'Đã nhận máy',fixing:'Đang sửa',done:'Hoàn thành',cancelled:'Đã hủy'};
+
+      var html = '📋 <b>Lịch hẹn của '+with0+'</b> ('+rows.length+' kết quả):<br><br>';
+      rows.slice(0,3).forEach(function(row, i){
+        var rawStatus = (row.Status||row.status||row.TrangThai||'chờ xử lý').toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        var badge = 'waiting';
+        Object.keys(statusMap).forEach(function(k){
+          if(rawStatus.indexOf(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))>-1) badge=statusMap[k];
+        });
+        var device = row.device||row.Device||row.ThietBi||'Chưa rõ';
+        var name   = row.name||row.Name||row.TenKhachHang||'Khách hàng';
+        var date   = row.date||row.Date||row.NgayHen||'';
+        var tech   = row.technician||row.Technician||row.KyThuatVien||'';
+        var note   = row.issueDesc||row.IssueDesc||row.MoTaLoi||'';
+        var cost   = row.repairCost||row.RepairCost||row.ChiPhi||'';
+
+        html += '<div style="background:#f0f9ff;border-left:3px solid #2563eb;padding:10px 12px;border-radius:8px;margin-bottom:10px">';
+        html += '<b>'+statusIcon[badge]+' '+statusLabel[badge]+'</b>';
+        html += '<br>👤 '+name;
+        if(device) html += ' | 💻 '+device;
+        if(date)   html += '<br>📅 '+date;
+        if(tech)   html += '<br>👨‍🔧 KTV: '+tech;
+        if(note)   html += '<br>📝 '+note;
+        if(cost && cost!='0') html += '<br>💰 Chi phí: <b>'+Number(cost).toLocaleString('vi-VN')+'đ</b>';
+        html += '</div>';
+      });
+      if(rows.length > 3) html += '<i>+ '+(rows.length-3)+' lịch hẹn khác...</i><br>';
+      html += '<br>📞 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>';
+
+      bS(html, ['Đặt lịch mới','Zalo tư vấn','Hotline gọi ngay']);
+    })
+    .catch(function(e){
+      bS('⚠️ Lỗi kết nối, vui lòng thử lại sau.<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>',
+        ['Hotline gọi ngay','Zalo tư vấn']);
+    });
+}
+
+/* -- Lấy sản phẩm thực từ GAS và hiển thị trong chatbot -- */
+function _cbShowProducts(category) {
+  ty_then('⏳ Đang tải danh sách sản phẩm...', []);
+  var url = (typeof GAS_URL!=='undefined'?GAS_URL:'') + '?action=getProducts';
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var prods = [];
+      if(d.success && d.data){
+        prods = d.data.filter(function(p){
+          return p.isActive!==false && p.isActive!=='false';
+        });
+        if(category && category!=='all'){
+          var catN = category.toLowerCase();
+          prods = prods.filter(function(p){
+            return (p.category||'').toLowerCase().indexOf(catN)>-1 ||
+                   (p.name||'').toLowerCase().indexOf(catN)>-1;
+          });
+        }
+      }
+      if(!prods.length){
+        bS('📦 Hiện chưa có sản phẩm' + (category?' trong mục <b>'+category+'</b>':'') + '.<br>Liên hệ Zalo để được tư vấn sản phẩm phù hợp!',
+          ['Zalo tư vấn','Hotline gọi ngay','Sản phẩm nổi bật']);
+        return;
+      }
+      /* Nhóm theo danh mục */
+      var cats = {};
+      prods.forEach(function(p){
+        var cat = p.category || 'Khác';
+        if(!cats[cat]) cats[cat]=[];
+        cats[cat].push(p);
+      });
+      var html = '🏪 <b>Sản phẩm tại Trần Hoà Computer</b> ('+prods.length+' sản phẩm):<br><br>';
+      var catKeys = Object.keys(cats);
+      catKeys.forEach(function(cat){
+        html += '<b>📂 '+cat+'</b> ('+cats[cat].length+' sản phẩm):<br>';
+        cats[cat].slice(0,3).forEach(function(p){
+          var price = p.price ? Number(p.price).toLocaleString('vi-VN')+'đ' : 'Liên hệ';
+          html += '• <b>'+p.name+'</b>';
+          if(p.price) html += ' — <span style="color:#2563eb;font-weight:700">'+price+'</span>';
+          if(p.description) html += '<br>  <span style="color:#6b7280;font-size:12px">'+p.description+'</span>';
+          html += '<br>';
+        });
+        if(cats[cat].length>3) html += '<i>... và '+(cats[cat].length-3)+' sản phẩm khác</i><br>';
+        html += '<br>';
+      });
+      html += '👉 Nhắn Zalo để báo giá và đặt hàng!';
+      var qr = ['Zalo tư vấn','Hotline gọi ngay','Đặt lịch sửa'];
+      catKeys.slice(0,3).forEach(function(cat){ qr.unshift('Xem '+cat); });
+      bS(html, qr.slice(0,5));
+    })
+    .catch(function(){
+      bS('⚠️ Không tải được sản phẩm. Liên hệ trực tiếp:<br>💬 Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
+        ['Zalo tư vấn','Hotline gọi ngay']);
+    });
+}
+
 
 /* ══ MAIN REPLY FUNCTION ══ */
 function rp(txt){
@@ -5674,6 +5824,18 @@ function rp(txt){
   _cbCtx.turnCount++;
 
   var low = normalizeStr(raw);
+
+  /* ── Chế độ chờ SĐT tra cứu ── */
+  if(_cbLookupMode){
+    uS(raw); _cbLookupPhone(raw); return;
+  }
+
+  /* ── Tra cứu lịch hẹn ── */
+  if(/tra cuu|kiem tra lich|lich hen|check lich|lich cua toi|so dien thoai tra|tra cuu lich/.test(low)){
+    _cbLookupMode = true;
+    ty_then('📱 <b>Tra cứu lịch hẹn</b><br><br>Vui lòng nhập <b>số điện thoại</b> đã đặt lịch:', []);
+    return;
+  }
 
   /* ── 1. Budget detection ── */
   var budget = _parseBudget(low);
@@ -5704,6 +5866,8 @@ function rp(txt){
   if(best && bestScore>=10){
     _cbCtx.lastTopic=best.k[0];
     _cbCtx.budgetExpected = !!(best.a && best.a.indexOf('ngan sach')>-1);
+    if(best.rt === 'products'){ _cbShowProducts(); return; }
+    if(best.rt === 'lookup'){ _cbLookupMode=true; ty_then('📱 Nhập số điện thoại đặt lịch:', []); return; }
     ty_then(best.a, best.q); return;
   }
 
