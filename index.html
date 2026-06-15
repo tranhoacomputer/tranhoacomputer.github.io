@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa Chữa Lắp Ráp Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Đại Từ</title>
+    <title>Sửa Chữa Lắp Ráp Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Thái Nguyên</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/bevietnam/v25/FwZf7-Q1xVk-40qxOdnIoOlAIMByudQ.woff2" as="font" type="font/woff2" crossorigin>
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
-    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên,mua laptop iPad Macbook chính hãng, Phụ kiện máy tính chính hãng Thái Nguyên,tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, Trần Văn Hoà, Tran Van Hoa, tranvanhoa, Trần Hoà, Tran Hoa, tranhoa, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Đại Từ, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, Tran Hoa Computer">
+    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên, Mua laptop iPad Macbook chính hãng Thái Nguyên, Phụ kiện máy tính chính hãng Thái Nguyên, tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Thái Nguyên, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, Tran Hoa Computer">
     <meta name="author" content="Tran Hoa Computer">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="VN-69">
@@ -29,14 +29,14 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Tran Hoa Computer",
-      "description": "Trung tâm sửa chữa lắp ráp máy tính, laptop uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên. Chuyên cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook chính hãng.",
+      "description": "Trung tâm sửa chữa lắp ráp máy tính, laptop uy tín tại Phú Thịnh, Thái Nguyên. Chuyên cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook phụ kiện chính hãng.",
       "url": "https://tranhoacomputer.github.io/",
       "telephone": "+840963284044",
       "priceRange": "₫₫",
       "image": "https://tranhoacomputer.github.io/logo.png",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Xóm 6, Phú Thịnh",
+        "streetAddress": "Phú Thịnh",
         "addressLocality": "Đại Từ",
         "addressRegion": "Thái Nguyên",
         "addressCountry": "VN"
@@ -781,51 +781,27 @@
 
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
-        position: fixed;
-        /* DESKTOP: căn giữa màn hình */
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%) scale(.9);
-        z-index: 9400;
-        width: min(900px, 92vw);
-        height: min(640px, 88vh);
-        max-height: 640px;
-        background: #fff; border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.06);
+        position: fixed; left: 20px; bottom: 90px; z-index: 9400;
+        width: 420px; max-height: 620px;
+        background: #fff; border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(0,0,0,.2);
         display: flex; flex-direction: column; overflow: hidden;
+        transform: scale(.85) translateY(20px);
         opacity: 0; pointer-events: none;
-        transition: opacity .3s cubic-bezier(.34,1.56,.64,1),
-                    transform .3s cubic-bezier(.34,1.56,.64,1);
+        transition: background-color .3s cubic-bezier (.34,1.56,.64,1), color .3s cubic-bezier (.34,1.56,.64,1), opacity .3s cubic-bezier (.34,1.56,.64,1), transform .3s cubic-bezier (.34,1.56,.64,1), border-color .3s cubic-bezier (.34,1.56,.64,1);
     }
-    #chatbotPanel.cb-open {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1; pointer-events: all;
-    }
-    /* MOBILE: full width bottom sheet */
+    #chatbotPanel.cb-open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
     @media (max-width: 767px) {
-        #chatbotPanel {
-            top: auto; left: 8px; right: 8px;
-            bottom: 140px;
-            transform: scale(.9) translateY(16px);
-            width: auto; max-width: calc(100vw - 16px);
-            height: auto; max-height: 62vh; min-height: 220px;
-        }
-        #chatbotPanel.cb-open {
-            transform: scale(1) translateY(0);
-        }
+        #chatbotPanel { left: 8px; right: 8px; width: auto; max-width: calc(100vw - 16px); bottom: 140px; max-height: 60vh; min-height: 220px; }
     }
     .cb-hdr {
         background: linear-gradient(135deg,#4c1d95,#7c3aed);
-        color: #fff; padding: 14px 18px;
-        display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+        color: #fff; padding: 12px 14px;
+        display: flex; align-items: center; gap: 10px; flex-shrink: 0;
     }
-    @media(max-width:767px){ .cb-hdr { padding: 11px 14px; } }
-    .cb-av { width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
-    .cb-inf .cb-nm { font-weight:700;font-size:15px; }
-    .cb-inf .cb-st { font-size:12px;opacity:.8;display:flex;align-items:center;gap:4px; }
-    @media(max-width:767px){
-      .cb-av{width:34px;height:34px;font-size:17px}
-      .cb-inf .cb-nm{font-size:13.5px}
-    }
+    .cb-av { width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
+    .cb-inf .cb-nm { font-weight:700;font-size:13.5px; }
+    .cb-inf .cb-st { font-size:11px;opacity:.8;display:flex;align-items:center;gap:4px; }
     .cb-dot { width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:dotBlink 1.5s infinite; }
     @keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
     /* ── AI BADGE ── */
@@ -849,9 +825,8 @@
     .cb-footer { text-align:center;font-size:10px;color:rgba(100,116,139,.65);padding:3px 0 7px;flex-shrink:0;letter-spacing:.2px; }
     #cbClose { background:none;border:none;color:#fff;font-size:17px;cursor:pointer;margin-left:auto;opacity:.8; }
     #cbClose:hover { opacity:1; }
-    #cbMsgs { flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth; }
-    .cb-m { max-width:75%;line-height:1.6;font-size:14.5px;animation:msgIn .25s ease; }
-    @media(max-width:767px){ .cb-m { max-width:87%;font-size:13.5px; } }
+    #cbMsgs { flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth; }
+    .cb-m { max-width:85%;line-height:1.55;font-size:13.5px;animation:msgIn .25s ease; }
     @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
     .cb-m.bot { align-self:flex-start; }
     .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px; }
@@ -860,16 +835,11 @@
     .cb-qr { display:flex;flex-wrap:wrap;gap:5px;padding:4px 10px 8px;flex-shrink:0;max-height:76px;overflow-y:auto; }
     .cb-qb { background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;transition: background-color .2s  , color .2s  , opacity .2s  , transform .2s  , border-color .2s  ;white-space:nowrap; }
     .cb-qb:hover { background:#6d28d9;color:#fff;border-color:#6d28d9; }
-    .cb-inp { display:flex;gap:10px;padding:12px 14px 14px;border-top:1px solid #e2e8f0;flex-shrink:0; }
-    #cbInput { flex:1;border:1.5px solid #e2e8f0;border-radius:24px;padding:9px 16px;font-size:14px;outline:none;transition:border-color .2s; }
+    .cb-inp { display:flex;gap:8px;padding:9px 11px 11px;border-top:1px solid #e2e8f0;flex-shrink:0; }
+    #cbInput { flex:1;border:1.5px solid #e2e8f0;border-radius:22px;padding:7px 13px;font-size:13px;outline:none;transition:border-color .2s; }
     #cbInput:focus { border-color:#7c3aed; }
-    #cbSend { background:#7c3aed;color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;flex-shrink:0; }
+    #cbSend { background:#7c3aed;color:#fff;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .2s;flex-shrink:0; }
     #cbSend:hover { background:#6d28d9; }
-    @media(max-width:767px){
-      .cb-inp{padding:9px 11px 11px;gap:8px}
-      #cbInput{padding:7px 12px;font-size:13px}
-      #cbSend{width:36px;height:36px;font-size:14px}
-    }
     .cb-ty { display:flex;gap:2px;align-items:center;padding:3px 6px; }
     .cb-ty span { font-size:20px;font-weight:700;color:#94a3b8;display:inline-block;line-height:1;animation:cbBlink 1.4s infinite both; }
     .cb-ty span:nth-child(2){animation-delay:.2s;} .cb-ty span:nth-child(3){animation-delay:.4s;}
@@ -1088,9 +1058,15 @@
 #san-pham-section { margin: 48px 0 32px; }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
   margin-top: 20px;
+}
+@media(min-width:600px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media(min-width:900px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 .product-card {
   background: var(--surface, #fff);
@@ -1098,40 +1074,69 @@
   border: 1px solid var(--border-color, #e2e8f0);
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  transition: transform .2s, box-shadow .2s;
-  cursor: default;
+  transition: transform .22s, box-shadow .22s;
+  cursor: pointer;
+  display: flex; flex-direction: column;
 }
-.product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(37,99,235,.13); }
 .product-card-img {
   width: 100%; aspect-ratio: 4/3; object-fit: cover;
   background: #f1f5f9;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px; color: #94a3b8;
+  font-size: 40px; color: #94a3b8; flex-shrink: 0;
 }
 .product-card-img img { width:100%; height:100%; object-fit:cover; }
 .product-card-img.no-img::after { content: '🖥️'; font-size: 44px; }
-.product-card-body { padding: 12px 14px 14px; }
+.product-card-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; }
 .product-card-cat {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
   letter-spacing: .6px; color: var(--primary, #3b82f6);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .product-card-name {
-  font-size: 14px; font-weight: 700; color: var(--text-main, #1e293b);
-  margin-bottom: 6px; line-height: 1.4;
+  font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
+  margin-bottom: 5px; line-height: 1.4; flex: 1;
+}
+@media(min-width:900px) {
+  .product-card-body { padding: 12px 16px 14px; }
+  .product-card-name { font-size: 15px; }
 }
 .product-card-price {
-  font-size: 16px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
+  font-size: 15px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
 }
-.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 6px; }
-.product-card-desc { font-size: 12px; color: #64748b; line-height: 1.5; }
+@media(min-width:900px) { .product-card-price { font-size: 17px; } }
+.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 5px; }
+.product-card-desc { font-size: 11.5px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+
+/* Zalo inquiry button */
+.product-card-zalo { border:none; cursor:pointer; font-family:inherit; 
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 8px 10px;
+  background: linear-gradient(135deg,#0068ff,#0052cc);
+  color: #fff; font-size: 12px; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer;
+  text-decoration: none; margin-top: auto;
+  transition: opacity .15s, transform .12s;
+}
+.product-card-zalo:hover { opacity: .88; transform: scale(1.02); }
+.product-card-zalo svg { flex-shrink: 0; }
+@media(min-width:900px) {
+  .product-card-zalo { font-size: 13px; padding: 9px 12px; }
+}
+
+/* Tab bar — horizontal scroll on mobile */
 .product-section-tabs {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
+  display: flex; gap: 8px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  flex-wrap: nowrap; padding-bottom: 4px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
 }
+.product-section-tabs::-webkit-scrollbar { display: none; }
 .product-tab-btn {
   padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border-color,#e2e8f0);
   background: transparent; font-size: 13px; font-weight: 600; cursor: pointer;
-  color: var(--text-main,#1e293b); transition: all .15s;
+  color: var(--text-main,#1e293b); transition: all .15s; white-space: nowrap; flex-shrink: 0;
 }
 .product-tab-btn.active {
   background: var(--primary,#3b82f6); color: #fff; border-color: var(--primary,#3b82f6);
@@ -1141,10 +1146,7 @@
 [data-theme="dark"] .product-card { background:#1e293b; border-color:#334155; }
 [data-theme="dark"] .product-card-img { background:#0f172a; }
 [data-theme="dark"] .product-card-name { color:#f1f5f9; }
-@media(max-width:600px){
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .product-card-body { padding: 10px; }
-}
+[data-theme="dark"] .product-card-zalo { background: linear-gradient(135deg,#1a7aff,#0052cc); }
 
 /* Lưu ý info boxes (inline-style boxes in pricing tabs) */
 [data-theme="dark"] .pricing-note-box{background:linear-gradient(135deg,#0f2340,#0d2218)!important;border-color:#1e3a5f!important;}
@@ -1996,17 +1998,12 @@ body {
     }
 
     /* 3. Panel mở về phía bên trái của button, bottom gần button */
-    /* Desktop: panel căn giữa, không dùng right/left/bottom */
-    @media (min-width: 768px) {
-        #chatbotPanel {
-            right: auto !important;
-            left: 50% !important;
-            top: 50% !important;
-            bottom: auto !important;
-            width: min(900px, 92vw) !important;
-            height: min(640px, 88vh) !important;
-            max-height: 640px !important;
-        }
+    #chatbotPanel {
+        right: 8px !important;
+        left: auto !important;
+        bottom: 310px !important;
+        max-height: min(620px, calc(100vh - 340px)) !important;
+        width: 420px !important;
     }
 
     /* 4. cb-hint label hiển thị bên trái button */
@@ -2213,18 +2210,7 @@ body {
     .s-chip.s-note{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe;}
     [data-theme="dark"] .s-chip.s-note{background:#1e1040;border-color:#5b21b6;color:#c4b5fd;}
 
-    
-    /* Backdrop khi chatbot mở (desktop) */
-    #chatbotBackdrop {
-        display:none;
-        position:fixed;inset:0;z-index:9399;
-        background:rgba(0,0,0,.35);backdrop-filter:blur(3px);
-        transition:opacity .3s;
-    }
-    #chatbotBackdrop.vis { display:block;animation:fadeIn .3s ease; }
-    @media(max-width:767px){ #chatbotBackdrop { display:none!important; } }
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-</style>
+    </style>
     <!-- ── Áp dụng theme NGAY LẬP TỨC để tránh nhấp nháy sáng/tối khi tải trang ── -->
     <script>
     (function(){
@@ -2270,12 +2256,13 @@ body {
                 </div>
                 <div>
                     <h1 class="logo-animation">Tran Hoa Computer</h1>
-                    <p class="slogan-animation">Uy Tín Tạo Niềm Tin</p>
+                    <p class="slogan-animation">Uy Tín Tạo Nên Thương Hiệu</p>
                 </div>
             </div>
             <div class="nav-menu" id="menuNavbar">
                 <a href="#dich-vu">Dịch vụ</a>
                 <a href="#datlich-sua-chua">Đặt lịch</a>
+                <a href="#san-pham-section" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(!el)return;var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});})();">Sản Phẩm</a>
                 <a href="#muc-bang-gia">Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">Bảo hành</a>
                 <a href="#danh-gia-khach-hang">Đánh giá</a>
@@ -2317,7 +2304,7 @@ body {
         <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
-        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</div>
+        <div class="hero-tag">Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Đại Từ, Thái Nguyên</div>
         <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
@@ -2330,8 +2317,8 @@ body {
     
         <div class="hero-stats">
             <div class="hero-stat"><div class="stat-num" data-target="50" data-suffix="+">0</div><div class="stat-label">Lượt sửa chữa</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="7" data-suffix="+">0</div><div class="stat-label">năm kinh nghiệm</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="%">0</div><div class="stat-label">% Hài lòng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="3" data-suffix="+">0</div><div class="stat-label">năm kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="%">0</div><div class="stat-label">Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
         </div>
     </div>
@@ -2408,7 +2395,7 @@ body {
                         <select name="time-slot" id="selectTime" class="form-control" required>
                             <option value="">-- Khung giờ --</option>
                             <option value="7:00 - 9:00">7:00 - 9:00 (Sáng)</option>
-                            <option value="9:00 - 11:30">9:00 - 11:30 (Sáng)</option>
+                            <option value="9:00 - 11:30">9:00 - 11:30 (Trưa)</option>
                             <option value="13:00 - 15:00">13:00 - 15:00 (Chiều)</option>
                             <option value="15:00 - 18:00">15:00 - 18:00 (Chiều)</option>
                             <option value="19:00 - 22:00">19:00 - 22:00 (Tối)</option>
@@ -2434,7 +2421,7 @@ body {
             <div class="status-lookup-desc">Nhập số điện thoại đã đặt lịch để xem máy của bạn đang ở bước nào — đã có kỹ thuật viên nhận hay chưa.</div>
             <div class="status-lookup-row">
                 <input type="tel" id="statusPhone" class="status-lookup-input" placeholder="Nhập số điện thoại đặt lịch..." maxlength="11" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')">
-                <button class="status-lookup-btn" id="statusLookupBtn" onclick="lookupRepairStatus()">🔍 Kiểm tra</button>
+                <button class="status-lookup-btn" id="statusLookupBtn" onclick="lookupRepairStatus()">Kiểm tra</button>
             </div>
             <div class="status-result" id="statusResult"></div>
         </div>
@@ -2520,11 +2507,11 @@ body {
 
 
 
-
+        <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
         <section id="san-pham-section" class="reveal">
           <div class="section-title-wrap"><span class="section-badge">SẢN PHẨM</span></div>
-          <div class="section-title">SẢN PHẨM & LINH KIỆN NỔI BẬT</div>
-          <p class="section-subtitle">Linh kiện chính hãng — giá công khai — bảo hành đầy đủ</p>
+          <div class="section-title">SẢN PHẨM & PHỤ KIỆN NỔI BẬT</div>
+          <p class="section-subtitle">Sản phẩm chính hãng — giá công khai — bảo hành đầy đủ</p>
           <div class="product-section-tabs" id="productTabBar">
             <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
           </div>
@@ -2533,7 +2520,8 @@ body {
           </div>
         </section>
         <!-- ══ END SẢN PHẨM ══ -->
-        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai — không phát sinh</p>
+
+        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai minh bạch</p>
         <div class="tab-container reveal" id="priceTabContainer">
             <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
             <button class="tab-btn" id="tabBtn-software" role="tab" aria-label="Cài Phần Mềm" aria-controls="tab-software" onclick="switchTab('software',this)">Cài Phần Mềm</button>
@@ -3533,7 +3521,7 @@ body {
 
         </div><!-- end #priceTabsWrapper -->
 
-        <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
+
 
                 <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG VÀNG</div>
         <div class="commit-list reveal">
@@ -3771,21 +3759,21 @@ body {
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">BẢN ĐỒ CỬA HÀNG</h4>
-                <p style="margin-bottom:8px; font-size:13px;">Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <div class="map-wrapper">
                     <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">Địa chỉ: Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">Địa chỉ: Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
                 <p style="margin-bottom:6px;">Email: <a href="mailto:thienkim29903@gmail.com" style="color:#7dd3fc;font-weight:600;text-decoration:none;">thienkim29903@gmail.com</a></p>
 
             </div>
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;">
-            <p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p>
+            <p>© 2026 TRAN HOA COMPUTER ®. All rights reserved.</p>
             <p style="margin-top:8px;"><a href="admin.html" style="color:#475569;text-decoration:none;font-size:11px;">⚙️ Quản trị</a></p>
         </div>
     </footer>
@@ -3793,6 +3781,7 @@ body {
         <a href="tel:0963284044" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.62 10.79z"/></svg><span>Gọi Ngay</span></a>
         <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>Chat Zalo</span></a>
         <a href="#datlich-sua-chua" class="nav-item active-booking" onclick="event.preventDefault(); (function(){var _e=document.getElementById('datlich-sua-chua'),_h=document.getElementById('headerNav'),_o=_h?_h.offsetHeight+4:72;window.scrollTo({top:_e.getBoundingClientRect().top+window.pageYOffset-_o,behavior:'smooth'});})();"><div class="booking-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div><span style="margin-top:2px;">Đặt Lịch</span></a>
+        <a href="#san-pham-section" class="nav-item" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(!el)return;var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});})();"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.21 0-4-1.79-4-4h2c0 1.1.9 2 2 2s2-.9 2-2h2c0 2.21-1.79 4-4 4z"/></svg><span>Sản Phẩm</span></a>
         <a href="#muc-bang-gia" class="nav-item" onclick="event.preventDefault(); document.getElementById('muc-bang-gia').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg><span>Bảng Giá</span></a>
 
     </div>
@@ -4001,7 +3990,7 @@ body {
 
 /* ══════════════ PRODUCTS LOADER ══════════════ */
 (function(){
-  var _allProducts = [];
+  var _allProducts = []; window._allProducts = _allProducts;
   var _activeTab = 'all';
 
   function renderProducts(list) {
@@ -4020,10 +4009,16 @@ body {
       var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
       var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
       var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
+      // Zalo inquiry button — clipboard copy + open zalo.me
+      // (Zalo does NOT support ?text= pre-fill; use clipboard + open approach)
+      var zaloPrice = p.price ? (' — Giá: ' + p.price) : '';
+      var _name = p.name.replace(/'/g, "\\'");
+      var _price = (p.price||'').replace(/'/g, "\\'");
+      var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
       return '<div class="product-card">' + imgHtml +
         '<div class="product-card-body">' + catHtml +
         '<div class="product-card-name">' + p.name + '</div>' +
-        priceHtml + noteHtml + descHtml + '</div></div>';
+        priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
     }).join('');
   }
 
@@ -4052,7 +4047,7 @@ body {
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.success && d.data) {
-          _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; });
+          _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; }); window._allProducts = _allProducts;
           var section = document.getElementById('san-pham-section');
           if (_allProducts.length === 0) {
             if (section) section.style.display = 'none';
@@ -4231,6 +4226,33 @@ body {
         container.appendChild(toast);
         setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
+    }
+
+    function productZaloInquiry(btn, name, price) {
+      var msg = 'Xin chào! Tôi muốn hỏi mua sản phẩm: ' + name +
+                (price ? ' — Giá: ' + price : '') +
+                '. Vui lòng tư vấn giúp tôi! Xem thêm: https://tranhoacomputer.github.io/#san-pham-section';
+      // Copy message to clipboard
+      function doOpen() {
+        window.open('https://zalo.me/0963284044', '_blank', 'noopener');
+        showToast('📋 Đã copy thông tin! Paste vào chat Zalo nhé 👇');
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).then(doOpen).catch(function() {
+          // fallback
+          try { var ta = document.createElement('textarea'); ta.value = msg;
+            ta.style.cssText = 'position:fixed;top:-9999px'; document.body.appendChild(ta);
+            ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+          } catch(e){}
+          doOpen();
+        });
+      } else {
+        try { var ta = document.createElement('textarea'); ta.value = msg;
+          ta.style.cssText = 'position:fixed;top:-9999px'; document.body.appendChild(ta);
+          ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+        } catch(e){}
+        doOpen();
+      }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -4609,7 +4631,6 @@ body {
 </div>
 
 <!-- ══ CHATBOT PANEL ══ -->
-<div id="chatbotBackdrop" onclick="closeChatbot()"></div>
 <div id="chatbotPanel" role="dialog" aria-label="Trợ lý tư vấn">
     <div class="cb-hdr">
         <div class="cb-av">🤖</div>
@@ -4654,6 +4675,174 @@ var msgs=document.getElementById('cbMsgs');
 var qrDiv=document.getElementById('cbQR');
 
 /* ── KNOWLEDGE BASE ── */
+/* ══ TRA CỨU + SẢN PHẨM HELPERS ══ */
+function _mkStatusForm() {
+  var uid = 'cs' + Date.now();
+  return [
+    '<b>🔍 Tra cứu tình trạng sửa máy</b><br><br>',
+    'Nhập số điện thoại đã đặt lịch:<br>',
+    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">',
+    '<input id="csp_' + uid + '" type="tel" inputmode="numeric" ',
+    'placeholder="VD: 0963284044" maxlength="11" ',
+    'style="flex:1;min-width:140px;padding:7px 10px;border:1.5px solid #cbd5e1;',
+    'border-radius:8px;font-size:13px">',
+    '<button onclick="chatLookupStatus(' + "'" + uid + "'" + ')" ',
+    'style="padding:7px 14px;background:#2563eb;color:#fff;border:none;',
+    'border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">',
+    '🔍 Kiểm tra</button></div>',
+    '<div id="csr_' + uid + '" style="margin-top:10px"></div>'
+  ].join('');
+}
+
+function _mkProductsAns() {
+  var prods = window._allProducts || [];
+  var scrollLink = '<a href="#san-pham-section" onclick="var el=document.getElementById(\'san-pham-section\');'
+    + 'if(el){event.preventDefault();var h=document.getElementById(\'headerNav\');'
+    + 'var o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:\'smooth\'});}" '
+    + 'style="color:#2563eb;font-weight:700;text-decoration:underline">';
+  if (prods.length > 0) {
+    var cats = {};
+    prods.forEach(function(p) { if (p.category) cats[p.category] = (cats[p.category] || 0) + 1; });
+    var catLines = Object.keys(cats).map(function(c) {
+      return '• <b>' + c + '</b> (' + cats[c] + ' sản phẩm)';
+    }).join('<br>');
+    var featLines = prods.slice(0, 4).map(function(p) {
+      return '🔹 <b>' + p.name + '</b>' + (p.price ? ' — <span style="color:#2563eb;font-weight:700">' + p.price + '</span>' : '');
+    }).join('<br>');
+    return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
+      + '<b>📂 Danh mục:</b><br>' + catLines + '<br><br>'
+      + '<b>⭐ Nổi bật:</b><br>' + featLines + '<br><br>'
+      + scrollLink + '👉 Xem tất cả sản phẩm →</a>';
+  }
+  return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
+    + 'Cửa hàng cung cấp:<br>'
+    + '• 💻 Laptop văn phòng &amp; gaming<br>'
+    + '• 🖥️ PC Desktop, PC Gaming<br>'
+    + '• 📱 iPad / MacBook<br>'
+    + '• 💾 RAM, SSD, Ổ cứng<br>'
+    + '• 🖨️ Màn hình, Máy in<br>'
+    + '• 🔌 Phụ kiện &amp; linh kiện chính hãng<br><br>'
+    + scrollLink + '👉 Xem sản phẩm nổi bật →</a><br>'
+    + '📞 Gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để hỏi trực tiếp!';
+}
+
+function chatLookupStatus(uid) {
+  var inp = document.getElementById('csp_' + uid);
+  var res = document.getElementById('csr_' + uid);
+  if (!inp || !res) return;
+  var phone = (inp.value || '').trim().replace(/\D/g, '');
+  if (!phone || phone.length < 9) {
+    res.innerHTML = '<div style="color:#ef4444;font-size:12px">⚠️ Nhập số điện thoại ít nhất 9 chữ số</div>';
+    return;
+  }
+  res.innerHTML = '<div style="color:#3b82f6;font-size:12px">⏳ Đang tra cứu...</div>';
+  inp.disabled = true;
+  var submitBtn = inp.parentElement ? inp.parentElement.querySelector('button') : null;
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳...'; }
+
+  var phoneNorm  = phone.replace(/^(\+84|84|0)/, '');
+  var phoneWith0 = '0' + phoneNorm;
+
+  var STEPS = [
+    { key: 'waiting',  icon: '📋', label: 'Chờ xử lý' },
+    { key: 'assigned', icon: '📥', label: 'Nhận máy'  },
+    { key: 'fixing',   icon: '🔧', label: 'Đang sửa'  },
+    { key: 'done',     icon: '✅', label: 'Hoàn thành' }
+  ];
+  var statusMap = {
+    'cho xu ly': 'waiting', 'chờ xử lý': 'waiting', 'chờ': 'waiting', 'pending': 'waiting',
+    'da phan cong': 'assigned', 'đã phân công': 'assigned',
+    'dang xu ly': 'assigned', 'đang xử lý': 'assigned', 'assigned': 'assigned',
+    'dang sua': 'fixing', 'đang sửa': 'fixing', 'fixing': 'fixing', 'in_progress': 'fixing',
+    'hoan thanh': 'done', 'hoàn thành': 'done', 'xong': 'done', 'done': 'done', 'completed': 'done',
+    'da huy': 'cancelled', 'đã hủy': 'cancelled', 'cancelled': 'cancelled'
+  };
+  var stepIdx = { waiting: 0, assigned: 1, fixing: 2, done: 3 };
+  var statusLbl = {
+    waiting: '⏳ Chờ xử lý', assigned: '📥 Đã nhận máy',
+    fixing: '🔧 Đang sửa', done: '✅ Hoàn thành', cancelled: '🚫 Đã hủy'
+  };
+  var svcMap = {
+    'sua-laptop': 'Sửa Laptop', 'sua-pc': 'Sửa máy bàn', 'cai-win': 'Cài Windows',
+    'diet-virus': 'Diệt virus', 'bao-duong': 'Vệ sinh', 'nang-cap-ram': 'Nâng RAM',
+    'nang-cap-ssd': 'Nâng SSD', 'lap-pc-gaming': 'Lắp PC Gaming',
+    'cuu-data': 'Cứu dữ liệu', 'khac': 'Dịch vụ khác'
+  };
+
+  var gasUrl = (typeof GAS_URL !== 'undefined') ? GAS_URL : '';
+  if (!gasUrl) {
+    res.innerHTML = '<div style="color:#ef4444;font-size:12px">❌ Không kết nối được máy chủ.</div>';
+    inp.disabled = false;
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '🔍 Kiểm tra'; }
+    return;
+  }
+
+  fetch(gasUrl + '?action=searchByPhone&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var rows = [];
+      if (d && d.success && d.data && d.data.length) rows = d.data;
+      else if (d && d.results && d.results.length) rows = d.results;
+      else if (Array.isArray(d) && d.length) rows = d;
+
+      if (!rows.length) {
+        res.innerHTML = '<div style="font-size:12px;color:#64748b">❌ Không tìm thấy đơn với số <b>' + phoneWith0 + '</b>.'
+          + '<br>Kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>.</div>';
+        return;
+      }
+
+      var out = '';
+      rows.slice(0, 2).forEach(function(item, i) {
+        var rawNorm = (item.Status || item.status || '').toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        var badge = 'waiting';
+        Object.keys(statusMap).forEach(function(k) {
+          if (rawNorm.indexOf(k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')) > -1) badge = statusMap[k];
+        });
+        var isCan = badge === 'cancelled';
+        var cs    = isCan ? -1 : (stepIdx[badge] !== undefined ? stepIdx[badge] : 0);
+        var rawSvc  = item.Service || item.service || '';
+        var svc     = svcMap[rawSvc] || rawSvc || item.Note || '';
+        var cust    = item['Full name'] || item.Full_name || item.customerName || phoneWith0;
+        var aNote   = item.Notes || item.notes || item.adminNote || '';
+        var costEst = (item.estimated_cost || item.estimatedCost || '').toString().replace(/[^0-9]/g, '');
+        var badgeColor = badge === 'done' ? '#16a34a' : badge === 'cancelled' ? '#dc2626' : '#2563eb';
+
+        out += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;'
+          + (i > 0 ? 'margin-top:8px' : '') + '">';
+        out += '<div style="font-size:12px;margin-bottom:4px"><b>' + cust + '</b>' + (svc ? ' · ' + svc : '') + '</div>';
+        out += '<div style="font-size:13px;font-weight:700;color:' + badgeColor + '">' + (statusLbl[badge] || badge) + '</div>';
+
+        if (!isCan) {
+          out += '<div style="display:flex;gap:4px;margin-top:6px">';
+          STEPS.forEach(function(s, idx) {
+            var col = idx < cs ? '#16a34a' : (idx === cs ? '#2563eb' : '#cbd5e1');
+            out += '<div style="flex:1;text-align:center;font-size:10px;color:' + col + '">'
+              + '<div style="width:22px;height:22px;border-radius:50%;background:' + col
+              + ';color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px">'
+              + s.icon + '</div>'
+              + '<div style="margin-top:2px">' + s.label + '</div></div>';
+          });
+          out += '</div>';
+        }
+        if (aNote)   out += '<div style="font-size:11px;color:#64748b;margin-top:4px">📝 ' + aNote + '</div>';
+        if (costEst) out += '<div style="font-size:11px;color:#7c3aed;margin-top:3px;font-weight:600">💰 ~'
+          + Number(costEst).toLocaleString('vi-VN') + 'đ</div>';
+        out += '</div>';
+      });
+      res.innerHTML = out;
+    })
+    .catch(function() {
+      res.innerHTML = '<div style="font-size:12px;color:#ef4444">❌ Lỗi kết nối. Gọi '
+        + '<a href="tel:0963284044" style="color:#2563eb">0963.284.044</a>.</div>';
+    })
+    .finally(function() {
+      inp.disabled = false;
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '🔍 Kiểm tra'; }
+    });
+}
+window.chatLookupStatus = chatLookupStatus;
+
 var KB=[
  {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
   a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
@@ -5390,550 +5579,499 @@ var KB=[
   a:'👨‍🔧 <b>Liên hệ trực tiếp ngay!</b><br><br>📞 <b>Hotline cửa hàng:</b> <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>💬 <b>Zalo admin:</b> <a href="https://zalo.me/0963284044" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:700">Nhắn Zalo ngay</a><br><br>🔧 <b>Kỹ thuật viên trực tiếp:</b> <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a><br>💬 <b>Zalo KTV:</b> <a href="https://zalo.me/0819120401" target="_blank" rel="noopener noreferrer" style="color:#059669;font-weight:700">Nhắn Zalo KTV</a><br><br>⏰ Giờ làm việc: <b>7:00 – 22:00</b> hàng ngày (kể cả T7, CN)<br><br><i>Kỹ thuật viên sẽ tư vấn miễn phí và xử lý nhanh nhất!</i>',
   q:['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa']},
 
+ /* ── TRA CỨU TÌNH TRẠNG SỬA MÁY ── */
+ {k:['tra cứu','tình trạng','máy tôi','máy của tôi','kiểm tra tình trạng','biết máy chưa','máy xong chưa',
+     'sửa xong chưa','máy đâu rồi','xem tiến độ','tiến độ sửa','đã nhận máy chưa','máy đến đâu rồi',
+     'theo dõi đơn','check máy','máy hôm nay','xong chưa','tra cuu','tinh trang'],
+  a: _mkStatusForm,
+  q:['Đặt lịch sửa','Liên hệ ngay','Giá dịch vụ']},
+
+ /* ── SẢN PHẨM & LINH KIỆN ── */
+ {k:['sản phẩm','linh kiện','có bán','cửa hàng bán','mua hàng','mua linh kiện','mua laptop','mua pc',
+     'mua ram','mua ssd','mua màn hình','mua máy','hàng bán','bán gì','shop bán','có laptop không',
+     'có pc không','có sẵn hàng','xem sản phẩm','danh sách sản phẩm','sản phẩm nổi bật','hàng có sẵn',
+     'san pham','linh kien','co ban'],
+  a: _mkProductsAns,
+  q:['Xem sản phẩm','Hỏi giá linh kiện','Đặt lịch sửa','Zalo tư vấn']},
+
 ];
 
-
 /* ── QUICK REPLY ACTIONS ── */
-var QRA = {};
+var QRA={
+  'Giá dịch vụ':       function(){uS('Giá dịch vụ?');rp('giá');},
+  'Giá sửa laptop':    function(){uS('Giá sửa laptop?');rp('laptop');},
+  'Giá cài Windows':   function(){uS('Giá cài Windows?');rp('win');},
+  'Giá cứu dữ liệu':  function(){uS('Giá cứu dữ liệu?');rp('dữ liệu');},
+  'Giá nâng cấp SSD':  function(){uS('Giá nâng cấp SSD?');rp('ssd');},
+  'Giá nâng cấp RAM':  function(){uS('Giá nâng cấp RAM?');rp('ram');},
+  'Giá thay pin':      function(){uS('Giá thay pin?');rp('pin');},
+  'Đặt lịch sửa':     function(){uS('Đặt lịch sửa máy');rp('đặt lịch');},
+  'Đặt lịch':         function(){uS('Đặt lịch');rp('đặt lịch');},
+  'Liên hệ ngay':     function(){uS('Liên hệ cửa hàng?');rp('hotline');},
+  'Liên hệ':          function(){uS('Liên hệ?');rp('hotline');},
+  'Hotline gọi ngay': function(){uS('Hotline là gì?');rp('hotline');},
+  'Gặp kỹ thuật viên': function(){uS('Gặp kỹ thuật viên');rp('gap ky thuat vien');},
+  'Báo giá sửa chữa':  function(){uS('Báo giá sửa chữa?');rp('giá hết bao nhiêu');},
+  'Cài Win/phần mềm':  function(){uS('Cài Win/phần mềm?');rp('cài win');},
+  'Zalo tư vấn':      function(){uS('Nhắn Zalo?');rp('zalo');},
+  'Hỗ trợ từ xa':     function(){uS('Hỗ trợ từ xa?');rp('từ xa');},
+  'Bảo hành':         function(){uS('Bảo hành?');rp('bảo hành');},
+  'Laptop văn phòng':    function(){uS('Laptop văn phòng?');rp('laptop văn phòng');},
+  'Laptop gaming':       function(){uS('Laptop gaming?');rp('laptop gaming');},
+  'MacBook Air':         function(){uS('Giá MacBook Air?');rp('macbook air');},
+  'MacBook Pro':         function(){uS('Giá MacBook Pro?');rp('macbook pro');},
+  'iPad Air':            function(){uS('Giá iPad Air?');rp('ipad');},
+  'iPad Pro':            function(){uS('Giá iPad Pro?');rp('ipad');},
 
-/* Helper: tự động map mọi label → gọi rp() với text tương ứng */
-function _qraAuto(label) {
-  uS(label); rp(label);
+  'Chuột':              function(){uS('Giá chuột?');rp('chuột');},
+  'Bàn phím':           function(){uS('Giá bàn phím?');rp('bàn phím');},
+  'Màn hình':           function(){uS('Giá màn hình?');rp('màn hình');},
+  'Máy in':             function(){uS('Giá máy in?');rp('máy in');},
+  'Tra cứu tình trạng': function(){uS('Tra cứu tình trạng máy');rp('tra cứu');},
+  'Xem sản phẩm':       function(){uS('Xem sản phẩm');rp('sản phẩm');},
+  'Hỏi giá linh kiện':  function(){uS('Hỏi giá linh kiện?');rp('sản phẩm');},
+  'Tai nghe':           function(){uS('Giá tai nghe?');rp('tai nghe');},
+  'Phụ kiện':           function(){uS('Giá phụ kiện?');rp('phụ kiện');},
+
+  'Ráp PC Gaming':    function(){uS('Ráp PC Gaming');rp('gaming');},
+  'Tư vấn cấu hình':  function(){uS('Tư vấn cấu hình');rp('gaming');},
+  'Địa chỉ':          function(){uS('Địa chỉ cửa hàng?');rp('địa chỉ');},
+  'Địa chỉ cửa hàng': function(){uS('Địa chỉ?');rp('địa chỉ');},
+  'Giờ làm việc':     function(){uS('Giờ mở cửa?');rp('giờ mở cửa');},
+  'Dịch vụ của shop': function(){uS('Shop có dịch vụ gì?');rp('dịch vụ');},
+  'Kiểm tra miễn phí':function(){uS('Kiểm tra miễn phí?');rp('miễn phí');},
+  'Thanh toán':        function(){uS('Hình thức thanh toán?');rp('thanh toán');},
+  'Ưu đãi hiện tại':  function(){uS('Có ưu đãi gì không?');rp('khuyến mãi');},
+  'Tư vấn mua laptop': function(){uS('Tư vấn mua laptop');rp('mua laptop');},
+  'Cứu dữ liệu':      function(){uS('Cứu dữ liệu?');rp('dữ liệu');},
+  'Giá thay màn hình': function(){uS('Giá thay màn hình laptop?');rp('màn hình');},
+  'Sửa khẩn cấp':     function(){uS('Cần sửa gấp');rp('khẩn');},
+  'Giá mainboard':    function(){uS('Sửa mainboard bao nhiêu?');rp('mainboard');},
+
+  'Giá sửa phần cứng':  function(){uS('Giá sửa phần cứng?');rp('giá sửa phần cứng');},
+  'Giá cài phần mềm':   function(){uS('Giá cài phần mềm?');rp('giá cài phần mềm');},
+  'Lắp đặt PC':         function(){uS('Giá lắp đặt PC?');rp('giá lắp đặt pc');},
+  'Ưu đãi hiện tại':   function(){uS('Có ưu đãi gì không?');rp('ưu đãi hiện tại');},
+  'Vào nhóm Zalo':      function(){uS('Vào nhóm Zalo?');rp('vào nhóm zalo');},
+  'Tư vấn cấu hình':    function(){uS('Tư vấn cấu hình PC');rp('giá lắp đặt pc');},
+  'Máy không lên nguồn':function(){uS('Máy không lên nguồn');rp('máy không lên');},
+  'Máy chạy chậm':      function(){uS('Máy chạy chậm');rp('máy chạy chậm');},
+  'Màn hình lỗi':       function(){uS('Màn hình có vấn đề');rp('màn hình đen');},
+  'Kiểm tra miễn phí':  function(){uS('Kiểm tra miễn phí?');rp('miễn phí');},
+
+  'Laptop văn phòng':    function(){uS('Laptop văn phòng?');rp('laptop văn phòng');},
+  'Laptop gaming':       function(){uS('Laptop gaming?');rp('laptop gaming');},
+  'MacBook Air':         function(){uS('Giá MacBook Air?');rp('macbook air');},
+  'MacBook Pro':         function(){uS('Giá MacBook Pro?');rp('macbook pro');},
+  'iPad Air':            function(){uS('Giá iPad Air?');rp('ipad');},
+  'iPad Pro':            function(){uS('Giá iPad Pro?');rp('ipad');},
+
+  'Laptop/iPad/MacBook': function(){uS('Laptop/iPad/MacBook');rp('laptop ipad macbook');},
+  'MacBook':             function(){uS('Giá MacBook?');rp('macbook');},
+  'iPad':                function(){uS('Giá iPad?');rp('ipad');},
+  'Laptop gaming':       function(){uS('Laptop gaming?');rp('laptop gaming');},
+  'Laptop văn phòng':    function(){uS('Laptop văn phòng?');rp('laptop văn phòng');},
+
+  'Chuột':              function(){uS('Giá chuột?');rp('chuột');},
+  'Bàn phím':           function(){uS('Giá bàn phím?');rp('bàn phím');},
+  'Màn hình':           function(){uS('Giá màn hình?');rp('màn hình');},
+  'Máy in':             function(){uS('Giá máy in?');rp('máy in');},
+  'Tai nghe':           function(){uS('Giá tai nghe?');rp('tai nghe');},
+  'Phụ kiện':           function(){uS('Giá phụ kiện?');rp('phụ kiện');},
+
+  'Ráp PC Gaming':      function(){uS('Ráp PC Gaming?');rp('ráp pc gaming');},
+  'Lắp đặt PC văn phòng':function(){uS('Lắp PC văn phòng?');rp('pc văn phòng');},
+  'Tư vấn ngân sách':   function(){_cbCtx.budgetExpected=true;uS('Tư vấn theo ngân sách');ty_then('💬 Cho mình biết ngân sách của bạn (ví dụ: <b>10 triệu</b>, <b>15tr</b>, <b>25 triệu</b>...).<br>Mình tư vấn cấu hình tối ưu ngay!', []);},
+  'Màn hình lỗi':       function(){uS('Màn hình có vấn đề');rp('màn hình đen');},
+  'Bảo hành':           function(){uS('Chính sách bảo hành?');rp('bảo hành');},
+  'Địa chỉ':            function(){uS('Địa chỉ cửa hàng?');rp('địa chỉ');},
+
+  'Cứu dữ liệu':      function(){uS('Cứu dữ liệu?');rp('dữ liệu')},
+  'Lỗi loa/tiếng':    function(){uS('Loa laptop không có tiếng');rp('loa');},
+  'Lỗi webcam':       function(){uS('Webcam không hoạt động');rp('webcam');},
+  'Máy bị đổ nước':   function(){uS('Đổ nước vào máy tính');rp('đổ nước');},
+  'Lỗi touchpad':     function(){uS('Touchpad không hoạt động');rp('touchpad');},
+  'Lỗi bluetooth':    function(){uS('Bluetooth không kết nối');rp('bluetooth');},
+  'USB không nhận':   function(){uS('Cổng USB không nhận thiết bị');rp('usb');},
+  'Thay bản lề':      function(){uS('Sửa bản lề laptop');rp('bản lề');},
+  'Thay quạt':        function(){uS('Quạt máy tính hỏng');rp('quạt hỏng');},
+  'Sửa mainboard':    function(){uS('Sửa mainboard laptop');rp('mainboard');},
+  'Ưu đãi hiện tại':  function(){uS('Có ưu đãi khuyến mãi gì?');rp('ưu đãi');},
+  'Tư vấn mua laptop':function(){uS('Tư vấn chọn mua laptop mới');rp('tư vấn mua laptop');},
+  'Thời gian sửa':    function(){uS('Sửa mất bao lâu?');rp('bao lâu');},
+  'Dịch vụ của shop': function(){uS('Shop có dịch vụ gì?');rp('dịch vụ');},
+
+  'PC cơ bản (~8tr)': function(){uS('PC cơ bản (~8tr)');rp('pc cơ bản');},
+  'PC văn phòng (~15tr)': function(){uS('PC văn phòng (~15tr)');rp('pc văn phòng');},
+  'PC Gaming (~25–45tr)': function(){uS('PC Gaming (~25–45tr)');rp('pc gaming');},
+  'PC đồ họa (~35–60tr)': function(){uS('PC đồ họa (~35–60tr)');rp('pc đồ họa');},
+  'Đặt lịch lắp đặt': function(){uS('Đặt lịch lắp đặt');rp('đặt lịch');},
+  'Liên hệ tư vấn': function(){uS('Liên hệ tư vấn');rp('tư vấn trực tiếp');},
+
+  /* Extended actions */
+  'Giá thay màn hình':     function(){uS('Giá thay màn hình laptop?');rp('giá thay màn hình laptop');},
+  'Giá thay màn laptop':   function(){uS('Giá thay màn hình laptop?');rp('giá thay màn hình laptop');},
+  'Giá pin laptop':        function(){uS('Giá thay pin laptop?');rp('giá thay pin laptop');},
+  'Giá nâng cấp SSD':      function(){uS('Giá nâng cấp SSD?');rp('giá nâng cấp ssd');},
+  'Giá nâng cấp RAM':      function(){uS('Giá nâng cấp RAM?');rp('giá nâng cấp ram');},
+  'Giá cứu dữ liệu':       function(){uS('Giá cứu dữ liệu?');rp('giá cứu dữ liệu');},
+  'Cài lại Windows':       function(){uS('Cài lại Windows?');rp('cài windows');},
+  'Máy bị virus':          function(){uS('Máy bị virus?');rp('bị virus');},
+  'Nên sửa hay mua mới':   function(){uS('Nên sửa hay mua mới?');rp('nên sửa hay mua mới');},
+  'Tư vấn laptop mua mới': function(){uS('Tư vấn laptop mua mới?');rp('mua laptop');},
+  'Xem bảng giá chi tiết': function(){uS('Xem bảng giá chi tiết?');rp('giá sửa phần cứng');},
+  'Chat Zalo':             function(){uS('Nhắn Zalo?');rp('zalo');},
+};
+
+var offT=[
+  '😄 Câu hỏi này ngoài chuyên môn máy tính của mình rồi 😅<br>Nhưng về <b>máy tính & công nghệ</b> thì mình biết hết! Bạn có thắc mắc gì về thiết bị không?',
+  '🤖 Ồ, mình chỉ giỏi về máy tính thôi, không phải mọi thứ 😄<br>Có vấn đề gì với laptop hay PC không? Mình sẵn sàng hỗ trợ!',
+  '🤔 Haha, câu này hơi ngoài vùng phủ sóng của mình! Mình chuyên về <b>sửa chữa & tư vấn máy tính</b>.<br>Bạn cần hỗ trợ gì về thiết bị không?',
+,
+ {k:['giá cài win','chi phí cài windows','bao nhiêu tiền cài win','giá cài lại win','phí cài windows'],
+  a:'💰 <b>Giá cài đặt Windows tại Tran Hoa Computer:</b><br><br>🪟 <b>Cài Windows 10/11:</b> 100.000 – 150.000đ<br>📦 <b>Cài kèm Office:</b> +50.000đ<br>🛡️ <b>Cài phần mềm diệt virus:</b> +30.000đ<br><br>✅ Bao gồm: cài driver đầy đủ, tối ưu hệ thống<br>⏱️ Thời gian: 30–60 phút<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a> để đặt lịch!'},
+
+ {k:['giá thay pin','bao nhiêu tiền thay pin','chi phí thay pin laptop','pin laptop giá bao nhiêu','pin hết pin'],
+  a:'🔋 <b>Giá thay pin Laptop tại Tran Hoa Computer:</b><br><br>💻 <b>Pin laptop phổ thông:</b> 350.000 – 600.000đ<br>🎮 <b>Pin laptop gaming:</b> 600.000 – 1.200.000đ<br>🍎 <b>Pin Macbook:</b> 800.000 – 1.500.000đ<br><br>✅ Bảo hành pin: 3–6 tháng<br>✅ Linh kiện chính hãng, có hóa đơn<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['giá thay màn hình','chi phí thay màn laptop','màn hình vỡ giá bao nhiêu','thay lcd','thay màn'],
+  a:'🖥️ <b>Giá thay màn hình Laptop:</b><br><br>📺 <b>Màn HD (14"/15"):</b> 800.000 – 1.500.000đ<br>📺 <b>Màn FHD IPS:</b> 1.200.000 – 2.500.000đ<br>📺 <b>Màn 4K / OLED:</b> 2.500.000 – 5.000.000đ<br><br>✅ Bảo hành màn: 3 tháng<br>✅ Kiểm tra miễn phí trước khi báo giá<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['giá nâng cấp ram','thêm ram bao nhiêu tiền','ram 8gb giá bao nhiêu','nâng ram','mua ram'],
+  a:'💾 <b>Giá nâng cấp RAM Laptop:</b><br><br>🟢 <b>RAM 8GB DDR4:</b> 250.000 – 400.000đ<br>🔵 <b>RAM 16GB DDR4:</b> 450.000 – 700.000đ<br>🟣 <b>RAM 16GB DDR5:</b> 600.000 – 900.000đ<br>⚫ <b>RAM 32GB:</b> 900.000 – 1.500.000đ<br><br>✅ Kiểm tra tương thích miễn phí<br>✅ Bảo hành 12 tháng<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi ngay!</a>'},
+
+ {k:['giá vệ sinh','bao nhiêu tiền vệ sinh','giá bảo dưỡng laptop','vệ sinh máy bao nhiêu','thay keo tản nhiệt'],
+  a:'🧹 <b>Giá vệ sinh / bảo dưỡng Laptop:</b><br><br>🔧 <b>Vệ sinh cơ bản (thổi bụi):</b> 80.000đ<br>⚙️ <b>Vệ sinh toàn bộ + thay keo tản nhiệt:</b> 150.000 – 200.000đ<br>❄️ <b>Vệ sinh + thay compound cao cấp:</b> 250.000đ<br><br>✅ Máy chạy mát hơn, tăng tuổi thọ CPU<br>⏱️ Thời gian: 30–45 phút<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['máy tính bị đơ','laptop đơ','máy treo','không phản hồi','máy bị lag nặng','máy chậm quá','sao máy chậm'],
+  a:'🐢 <b>Máy chậm/đơ có thể do:</b><br><br>1️⃣ <b>RAM thiếu</b> → Nâng cấp RAM 8GB hoặc 16GB<br>2️⃣ <b>Ổ cứng HDD cũ</b> → Thay SSD chạy nhanh gấp 5 lần<br>3️⃣ <b>Nhiễm virus/malware</b> → Diệt virus, dọn rác<br>4️⃣ <b>Nhiệt độ cao</b> → Vệ sinh, thay keo tản nhiệt<br>5️⃣ <b>Windows bị lỗi</b> → Cài lại Windows<br><br>💡 Mang máy đến <b>kiểm tra miễn phí</b>, báo giá trước khi sửa!<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>'},
+
+ {k:['máy không lên nguồn','laptop không bật được','bật không lên','không khởi động được','ấn nút không lên'],
+  a:'⚡ <b>Laptop không lên nguồn:</b><br><br>🔍 <b>Nguyên nhân thường gặp:</b><br>• Pin hết/hỏng → Thử cắm sạc trực tiếp<br>• Lỗi bo mạch chủ / IC nguồn<br>• Màn hình hỏng (máy vẫn chạy, không hiển thị)<br>• Ram/SSD lỏng kết nối<br><br>⚠️ Không nên tự mở máy nếu chưa có kinh nghiệm!<br>✅ Mang đến <b>kiểm tra miễn phí</b> tại Tran Hoa Computer<br><br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>'},
+
+ {k:['mất dữ liệu','xóa nhầm file','cứu data','khôi phục file','ổ cứng chết','cứu ổ cứng'],
+  a:'💾 <b>Cứu dữ liệu / khôi phục file:</b><br><br>✅ Tỷ lệ thành công: <b>70–90%</b> tùy mức độ<br><br>📋 <b>Các trường hợp xử lý được:</b><br>• Xóa nhầm file, format nhầm ổ<br>• Ổ cứng bị lỗi bad sector<br>• Laptop chết nhưng ổ cứng còn tốt<br>• Phân vùng bị mất<br><br>⚠️ <b>Lưu ý:</b> Dừng dùng máy ngay để tránh ghi đè dữ liệu!<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi ngay: 0963.284.044</a>'},
+
+ {k:['có bảo hành không','bảo hành bao lâu','chính sách bảo hành','bảo hành sửa chữa'],
+  a:'🛡️ <b>Chính sách bảo hành Tran Hoa Computer:</b><br><br>🔧 <b>Dịch vụ sửa chữa:</b> Bảo hành <b>1–3 tháng</b><br>🔋 <b>Linh kiện (pin, màn, RAM, SSD):</b> Bảo hành <b>3–12 tháng</b><br>💻 <b>Lắp ráp PC:</b> Bảo hành theo hãng linh kiện<br>🪟 <b>Cài Windows/phần mềm:</b> Hỗ trợ <b>30 ngày</b> nếu lỗi do cài đặt<br><br>✅ <b>Cam kết:</b> Minh bạch giá, báo trước khi làm<br>✅ Có hóa đơn, biên lai đầy đủ'},
+
+ {k:['lấy máy bao lâu','sửa mấy ngày','bao lâu xong','thời gian sửa','khi nào lấy máy'],
+  a:'⏱️ <b>Thời gian sửa chữa tại Tran Hoa Computer:</b><br><br>⚡ <b>Cài Win / cài phần mềm:</b> 30–60 phút<br>🧹 <b>Vệ sinh / bảo dưỡng:</b> 30–45 phút<br>🔋 <b>Thay pin / màn hình:</b> 30–60 phút<br>💾 <b>Nâng cấp RAM / SSD:</b> 20–30 phút<br>🔧 <b>Sửa mainboard / phần cứng phức tạp:</b> 1–3 ngày<br><br>📞 Gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để được báo thời gian cụ thể!'}
+];
+var offIdx=0;
+
+function uS(t){addMsg(t,'user',[]);}
+function bS(t,q){addMsg(t,'bot',q||[]);}
+
+function addMsg(t,role,qrs){
+  var w=document.createElement('div');
+  w.className='cb-m '+(role==='user'?'user':'bot');
+  var b=document.createElement('div');
+  b.className='bub'; b.innerHTML=t;
+  w.appendChild(b); msgs.appendChild(w);
+  msgs.scrollTop=msgs.scrollHeight;
+  setQR(qrs);
+  /* save to session history */
+  _chatHistory.push({role:(role==='user'?'user':'bot'), html:t});
+  _saveChatHistory();
 }
 
-/* Đăng ký tất cả nút quick reply */
-(function(){
-  var btns = [
-    'Giá dịch vụ','Giá sửa laptop','Giá cài Windows','Giá cứu dữ liệu',
-    'Giá nâng cấp SSD','Giá nâng cấp RAM','Giá thay pin','Giá mainboard',
-    'Giá sửa phần cứng','Giá cài phần mềm','Giá thay màn hình','Giá vệ sinh',
-    'Đặt lịch sửa','Đặt lịch','Đặt lịch nâng cấp','Đặt lịch cài Win',
-    'Đặt lịch thay pin','Đặt lịch cứu dữ liệu','Đặt lịch vệ sinh',
-    'Liên hệ ngay','Liên hệ','Hotline gọi ngay','Gặp kỹ thuật viên',
-    'Zalo tư vấn','Hỗ trợ từ xa','Gửi ảnh Zalo',
-    'Bảo hành','Địa chỉ cửa hàng','Địa chỉ','Giờ làm việc',
-    'Dịch vụ của shop','Kiểm tra miễn phí',
-    'Sản phẩm nổi bật','Sản phẩm','Laptop văn phòng','Laptop gaming',
-    'iPad/MacBook','iPad','MacBook','Ráp PC Gaming','Lắp đặt PC',
-    'Tư vấn Laptop','Tư vấn PC','Tư vấn cấu hình','Xem cấu hình chi tiết',
-    'Nâng cấp SSD/RAM','Máy chạy chậm','Máy không lên nguồn','Màn hình lỗi',
-    'Cài Win/phần mềm','Báo giá sửa chữa','Ưu đãi hiện tại',
-    'Phụ kiện','Màn hình','Chuột','Bàn phím','Máy in','Tai nghe',
-    'Cứu dữ liệu','Diệt virus','Lỗi Wifi','Lỗi bluetooth',
-    'Đặt lịch sửa khẩn','Đặt lịch tư vấn',
-  ];
-  btns.forEach(function(b){ QRA[b] = function(){ _qraAuto(b); }; });
-
-  /* Nút đặc biệt: tư vấn ngân sách */
-  QRA['Tư vấn ngân sách'] = function(){
-    _cbCtx.budgetExpected = true;
-    uS('Tư vấn theo ngân sách');
-    ty_then('💬 Bạn có ngân sách bao nhiêu? (ví dụ: <b>10 triệu</b>, <b>15tr</b>, <b>25 triệu</b>...)<br>Mình tư vấn cấu hình tối ưu ngay!', []);
-  };
-})();
-
-
-/* ════════════════════════════════════════════════════════════
-   SMART CHATBOT ENGINE v8 – Tran Hoa Computer
-   ✅ Exact phrase priority matching (threshold cao)
-   ✅ Không bao giờ match sai topic
-   ✅ Budget / số tiền detection
-   ✅ Context memory
-   ✅ AI-style fallback thông minh
-════════════════════════════════════════════════════════════ */
-
-/* ── Normalize tiếng Việt → không dấu ── */
-function normalizeStr(s){
-  if(!s) return '';
-  return s.toLowerCase()
-    .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g,'a').replace(/[èéẹẻẽêềếệểễ]/g,'e')
-    .replace(/[ìíịỉĩ]/g,'i').replace(/[òóọỏõôồốộổỗơờớợởỡ]/g,'o')
-    .replace(/[ùúụủũưừứựửữ]/g,'u').replace(/[ỳýỵỷỹ]/g,'y').replace(/đ/g,'d')
-    .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+function setQR(list){
+  qrDiv.innerHTML='';
+  (list||[]).slice(0,8).forEach(function(lbl){
+    var btn=document.createElement('button');
+    btn.className='cb-qb'; btn.textContent=lbl;
+    btn.onclick=function(){if(QRA[lbl])QRA[lbl]();};
+    qrDiv.appendChild(btn);
+  });
 }
 
-/* ── Context state ── */
-var _cbCtx = { budgetExpected:false, lastTopic:null, turnCount:0 };
+function _cbSetBusy(busy){
+  botIsTyping=busy;
+  var inp=document.getElementById('cbInput');
+  var sendBtn=document.getElementById('cbSend');
+  if(inp) inp.disabled=busy;
+  if(sendBtn) sendBtn.disabled=busy;
+  qrDiv.querySelectorAll('.cb-qb').forEach(function(b){b.disabled=busy;});
+}
 
-/* ── Budget parser ── */
-function _parseBudget(txt){
-  var m = txt.match(/(\d+(?:[.,]\d+)?)\s*(triệu|trieu|tr\b|m\b)/i);
-  if(m) return parseFloat(m[1].replace(',','.'))*1e6;
-  if(_cbCtx.budgetExpected){
-    var m2=txt.match(/^(\d+(?:[.,]\d+)?)$/);
-    if(m2){ var n=parseFloat(m2[1].replace(',','.')); if(n>=3&&n<=200) return n*1e6; }
+function ty_then(a,q){
+  _cbSetBusy(true);
+  var tw=document.createElement('div');
+  tw.className='cb-m bot typing-indicator';
+  tw.innerHTML='<div class="bub"><div class="cb-ty"><span>.</span><span>.</span><span>.</span></div></div>';
+  msgs.appendChild(tw); msgs.scrollTop=msgs.scrollHeight; setQR([]);
+  setTimeout(function(){
+    if(tw.parentNode) tw.parentNode.removeChild(tw);
+    bS(a,q);
+    _cbSetBusy(false);
+  },800);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   SMART CHATBOT ENGINE v5
+   - Scored multi-keyword matching
+   - Budget/number detection → PC config recommender
+   - Conversational context memory
+   - FAQ-aware responses from all page content
+═══════════════════════════════════════════════════════════ */
+
+/* ── CONTEXT STATE ── */
+var _cbCtx = { budgetExpected: false, lastTopic: null };
+
+/* ── BUDGET PARSER ── */
+function _parseBudget(txt) {
+  /* handle "10 triệu", "10tr", "10m", "15.5 triệu", "~20tr", "khoảng 25" */
+  var clean = txt.replace(/[~≈khoảng]/gi,'').trim();
+  var m = clean.match(/(\d+(?:[.,]\d+)?)\s*(triệu|tr\b|m\b)/i);
+  if (m) {
+    return parseFloat(m[1].replace(',','.')) * 1e6;
   }
-  var m3=txt.match(/(\d{7,})/); if(m3) return parseInt(m3[1]);
+  /* bare number like "10" or "15" likely means triệu in PC context */
+  if (_cbCtx.budgetExpected) {
+    var m2 = clean.match(/^(\d+(?:[.,]\d+)?)$/);
+    if (m2) {
+      var n = parseFloat(m2[1].replace(',','.'));
+      if (n >= 3 && n <= 200) return n * 1e6;
+    }
+  }
+  /* explicit large number */
+  var m3 = clean.match(/(\d{7,})/);
+  if (m3) return parseInt(m3[1]);
   return 0;
 }
 
-/* ── Budget recommender ── */
-function _budgetRecommend(budget){
-  _cbCtx.budgetExpected=false;
-  var tr=Math.round(budget/1e6); var ans,q;
-  if(tr<5){
-    ans='💡 Ngân sách <b>'+tr+' triệu</b> — mình tư vấn:<br>• PC tân trang linh kiện cũ (3–4 triệu)<br>• Nâng cấp máy cũ: SSD + RAM (~400K–700K)<br>Bạn muốn hướng nào?';
-    q=['Nâng cấp SSD/RAM','Đặt lịch sửa','Liên hệ ngay'];
-  } else if(tr<8){
-    ans='🖥️ Ngân sách <b>'+tr+' triệu</b> — PC văn phòng ổn định:<br>• Intel Core i3-12100 / Ryzen 3<br>• RAM 8GB DDR4 | SSD 256GB<br>• Màn hình 21" Full HD<br>Chạy Office/Zoom/web mượt mà!';
-    q=['Xem cấu hình chi tiết','Zalo tư vấn','Đặt lịch tư vấn'];
-  } else if(tr<15){
-    ans='💻 Ngân sách <b>'+tr+' triệu</b> — 2 lựa chọn tốt:<br>🖥️ <b>PC văn phòng:</b> Core i5, RAM 16GB, SSD 512GB<br>💻 <b>Laptop:</b> Dell/Asus/Lenovo i5, 8GB, 256GB<br>Bạn cần PC hay Laptop?';
-    q=['Tư vấn PC','Tư vấn Laptop','Zalo tư vấn'];
-  } else if(tr<25){
-    ans='🎮 Ngân sách <b>'+tr+' triệu</b> — PC Gaming tốt:<br>• CPU: Ryzen 5 7600 / Core i5-13400F<br>• RAM: 16GB DDR5<br>• VGA: RTX 3060 / RX 6700 XT<br>• SSD: 512GB NVMe<br>Chơi game AAA mượt 60–100fps!';
-    q=['Ráp PC Gaming','Zalo tư vấn','Đặt lịch tư vấn'];
+/* ── BUDGET RECOMMENDER ── */
+function _budgetRecommend(budget) {
+  _cbCtx.budgetExpected = false;
+  var tr = Math.round(budget / 1e6);
+  var ans, q;
+  if (tr < 5) {
+    ans = '💡 Ngân sách <b>' + tr + ' triệu</b> hơi hạn chế cho PC mới.<br>Mình có thể tư vấn:<br>• PC tân trang linh kiện cũ chất lượng (3–4 triệu)<br>• Nâng cấp máy cũ đang có: thêm SSD, RAM (~300K–600K)<br>Bạn muốn tư vấn hướng nào?';
+    q = ['Nâng cấp SSD','Nâng cấp RAM','Liên hệ tư vấn'];
+  } else if (tr <= 8) {
+    ans = '🏢 Ngân sách <b>~' + tr + ' triệu</b> — Phù hợp <b>PC Văn phòng cơ bản</b>:<br><br>• <b>Cấu hình gợi ý:</b> Intel i3-12100F / 8GB RAM / SSD 256GB<br>• Chạy tốt: Word, Excel, web, Zoom, YouTube<br>• Ước tính: <b>~6–7 triệu</b> (bao gồm lắp, cài Win + phần mềm)<br><br><i>Liên hệ để được báo giá chính xác nhé!</i>';
+    q = ['Đặt lịch sửa','Hotline gọi ngay','Lắp đặt PC'];
+  } else if (tr <= 12) {
+    ans = '🏢 Ngân sách <b>~' + tr + ' triệu</b> — Phù hợp <b>PC Văn phòng trung bình</b>:<br><br>• <b>Cấu hình gợi ý:</b> Intel i5-12400 / 16GB RAM / SSD 512GB<br>• Chạy mượt: đa nhiệm, kế toán, thiết kế nhẹ<br>• Ước tính: <b>~9–11 triệu</b><br><br><i>Ghé trực tiếp hoặc nhắn Zalo để báo giá chi tiết!</i>';
+    q = ['Đặt lịch sửa','Zalo tư vấn','Lắp đặt PC'];
+  } else if (tr <= 15) {
+    ans = '🏢 Ngân sách <b>~' + tr + ' triệu</b> — Phù hợp <b>PC Văn phòng cao cấp</b> hoặc <b>Gaming nhập môn</b>:<br><br>🖥️ <b>Văn phòng cao cấp:</b> i5-13400 / 16GB / 1TB NVMe → ~13 triệu<br>🎮 <b>Gaming nhập môn:</b> Ryzen 5 5600 + GTX 1650 → ~15 triệu<br><br>Bạn dùng để làm việc hay chơi game?';
+    q = ['Ráp PC Gaming','Lắp đặt PC văn phòng','Zalo tư vấn'];
+  } else if (tr <= 22) {
+    ans = '🎮 Ngân sách <b>~' + tr + ' triệu</b> — Lý tưởng cho <b>PC Gaming tầm trung</b>:<br><br>• <b>Cấu hình gợi ý:</b> AMD Ryzen 5 7600 + RTX 4060<br>• RAM 16GB DDR5 / SSD NVMe 512GB<br>• Chơi tốt: Valorant, GTA V, Elden Ring, Cyberpunk (medium–high)<br>• Ước tính: <b>~20–22 triệu</b><br><br><i>Linh kiện chính hãng 100%, ráp & test trước khi giao!</i>';
+    q = ['Đặt lịch sửa','Zalo tư vấn','Ưu đãi hiện tại'];
+  } else if (tr <= 35) {
+    ans = '🎮 Ngân sách <b>~' + tr + ' triệu</b> — Xây <b>PC Gaming cao cấp</b>:<br><br>• <b>Cấu hình gợi ý:</b> Intel i7-13700F + RTX 4070<br>• RAM 32GB DDR5 / SSD NVMe 1TB<br>• Chơi cực mượt 1440p, stream game, render video<br>• Ước tính: <b>~28–32 triệu</b><br><br><i>Bảo hành linh kiện đầy đủ, lắp đặt chuyên nghiệp!</i>';
+    q = ['Zalo tư vấn','Hotline gọi ngay','Đặt lịch sửa'];
   } else {
-    ans='🔥 Ngân sách <b>'+tr+' triệu</b> — máy cực mạnh:<br>• CPU: Ryzen 7 7700X / Core i7-13700K<br>• RAM: 32GB DDR5 | VGA: RTX 4070<br>• SSD: 1TB NVMe<br>Đỉnh cả gaming lẫn đồ họa!';
-    q=['Ráp PC Gaming','Zalo tư vấn','Đặt lịch tư vấn'];
+    ans = '🚀 Ngân sách <b>~' + tr + ' triệu</b> — Đủ cho <b>PC Workstation / Gaming đỉnh</b>:<br><br>• i9-13900K / Ryzen 9 7950X + RTX 4080/4090<br>• RAM 64GB / SSD NVMe 2TB<br>• Màn hình 165Hz+ 1440p hoặc 4K<br><br>Mình cần tư vấn chi tiết để tối ưu cấu hình trong tầm giá nhé! Liên hệ ngay:';
+    q = ['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa'];
   }
-  ty_then(ans,q);
-}
-
-/* ══ TOPIC DATABASE — dùng normalize để match ══ */
-var TOPICS = [
-  /* CHÀO HỎI */
-  {k:['xin chao','hello','hi','chao','alo','hey','bat dau','tu van','ho tro'],
-   a:'👋 Xin chào! Mình là <b>Trợ lý AI Trần Hoà Computer</b> 🤖<br><br>Mình hỗ trợ:<br>• 🔧 Tư vấn sửa chữa máy tính / laptop<br>• 💰 Báo giá dịch vụ & sản phẩm<br>• 📅 Đặt lịch kỹ thuật viên<br>• 🎮 Ráp PC gaming theo ngân sách<br>• 🌐 Hỗ trợ từ xa miễn phí<br><br>Bạn cần hỗ trợ gì hôm nay? 😊',
-   q:['Giá dịch vụ','Sản phẩm nổi bật','Đặt lịch sửa','Ráp PC Gaming','Hỗ trợ từ xa']},
-
-  /* SẢN PHẨM NỔI BẬT */
-  {k:['san pham noi bat','hang noi bat','san pham ban chay','hang hot','co gi ban','ban gi','co san pham'],
-   a:'🏆 <b>Sản phẩm nổi bật tại Trần Hoà Computer:</b><br><br>💻 <b>Laptop văn phòng</b> — Dell, Asus, Lenovo: từ <b>10 triệu</b><br>🎮 <b>Laptop Gaming</b> — Asus TUF, Acer Nitro, MSI: từ <b>15 triệu</b><br>📱 <b>iPad / MacBook Air</b> — chính hãng Apple: từ <b>9 triệu</b><br>🖥️ <b>Màn hình</b> — Dell, LG, Samsung 24–27": từ <b>2.5 triệu</b><br>⚙️ <b>RAM / SSD nâng cấp</b>: từ <b>300K</b><br>🖨️ <b>Máy in</b> — HP, Canon, Epson<br><br>👉 Nhắn Zalo để báo giá mới nhất!',
-   q:['Laptop văn phòng','Laptop gaming','iPad/MacBook','Ráp PC Gaming','Zalo tư vấn'],
-   rt:'products'},
-
-  /* SẢN PHẨM (chung) */
-  {k:['san pham','linh kien','hang hoa','danh muc','co nhung gi'],
-   a:'📦 <b>Danh mục sản phẩm Trần Hoà Computer:</b><br><br>💻 Laptop (văn phòng, gaming, MacBook)<br>📱 iPad các dòng<br>🖥️ PC Desktop & màn hình<br>⚙️ Linh kiện: RAM, SSD, VGA, PSU, tản nhiệt<br>🖨️ Máy in & thiết bị văn phòng<br>🔌 Phụ kiện: chuột, bàn phím, tai nghe...<br><br>Tất cả hàng chính hãng, bảo hành đầy đủ!',
-   q:['Sản phẩm nổi bật','Laptop văn phòng','Ráp PC Gaming','Zalo tư vấn']},
-
-  /* GIÁ DỊCH VỤ */
-  {k:['gia dich vu','bang gia','bao nhieu tien','chi phi','phat sinh','gia ca','phi dich vu'],
-   a:'💰 <b>Bảng giá dịch vụ (tham khảo):</b><br><br>🔧 Sửa lỗi phần cứng: <b>150K–450K</b><br>💾 Thay RAM/SSD: <b>50K–150K</b><br>⚙️ Cài Windows trọn gói: <b>150K–350K</b><br>🦠 Diệt virus: <b>80K–200K</b><br>💽 Cứu dữ liệu: <b>200K–800K</b><br>🔋 Thay pin laptop: <b>250K–600K</b><br>🖥️ Lắp PC văn phòng: <b>~6.5–13 triệu</b><br>🎮 Lắp PC gaming: <b>~15–32 triệu</b><br><br>✅ <b>Báo giá chính xác sau kiểm tra miễn phí!</b>',
-   q:['Kiểm tra miễn phí','Đặt lịch sửa','Liên hệ ngay']},
-
-  /* ĐỊA CHỈ */
-  {k:['dia chi','o dau','cho nao','vi tri','thai nguyen','dai tu','phu thinh','duong di'],
-   a:'📍 <b>Địa chỉ:</b> Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên<br><br>📞 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>📞 KTV: <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a><br><br>Cần chỉ đường gọi trực tiếp nhé!',
-   q:['Hotline gọi ngay','Zalo tư vấn','Giờ làm việc']},
-
-  /* GIỜ MỞ CỬA */
-  {k:['gio mo cua','may gio','khi nao mo','gio lam viec','thu may','chu nhat','lam viec'],
-   a:'🕐 <b>Giờ làm việc: 07:00 – 22:00</b> tất cả các ngày<br>Kể cả Thứ 7, Chủ Nhật & ngày lễ 🎉<br><br>Đặt lịch trước để phục vụ ưu tiên, không phải chờ!',
-   q:['Đặt lịch sửa','Hotline gọi ngay','Zalo tư vấn']},
-
-  /* ĐẶT LỊCH */
-  {k:['dat lich','hen gio','dang ky lich','booking','appointment','hen gap','lich hen'],
-   a:'📅 <b>Đặt lịch hẹn:</b><br><br>1️⃣ Nhấn nút <b>"Đặt Lịch Hẹn"</b> trên trang này<br>2️⃣ Nhắn Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>3️⃣ Gọi hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br><br>✅ Xác nhận trong <b>15 phút!</b>',
-   q:['Zalo tư vấn','Hotline gọi ngay','Giá dịch vụ']},
-
-  /* HOTLINE */
-  {k:['hotline','so dien thoai','lien he','goi dien','so dt','phone','call'],
-   a:'📞 <b>Liên hệ Trần Hoà Computer:</b><br><br>🔵 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700;font-size:15px">0963.284.044</a><br>🟢 KTV: <a href="tel:0819120401" style="color:#059669;font-weight:700;font-size:15px">0819.120.401</a><br>💬 Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">Chat ngay</a><br><br>⏰ 07:00–22:00 hàng ngày',
-   q:['Zalo tư vấn','Đặt lịch sửa','Địa chỉ']},
-
-  /* ZALO */
-  {k:['zalo','nhan tin','chat online','nhan zalo'],
-   a:'💬 <b>Zalo Trần Hoà Computer:</b><br><br><a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700;font-size:16px">👉 Nhắn Zalo: 0963.284.044</a><br><br>Gửi ảnh máy để chẩn đoán lỗi từ xa — <b>hoàn toàn miễn phí!</b>',
-   q:['Hotline gọi ngay','Hỗ trợ từ xa','Đặt lịch sửa']},
-
-  /* BẢO HÀNH */
-  {k:['bao hanh','warranty','doi tra','cam ket','chinh sach','loi lai','bao hanh may'],
-   a:'🛡️ <b>Chính sách bảo hành:</b><br><br>✅ Dịch vụ sửa: <b>3–12 tháng</b><br>✅ Linh kiện mới: theo hãng sản xuất<br>✅ Lỗi tái phát → <b>sửa lại miễn phí</b><br>✅ Báo giá trước — <b>không phát sinh ẩn phí</b><br>✅ Hoàn tiền nếu không sửa được',
-   q:['Giá dịch vụ','Đặt lịch sửa','Liên hệ ngay']},
-
-  /* LAPTOP */
-  {k:['laptop','may xach tay','notebook','sua laptop','laptop hong','laptop loi'],
-   a:'💻 <b>Dịch vụ Laptop tại Trần Hoà:</b><br><br>🔧 Sửa: lỗi nguồn, màn hình, bản lề gãy, mainboard<br>⚡ Nâng cấp: SSD, RAM, pin, bàn phím, tản nhiệt<br>💊 Phục hồi: cứu dữ liệu, diệt virus, cài lại Windows<br><br>✅ <b>Kiểm tra miễn phí</b> trước khi báo giá!',
-   q:['Giá sửa laptop','Nâng cấp SSD/RAM','Đặt lịch sửa','Zalo tư vấn']},
-
-  /* LAPTOP VĂN PHÒNG */
-  {k:['laptop van phong','mua laptop','laptop co ban','laptop hoc tap','laptop gia re'],
-   a:'💼 <b>Laptop văn phòng tại Trần Hoà:</b><br><br>🏷️ <b>Từ 10–14 triệu:</b><br>• Asus VivoBook 15 (Core i5, 8GB, 512GB SSD)<br>• Dell Inspiron 15 (i5, 8GB, 256GB SSD)<br>• Lenovo IdeaPad (i5, 8GB, 512GB SSD)<br><br>🏷️ <b>Từ 14–20 triệu:</b><br>• Dell Latitude / HP ProBook (business, bền bỉ)<br>• Asus ExpertBook<br><br>Tất cả hàng chính hãng, bảo hành đầy đủ!',
-   q:['Zalo tư vấn','Đặt lịch tư vấn','Laptop gaming']},
-
-  /* LAPTOP GAMING */
-  {k:['laptop gaming','laptop game','may tinh choi game','laptop do hoa'],
-   a:'🎮 <b>Laptop Gaming tại Trần Hoà:</b><br><br>🏷️ <b>15–20 triệu:</b> Acer Nitro 5, Asus TUF (RTX 3050/3060)<br>🏷️ <b>20–28 triệu:</b> MSI Thin, Lenovo IdeaPad Gaming (RTX 3060)<br>🏷️ <b>28 triệu+:</b> Asus ROG, MSI GF (RTX 4060/4070)<br><br>Chơi game mượt, thiết kế đồ họa, render video!',
-   q:['Zalo tư vấn','Tư vấn ngân sách','Đặt lịch tư vấn']},
-
-  /* PC / MÁY BÀN */
-  {k:['pc','may ban','desktop','may cay','may tinh de ban'],
-   a:'🖥️ <b>Dịch vụ PC/Máy bàn:</b><br><br>🔧 Sửa: lỗi nguồn, mainboard, RAM, VGA<br>⚡ Nâng cấp: SSD, RAM, card đồ hoạ<br>🎮 Ráp PC Gaming theo ngân sách<br>⚙️ Cài Windows, driver, phần mềm<br><br>Linh kiện chính hãng, test kỹ trước giao!',
-   q:['Ráp PC Gaming','Tư vấn cấu hình','Giá dịch vụ']},
-
-  /* GAMING / RÁP PC */
-  {k:['gaming','choi game','rap pc','build pc','cau hinh game','rtx','ryzen','core i','lap pc'],
-   a:'🎮 <b>Ráp PC Gaming chuyên nghiệp:</b><br><br>💰 <b>10–13 triệu:</b> i3-13100F + GTX 1660S → 60fps<br>💰 <b>15–20 triệu:</b> i5-13400F + RX 6700XT → 100fps<br>💰 <b>20–30 triệu:</b> Ryzen 7 + RTX 4070 → Ultra<br><br>✅ Linh kiện chính hãng, test 48h, bảo hành đầy đủ<br>Cho mình biết ngân sách để tư vấn cụ thể!',
-   q:['Tư vấn ngân sách','Zalo tư vấn','Đặt lịch tư vấn']},
-
-  /* MACBOOK / IPAD */
-  {k:['macbook','ipad','apple','ios','macos','mac'],
-   a:'🍎 <b>Apple tại Trần Hoà Computer:</b><br><br>📱 iPad Air/Pro: từ <b>9 triệu</b><br>💻 MacBook Air M1/M2: từ <b>18 triệu</b><br>💻 MacBook Pro: từ <b>25 triệu</b><br><br>🔧 Sửa: pin, màn hình, logic board MacBook/iPad<br>✅ Chính hãng, hỗ trợ kích hoạt',
-   q:['Zalo tư vấn','Đặt lịch sửa','Giá dịch vụ']},
-
-  /* SSD / RAM */
-  {k:['ssd','ram','nang cap','them ram','doi ssd','bo nho','o cung','nang cap may'],
-   a:'⚡ <b>Nâng cấp máy tính:</b><br><br>💾 SSD 256GB: <b>~500K–800K</b> (kèm cài lại hệ điều hành)<br>💾 SSD 512GB: <b>~700K–1.2 triệu</b><br>🧠 RAM 8GB: <b>~350K–600K</b><br>🧠 RAM 16GB: <b>~600K–1 triệu</b><br><br>✅ Tốc độ tăng <b>3–5 lần</b>, máy nhanh như mới!',
-   q:['Đặt lịch nâng cấp','Giá dịch vụ','Kiểm tra miễn phí']},
-
-  /* PIN / SẠC */
-  {k:['pin','sac','het pin','pin phong','thay pin','ac quy','adapter','pin chai'],
-   a:'🔋 <b>Thay pin laptop:</b><br><br>• Laptop phổ thông (Dell/HP/Asus): <b>250K–450K</b><br>• Laptop gaming: <b>350K–600K</b><br>• MacBook: <b>500K–1.2 triệu</b><br>• Adapter/sạc hỏng: <b>150K–400K</b><br><br>✅ Pin chính hãng, bảo hành 3 tháng<br>✅ Test trước khi thay, không tốn phí kiểm tra!',
-   q:['Đặt lịch thay pin','Giá dịch vụ','Kiểm tra miễn phí']},
-
-  /* CÀI WINDOWS */
-  {k:['cai windows','cai win','he dieu hanh','win 10','win 11','cai lai may','format','reinstall'],
-   a:'⚙️ <b>Cài Windows trọn gói:</b><br><br>🪟 Windows 10/11 bản quyền: <b>150K–350K</b><br>📦 Kèm: Office, Driver, diệt virus, tối ưu hệ thống<br>🌐 Hỗ trợ từ xa miễn phí nếu lỗi vặt sau cài<br><br>✅ Windows bản quyền, kích hoạt vĩnh viễn<br>✅ Backup dữ liệu trước khi cài',
-   q:['Đặt lịch cài Win','Hỗ trợ từ xa','Giá dịch vụ']},
-
-  /* VIRUS */
-  {k:['virus','malware','ma doc','bi hack','ransomware','diet virus','may cham do virus','ma hoa'],
-   a:'🦠 <b>Diệt virus & bảo mật:</b><br><br>🔍 Quét & diệt malware, spyware, ransomware toàn diện<br>🔒 Cài phần mềm bảo vệ chuyên dụng<br>📁 Phục hồi file bị mã hóa (nếu khả thi)<br>🌐 <b>Hỗ trợ từ xa miễn phí</b> cho lỗi nhẹ<br><br>Gửi ảnh màn hình qua Zalo để chẩn đoán nhanh!',
-   q:['Hỗ trợ từ xa','Zalo tư vấn','Đặt lịch sửa']},
-
-  /* CỨU DỮ LIỆU */
-  {k:['cuu du lieu','phuc hoi du lieu','mat file','xoa nham','format nham','o cung chet','ssd hong','mat du lieu'],
-   a:'💾 <b>Cứu dữ liệu chuyên nghiệp:</b><br><br>✅ HDD chết cơ, bad sector<br>✅ SSD lỗi, không nhận<br>✅ Xóa nhầm, format nhầm, virus mã hóa<br>✅ Tỉ lệ phục hồi: <b>80–95%</b><br><br>💡 Kiểm tra → báo kết quả → mới tính phí!<br>Chi phí: <b>200K–800K</b>',
-   q:['Đặt lịch cứu dữ liệu','Zalo tư vấn','Liên hệ ngay']},
-
-  /* MÀN HÌNH */
-  {k:['man hinh','lcd','display','screen','khong len hinh','man xanh','man den','nhap nhay','flicker','vo man','nut man'],
-   a:'🖥️ <b>Sửa màn hình:</b><br><br>• Không lên hình: kiểm tra cáp, GPU, mainboard<br>• Nhấp nháy: cài lại driver VGA hoặc thay cáp LVDS/EDP<br>• Màn hình vỡ/nứt: thay panel mới<br>• Đốm sáng, ố vàng: thay đèn backlight<br><br>💡 Gửi video qua Zalo để chẩn đoán nhanh!<br>Thay màn laptop: <b>700K–2.5 triệu</b>',
-   q:['Gửi ảnh Zalo','Đặt lịch sửa','Giá dịch vụ']},
-
-  /* MÁY CHẬM */
-  {k:['may cham','may lag','may treo','do may','may bi cham','giat lag','may kho dung'],
-   a:'🐌 <b>Máy chậm/lag — nguyên nhân & xử lý:</b><br><br>1️⃣ <b>Đầy ổ cứng</b> → Dọn dẹp hoặc nâng cấp SSD<br>2️⃣ <b>Thiếu RAM</b> → Thêm RAM 8–16GB<br>3️⃣ <b>Virus</b> → Quét & diệt sạch<br>4️⃣ <b>Windows lỗi</b> → Cài lại tối ưu<br>5️⃣ <b>Nhiệt độ cao</b> → Vệ sinh + thay keo<br><br>✅ Kiểm tra miễn phí để xác định đúng nguyên nhân!',
-   q:['Nâng cấp SSD/RAM','Kiểm tra miễn phí','Đặt lịch sửa']},
-
-  /* KHÔNG LÊN NGUỒN */
-  {k:['khong len nguon','khong bat duoc','may chet','khong khoi dong','bat may khong len','may khong bat'],
-   a:'⚡ <b>Máy không lên nguồn — chẩn đoán:</b><br><br>🔴 Không có gì: lỗi nguồn PSU/adapter hoặc mainboard<br>🟡 Đèn nhấp nháy: lỗi RAM hoặc BIOS<br>🟠 Tiếng bip: mã lỗi RAM hoặc GPU<br>🟢 Fan quay không lên hình: lỗi màn hình hoặc VGA<br><br>⚠️ Đừng ép nguồn nhiều lần — có thể cháy mainboard!<br>Mang máy đến kiểm tra <b>miễn phí!</b>',
-   q:['Đặt lịch sửa','Hotline gọi ngay','Zalo tư vấn']},
-
-  /* WIFI / MẠNG */
-  {k:['wifi','mang','ket noi mang','bluetooth','lan','khong bat wifi','mat ket noi','mang cham'],
-   a:'📶 <b>Lỗi Wifi/Mạng:</b><br><br>• Không bắt Wifi → cài lại driver, kiểm tra card mạng<br>• Wifi chập chờn → thay module Wifi (150K–300K)<br>• Bluetooth không kết nối → update driver hoặc thay module<br>• Lỗi LAN → thay card hoặc dùng USB LAN ngoài<br><br>💡 Nhiều lỗi fix được <b>từ xa miễn phí!</b>',
-   q:['Hỗ trợ từ xa','Đặt lịch sửa','Zalo tư vấn']},
-
-  /* HỖ TRỢ TỪ XA */
-  {k:['tu xa','remote','ultraviewer','teamviewer','ho tro online','qua mang','mien phi'],
-   a:'🌐 <b>Hỗ trợ từ xa MIỄN PHÍ:</b><br><br>✅ Lỗi phần mềm, Office, ứng dụng<br>✅ Cài driver, cập nhật Windows<br>✅ Quét virus nhẹ, tối ưu hệ thống<br>✅ Hướng dẫn sử dụng phần mềm<br><br>📥 Tải <b>UltraViewer</b> → nhắn ID + Pass qua Zalo là xong!<br>⚡ Kết nối trong 5 phút!',
-   q:['Zalo tư vấn','Hotline gọi ngay','Đặt lịch sửa']},
-
-  /* MÁY IN */
-  {k:['may in','printer','ket giay','in mo','muc in','khong in duoc'],
-   a:'🖨️ <b>Sửa máy in:</b><br><br>• Kẹt giấy, in mờ, lỗi màu<br>• Thay mực, drum (HP, Canon, Epson, Brother)<br>• Cài driver từ xa <b>miễn phí</b><br>• Sửa chuột, bàn phím, màn hình ngoài<br><br>Chi phí: <b>50K–300K</b>',
-   q:['Hỗ trợ từ xa','Giá dịch vụ','Đặt lịch sửa']},
-
-  /* MẬT KHẨU */
-  {k:['mat khau','password','bios','quen pass','unlock','bitlocker','pha pass'],
-   a:'🔑 <b>Xử lý mật khẩu:</b><br><br>🔓 Phá pass Windows: không mất dữ liệu — <b>100K–200K</b><br>🔓 Pass BIOS/UEFI: can thiệp phần cứng — <b>150K–350K</b><br>🔓 Bitlocker, TPM, tài khoản Microsoft<br><br>⚠️ Cần mang máy đến trực tiếp!',
-   q:['Đặt lịch sửa','Địa chỉ cửa hàng','Hotline gọi ngay']},
-
-  /* MÁY NÓNG */
-  {k:['may nong','qua nhiet','overheat','ve sinh','keo tan nhiet','quat keu','tieng on'],
-   a:'🌡️ <b>Máy nóng/quá nhiệt:</b><br><br>🌀 Vệ sinh quạt & tản nhiệt: <b>100K–200K</b><br>🧴 Thay keo tản nhiệt CPU/GPU: <b>80K–150K</b><br>🔧 Thay quạt mới: <b>200K–400K</b><br><br>⚠️ Máy nóng liên tục → dễ cháy CPU/mainboard!<br>Nên vệ sinh <b>mỗi 6–12 tháng</b>',
-   q:['Đặt lịch vệ sinh','Kiểm tra miễn phí','Zalo tư vấn']},
-
-  /* ĐỔ NƯỚC */
-  {k:['do nuoc','bi uot','nuoc vao may','ngam nuoc','may bi uot'],
-   a:'💧 <b>🚨 KHẨN CẤP — Máy bị đổ nước!</b><br><br>Làm NGAY:<br>1. <b>TẮT NGUỒN</b> ngay (giữ 5 giây)<br>2. <b>Rút sạc</b> ra ngay<br>3. <b>KHÔNG bật lại</b> — sẽ chập mạch!<br>4. Lật ngược, thấm khô bên ngoài<br>5. Mang đến cửa hàng <b>càng nhanh càng tốt!</b><br><br>📞 <a href="tel:0963284044" style="color:#ef4444;font-weight:700">Gọi khẩn: 0963.284.044</a>',
-   q:['Hotline gọi ngay','Đặt lịch sửa','Địa chỉ cửa hàng']},
-
-  /* MAINBOARD */
-  {k:['mainboard','bo mach','chip','ic','han mach','loi main','main hong'],
-   a:'🔩 <b>Sửa Mainboard/Bo mạch chủ:</b><br><br>🔬 Chẩn đoán lỗi IC nguồn, chip cầu<br>⚙️ Hàn lại chip BGA, reflow<br>🔧 Thay IC nguồn, MOSFET<br>💾 Nạp lại BIOS/firmware<br><br>Chi phí: <b>200K–800K</b> tuỳ mức độ',
-   q:['Đặt lịch sửa','Kiểm tra miễn phí','Hotline gọi ngay']},
-
-  /* ƯU ĐÃI */
-  {k:['uu dai','khuyen mai','giam gia','tang qua','discount','sale','co uu dai'],
-   a:'🎁 <b>Ưu đãi tại Trần Hoà Computer:</b><br><br>🆓 <b>Kiểm tra máy MIỄN PHÍ</b><br>🆓 <b>Hỗ trợ từ xa miễn phí trọn đời</b><br>💸 <b>Giảm 10%</b> khi giới thiệu bạn bè<br>📅 <b>Ưu tiên</b> khi đặt lịch trước<br><br>Liên hệ hỏi thêm về chương trình hiện tại!',
-   q:['Đặt lịch sửa','Zalo tư vấn','Giá dịch vụ']},
-
-  /* PHỤ KIỆN */
-  {k:['phu kien','chuot','ban phim','tai nghe','loa','webcam','hub usb','cap','mua them'],
-   a:'🖱️ <b>Phụ kiện tại Trần Hoà:</b><br><br>🖱️ Chuột: Logitech, Rapoo từ <b>150K</b><br>⌨️ Bàn phím: cơ, màng từ <b>200K</b><br>🎧 Tai nghe: Sony, JBL, Logitech từ <b>300K</b><br>📷 Webcam: Logitech C270/C920<br>🔌 Hub USB, cáp, túi laptop...<br><br>Nhắn Zalo để hỏi hàng có sẵn!',
-   q:['Zalo tư vấn','Sản phẩm nổi bật','Liên hệ ngay']},
-
-  /* DRIVER / PHẦN MỀM */
-  {k:['driver','update','cap nhat','phan mem','cai phan mem','sua phan mem','loi driver'],
-   a:'⚙️ <b>Cài driver & phần mềm:</b><br><br>🖥️ Driver đầy đủ sau cài Windows<br>📦 Office, Photoshop, AutoCAD, Corel...<br>🛡️ Phần mềm diệt virus bản quyền<br>🌐 <b>Cài từ xa miễn phí</b> qua UltraViewer<br><br>⚡ Hỗ trợ trong 5–15 phút!',
-   q:['Hỗ trợ từ xa','Zalo tư vấn','Giá dịch vụ']},
-
-  /* KIỂM TRA MIỄN PHÍ */
-  {k:['kiem tra mien phi','mien phi','free check','kiem tra may','chan doan'],
-   a:'🆓 <b>Kiểm tra máy HOÀN TOÀN MIỄN PHÍ!</b><br><br>KTV sẽ kiểm tra:<br>✅ Phần cứng: RAM, SSD, nhiệt độ, nguồn<br>✅ Phần mềm: Windows, driver, virus<br>✅ Báo cáo: lỗi gì, sửa thế nào, giá bao nhiêu<br><br>🚫 <b>Không ép sửa</b> — chỉ tư vấn thật!<br>Mang máy đến hoặc đặt lịch ngay!',
-   q:['Đặt lịch sửa','Địa chỉ cửa hàng','Hotline gọi ngay']},
-
-  /* TRA CỨU LỊCH HẸN */
-  {k:['tra cuu','kiem tra lich','lich hen cua toi','check lich','so dien thoai','ket qua sua'],
-   rt:'lookup', a:'', q:[]},
-];
-
-
-/* ══ CHATBOT: TRA CỨU LỊCH HẸN & SẢN PHẨM THỰC TẾ ══ */
-
-/* -- State tra cứu -- */
-var _cbLookupMode = false; /* đang chờ user nhập SĐT */
-
-/* -- Tra cứu lịch hẹn từ GAS -- */
-function _cbLookupPhone(phone) {
-  var phoneClean = phone.replace(/\D/g,'');
-  if(phoneClean.length < 9){
-    ty_then('⚠️ Số điện thoại không hợp lệ. Vui lòng nhập lại (ít nhất 9 chữ số).', []);
-    _cbLookupMode = true; return;
-  }
-  _cbLookupMode = false;
-  var norm = phoneClean.replace(/^(84|0)/,'');
-  var with0 = '0'+norm;
-  var with84 = '+84'+norm;
-
-  ty_then('🔍 Đang tra cứu lịch hẹn của số <b>'+with0+'</b>...', []);
-
-  var url = (typeof GAS_URL!=='undefined'?GAS_URL:'') +
-    '?action=getAppointments&phone='+encodeURIComponent(with0);
-
-  fetch(url)
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var rows = [];
-      if(d.success && d.data && d.data.length){
-        rows = d.data.filter(function(row){
-          var p = (row.phone||row.Phone||row.SoDienThoai||'').replace(/\D/g,'').replace(/^(84|0)/,'');
-          return p === norm;
-        });
-      }
-      if(!rows.length){
-        bS('❌ <b>Không tìm thấy lịch hẹn</b> cho số <b>'+with0+'</b>.<br><br>Có thể:<br>• Số điện thoại chưa đặt lịch<br>• Đặt bằng số khác<br><br>💬 Nhắn Zalo <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để kiểm tra!',
-          ['Đặt lịch sửa','Zalo tư vấn','Hotline gọi ngay']);
-        return;
-      }
-
-      var statusMap = {
-        'cho xu ly':'waiting','chờ xử lý':'waiting','chờ':'waiting','pending':'waiting',
-        'da phan cong':'assigned','đã phân công':'assigned','nhan may':'assigned',
-        'dang xu ly':'assigned','đang xử lý':'assigned','assigned':'assigned',
-        'dang sua':'fixing','đang sửa':'fixing','fixing':'fixing','in_progress':'fixing',
-        'hoan thanh':'done','hoàn thành':'done','xong':'done','done':'done','completed':'done',
-        'da huy':'cancelled','đã hủy':'cancelled','cancelled':'cancelled'
-      };
-      var statusIcon = {waiting:'⏳',assigned:'👨‍🔧',fixing:'🔧',done:'✅',cancelled:'❌'};
-      var statusLabel = {waiting:'Chờ xử lý',assigned:'Đã nhận máy',fixing:'Đang sửa',done:'Hoàn thành',cancelled:'Đã hủy'};
-
-      var html = '📋 <b>Lịch hẹn của '+with0+'</b> ('+rows.length+' kết quả):<br><br>';
-      rows.slice(0,3).forEach(function(row, i){
-        var rawStatus = (row.Status||row.status||row.TrangThai||'chờ xử lý').toLowerCase()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-        var badge = 'waiting';
-        Object.keys(statusMap).forEach(function(k){
-          if(rawStatus.indexOf(k.normalize('NFD').replace(/[\u0300-\u036f]/g,''))>-1) badge=statusMap[k];
-        });
-        var device = row.device||row.Device||row.ThietBi||'Chưa rõ';
-        var name   = row.name||row.Name||row.TenKhachHang||'Khách hàng';
-        var date   = row.date||row.Date||row.NgayHen||'';
-        var tech   = row.technician||row.Technician||row.KyThuatVien||'';
-        var note   = row.issueDesc||row.IssueDesc||row.MoTaLoi||'';
-        var cost   = row.repairCost||row.RepairCost||row.ChiPhi||'';
-
-        html += '<div style="background:#f0f9ff;border-left:3px solid #2563eb;padding:10px 12px;border-radius:8px;margin-bottom:10px">';
-        html += '<b>'+statusIcon[badge]+' '+statusLabel[badge]+'</b>';
-        html += '<br>👤 '+name;
-        if(device) html += ' | 💻 '+device;
-        if(date)   html += '<br>📅 '+date;
-        if(tech)   html += '<br>👨‍🔧 KTV: '+tech;
-        if(note)   html += '<br>📝 '+note;
-        if(cost && cost!='0') html += '<br>💰 Chi phí: <b>'+Number(cost).toLocaleString('vi-VN')+'đ</b>';
-        html += '</div>';
-      });
-      if(rows.length > 3) html += '<i>+ '+(rows.length-3)+' lịch hẹn khác...</i><br>';
-      html += '<br>📞 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>';
-
-      bS(html, ['Đặt lịch mới','Zalo tư vấn','Hotline gọi ngay']);
-    })
-    .catch(function(e){
-      bS('⚠️ Lỗi kết nối, vui lòng thử lại sau.<br>📞 <a href="tel:0963284044" style="color:#2563eb;font-weight:700">Gọi 0963.284.044</a>',
-        ['Hotline gọi ngay','Zalo tư vấn']);
-    });
-}
-
-/* -- Lấy sản phẩm thực từ GAS và hiển thị trong chatbot -- */
-function _cbShowProducts(category) {
-  ty_then('⏳ Đang tải danh sách sản phẩm...', []);
-  var url = (typeof GAS_URL!=='undefined'?GAS_URL:'') + '?action=getProducts';
-  fetch(url)
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var prods = [];
-      if(d.success && d.data){
-        prods = d.data.filter(function(p){
-          return p.isActive!==false && p.isActive!=='false';
-        });
-        if(category && category!=='all'){
-          var catN = category.toLowerCase();
-          prods = prods.filter(function(p){
-            return (p.category||'').toLowerCase().indexOf(catN)>-1 ||
-                   (p.name||'').toLowerCase().indexOf(catN)>-1;
-          });
-        }
-      }
-      if(!prods.length){
-        bS('📦 Hiện chưa có sản phẩm' + (category?' trong mục <b>'+category+'</b>':'') + '.<br>Liên hệ Zalo để được tư vấn sản phẩm phù hợp!',
-          ['Zalo tư vấn','Hotline gọi ngay','Sản phẩm nổi bật']);
-        return;
-      }
-      /* Nhóm theo danh mục */
-      var cats = {};
-      prods.forEach(function(p){
-        var cat = p.category || 'Khác';
-        if(!cats[cat]) cats[cat]=[];
-        cats[cat].push(p);
-      });
-      var html = '🏪 <b>Sản phẩm tại Trần Hoà Computer</b> ('+prods.length+' sản phẩm):<br><br>';
-      var catKeys = Object.keys(cats);
-      catKeys.forEach(function(cat){
-        html += '<b>📂 '+cat+'</b> ('+cats[cat].length+' sản phẩm):<br>';
-        cats[cat].slice(0,3).forEach(function(p){
-          var price = p.price ? Number(p.price).toLocaleString('vi-VN')+'đ' : 'Liên hệ';
-          html += '• <b>'+p.name+'</b>';
-          if(p.price) html += ' — <span style="color:#2563eb;font-weight:700">'+price+'</span>';
-          if(p.description) html += '<br>  <span style="color:#6b7280;font-size:12px">'+p.description+'</span>';
-          html += '<br>';
-        });
-        if(cats[cat].length>3) html += '<i>... và '+(cats[cat].length-3)+' sản phẩm khác</i><br>';
-        html += '<br>';
-      });
-      html += '👉 Nhắn Zalo để báo giá và đặt hàng!';
-      var qr = ['Zalo tư vấn','Hotline gọi ngay','Đặt lịch sửa'];
-      catKeys.slice(0,3).forEach(function(cat){ qr.unshift('Xem '+cat); });
-      bS(html, qr.slice(0,5));
-    })
-    .catch(function(){
-      bS('⚠️ Không tải được sản phẩm. Liên hệ trực tiếp:<br>💬 Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
-        ['Zalo tư vấn','Hotline gọi ngay']);
-    });
+  ty_then(ans, q);
 }
 
 
-/* ══ MAIN REPLY FUNCTION ══ */
-function rp(txt){
-  if(botIsTyping) return;
-  var raw=(txt||'').trim(); if(!raw) return;
-  _cbCtx.turnCount++;
+/* ── VIETNAMESE NORMALIZE (remove diacritics, lowercase) ── */
+function normalizeStr(s) {
+  if (!s) return '';
+  var map = {
+    'à':'a','á':'a','ạ':'a','ả':'a','ã':'a','â':'a','ầ':'a','ấ':'a','ậ':'a','ẩ':'a','ẫ':'a',
+    'ă':'a','ằ':'a','ắ':'a','ặ':'a','ẳ':'a','ẵ':'a','À':'a','Á':'a','Ạ':'a','Ả':'a','Ã':'a',
+    'Â':'a','Ầ':'a','Ấ':'a','Ậ':'a','Ẩ':'a','Ẫ':'a','Ă':'a','Ằ':'a','Ắ':'a','Ặ':'a','Ẳ':'a','Ẵ':'a',
+    'è':'e','é':'e','ẹ':'e','ẻ':'e','ẽ':'e','ê':'e','ề':'e','ế':'e','ệ':'e','ể':'e','ễ':'e',
+    'È':'e','É':'e','Ẹ':'e','Ẻ':'e','Ẽ':'e','Ê':'e','Ề':'e','Ế':'e','Ệ':'e','Ể':'e','Ễ':'e',
+    'ì':'i','í':'i','ị':'i','ỉ':'i','ĩ':'i','Ì':'i','Í':'i','Ị':'i','Ỉ':'i','Ĩ':'i',
+    'ò':'o','ó':'o','ọ':'o','ỏ':'o','õ':'o','ô':'o','ồ':'o','ố':'o','ộ':'o','ổ':'o','ỗ':'o',
+    'ơ':'o','ờ':'o','ớ':'o','ợ':'o','ở':'o','ỡ':'o',
+    'Ò':'o','Ó':'o','Ọ':'o','Ỏ':'o','Õ':'o','Ô':'o','Ồ':'o','Ố':'o','Ộ':'o','Ổ':'o','Ỗ':'o',
+    'Ơ':'o','Ờ':'o','Ớ':'o','Ợ':'o','Ở':'o','Ỡ':'o',
+    'ù':'u','ú':'u','ụ':'u','ủ':'u','ũ':'u','ư':'u','ừ':'u','ứ':'u','ự':'u','ử':'u','ữ':'u',
+    'Ù':'u','Ú':'u','Ụ':'u','Ủ':'u','Ũ':'u','Ư':'u','Ừ':'u','Ứ':'u','Ự':'u','Ử':'u','Ữ':'u',
+    'ỳ':'y','ý':'y','ỵ':'y','ỷ':'y','ỹ':'y','Ỳ':'y','Ý':'y','Ỵ':'y','Ỷ':'y','Ỹ':'y',
+    'đ':'d','Đ':'d'
+  };
+  return s.toLowerCase().split('').map(function(c){ return map[c]||c; }).join('').trim();
+}
 
+/* ── SCORING ENGINE ── */
+function rp(txt) {
+  if (botIsTyping) return;
+  var raw = (txt || '').trim();
+  if (!raw) return;
+  /* ── Pre-process: expand common shorthand/typos ── */
+  var _aliases = {
+    'kv': 'ky thuat vien', 'ktv': 'ky thuat vien',
+    'bh': 'bao hanh', 'bcm': 'bo cam ket',
+    'os': 'windows', 'w10': 'windows 10', 'w11': 'windows 11',
+    'win10': 'windows 10', 'win11': 'windows 11', 'win7': 'windows 7',
+    'cai win': 'cai windows', 'reinstall': 'cai lai windows',
+    'ssd': 'ssd', 'hdd': 'o cung', 'ram': 'ram',
+    'charge': 'sac', 'charger': 'sac', 'adapter': 'sac',
+    'batt': 'pin', 'battery': 'pin',
+    'screen': 'man hinh', 'display': 'man hinh', 'lcd': 'man hinh',
+    'kb': 'ban phim', 'keyboard': 'ban phim',
+    'reboot': 'khoi dong lai', 'restart': 'khoi dong lai',
+    'shutdown': 'tat may tu dong', 'bsod': 'man hinh xanh',
+    'blue screen': 'man hinh xanh', 'black screen': 'man hinh den',
+    'no display': 'khong len hinh', 'lag': 'cham', 'slow': 'cham',
+    'hang': 'do may', 'freeze': 'do may', 'crash': 'loi may',
+    'hot': 'nong', 'overheat': 'qua nhiet', 'overheating': 'may nong',
+    'password': 'mat khau', 'unlock': 'mo khoa', 'lock': 'khoa may',
+    'format': 'cai lai', 'reinstall': 'cai lai', 'reset': 'cai lai',
+    'backup': 'sao luu', 'restore': 'khoi phuc',
+    'virus': 'virus', 'malware': 'virus', 'ransomware': 'virus ma hoa',
+    'driver': 'driver', 'update': 'cap nhat',
+    'gaming': 'game', 'gamer': 'game',
+    'oc': 'op lung', 'case': 'vo may',
+    'cpu': 'cpu vi xu ly', 'gpu': 'card do hoa',
+    'nvme': 'ssd nvme', 'm2': 'ssd m2',
+    'ddr': 'ram', 'ddr4': 'ram ddr4', 'ddr5': 'ram ddr5',
+    'thermal paste': 'keo tan nhiet', 'thermal': 'tan nhiet',
+    'heatsink': 'tan nhiet', 'cooler': 'quat tan nhiet',
+    'psu': 'nguon may tinh', 'power supply': 'nguon',
+    'mobo': 'mainboard', 'motherboard': 'mainboard', 'bo mach': 'mainboard',
+    'usb c': 'type c', 'type c': 'cong type c',
+    'sata': 'sata',
+    'bao gia': 'bao gia gia ca', 'price': 'gia bao nhieu',
+    'how much': 'gia bao nhieu', 'cost': 'gia bao nhieu',
+    'repair': 'sua chua', 'fix': 'sua',
+    'buy': 'mua', 'sell': 'ban', 'recommend': 'tu van',
+    'dia chi': 'dia chi cua hang', 'address': 'dia chi',
+    'location': 'dia chi', 'where': 'o dau',
+    'open': 'gio mo cua', 'close': 'gio dong cua',
+    'hour': 'gio lam viec', 'hours': 'gio lam viec'
+  };
+  var _expandAliases = function(s) {
+    var words = s.toLowerCase().split(/\s+/);
+    var out = [];
+    var i = 0;
+    while (i < words.length) {
+      /* Try 2-word combos first */
+      if (i < words.length - 1) {
+        var two = words[i] + ' ' + words[i+1];
+        if (_aliases[two]) { out.push(_aliases[two]); i += 2; continue; }
+      }
+      out.push(_aliases[words[i]] || words[i]);
+      i++;
+    }
+    return out.join(' ');
+  };
+  raw = _expandAliases(raw);
   var low = normalizeStr(raw);
 
-  /* ── Chế độ chờ SĐT tra cứu ── */
-  if(_cbLookupMode){
-    uS(raw); _cbLookupPhone(raw); return;
+
+  /* ── 1. Budget check ── */
+  var budget = _parseBudget(low);
+  if (budget > 0 && (_cbCtx.budgetExpected || /\d/.test(low))) {
+    return _budgetRecommend(budget);
   }
 
-  /* ── Tra cứu lịch hẹn ── */
-  if(/tra cuu|kiem tra lich|lich hen|check lich|lich cua toi|so dien thoai tra|tra cuu lich/.test(low)){
-    _cbLookupMode = true;
-    ty_then('📱 <b>Tra cứu lịch hẹn</b><br><br>Vui lòng nhập <b>số điện thoại</b> đã đặt lịch:', []);
+  /* ── 2. Smart word-level scoring ──
+     For each KB entry:
+     • Split each keyword into words (2+ chars)
+     • Check if user input contains that word (substring OR word boundary)
+     • Full keyword phrase match → big bonus
+     • Single word match → smaller bonus based on word length
+     • Avoid single-char / stop-word false positives
+  */
+  var inputWords = low.split(/\s+/).filter(function(w){ return w.length >= 2; });
+  var STOP = {
+    'bi':1,'co':1,'va':1,'la':1,'thi':1,'de':1,'cho':1,'nhung':1,'cua':1,'nay':1,
+    'ban':1,'oi':1,'the':1,'nao':1,'hay':1,'muon':1,'can':1,'duoc':1,'roi':1,'vay':1
+  };
+
+  var best = null, bestScore = 0, secondScore = 0;
+  for (var i = 0; i < KB.length; i++) {
+    var score = 0;
+    var keys = KB[i].k;
+    for (var j = 0; j < keys.length; j++) {
+      var nk = normalizeStr(keys[j]);
+      var nkLen = nk.length;
+      /* A) Full phrase substring match — strong signal */
+      if (nkLen >= 4 && low.indexOf(nk) > -1) {
+        score += nkLen >= 8 ? 8 : nkLen >= 6 ? 5 : 3;
+        continue;
+      }
+      /* B) Word-level match */
+      var kwWords = nk.split(/\s+/).filter(function(w){ return w.length >= 2 && !STOP[w]; });
+      var kwMatched = 0;
+      for (var kw = 0; kw < kwWords.length; kw++) {
+        var kww = kwWords[kw];
+        if (kww.length < 2) continue;
+        /* Check if any user input word contains this keyword word or vice versa */
+        var matched = false;
+        for (var iw = 0; iw < inputWords.length; iw++) {
+          var uw = inputWords[iw];
+          if (STOP[uw]) continue;
+          if (uw === kww) { matched = true; break; }           /* exact word */
+          if (uw.length >= 3 && kww.indexOf(uw) > -1) { matched = true; break; }  /* user word in kw */
+          if (kww.length >= 3 && uw.indexOf(kww) > -1) { matched = true; break; } /* kw in user word */
+        }
+        if (matched) kwMatched++;
+      }
+      /* Require at least 1 meaningful word match; multi-word phrases get bonus */
+      if (kwMatched > 0) {
+        var wordBonus = kwMatched >= 2 ? kwMatched * 2 : 1;
+        score += wordBonus;
+      }
+    }
+    if (score > bestScore) { secondScore = bestScore; bestScore = score; best = KB[i]; }
+    else if (score > secondScore) { secondScore = score; }
+  }
+
+  /* Require minimum confidence — avoid weak single-char matches */
+  var THRESHOLD = 1;
+  if (best && bestScore >= THRESHOLD) {
+    /* Extra filter: if score is low and ambiguous, prefer a clearer response */
+    if (bestScore === 1 && secondScore === 1) {
+      /* Tie — too ambiguous, use tech fallback if relevant */
+    } else {
+      var _ans = typeof best.a === 'function' ? best.a() : best.a;
+      _cbCtx.budgetExpected = !!(_ans && typeof _ans === 'string' && (_ans.indexOf('ngan sach') > -1 || _ans.indexOf('budget') > -1));
+      ty_then(_ans, best.q);
+      return;
+    }
+  }
+
+  /* ── 3. Tech-word fallback ── */
+  var tech = ['may','cpu','gpu','ram','ssd','hdd','cai','loi','sua','win','driver','lap','rap','build','cau hinh',
+              'bios','usb','vga','card','chip','main','game','lag','fps','laptop','pc',
+              'man','pin','ban phim','cong','wifi','mang','lan','bluetooth','nguon','o cung',
+              'nhiet','quat','loa','am thanh','webcam','camera','touchpad','ban le',
+              'sac','adapter','o dia','dvd','nuoc','uot','ngam','mainboard','ic','han','rom',
+              'khoi dong','khong bat','khong len','man hinh','mau','den','xanh','do','tim'];
+  var isTech = tech.some(function(w){ return low.indexOf(w) > -1; });
+  if (isTech) {
+    ty_then('🤔 Câu hỏi này mình chưa có câu trả lời sẵn.<br>Kỹ thuật viên sẽ giải đáp ngay!<br><br>📞 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> &nbsp;·&nbsp; KTV: <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a>',
+      ['Gặp kỹ thuật viên','Đặt lịch sửa','Giá dịch vụ']);
     return;
   }
 
-  /* ── 1. Budget detection ── */
-  var budget = _parseBudget(low);
-  if(budget>0 && (_cbCtx.budgetExpected || /\d/.test(low))){
-    _budgetRecommend(budget); return;
-  }
-
-  /* ── 2. Topic matching (score-based, exact phrase priority) ── */
-  var best=null, bestScore=0;
-  for(var i=0; i<TOPICS.length; i++){
-    var score=0, keys=TOPICS[i].k;
-    for(var j=0; j<keys.length; j++){
-      var k=keys[j];
-      /* A) Full phrase match — cao điểm nhất */
-      if(low===k){ score+=100; break; }
-      if(low.indexOf(k)>-1 && k.length>=5){ score+= k.length>=8?60:k.length>=5?40:25; continue; }
-      /* B) Word-level match */
-      var kw=k.split(' ');
-      var matched=kw.filter(function(w){ return w.length>=3 && low.indexOf(w)>-1; });
-      if(matched.length>0 && matched.length===kw.length){ score+=kw.length*12; }   /* all words hit */
-      else if(matched.length>=2){ score+=matched.length*6; }                         /* partial */
-      else if(matched.length===1 && kw.length===1 && matched[0].length>=5){ score+=10; } /* single long word */
-    }
-    if(score>bestScore){ bestScore=score; best=TOPICS[i]; }
-  }
-
-  /* Threshold = 10 — đủ tin cậy, tránh match sai */
-  if(best && bestScore>=10){
-    _cbCtx.lastTopic=best.k[0];
-    _cbCtx.budgetExpected = !!(best.a && best.a.indexOf('ngan sach')>-1);
-    if(best.rt === 'products'){ _cbShowProducts(); return; }
-    if(best.rt === 'lookup'){ _cbLookupMode=true; ty_then('📱 Nhập số điện thoại đặt lịch:', []); return; }
-    ty_then(best.a, best.q); return;
-  }
-
-  /* ── 3. KB fallback — chỉ dùng nếu score cao ── */
-  var kbBest=null, kbBestScore=0;
-  for(var ki=0; ki<KB.length; ki++){
-    var ks=0, kkeys=KB[ki].k;
-    for(var kj=0; kj<kkeys.length; kj++){
-      var nk=normalizeStr(kkeys[kj]);
-      if(nk.length>=6 && low.indexOf(nk)>-1){ ks+=nk.length>=8?12:8; continue; }
-      var kww=nk.split(/\s+/).filter(function(w){return w.length>=4;});
-      var km=kww.filter(function(w){return low.indexOf(w)>-1;});
-      if(km.length===kww.length && kww.length>=2) ks+=kww.length*8;
-      else if(km.length>=2) ks+=km.length*4;
-    }
-    if(ks>kbBestScore){kbBestScore=ks;kbBest=KB[ki];}
-  }
-  if(kbBest && kbBestScore>=12){
-    ty_then(kbBest.a, kbBest.q); return;
-  }
-
-  /* ── 4. Câu hỏi IT chung → chuyển KTV ── */
-  var techWords=['may','cpu','gpu','ssd','hdd','bios','vga','card','chip','main','pin',
-                 'quat','loa','webcam','sac','adapter','o cung','nhiet','khoi dong'];
-  if(techWords.some(function(w){return low.indexOf(w)>-1;})){
-    ty_then('🔧 Câu hỏi kỹ thuật này kỹ thuật viên sẽ giải đáp chính xác nhất!<br><br>📞 Gọi KTV: <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a><br>💬 Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> — Gửi ảnh/video để chẩn đoán nhanh!',
-      ['Gửi ảnh Zalo','Đặt lịch sửa','Kiểm tra miễn phí']); return;
-  }
-
-  /* ── 5. Off-topic thân thiện ── */
-  var offs=[
-    '😊 Mình là trợ lý của <b>Trần Hoà Computer</b> — chuyên tư vấn máy tính & dịch vụ sửa chữa.<br><br>Bạn đang gặp vấn đề gì về máy tính? Mình hỗ trợ ngay!',
-    '🤖 Câu này hơi vượt ngoài chuyên môn máy tính của mình 😄<br>Nhưng <b>kỹ thuật viên</b> của shop chắc biết! Nhắn Zalo: <a href="https://zalo.me/0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>',
-  ];
-  ty_then(offs[_cbCtx.turnCount%offs.length],['Giá dịch vụ','Đặt lịch sửa','Sản phẩm nổi bật']);
+  /* ── 4. Off-topic ── */
+  _cbCtx.budgetExpected = false;
+  ty_then(offT[offIdx % offT.length], ['Giá dịch vụ','Đặt lịch sửa','Dịch vụ của shop']);
+  offIdx++;
 }
+
+
 
 window.cbSend=function(){
   if(botIsTyping) return;
   var inp=document.getElementById('cbInput');
-  var t=(inp.value||'').trim(); if(!t) return;
-  inp.value=''; uS(t); rp(t);
+  var t=(inp.value||'').trim();
+  if(!t) return;
+  inp.value='';
+  uS(t); rp(t);
 };
 
-
-
-
-window.closeChatbot=function(){
-  if(_open){ _open=false;
-    var panel=document.getElementById('chatbotPanel');
-    var badge=document.querySelector('#chatbotToggle .cb-badge');
-    if(panel) panel.classList.remove('cb-open');
-    if(badge) badge.style.display='flex';
-    var bd=document.getElementById('chatbotBackdrop');
-    if(bd) bd.classList.remove('vis');
-  }
-};
 window.cbToggle=function(){
   _open=!_open;
   var panel=document.getElementById('chatbotPanel');
   var badge=document.querySelector('#chatbotToggle .cb-badge');
   panel.classList.toggle('cb-open',_open);
   if(badge) badge.style.display=_open?'none':'flex';
-  // Backdrop cho desktop
-  var bd=document.getElementById('chatbotBackdrop');
-  if(bd){ if(_open && window.innerWidth>=768) bd.classList.add('vis'); else bd.classList.remove('vis'); }
   if(_open && !_greeted){
     _greeted=true;
     var _prev2=_loadChatHistory();
