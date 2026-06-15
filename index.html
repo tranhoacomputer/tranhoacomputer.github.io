@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sửa Chữa Lắp Ráp Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Thái Nguyên</title>
+    <title>Sửa Chữa Lắp Ráp Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Đại Từ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.gstatic.com/s/bevietnam/v25/FwZf7-Q1xVk-40qxOdnIoOlAIMByudQ.woff2" as="font" type="font/woff2" crossorigin>
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
-    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên, Mua laptop iPad Macbook chính hãng Thái Nguyên, Phụ kiện máy tính chính hãng Thái Nguyên, tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Thái Nguyên, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, Tran Hoa Computer">
+    <meta name="keywords" content="sửa chữa lắp ráp máy tính Thái Nguyên, sửa laptop Thái Nguyên,mua laptop iPad Macbook chính hãng, Phụ kiện máy tính chính hãng Thái Nguyên,tranhoacomputer, máy tính Trần Hoà, Trần Hoà Thái Nguyên, Sửa máy tính lấy ngay, Trần Văn Hoà, Tran Van Hoa, tranvanhoa, Trần Hoà, Tran Hoa, tranhoa, máy tính trần hoà, may tinh tran hoa, cài Windows Thái Nguyên, thay màn hình laptop Đại Từ, sửa máy tính Phú Thịnh, cứu dữ liệu Thái Nguyên, sửa PC Thái Nguyên, dịch vụ máy tính Thái Nguyên, Tran Hoa Computer">
     <meta name="author" content="Tran Hoa Computer">
     <meta name="robots" content="index, follow">
     <meta name="geo.region" content="VN-69">
@@ -29,14 +29,14 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "Tran Hoa Computer",
-      "description": "Trung tâm sửa chữa lắp ráp máy tính, laptop uy tín tại Phú Thịnh, Thái Nguyên. Chuyên cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook phụ kiện chính hãng.",
+      "description": "Trung tâm sửa chữa lắp ráp máy tính, laptop uy tín tại Phú Thịnh, Đại Từ, Thái Nguyên. Chuyên cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook chính hãng.",
       "url": "https://tranhoacomputer.github.io/",
       "telephone": "+840963284044",
       "priceRange": "₫₫",
       "image": "https://tranhoacomputer.github.io/logo.png",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Phú Thịnh",
+        "streetAddress": "Xóm 6, Phú Thịnh",
         "addressLocality": "Đại Từ",
         "addressRegion": "Thái Nguyên",
         "addressCountry": "VN"
@@ -781,27 +781,51 @@
 
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
-        position: fixed; left: 20px; bottom: 90px; z-index: 9400;
-        width: 420px; max-height: 620px;
-        background: #fff; border-radius: 16px;
-        box-shadow: 0 8px 40px rgba(0,0,0,.2);
+        position: fixed;
+        /* DESKTOP: căn giữa màn hình, khung lớn */
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(.88);
+        z-index: 9400;
+        width: min(680px, 90vw);
+        height: min(600px, 88vh);
+        max-height: 600px;
+        background: #fff; border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
         display: flex; flex-direction: column; overflow: hidden;
-        transform: scale(.85) translateY(20px);
         opacity: 0; pointer-events: none;
-        transition: background-color .3s cubic-bezier (.34,1.56,.64,1), color .3s cubic-bezier (.34,1.56,.64,1), opacity .3s cubic-bezier (.34,1.56,.64,1), transform .3s cubic-bezier (.34,1.56,.64,1), border-color .3s cubic-bezier (.34,1.56,.64,1);
+        transition: opacity .3s cubic-bezier(.34,1.56,.64,1),
+                    transform .3s cubic-bezier(.34,1.56,.64,1);
     }
-    #chatbotPanel.cb-open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+    #chatbotPanel.cb-open {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1; pointer-events: all;
+    }
+    /* MOBILE: full width bottom sheet */
     @media (max-width: 767px) {
-        #chatbotPanel { left: 8px; right: 8px; width: auto; max-width: calc(100vw - 16px); bottom: 140px; max-height: 60vh; min-height: 220px; }
+        #chatbotPanel {
+            top: auto; left: 8px; right: 8px;
+            bottom: 140px;
+            transform: scale(.9) translateY(16px);
+            width: auto; max-width: calc(100vw - 16px);
+            height: auto; max-height: 62vh; min-height: 220px;
+        }
+        #chatbotPanel.cb-open {
+            transform: scale(1) translateY(0);
+        }
     }
     .cb-hdr {
         background: linear-gradient(135deg,#4c1d95,#7c3aed);
-        color: #fff; padding: 12px 14px;
-        display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+        color: #fff; padding: 14px 18px;
+        display: flex; align-items: center; gap: 12px; flex-shrink: 0;
     }
-    .cb-av { width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0; }
-    .cb-inf .cb-nm { font-weight:700;font-size:13.5px; }
-    .cb-inf .cb-st { font-size:11px;opacity:.8;display:flex;align-items:center;gap:4px; }
+    @media(max-width:767px){ .cb-hdr { padding: 11px 14px; } }
+    .cb-av { width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+    .cb-inf .cb-nm { font-weight:700;font-size:15px; }
+    .cb-inf .cb-st { font-size:12px;opacity:.8;display:flex;align-items:center;gap:4px; }
+    @media(max-width:767px){
+      .cb-av{width:34px;height:34px;font-size:17px}
+      .cb-inf .cb-nm{font-size:13.5px}
+    }
     .cb-dot { width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;animation:dotBlink 1.5s infinite; }
     @keyframes dotBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
     /* ── AI BADGE ── */
@@ -825,8 +849,9 @@
     .cb-footer { text-align:center;font-size:10px;color:rgba(100,116,139,.65);padding:3px 0 7px;flex-shrink:0;letter-spacing:.2px; }
     #cbClose { background:none;border:none;color:#fff;font-size:17px;cursor:pointer;margin-left:auto;opacity:.8; }
     #cbClose:hover { opacity:1; }
-    #cbMsgs { flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px;scroll-behavior:smooth; }
-    .cb-m { max-width:85%;line-height:1.55;font-size:13.5px;animation:msgIn .25s ease; }
+    #cbMsgs { flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth; }
+    .cb-m { max-width:75%;line-height:1.6;font-size:14.5px;animation:msgIn .25s ease; }
+    @media(max-width:767px){ .cb-m { max-width:87%;font-size:13.5px; } }
     @keyframes msgIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
     .cb-m.bot { align-self:flex-start; }
     .cb-m.bot .bub { background:#f1f5f9;color:#1e293b;padding:9px 12px;border-radius:4px 13px 13px 13px; }
@@ -835,11 +860,16 @@
     .cb-qr { display:flex;flex-wrap:wrap;gap:5px;padding:4px 10px 8px;flex-shrink:0;max-height:76px;overflow-y:auto; }
     .cb-qb { background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe;border-radius:20px;padding:5px 11px;font-size:12px;cursor:pointer;transition: background-color .2s  , color .2s  , opacity .2s  , transform .2s  , border-color .2s  ;white-space:nowrap; }
     .cb-qb:hover { background:#6d28d9;color:#fff;border-color:#6d28d9; }
-    .cb-inp { display:flex;gap:8px;padding:9px 11px 11px;border-top:1px solid #e2e8f0;flex-shrink:0; }
-    #cbInput { flex:1;border:1.5px solid #e2e8f0;border-radius:22px;padding:7px 13px;font-size:13px;outline:none;transition:border-color .2s; }
+    .cb-inp { display:flex;gap:10px;padding:12px 14px 14px;border-top:1px solid #e2e8f0;flex-shrink:0; }
+    #cbInput { flex:1;border:1.5px solid #e2e8f0;border-radius:24px;padding:9px 16px;font-size:14px;outline:none;transition:border-color .2s; }
     #cbInput:focus { border-color:#7c3aed; }
-    #cbSend { background:#7c3aed;color:#fff;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .2s;flex-shrink:0; }
+    #cbSend { background:#7c3aed;color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;flex-shrink:0; }
     #cbSend:hover { background:#6d28d9; }
+    @media(max-width:767px){
+      .cb-inp{padding:9px 11px 11px;gap:8px}
+      #cbInput{padding:7px 12px;font-size:13px}
+      #cbSend{width:36px;height:36px;font-size:14px}
+    }
     .cb-ty { display:flex;gap:2px;align-items:center;padding:3px 6px; }
     .cb-ty span { font-size:20px;font-weight:700;color:#94a3b8;display:inline-block;line-height:1;animation:cbBlink 1.4s infinite both; }
     .cb-ty span:nth-child(2){animation-delay:.2s;} .cb-ty span:nth-child(3){animation-delay:.4s;}
@@ -1058,15 +1088,9 @@
 #san-pham-section { margin: 48px 0 32px; }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
   margin-top: 20px;
-}
-@media(min-width:600px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-}
-@media(min-width:900px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 .product-card {
   background: var(--surface, #fff);
@@ -1074,69 +1098,40 @@
   border: 1px solid var(--border-color, #e2e8f0);
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
-  transition: transform .22s, box-shadow .22s;
-  cursor: pointer;
-  display: flex; flex-direction: column;
+  transition: transform .2s, box-shadow .2s;
+  cursor: default;
 }
-.product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(37,99,235,.13); }
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
 .product-card-img {
   width: 100%; aspect-ratio: 4/3; object-fit: cover;
   background: #f1f5f9;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px; color: #94a3b8; flex-shrink: 0;
+  font-size: 40px; color: #94a3b8;
 }
 .product-card-img img { width:100%; height:100%; object-fit:cover; }
 .product-card-img.no-img::after { content: '🖥️'; font-size: 44px; }
-.product-card-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; }
+.product-card-body { padding: 12px 14px 14px; }
 .product-card-cat {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
   letter-spacing: .6px; color: var(--primary, #3b82f6);
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .product-card-name {
-  font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
-  margin-bottom: 5px; line-height: 1.4; flex: 1;
-}
-@media(min-width:900px) {
-  .product-card-body { padding: 12px 16px 14px; }
-  .product-card-name { font-size: 15px; }
+  font-size: 14px; font-weight: 700; color: var(--text-main, #1e293b);
+  margin-bottom: 6px; line-height: 1.4;
 }
 .product-card-price {
-  font-size: 15px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
+  font-size: 16px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
 }
-@media(min-width:900px) { .product-card-price { font-size: 17px; } }
-.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 5px; }
-.product-card-desc { font-size: 11.5px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
-
-/* Zalo inquiry button */
-.product-card-zalo { border:none; cursor:pointer; font-family:inherit; 
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; padding: 8px 10px;
-  background: linear-gradient(135deg,#0068ff,#0052cc);
-  color: #fff; font-size: 12px; font-weight: 700;
-  border: none; border-radius: 10px; cursor: pointer;
-  text-decoration: none; margin-top: auto;
-  transition: opacity .15s, transform .12s;
-}
-.product-card-zalo:hover { opacity: .88; transform: scale(1.02); }
-.product-card-zalo svg { flex-shrink: 0; }
-@media(min-width:900px) {
-  .product-card-zalo { font-size: 13px; padding: 9px 12px; }
-}
-
-/* Tab bar — horizontal scroll on mobile */
+.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+.product-card-desc { font-size: 12px; color: #64748b; line-height: 1.5; }
 .product-section-tabs {
-  display: flex; gap: 8px;
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
-  flex-wrap: nowrap; padding-bottom: 4px;
-  margin-bottom: 16px;
-  scrollbar-width: none;
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;
 }
-.product-section-tabs::-webkit-scrollbar { display: none; }
 .product-tab-btn {
   padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border-color,#e2e8f0);
   background: transparent; font-size: 13px; font-weight: 600; cursor: pointer;
-  color: var(--text-main,#1e293b); transition: all .15s; white-space: nowrap; flex-shrink: 0;
+  color: var(--text-main,#1e293b); transition: all .15s;
 }
 .product-tab-btn.active {
   background: var(--primary,#3b82f6); color: #fff; border-color: var(--primary,#3b82f6);
@@ -1146,7 +1141,10 @@
 [data-theme="dark"] .product-card { background:#1e293b; border-color:#334155; }
 [data-theme="dark"] .product-card-img { background:#0f172a; }
 [data-theme="dark"] .product-card-name { color:#f1f5f9; }
-[data-theme="dark"] .product-card-zalo { background: linear-gradient(135deg,#1a7aff,#0052cc); }
+@media(max-width:600px){
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .product-card-body { padding: 10px; }
+}
 
 /* Lưu ý info boxes (inline-style boxes in pricing tabs) */
 [data-theme="dark"] .pricing-note-box{background:linear-gradient(135deg,#0f2340,#0d2218)!important;border-color:#1e3a5f!important;}
@@ -2002,8 +2000,8 @@ body {
         right: 8px !important;
         left: auto !important;
         bottom: 310px !important;
-        max-height: min(620px, calc(100vh - 340px)) !important;
-        width: 420px !important;
+        max-height: min(510px, calc(100vh - 340px)) !important;
+        width: 330px !important;
     }
 
     /* 4. cb-hint label hiển thị bên trái button */
@@ -2210,7 +2208,18 @@ body {
     .s-chip.s-note{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe;}
     [data-theme="dark"] .s-chip.s-note{background:#1e1040;border-color:#5b21b6;color:#c4b5fd;}
 
-    </style>
+    
+    /* Backdrop khi chatbot mở (desktop) */
+    #chatbotBackdrop {
+        display:none;
+        position:fixed;inset:0;z-index:9399;
+        background:rgba(0,0,0,.35);backdrop-filter:blur(3px);
+        transition:opacity .3s;
+    }
+    #chatbotBackdrop.vis { display:block;animation:fadeIn .3s ease; }
+    @media(max-width:767px){ #chatbotBackdrop { display:none!important; } }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>
     <!-- ── Áp dụng theme NGAY LẬP TỨC để tránh nhấp nháy sáng/tối khi tải trang ── -->
     <script>
     (function(){
@@ -2256,13 +2265,12 @@ body {
                 </div>
                 <div>
                     <h1 class="logo-animation">Tran Hoa Computer</h1>
-                    <p class="slogan-animation">Uy Tín Tạo Nên Thương Hiệu</p>
+                    <p class="slogan-animation">Uy Tín Tạo Niềm Tin</p>
                 </div>
             </div>
             <div class="nav-menu" id="menuNavbar">
                 <a href="#dich-vu">Dịch vụ</a>
                 <a href="#datlich-sua-chua">Đặt lịch</a>
-                <a href="#san-pham-section" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(!el)return;var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});})();">Sản Phẩm</a>
                 <a href="#muc-bang-gia">Xem Bảng Giá</a>
                 <a href="#chinh-sach-bao-hanh">Bảo hành</a>
                 <a href="#danh-gia-khach-hang">Đánh giá</a>
@@ -2304,7 +2312,7 @@ body {
         <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
-        <div class="hero-tag">Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Đại Từ, Thái Nguyên</div>
+        <div class="hero-tag">✦ Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</div>
         <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
@@ -2317,8 +2325,8 @@ body {
     
         <div class="hero-stats">
             <div class="hero-stat"><div class="stat-num" data-target="50" data-suffix="+">0</div><div class="stat-label">Lượt sửa chữa</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="3" data-suffix="+">0</div><div class="stat-label">năm kinh nghiệm</div></div>
-            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="%">0</div><div class="stat-label">Hài lòng</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="7" data-suffix="+">0</div><div class="stat-label">năm kinh nghiệm</div></div>
+            <div class="hero-stat"><div class="stat-num" data-target="99" data-suffix="%">0</div><div class="stat-label">% Hài lòng</div></div>
             <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-label">Hỗ trợ tư vấn</div></div>
         </div>
     </div>
@@ -2395,7 +2403,7 @@ body {
                         <select name="time-slot" id="selectTime" class="form-control" required>
                             <option value="">-- Khung giờ --</option>
                             <option value="7:00 - 9:00">7:00 - 9:00 (Sáng)</option>
-                            <option value="9:00 - 11:30">9:00 - 11:30 (Trưa)</option>
+                            <option value="9:00 - 11:30">9:00 - 11:30 (Sáng)</option>
                             <option value="13:00 - 15:00">13:00 - 15:00 (Chiều)</option>
                             <option value="15:00 - 18:00">15:00 - 18:00 (Chiều)</option>
                             <option value="19:00 - 22:00">19:00 - 22:00 (Tối)</option>
@@ -2421,7 +2429,7 @@ body {
             <div class="status-lookup-desc">Nhập số điện thoại đã đặt lịch để xem máy của bạn đang ở bước nào — đã có kỹ thuật viên nhận hay chưa.</div>
             <div class="status-lookup-row">
                 <input type="tel" id="statusPhone" class="status-lookup-input" placeholder="Nhập số điện thoại đặt lịch..." maxlength="11" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'')">
-                <button class="status-lookup-btn" id="statusLookupBtn" onclick="lookupRepairStatus()">Kiểm tra</button>
+                <button class="status-lookup-btn" id="statusLookupBtn" onclick="lookupRepairStatus()">🔍 Kiểm tra</button>
             </div>
             <div class="status-result" id="statusResult"></div>
         </div>
@@ -2507,21 +2515,7 @@ body {
 
 
 
-        <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
-        <section id="san-pham-section" class="reveal">
-          <div class="section-title-wrap"><span class="section-badge">SẢN PHẨM</span></div>
-          <div class="section-title">SẢN PHẨM & PHỤ KIỆN NỔI BẬT</div>
-          <p class="section-subtitle">Sản phẩm chính hãng — giá công khai — bảo hành đầy đủ</p>
-          <div class="product-section-tabs" id="productTabBar">
-            <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
-          </div>
-          <div class="product-grid" id="productGrid">
-            <div class="product-loading">⏳ Đang tải sản phẩm...</div>
-          </div>
-        </section>
-        <!-- ══ END SẢN PHẨM ══ -->
-
-        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai minh bạch</p>
+        <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai — không phát sinh</p>
         <div class="tab-container reveal" id="priceTabContainer">
             <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
             <button class="tab-btn" id="tabBtn-software" role="tab" aria-label="Cài Phần Mềm" aria-controls="tab-software" onclick="switchTab('software',this)">Cài Phần Mềm</button>
@@ -3521,7 +3515,19 @@ body {
 
         </div><!-- end #priceTabsWrapper -->
 
-
+        <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
+        <section id="san-pham-section" class="reveal">
+          <div class="section-title-wrap"><span class="section-badge">SẢN PHẨM</span></div>
+          <div class="section-title">SẢN PHẨM & LINH KIỆN NỔI BẬT</div>
+          <p class="section-subtitle">Linh kiện chính hãng — giá công khai — bảo hành đầy đủ</p>
+          <div class="product-section-tabs" id="productTabBar">
+            <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
+          </div>
+          <div class="product-grid" id="productGrid">
+            <div class="product-loading">⏳ Đang tải sản phẩm...</div>
+          </div>
+        </section>
+        <!-- ══ END SẢN PHẨM ══ -->
 
                 <div class="section-title reveal">CAM KẾT CHẤT LƯỢNG VÀNG</div>
         <div class="commit-list reveal">
@@ -3759,21 +3765,21 @@ body {
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">BẢN ĐỒ CỬA HÀNG</h4>
-                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:8px; font-size:13px;">Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <div class="map-wrapper">
                     <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">Địa chỉ: Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">Địa chỉ: Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
                 <p style="margin-bottom:6px;">Email: <a href="mailto:thienkim29903@gmail.com" style="color:#7dd3fc;font-weight:600;text-decoration:none;">thienkim29903@gmail.com</a></p>
 
             </div>
         </div>
         <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 11px; color: #64748b;">
-            <p>© 2026 TRAN HOA COMPUTER ®. All rights reserved.</p>
+            <p>© 2026 TRAN HOA COMPUTER. All rights reserved.</p>
             <p style="margin-top:8px;"><a href="admin.html" style="color:#475569;text-decoration:none;font-size:11px;">⚙️ Quản trị</a></p>
         </div>
     </footer>
@@ -3781,7 +3787,6 @@ body {
         <a href="tel:0963284044" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.62 10.79z"/></svg><span>Gọi Ngay</span></a>
         <a href="https://zalo.me/g/ebbuf9yfotpeiwxgziqo" target="_blank" rel="noopener noreferrer" class="nav-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg><span>Chat Zalo</span></a>
         <a href="#datlich-sua-chua" class="nav-item active-booking" onclick="event.preventDefault(); (function(){var _e=document.getElementById('datlich-sua-chua'),_h=document.getElementById('headerNav'),_o=_h?_h.offsetHeight+4:72;window.scrollTo({top:_e.getBoundingClientRect().top+window.pageYOffset-_o,behavior:'smooth'});})();"><div class="booking-icon-wrapper"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div><span style="margin-top:2px;">Đặt Lịch</span></a>
-        <a href="#san-pham-section" class="nav-item" onclick="event.preventDefault();(function(){var el=document.getElementById('san-pham-section');if(!el)return;var h=document.getElementById('headerNav'),o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:'smooth'});})();"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm0 10c-2.21 0-4-1.79-4-4h2c0 1.1.9 2 2 2s2-.9 2-2h2c0 2.21-1.79 4-4 4z"/></svg><span>Sản Phẩm</span></a>
         <a href="#muc-bang-gia" class="nav-item" onclick="event.preventDefault(); document.getElementById('muc-bang-gia').scrollIntoView({behavior:'smooth'});"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg><span>Bảng Giá</span></a>
 
     </div>
@@ -3990,7 +3995,7 @@ body {
 
 /* ══════════════ PRODUCTS LOADER ══════════════ */
 (function(){
-  var _allProducts = []; window._allProducts = _allProducts;
+  var _allProducts = [];
   var _activeTab = 'all';
 
   function renderProducts(list) {
@@ -4009,16 +4014,10 @@ body {
       var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
       var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
       var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
-      // Zalo inquiry button — clipboard copy + open zalo.me
-      // (Zalo does NOT support ?text= pre-fill; use clipboard + open approach)
-      var zaloPrice = p.price ? (' — Giá: ' + p.price) : '';
-      var _name = p.name.replace(/'/g, "\\'");
-      var _price = (p.price||'').replace(/'/g, "\\'");
-      var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
       return '<div class="product-card">' + imgHtml +
         '<div class="product-card-body">' + catHtml +
         '<div class="product-card-name">' + p.name + '</div>' +
-        priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
+        priceHtml + noteHtml + descHtml + '</div></div>';
     }).join('');
   }
 
@@ -4047,7 +4046,7 @@ body {
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.success && d.data) {
-          _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; }); window._allProducts = _allProducts;
+          _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; });
           var section = document.getElementById('san-pham-section');
           if (_allProducts.length === 0) {
             if (section) section.style.display = 'none';
@@ -4226,33 +4225,6 @@ body {
         container.appendChild(toast);
         setTimeout(() => toast.classList.add('show'), 10);
         setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3500);
-    }
-
-    function productZaloInquiry(btn, name, price) {
-      var msg = 'Xin chào! Tôi muốn hỏi mua sản phẩm: ' + name +
-                (price ? ' — Giá: ' + price : '') +
-                '. Vui lòng tư vấn giúp tôi! Xem thêm: https://tranhoacomputer.github.io/#san-pham-section';
-      // Copy message to clipboard
-      function doOpen() {
-        window.open('https://zalo.me/0963284044', '_blank', 'noopener');
-        showToast('📋 Đã copy thông tin! Paste vào chat Zalo nhé 👇');
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(msg).then(doOpen).catch(function() {
-          // fallback
-          try { var ta = document.createElement('textarea'); ta.value = msg;
-            ta.style.cssText = 'position:fixed;top:-9999px'; document.body.appendChild(ta);
-            ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-          } catch(e){}
-          doOpen();
-        });
-      } else {
-        try { var ta = document.createElement('textarea'); ta.value = msg;
-          ta.style.cssText = 'position:fixed;top:-9999px'; document.body.appendChild(ta);
-          ta.focus(); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-        } catch(e){}
-        doOpen();
-      }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -4631,6 +4603,7 @@ body {
 </div>
 
 <!-- ══ CHATBOT PANEL ══ -->
+<div id="chatbotBackdrop" onclick="closeChatbot()"></div>
 <div id="chatbotPanel" role="dialog" aria-label="Trợ lý tư vấn">
     <div class="cb-hdr">
         <div class="cb-av">🤖</div>
@@ -4675,174 +4648,6 @@ var msgs=document.getElementById('cbMsgs');
 var qrDiv=document.getElementById('cbQR');
 
 /* ── KNOWLEDGE BASE ── */
-/* ══ TRA CỨU + SẢN PHẨM HELPERS ══ */
-function _mkStatusForm() {
-  var uid = 'cs' + Date.now();
-  return [
-    '<b>🔍 Tra cứu tình trạng sửa máy</b><br><br>',
-    'Nhập số điện thoại đã đặt lịch:<br>',
-    '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">',
-    '<input id="csp_' + uid + '" type="tel" inputmode="numeric" ',
-    'placeholder="VD: 0963284044" maxlength="11" ',
-    'style="flex:1;min-width:140px;padding:7px 10px;border:1.5px solid #cbd5e1;',
-    'border-radius:8px;font-size:13px">',
-    '<button onclick="chatLookupStatus(' + "'" + uid + "'" + ')" ',
-    'style="padding:7px 14px;background:#2563eb;color:#fff;border:none;',
-    'border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;white-space:nowrap">',
-    '🔍 Kiểm tra</button></div>',
-    '<div id="csr_' + uid + '" style="margin-top:10px"></div>'
-  ].join('');
-}
-
-function _mkProductsAns() {
-  var prods = window._allProducts || [];
-  var scrollLink = '<a href="#san-pham-section" onclick="var el=document.getElementById(\'san-pham-section\');'
-    + 'if(el){event.preventDefault();var h=document.getElementById(\'headerNav\');'
-    + 'var o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:\'smooth\'});}" '
-    + 'style="color:#2563eb;font-weight:700;text-decoration:underline">';
-  if (prods.length > 0) {
-    var cats = {};
-    prods.forEach(function(p) { if (p.category) cats[p.category] = (cats[p.category] || 0) + 1; });
-    var catLines = Object.keys(cats).map(function(c) {
-      return '• <b>' + c + '</b> (' + cats[c] + ' sản phẩm)';
-    }).join('<br>');
-    var featLines = prods.slice(0, 4).map(function(p) {
-      return '🔹 <b>' + p.name + '</b>' + (p.price ? ' — <span style="color:#2563eb;font-weight:700">' + p.price + '</span>' : '');
-    }).join('<br>');
-    return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
-      + '<b>📂 Danh mục:</b><br>' + catLines + '<br><br>'
-      + '<b>⭐ Nổi bật:</b><br>' + featLines + '<br><br>'
-      + scrollLink + '👉 Xem tất cả sản phẩm →</a>';
-  }
-  return '🛍️ <b>Sản phẩm tại Tran Hoa Computer</b><br><br>'
-    + 'Cửa hàng cung cấp:<br>'
-    + '• 💻 Laptop văn phòng &amp; gaming<br>'
-    + '• 🖥️ PC Desktop, PC Gaming<br>'
-    + '• 📱 iPad / MacBook<br>'
-    + '• 💾 RAM, SSD, Ổ cứng<br>'
-    + '• 🖨️ Màn hình, Máy in<br>'
-    + '• 🔌 Phụ kiện &amp; linh kiện chính hãng<br><br>'
-    + scrollLink + '👉 Xem sản phẩm nổi bật →</a><br>'
-    + '📞 Gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để hỏi trực tiếp!';
-}
-
-function chatLookupStatus(uid) {
-  var inp = document.getElementById('csp_' + uid);
-  var res = document.getElementById('csr_' + uid);
-  if (!inp || !res) return;
-  var phone = (inp.value || '').trim().replace(/\D/g, '');
-  if (!phone || phone.length < 9) {
-    res.innerHTML = '<div style="color:#ef4444;font-size:12px">⚠️ Nhập số điện thoại ít nhất 9 chữ số</div>';
-    return;
-  }
-  res.innerHTML = '<div style="color:#3b82f6;font-size:12px">⏳ Đang tra cứu...</div>';
-  inp.disabled = true;
-  var submitBtn = inp.parentElement ? inp.parentElement.querySelector('button') : null;
-  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳...'; }
-
-  var phoneNorm  = phone.replace(/^(\+84|84|0)/, '');
-  var phoneWith0 = '0' + phoneNorm;
-
-  var STEPS = [
-    { key: 'waiting',  icon: '📋', label: 'Chờ xử lý' },
-    { key: 'assigned', icon: '📥', label: 'Nhận máy'  },
-    { key: 'fixing',   icon: '🔧', label: 'Đang sửa'  },
-    { key: 'done',     icon: '✅', label: 'Hoàn thành' }
-  ];
-  var statusMap = {
-    'cho xu ly': 'waiting', 'chờ xử lý': 'waiting', 'chờ': 'waiting', 'pending': 'waiting',
-    'da phan cong': 'assigned', 'đã phân công': 'assigned',
-    'dang xu ly': 'assigned', 'đang xử lý': 'assigned', 'assigned': 'assigned',
-    'dang sua': 'fixing', 'đang sửa': 'fixing', 'fixing': 'fixing', 'in_progress': 'fixing',
-    'hoan thanh': 'done', 'hoàn thành': 'done', 'xong': 'done', 'done': 'done', 'completed': 'done',
-    'da huy': 'cancelled', 'đã hủy': 'cancelled', 'cancelled': 'cancelled'
-  };
-  var stepIdx = { waiting: 0, assigned: 1, fixing: 2, done: 3 };
-  var statusLbl = {
-    waiting: '⏳ Chờ xử lý', assigned: '📥 Đã nhận máy',
-    fixing: '🔧 Đang sửa', done: '✅ Hoàn thành', cancelled: '🚫 Đã hủy'
-  };
-  var svcMap = {
-    'sua-laptop': 'Sửa Laptop', 'sua-pc': 'Sửa máy bàn', 'cai-win': 'Cài Windows',
-    'diet-virus': 'Diệt virus', 'bao-duong': 'Vệ sinh', 'nang-cap-ram': 'Nâng RAM',
-    'nang-cap-ssd': 'Nâng SSD', 'lap-pc-gaming': 'Lắp PC Gaming',
-    'cuu-data': 'Cứu dữ liệu', 'khac': 'Dịch vụ khác'
-  };
-
-  var gasUrl = (typeof GAS_URL !== 'undefined') ? GAS_URL : '';
-  if (!gasUrl) {
-    res.innerHTML = '<div style="color:#ef4444;font-size:12px">❌ Không kết nối được máy chủ.</div>';
-    inp.disabled = false;
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '🔍 Kiểm tra'; }
-    return;
-  }
-
-  fetch(gasUrl + '?action=searchByPhone&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0))
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      var rows = [];
-      if (d && d.success && d.data && d.data.length) rows = d.data;
-      else if (d && d.results && d.results.length) rows = d.results;
-      else if (Array.isArray(d) && d.length) rows = d;
-
-      if (!rows.length) {
-        res.innerHTML = '<div style="font-size:12px;color:#64748b">❌ Không tìm thấy đơn với số <b>' + phoneWith0 + '</b>.'
-          + '<br>Kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>.</div>';
-        return;
-      }
-
-      var out = '';
-      rows.slice(0, 2).forEach(function(item, i) {
-        var rawNorm = (item.Status || item.status || '').toLowerCase()
-          .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        var badge = 'waiting';
-        Object.keys(statusMap).forEach(function(k) {
-          if (rawNorm.indexOf(k.normalize('NFD').replace(/[\u0300-\u036f]/g, '')) > -1) badge = statusMap[k];
-        });
-        var isCan = badge === 'cancelled';
-        var cs    = isCan ? -1 : (stepIdx[badge] !== undefined ? stepIdx[badge] : 0);
-        var rawSvc  = item.Service || item.service || '';
-        var svc     = svcMap[rawSvc] || rawSvc || item.Note || '';
-        var cust    = item['Full name'] || item.Full_name || item.customerName || phoneWith0;
-        var aNote   = item.Notes || item.notes || item.adminNote || '';
-        var costEst = (item.estimated_cost || item.estimatedCost || '').toString().replace(/[^0-9]/g, '');
-        var badgeColor = badge === 'done' ? '#16a34a' : badge === 'cancelled' ? '#dc2626' : '#2563eb';
-
-        out += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;'
-          + (i > 0 ? 'margin-top:8px' : '') + '">';
-        out += '<div style="font-size:12px;margin-bottom:4px"><b>' + cust + '</b>' + (svc ? ' · ' + svc : '') + '</div>';
-        out += '<div style="font-size:13px;font-weight:700;color:' + badgeColor + '">' + (statusLbl[badge] || badge) + '</div>';
-
-        if (!isCan) {
-          out += '<div style="display:flex;gap:4px;margin-top:6px">';
-          STEPS.forEach(function(s, idx) {
-            var col = idx < cs ? '#16a34a' : (idx === cs ? '#2563eb' : '#cbd5e1');
-            out += '<div style="flex:1;text-align:center;font-size:10px;color:' + col + '">'
-              + '<div style="width:22px;height:22px;border-radius:50%;background:' + col
-              + ';color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px">'
-              + s.icon + '</div>'
-              + '<div style="margin-top:2px">' + s.label + '</div></div>';
-          });
-          out += '</div>';
-        }
-        if (aNote)   out += '<div style="font-size:11px;color:#64748b;margin-top:4px">📝 ' + aNote + '</div>';
-        if (costEst) out += '<div style="font-size:11px;color:#7c3aed;margin-top:3px;font-weight:600">💰 ~'
-          + Number(costEst).toLocaleString('vi-VN') + 'đ</div>';
-        out += '</div>';
-      });
-      res.innerHTML = out;
-    })
-    .catch(function() {
-      res.innerHTML = '<div style="font-size:12px;color:#ef4444">❌ Lỗi kết nối. Gọi '
-        + '<a href="tel:0963284044" style="color:#2563eb">0963.284.044</a>.</div>';
-    })
-    .finally(function() {
-      inp.disabled = false;
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = '🔍 Kiểm tra'; }
-    });
-}
-window.chatLookupStatus = chatLookupStatus;
-
 var KB=[
  {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
   a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
@@ -5579,21 +5384,6 @@ var KB=[
   a:'👨‍🔧 <b>Liên hệ trực tiếp ngay!</b><br><br>📞 <b>Hotline cửa hàng:</b> <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>💬 <b>Zalo admin:</b> <a href="https://zalo.me/0963284044" target="_blank" rel="noopener noreferrer" style="color:#2563eb;font-weight:700">Nhắn Zalo ngay</a><br><br>🔧 <b>Kỹ thuật viên trực tiếp:</b> <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a><br>💬 <b>Zalo KTV:</b> <a href="https://zalo.me/0819120401" target="_blank" rel="noopener noreferrer" style="color:#059669;font-weight:700">Nhắn Zalo KTV</a><br><br>⏰ Giờ làm việc: <b>7:00 – 22:00</b> hàng ngày (kể cả T7, CN)<br><br><i>Kỹ thuật viên sẽ tư vấn miễn phí và xử lý nhanh nhất!</i>',
   q:['Hotline gọi ngay','Zalo tư vấn','Đặt lịch sửa']},
 
- /* ── TRA CỨU TÌNH TRẠNG SỬA MÁY ── */
- {k:['tra cứu','tình trạng','máy tôi','máy của tôi','kiểm tra tình trạng','biết máy chưa','máy xong chưa',
-     'sửa xong chưa','máy đâu rồi','xem tiến độ','tiến độ sửa','đã nhận máy chưa','máy đến đâu rồi',
-     'theo dõi đơn','check máy','máy hôm nay','xong chưa','tra cuu','tinh trang'],
-  a: _mkStatusForm,
-  q:['Đặt lịch sửa','Liên hệ ngay','Giá dịch vụ']},
-
- /* ── SẢN PHẨM & LINH KIỆN ── */
- {k:['sản phẩm','linh kiện','có bán','cửa hàng bán','mua hàng','mua linh kiện','mua laptop','mua pc',
-     'mua ram','mua ssd','mua màn hình','mua máy','hàng bán','bán gì','shop bán','có laptop không',
-     'có pc không','có sẵn hàng','xem sản phẩm','danh sách sản phẩm','sản phẩm nổi bật','hàng có sẵn',
-     'san pham','linh kien','co ban'],
-  a: _mkProductsAns,
-  q:['Xem sản phẩm','Hỏi giá linh kiện','Đặt lịch sửa','Zalo tư vấn']},
-
 ];
 
 /* ── QUICK REPLY ACTIONS ── */
@@ -5627,9 +5417,6 @@ var QRA={
   'Bàn phím':           function(){uS('Giá bàn phím?');rp('bàn phím');},
   'Màn hình':           function(){uS('Giá màn hình?');rp('màn hình');},
   'Máy in':             function(){uS('Giá máy in?');rp('máy in');},
-  'Tra cứu tình trạng': function(){uS('Tra cứu tình trạng máy');rp('tra cứu');},
-  'Xem sản phẩm':       function(){uS('Xem sản phẩm');rp('sản phẩm');},
-  'Hỏi giá linh kiện':  function(){uS('Hỏi giá linh kiện?');rp('sản phẩm');},
   'Tai nghe':           function(){uS('Giá tai nghe?');rp('tai nghe');},
   'Phụ kiện':           function(){uS('Giá phụ kiện?');rp('phụ kiện');},
 
@@ -6028,9 +5815,8 @@ function rp(txt) {
     if (bestScore === 1 && secondScore === 1) {
       /* Tie — too ambiguous, use tech fallback if relevant */
     } else {
-      var _ans = typeof best.a === 'function' ? best.a() : best.a;
-      _cbCtx.budgetExpected = !!(_ans && typeof _ans === 'string' && (_ans.indexOf('ngan sach') > -1 || _ans.indexOf('budget') > -1));
-      ty_then(_ans, best.q);
+      _cbCtx.budgetExpected = !!(best.a && (best.a.indexOf('ngan sach') > -1 || best.a.indexOf('budget') > -1));
+      ty_then(best.a, best.q);
       return;
     }
   }
@@ -6066,12 +5852,25 @@ window.cbSend=function(){
   uS(t); rp(t);
 };
 
+window.closeChatbot=function(){
+  if(_open){ _open=false;
+    var panel=document.getElementById('chatbotPanel');
+    var badge=document.querySelector('#chatbotToggle .cb-badge');
+    if(panel) panel.classList.remove('cb-open');
+    if(badge) badge.style.display='flex';
+    var bd=document.getElementById('chatbotBackdrop');
+    if(bd) bd.classList.remove('vis');
+  }
+};
 window.cbToggle=function(){
   _open=!_open;
   var panel=document.getElementById('chatbotPanel');
   var badge=document.querySelector('#chatbotToggle .cb-badge');
   panel.classList.toggle('cb-open',_open);
   if(badge) badge.style.display=_open?'none':'flex';
+  // Backdrop cho desktop
+  var bd=document.getElementById('chatbotBackdrop');
+  if(bd){ if(_open && window.innerWidth>=768) bd.classList.add('vis'); else bd.classList.remove('vis'); }
   if(_open && !_greeted){
     _greeted=true;
     var _prev2=_loadChatHistory();
