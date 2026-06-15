@@ -782,15 +782,15 @@
         /* ═══ CHATBOT PANEL ═══ */
     #chatbotPanel {
         position: fixed;
-        /* DESKTOP: căn giữa màn hình, khung lớn */
+        /* DESKTOP: căn giữa màn hình */
         top: 50%; left: 50%;
-        transform: translate(-50%, -50%) scale(.88);
+        transform: translate(-50%, -50%) scale(.9);
         z-index: 9400;
-        width: min(680px, 90vw);
-        height: min(600px, 88vh);
-        max-height: 600px;
+        width: min(900px, 92vw);
+        height: min(640px, 88vh);
+        max-height: 640px;
         background: #fff; border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+        box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 0 1px rgba(0,0,0,.06);
         display: flex; flex-direction: column; overflow: hidden;
         opacity: 0; pointer-events: none;
         transition: opacity .3s cubic-bezier(.34,1.56,.64,1),
@@ -1996,12 +1996,17 @@ body {
     }
 
     /* 3. Panel mở về phía bên trái của button, bottom gần button */
-    #chatbotPanel {
-        right: 8px !important;
-        left: auto !important;
-        bottom: 310px !important;
-        max-height: min(510px, calc(100vh - 340px)) !important;
-        width: 330px !important;
+    /* Desktop: panel căn giữa, không dùng right/left/bottom */
+    @media (min-width: 768px) {
+        #chatbotPanel {
+            right: auto !important;
+            left: 50% !important;
+            top: 50% !important;
+            bottom: auto !important;
+            width: min(900px, 92vw) !important;
+            height: min(640px, 88vh) !important;
+            max-height: 640px !important;
+        }
     }
 
     /* 4. cb-hint label hiển thị bên trái button */
