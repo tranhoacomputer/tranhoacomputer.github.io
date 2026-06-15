@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <!-- admin_v39.html | Tran Hoa Computer | 2026-06-15 | v39: fix revenue 0đ (actualCost||estimatedCost fallback); fix stats table empty (DD/MM/YYYY date parsing) fix booking desktop — sticky action col, clickable rows, remove dup CSV btn, breakpoint 768→767 daily stats table (replaces donut+bar charts); range filter 7d/30d/all dashboard redesign — primary KPI cards, status mini-grid, alert strip with icons+context quick-edit+priority field; print blob-URL fix; detail header no-overlap clean UI upgrade — typography, spacing, cards, table sticky header, auth refined, toast animation, modal polish quick-edit modal (KTV/ngày trả/chi phí), returnDate field, mobile card info -->
-<title>Trần Hoà Computer – Quản Trị Website</title>
+<title>Trần Hoà Computer – Quản Lý Web</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -874,15 +874,15 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 <div class="app">
   <div class="auth-overlay" id="authOverlay" style="display:none">
     <div class="auth-box">
-      <div class="auth-logo-wrap">🖥️</div>
+      <div class="auth-logo-wrap">🌐</div>
       <h3>Đăng nhập</h3>
-      <div class="auth-sub">Trần Hoà Computer — Quản trị hệ thống website</div>
+      <div class="auth-sub">Trần Hoà Computer — Quản Lý website</div>
       <div class="f">
         <input id="adm_user" placeholder="Tài khoản" autocomplete="username"/>
         <input id="adm_pass" type="password" placeholder="Mật khẩu" autocomplete="current-password"/>
       </div>
       <div class="auth-actions">
-        <button onclick="tryLogin()" class="btn b-pri">🔐 Đăng nhập</button>
+        <button onclick="tryLogin()" class="btn b-pri">Đăng nhập</button>
       </div>
     </div>
    </div>
@@ -892,7 +892,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   <div class="sb-logo">
    <div class="sb-logo-icon">💗</div>
       <div class="sb-logo-text" id="sb-shopname">Trần Hoà Computer</div>
-      <div class="sb-logo-sub">Quản Lý Lịch Hẹn - Sản Phẩm</div>
+      <div class="sb-logo-sub">Quản Lý Lịch Hẹn-Sản Phẩm</div>
     </div>
   </div>
 </div>
@@ -910,7 +910,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   <button class="sb-link" onclick="goP('cfg',this); closeSidebarOnMobile()" data-pg="cfg"><span class="sl-icon">⚙️</span><span class="sl-label">Cài đặt</span></button>
 </div>
 <div class="sb-ft">
-  <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-user-name">Admin</div><div class="sb-user-role">Quản trị viên</div></div></div>
+  <div class="sb-user"><div class="sb-avatar">A</div><div><div class="sb-user-name">TranHoaComputer</div><div class="sb-user-role">Quản trị viên</div></div></div>
 </div>
 </nav>
 <div class="sb-overlay" id="sbo" onclick="togSB()"></div>
@@ -921,7 +921,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   <div class="tb-actions">
     <div class="clk" id="clk"></div>
     <span class="sl" id="slbl"></span>
-    <button class="tb-btn" id="synbtn" onclick="doSync()" title="Đồng bộ GGSheet"><span id="synicon">🔄</span> Đồng bộ</button>
+    <button class="tb-btn" id="synbtn" onclick="doSync()" title="Đồng bộ GGSheet"><span id="synicon">🔄</span>Đồng bộ</button>
     <a class="tb-btn" href="index.html" target="_blank" style="text-decoration:none" title="Web khách hàng">🌐</a>
     <button class="tb-btn primary" onclick="doAdd(); closeSidebarOnMobile()">＋ Thêm lịch</button>
   </div>
@@ -944,7 +944,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
 <!-- ── BIỂU ĐỒ DOANH THU ── -->
 <div class="card" style="margin-bottom:14px">
   <div class="ch" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-    <h3 style="margin:0;display:flex;align-items:center;gap:6px">💰 Doanh thu</h3>
+    <h3 style="margin:0;display:flex;align-items:center;gap:6px">💲 Doanh thu</h3>
     <div style="display:flex;gap:6px;align-items:center">
       <button class="btn btn-sm b-sec" id="rv-wk" onclick="setRevRange('week')">Tuần</button>
       <button class="btn btn-sm b-pri" id="rv-mo" onclick="setRevRange('month')">Tháng</button>
@@ -978,7 +978,7 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
     <h2>Danh sách lịch hẹn</h2>
   </div>
   <div class="ph-actions">
-    <button class="btn b-sec" onclick="doExport()">📥 Xuất CSV</button>
+    <button class="btn b-sec" onclick="doExport()">Xuất CSV</button>
     <button class="btn b-pri" onclick="doAdd(); closeSidebarOnMobile()">＋ Thêm lịch hẹn</button>
   </div>
 </div>
@@ -1229,14 +1229,14 @@ tr.ur td:first-child { border-left: 3px solid var(--red); }
   </div>
   <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
     <button class="btn b-gho" onclick="cancelProdForm()">Hủy</button>
-    <button class="btn b-pri" onclick="saveProd()">💾 Lưu sản phẩm</button>
+    <button class="btn b-pri" onclick="saveProd()">Lưu sản phẩm</button>
   </div>
   <input type="hidden" id="pf_id"/>
 </div>
 
 <!-- Grid sản phẩm -->
 <div id="prodGrid" class="prod-grid">
-  <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted)">⏳ Đang tải...</div>
+  <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--muted)">Đang tải...</div>
 </div>
 </div>
 
@@ -1353,7 +1353,7 @@ function startClk(){
 function loadCfg(){
   cfg=JSON.parse(localStorage.getItem('thc_cfg')||'{}');
   cfg.name=cfg.name||'Tran Hoa Computer';
-  cfg.addr=cfg.addr||'Xom 6, Phú Thịnh, Dai Tu, Thai Nguyen';
+  cfg.addr=cfg.addr||'Phú Thịnh, Đại Từ, Thái Nguyên';
   cfg.phone=cfg.phone||'0963.284.044';
   cfg.adminUser=cfg.adminUser||'Tranhoacomputer';
   cfg.adminPass=cfg.adminPass||'Hoa29903';
@@ -1940,7 +1940,7 @@ function safeStr(s) {
         +'<div style="display:flex;flex-direction:column;gap:8px">'
         +'<div style="display:flex;flex-direction:column;gap:6px;flex:1">'
         +(b.scheduledAt?'<div style="font-size:12px;color:var(--muted)">'+fdt(b.scheduledAt)+'</div>':'')
-        +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">KTV: '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">⏳ Chưa phân công KTV</div>')
+        +(b.technician?'<div style="font-size:12px;color:#3b82f6;font-weight:600">KTV: '+esc(b.technician)+'</div>':'<div style="font-size:12px;color:#f59e0b">Chưa phân công KTV</div>')
         +(b.returnDate?'<div style="font-size:12px;color:#10b981;font-weight:600">Hẹn trả: '+fdt(b.returnDate)+'</div>':'')
         +(b.estimatedCost?'<div style="font-size:12px;color:#f59e0b;font-weight:600">~'+fmt(b.estimatedCost)+'đ</div>':'')
         +'<select class="ssel" style="font-size:13px;padding:5px 8px;max-width:160px" onchange="qkSt(\''+b.id+'\',this.value)">'+opts+'</select>'
@@ -1982,11 +1982,11 @@ function qkEdit(id){
     +'</div>'
     +'<div style="padding:18px;background:var(--surface)">'
     +'<div style="font-size:13px;color:var(--muted);margin-bottom:12px">Lịch hẹn <b>'+esc(b.customerName)+'</b> – <span style="color:var(--primary)">'+esc(b.id)+'</span></div>'
-    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">👨‍🔧 Kỹ thuật viên</label>'
+    +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Kỹ thuật viên</label>'
     +'<input id="qe_tc" value="'+esc(b.technician||'')+'" placeholder="Nhập tên KTV..." style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Mức độ ưu tiên</label>'+'<select id="qe_pr" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:#fff">'+'<option value="normal">Bình thường</option>'+'<option value="urgent">🚨 Khẩn cấp</option>'+'<option value="high">Cao</option>'+'<option value="low">Thấp</option>'+'</select></div>'+'<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Ngày hẹn trả máy</label>'
     +'<input id="qe_rd" type="date" value="'+esc(b.returnDate||'')+'" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
-    +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">💰 Chi phí ước tính (VND)</label>'
+    +'<div style="margin-bottom:18px"><label style="font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:4px">Chi phí ước tính (VND)</label>'
     +'<input id="qe_ec" type="number" value="'+esc(b.estimatedCost||'')+'" placeholder="150000" min="0" step="10000" style="width:100%;box-sizing:border-box;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit"/></div>'
     +'<div style="display:flex;gap:10px">'
     +'<button onclick="cMod()" style="flex:1;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);font-size:14px;cursor:pointer;font-family:inherit">Huỷ</button>'
@@ -2264,23 +2264,23 @@ function doPrint(id){
     +_row('Số điện thoại',_esc(b.phone||'—'))
     +_row('Địa chỉ',_esc(b.address||'—'))
     // ── SECTION: Thiết bị
-    +_sec('🖥️ Thiết bị')
+    +_sec('Thiết bị')
     +_row('Loại thiết bị',deviceStr)
     +_row('Serial / IMEI',_esc(b.serial||'—'))
     +_row('Vấn đề',_esc(b.issue||'—'))
     // ── SECTION: Lịch hẹn
-    +_sec('📅 Lịch hẹn & sửa chữa')
+    +_sec('Lịch hẹn & sửa chữa')
     +_row('Ngày hẹn',schedAt)
     +_row('Ngày nhận máy',b.createdAt?_fmtDate(b.createdAt):'—')
     +_row('Ngày trả dự kiến',b.returnDate?_fmtDateOnly(b.returnDate):'—')
     +_row('Kỹ thuật viên',_esc(b.technician||'—'))
     // ── SECTION: Chi phí
-    +_sec('💰 Chi phí')
+    +_sec('Chi phí')
     +_row('Ước tính',fmt(b.estimatedCost))
     +_row('Thực tế',fmt(b.actualCost),true)
     +'</div>'
     // ── NOTES
-    +(b.notes?'<div class="body"><div class="notes-box"><div class="nt">📝 Ghi chú</div><p>'+_esc(b.notes)+'</p></div></div>':'')
+    +(b.notes?'<div class="body"><div class="notes-box"><div class="nt">Ghi chú</div><p>'+_esc(b.notes)+'</p></div></div>':'')
     // ── SIGNATURE
     +'<div class="body"><div class="sig-row">'
     +'<div class="sig-box"><div class="sig-label">Khách hàng ký tên</div><div class="sig-line"></div><div class="sig-name">(Xác nhận nhận máy)</div></div>'
@@ -3104,7 +3104,7 @@ function saveProd() {
   toast('Đang lưu...', '⏳');
   fetch(url).then(function(r){ return r.json(); }).then(function(d){
     if (d.success) {
-      toast(_editProdId ? '✅ Đã cập nhật sản phẩm!' : '✅ Đã thêm sản phẩm!', '✅');
+      toast(_editProdId ? 'Đã cập nhật sản phẩm!' : 'Đã thêm sản phẩm!', '✅');
       cancelProdForm();
       loadProducts();
     } else {
