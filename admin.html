@@ -1553,8 +1553,8 @@ var del=JSON.parse(localStorage.getItem('thc_del')||'[]');
       });
       // Giữ lại các booking cục bộ chưa có trên SheetDB (mới tạo chưa đẩy lên)
       books=rows.concat(books.filter(function(b){return!ids.has(b.id)&&b.source==='customer_form'||!ids.has(b.id)&&(b.source||'')!=='demo';}));
-      saveBooks();renderAll();setSL('ok','Đã đồng bộ xong');
-      toast('Đồng bộ xong: '+rows.length+' lịch hẹn','ok');
+      saveBooks();renderAll();setSL('ok','đồng bộ');
+      toast('Xong: '+rows.length+' lịch hẹn','ok');
     }else{
       // GAS trả về dữ liệu rỗng — hiện danh sách trống
       setSL('ok','Dữ liệu trống - chưa có lịch hẹn nào');
