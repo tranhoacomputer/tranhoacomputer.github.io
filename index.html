@@ -5079,6 +5079,13 @@ function _normalizeQ(s) {
 
 function _quoteMatch(input) {
   var norm = _normalizeQ(input);
+  /* Stop words to skip in word-level matching */
+  var QSTOP = {
+    'khong':1,'duoc':1,'cua':1,'voi':1,'cho':1,'nhu':1,'nao':1,'the':1,
+    'nay':1,'do':1,'va':1,'la':1,'co':1,'bi':1,'hay':1,'khi':1,'hon':1,'rat':1,
+    'muon':1,'can':1,'nen':1,'roi':1,'vay':1,'ban':1,'oi':1,'toi':1,'minh':1,
+    'chung':1,'cac':1,'moi':1,'nhung':1,'tren':1,'duoi':1,'trong':1,'qua':1,'sau':1
+  };
   var best = null, bestScore = 0;
   for (var i = 0; i < QUOTE_DB.length; i++) {
     var q = QUOTE_DB[i];
@@ -5090,24 +5097,22 @@ function _quoteMatch(input) {
         score += kn.length >= 8 ? 10 : kn.length >= 5 ? 6 : 4;
         continue;
       }
-      /* B) Word-level — only exact word match, no substring */
-      var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 4; });
-      var nwords = norm.split(/\s+/);
+      /* B) Word-level — exact match only, skip stop words */
+      var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 4 && !QSTOP[w]; });
+      var nwords = norm.split(/\s+/).filter(function(w){ return w.length >= 3 && !QSTOP[w]; });
       var wordHits = 0;
       for (var kw = 0; kw < kwords.length; kw++) {
         for (var nw = 0; nw < nwords.length; nw++) {
-          /* Exact match or user word contains keyword (not keyword contains user) */
-          if (nwords[nw] === kwords[kw] || nwords[nw].indexOf(kwords[kw]) > -1) {
-            wordHits++; break;
-          }
+          if (nwords[nw] === kwords[kw]) { wordHits++; break; } /* exact only */
         }
       }
       if (wordHits >= 2) score += wordHits * 3;
-      else if (wordHits === 1 && kwords[0] && kwords[0].length >= 5) score += 4;
+      else if (wordHits === 1 && kwords[0] && kwords[0].length >= 6) score += 3;
+      /* Single short word (4-5 chars) = 0 pts → prevents false positives */
     }
     if (score > bestScore) { bestScore = score; best = q; }
   }
-  /* Require high confidence to avoid false positives */
+  /* Require high confidence — threshold 8 */
   return bestScore >= 8 ? best : null;
 }
 
@@ -6344,7 +6349,9 @@ function rp(txt) {
   var inputWords = low.split(/\s+/).filter(function(w){ return w.length >= 2; });
   var STOP = {
     'bi':1,'co':1,'va':1,'la':1,'thi':1,'de':1,'cho':1,'nhung':1,'cua':1,'nay':1,
-    'ban':1,'oi':1,'the':1,'nao':1,'hay':1,'muon':1,'can':1,'duoc':1,'roi':1,'vay':1
+    'ban':1,'oi':1,'the':1,'nao':1,'hay':1,'muon':1,'can':1,'duoc':1,'roi':1,'vay':1,
+    'khong':1,'hon':1,'rat':1,'nen':1,'toi':1,'minh':1,'cac':1,'moi':1,'qua':1,
+    'sau':1,'tren':1,'duoi':1,'trong':1,'khi':1,'voi':1,'nhu':1,'do':1
   };
 
   var best = null, bestScore = 0, secondScore = 0;
