@@ -5079,13 +5079,27 @@ function _normalizeQ(s) {
 
 function _quoteMatch(input) {
   var norm = _normalizeQ(input);
-  /* Stop words to skip in word-level matching */
+
+  /* ── BƯỚC 1: CHẶN CÂU HỎI NGOÀI LỀ TRƯỚC KHI QUÉT DB ── */
+  var OUT_OF_SCOPE = [
+    'tieng trung','tieng hoa','tieng nhat','tieng han','giao tiep','hoc tieng',
+    'tieng anh','thoi tiet','bai hat','ca nhac','da bong','bong da','tin tuc',
+    'gia vang','tu lap rap','lap rap pc','chia se','ngoai le','lam duoc gi',
+    'ban lam gi','bot lam gi','lam gi duoc','ban co the lam'
+  ];
+  for (var o = 0; o < OUT_OF_SCOPE.length; o++) {
+    if (norm.indexOf(OUT_OF_SCOPE[o]) > -1) return null;
+  }
+
+  /* ── BƯỚC 2: STOP WORDS ── */
   var QSTOP = {
     'khong':1,'duoc':1,'cua':1,'voi':1,'cho':1,'nhu':1,'nao':1,'the':1,
     'nay':1,'do':1,'va':1,'la':1,'co':1,'bi':1,'hay':1,'khi':1,'hon':1,'rat':1,
     'muon':1,'can':1,'nen':1,'roi':1,'vay':1,'ban':1,'oi':1,'toi':1,'minh':1,
-    'chung':1,'cac':1,'moi':1,'nhung':1,'tren':1,'duoi':1,'trong':1,'qua':1,'sau':1
+    'chung':1,'cac':1,'moi':1,'nhung':1,'tren':1,'duoi':1,'trong':1,'qua':1,'sau':1,
+    'bao':1,'nhieu':1,'tien':1,'gia':1,'phi':1,'chi':1,'tu':1,'tu':1,'xem':1
   };
+
   var best = null, bestScore = 0;
   for (var i = 0; i < QUOTE_DB.length; i++) {
     var q = QUOTE_DB[i];
@@ -5097,22 +5111,20 @@ function _quoteMatch(input) {
         score += kn.length >= 8 ? 10 : kn.length >= 5 ? 6 : 4;
         continue;
       }
-      /* B) Word-level — exact match only, skip stop words */
+      /* B) Word-level exact match only — skip stop words */
       var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 4 && !QSTOP[w]; });
       var nwords = norm.split(/\s+/).filter(function(w){ return w.length >= 3 && !QSTOP[w]; });
       var wordHits = 0;
       for (var kw = 0; kw < kwords.length; kw++) {
         for (var nw = 0; nw < nwords.length; nw++) {
-          if (nwords[nw] === kwords[kw]) { wordHits++; break; } /* exact only */
+          if (nwords[nw] === kwords[kw]) { wordHits++; break; }
         }
       }
       if (wordHits >= 2) score += wordHits * 3;
       else if (wordHits === 1 && kwords[0] && kwords[0].length >= 6) score += 3;
-      /* Single short word (4-5 chars) = 0 pts → prevents false positives */
     }
     if (score > bestScore) { bestScore = score; best = q; }
   }
-  /* Require high confidence — threshold 8 */
   return bestScore >= 8 ? best : null;
 }
 
@@ -5179,6 +5191,16 @@ function _patchRpWithQuote() {
   _origRp = rp;
   rp = function(txt) {
     if (typeof botIsTyping !== 'undefined' && botIsTyping) return;
+    /* ── Early-exit cho câu hỏi ngoài lề — đi thẳng vào AI ── */
+    var _normTxt = _normalizeQ(txt || '');
+    var _outScope = ['tieng trung','tieng hoa','tieng nhat','tieng han','giao tiep','hoc tieng',
+      'tieng anh','thoi tiet','bai hat','ca nhac','da bong','bong da','tin tuc','gia vang',
+      'tu lap rap','lap rap pc','ngoai le','lam duoc gi','ban lam gi','bot lam gi'];
+    var _isOutScope = _outScope.some(function(p){ return _normTxt.indexOf(p) > -1; });
+    if (_isOutScope) {
+      /* Chuyển thẳng sang AI, không dùng KB hay quote engine */
+      if (typeof _cbAskAI === 'function') { _cbAskAI(txt); return; }
+    }
     var q = _quoteMatch(txt || '');
     if (q) {
       /* Báo giá tức thì — uS(txt) đã được gọi bởi cbSend, không gọi lại */
