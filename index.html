@@ -5085,24 +5085,30 @@ function _quoteMatch(input) {
     var score = 0;
     for (var j = 0; j < q.k.length; j++) {
       var kn = _normalizeQ(q.k[j]);
-      if (norm.indexOf(kn) > -1) {
-        score += kn.length >= 8 ? 10 : kn.length >= 5 ? 6 : 3;
-      } else {
-        // word-level
-        var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 3; });
-        var nwords = norm.split(/\s+/);
-        for (var kw = 0; kw < kwords.length; kw++) {
-          for (var nw = 0; nw < nwords.length; nw++) {
-            if (nwords[nw] === kwords[kw] || nwords[nw].indexOf(kwords[kw]) > -1 || kwords[kw].indexOf(nwords[nw]) > -1) {
-              score += 2; break;
-            }
+      /* A) Full phrase match — strongest signal */
+      if (kn.length >= 4 && norm.indexOf(kn) > -1) {
+        score += kn.length >= 8 ? 10 : kn.length >= 5 ? 6 : 4;
+        continue;
+      }
+      /* B) Word-level — only exact word match, no substring */
+      var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 4; });
+      var nwords = norm.split(/\s+/);
+      var wordHits = 0;
+      for (var kw = 0; kw < kwords.length; kw++) {
+        for (var nw = 0; nw < nwords.length; nw++) {
+          /* Exact match or user word contains keyword (not keyword contains user) */
+          if (nwords[nw] === kwords[kw] || nwords[nw].indexOf(kwords[kw]) > -1) {
+            wordHits++; break;
           }
         }
       }
+      if (wordHits >= 2) score += wordHits * 3;
+      else if (wordHits === 1 && kwords[0] && kwords[0].length >= 5) score += 4;
     }
     if (score > bestScore) { bestScore = score; best = q; }
   }
-  return bestScore >= 3 ? best : null;
+  /* Require high confidence to avoid false positives */
+  return bestScore >= 8 ? best : null;
 }
 
 function _buildQuoteCard(q) {
