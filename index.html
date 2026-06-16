@@ -5170,8 +5170,7 @@ function _patchRpWithQuote() {
     if (typeof botIsTyping !== 'undefined' && botIsTyping) return;
     var q = _quoteMatch(txt || '');
     if (q) {
-      /* Báo giá tức thì */
-      if (typeof uS === 'function') uS(txt);
+      /* Báo giá tức thì — uS(txt) đã được gọi bởi cbSend, không gọi lại */
       if (typeof ty_then === 'function') {
         var card = _buildQuoteCard(q);
         ty_then(card, ['Đặt lịch sửa ngay', 'Xem dịch vụ khác', 'Zalo tư vấn']);
@@ -5197,6 +5196,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 var KB=[
+ {k:['bạn có thể làm gì','bot có thể làm gì','chatbot làm gì','bạn làm được gì','bạn hỗ trợ gì',
+     'bạn biết gì','tính năng','chức năng','khả năng','giới thiệu bản thân','bạn là ai',
+     'trợ lý làm gì','ai có thể giúp','mày làm gì được'],
+  a:'🤖 <b>Mình là Trợ lý AI của Tran Hoa Computer!</b><br><br>Mình có thể giúp bạn:<br>✅ <b>Báo giá</b> dịch vụ sửa chữa, nâng cấp máy tính<br>✅ <b>Chẩn đoán lỗi</b> theo mô tả của bạn (BSOD, đen màn, chậm...)<br>✅ <b>Tư vấn cấu hình</b> PC, laptop phù hợp nhu cầu<br>✅ <b>Đặt lịch hẹn</b> sửa máy nhanh chóng<br>✅ <b>Tra cứu tiến độ</b> sửa máy theo số điện thoại<br>✅ <b>Giải đáp</b> mọi thắc mắc về máy tính<br><br>Bạn đang cần hỗ trợ gì? 😊',
+  q:['Báo giá dịch vụ','Đặt lịch sửa','Tra cứu máy']},
  {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
   a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
   q:['Giá dịch vụ','Đặt lịch sửa','Hỗ trợ từ xa','Ưu đãi hiện tại','Kiểm tra miễn phí']},
@@ -6361,8 +6365,9 @@ function rp(txt) {
           var uw = inputWords[iw];
           if (STOP[uw]) continue;
           if (uw === kww) { matched = true; break; }           /* exact word */
-          if (uw.length >= 3 && kww.indexOf(uw) > -1) { matched = true; break; }  /* user word in kw */
-          if (kww.length >= 3 && uw.indexOf(kww) > -1) { matched = true; break; } /* kw in user word */
+          /* Only allow substring match if user word is LONGER than keyword word to avoid false positives */
+          if (uw.length >= 4 && kww.length >= 4 && kww.indexOf(uw) > -1 && uw.length >= kww.length - 1) { matched = true; break; }
+          if (kww.length >= 4 && uw.indexOf(kww) > -1) { matched = true; break; } /* kw is substring of user word */
         }
         if (matched) kwMatched++;
       }
