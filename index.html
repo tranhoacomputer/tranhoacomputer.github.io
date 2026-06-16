@@ -1063,19 +1063,94 @@
 
 /* ══ SẢN PHẨM NỔI BẬT ══ */
 #san-pham-section { margin: 48px 0 32px; }
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+
+/* ── Slider wrapper ── */
+.product-slider-wrap {
+  position: relative;
   margin-top: 20px;
 }
-@media(min-width:600px) {
-  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+/* Desktop nav buttons */
+.product-slider-btn {
+  display: none;
+  position: absolute;
+  top: 38%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 2px 14px rgba(0,0,0,.20);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  color: #1e293b;
+  transition: background .15s, box-shadow .15s, opacity .2s;
+  align-items: center; justify-content: center;
 }
-@media(min-width:900px) {
-  .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.product-slider-btn:hover { background: #f0f4ff; box-shadow: 0 4px 18px rgba(37,99,235,.18); }
+.product-slider-btn.prev { left: -22px; }
+.product-slider-btn.next { right: -22px; }
+.product-slider-btn.hidden { opacity: 0; pointer-events: none; }
+
+/* Dot indicators */
+.product-slider-dots {
+  display: none;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 16px;
 }
+.product-slider-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #cbd5e1; border: none; padding: 0; cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.product-slider-dot.active { background: var(--primary, #3b82f6); transform: scale(1.35); }
+
+/* ── Mobile swipe hint indicator ── */
+.product-swipe-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: #94a3b8;
+  letter-spacing: .2px;
+}
+.product-swipe-hint svg { opacity: .7; animation: swipeAnim 1.6s ease-in-out infinite; }
+@keyframes swipeAnim {
+  0%,100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+.product-swipe-hint .hint-dots { display: flex; gap: 4px; align-items: center; }
+.product-swipe-hint .hint-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: #cbd5e1;
+  transition: background .3s;
+}
+.product-swipe-hint .hint-dot.active { background: #3b82f6; }
+
+/* ── MOBILE: scroll snap slider — 2 card hiển thị ── */
+.product-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+  /* Căn đều chiều cao theo card cao nhất trong view */
+  align-items: stretch;
+}
+.product-grid::-webkit-scrollbar { display: none; }
+
+/* ── Card cơ bản ── */
 .product-card {
+  flex: 0 0 calc(50% - 6px);
+  min-width: calc(50% - 6px);
+  scroll-snap-align: start;
   background: var(--surface, #fff);
   border-radius: 16px;
   border: 1px solid var(--border-color, #e2e8f0);
@@ -1083,63 +1158,121 @@
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
   transition: transform .22s, box-shadow .22s;
   cursor: pointer;
-  display: flex; flex-direction: column;
+  /* Flex column + fixed structure đảm bảo card bằng nhau */
+  display: flex;
+  flex-direction: column;
 }
 .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(37,99,235,.13); }
+
+/* ── DESKTOP (>=900px): grid 2 hàng 4 cột + nút nav ── */
+@media(min-width:900px) {
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    overflow: visible;
+    scroll-snap-type: none;
+    align-items: unset;
+  }
+  .product-card { flex: unset; min-width: unset; }
+  .product-slider-btn { display: flex; }
+  .product-slider-dots { display: flex; }
+  .product-swipe-hint { display: none; }
+}
+
+/* ── Ảnh sản phẩm — fixed ratio, góc bo khớp card ── */
 .product-card-img {
-  width: 100%; padding-bottom: 70%; height: 0; position: relative;
-  background: #f1f5f9; overflow: hidden; flex-shrink: 0;
-  border-radius: 12px 12px 0 0;
+  width: 100%;
+  aspect-ratio: 4/3;
+  height: auto;
+  position: relative;
+  background: #f1f5f9;
+  overflow: hidden;
+  flex-shrink: 0;
+  /* Góc bo CHỈ trên, không bị overflow cắt mất */
+  border-radius: 14px 14px 0 0;
 }
 .product-card-img img {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%;
-  object-fit: cover; object-position: center;
+  object-fit: cover; object-position: center top;
   display: block; transition: transform .3s;
 }
 .product-card:hover .product-card-img img { transform: scale(1.04); }
-.product-card-img.no-img::after {
-  content: '🖥️'; font-size: 44px;
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+.product-card-img.no-img {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px; min-height: 120px;
 }
-.product-card-body { padding: 10px 12px 12px; flex: 1; display: flex; flex-direction: column; }
+.product-card-img.no-img::after { content: '🖥️'; }
+
+/* ── Body — flex grow để nút Zalo selalu di bawah ── */
+.product-card-body {
+  padding: 10px 11px 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .product-card-cat {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
   letter-spacing: .6px; color: var(--primary, #3b82f6);
-  margin-bottom: 3px;
+  margin-bottom: 3px; flex-shrink: 0;
 }
+/* Tên sản phẩm — 2 dòng cố định, không làm lệch chiều cao card */
 .product-card-name {
   font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
-  margin-bottom: 5px; line-height: 1.4; flex: 1;
+  margin-bottom: 5px; line-height: 1.35;
+  /* Cố định 2 dòng */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(13px * 1.35 * 2);
+  flex-shrink: 0;
 }
-@media(min-width:900px) {
-  .product-card-body { padding: 12px 16px 14px; }
-  .product-card-name { font-size: 15px; }
-}
+/* Giá — cố định vị trí */
 .product-card-price {
-  font-size: 15px; font-weight: 900; color: #dc2626; margin-bottom: 2px;
+  font-size: 14px; font-weight: 900; color: #dc2626;
+  margin-bottom: 2px; flex-shrink: 0;
 }
-@media(min-width:900px) { .product-card-price { font-size: 17px; } }
-.product-card-note { font-size: 11px; color: #64748b; margin-bottom: 5px; }
-.product-card-desc { font-size: 11.5px; color: #64748b; line-height: 1.5; margin-bottom: 8px; }
+.product-card-note {
+  font-size: 10.5px; color: #64748b; margin-bottom: 4px; flex-shrink: 0;
+}
+/* Mô tả — 2 dòng, flex grow để đẩy nút xuống đáy */
+.product-card-desc {
+  font-size: 11px; color: #64748b; line-height: 1.45;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1; /* đẩy zalo button xuống cuối */
+}
 
-/* Zalo inquiry button */
-.product-card-zalo { border:none; cursor:pointer; font-family:inherit; 
+@media(min-width:900px) {
+  .product-card-body { padding: 12px 14px 14px; }
+  .product-card-name { font-size: 14px; min-height: calc(14px * 1.35 * 2); }
+  .product-card-price { font-size: 16px; }
+  .product-card-desc { font-size: 11.5px; }
+}
+
+/* Zalo button — luôn ở đáy card */
+.product-card-zalo {
+  border: none; cursor: pointer; font-family: inherit;
   display: flex; align-items: center; justify-content: center; gap: 6px;
   width: 100%; padding: 8px 10px;
   background: linear-gradient(135deg,#0068ff,#0052cc);
   color: #fff; font-size: 12px; font-weight: 700;
-  border: none; border-radius: 10px; cursor: pointer;
-  text-decoration: none; margin-top: auto;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-top: auto;
+  flex-shrink: 0;
   transition: opacity .15s, transform .12s;
 }
 .product-card-zalo:hover { opacity: .88; transform: scale(1.02); }
 .product-card-zalo svg { flex-shrink: 0; }
-@media(min-width:900px) {
-  .product-card-zalo { font-size: 13px; padding: 9px 12px; }
-}
+@media(min-width:900px) { .product-card-zalo { font-size: 13px; padding: 9px 12px; } }
 
-/* Tab bar — horizontal scroll on mobile */
+/* Tab bar */
 .product-section-tabs {
   display: flex; gap: 8px;
   overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -1162,6 +1295,7 @@
 [data-theme="dark"] .product-card-img { background:#0f172a; }
 [data-theme="dark"] .product-card-name { color:#f1f5f9; }
 [data-theme="dark"] .product-card-zalo { background: linear-gradient(135deg,#1a7aff,#0052cc); }
+[data-theme="dark"] .product-slider-btn { background: #1e293b; color: #f1f5f9; box-shadow: 0 2px 12px rgba(0,0,0,.4); }
 
 /* Lưu ý info boxes (inline-style boxes in pricing tabs) */
 [data-theme="dark"] .pricing-note-box{background:linear-gradient(135deg,#0f2340,#0d2218)!important;border-color:#1e3a5f!important;}
@@ -2536,8 +2670,23 @@ body {
           <div class="product-section-tabs" id="productTabBar">
             <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
           </div>
-          <div class="product-grid" id="productGrid">
-            <div class="product-loading">⏳ Đang tải sản phẩm...</div>
+          <div class="product-slider-wrap" id="productSliderWrap">
+            <button class="product-slider-btn prev hidden" id="productSliderPrev" onclick="productSliderNav(-1)" aria-label="Trước">&#8249;</button>
+            <div class="product-grid" id="productGrid">
+              <div class="product-loading">⏳ Đang tải sản phẩm...</div>
+            </div>
+            <button class="product-slider-btn next hidden" id="productSliderNext" onclick="productSliderNav(1)" aria-label="Tiếp">&#8250;</button>
+          </div>
+          <div class="product-slider-dots" id="productSliderDots"></div>
+          <!-- Mobile swipe hint -->
+          <div class="product-swipe-hint" id="productSwipeHint">
+            <span class="hint-dots">
+              <span class="hint-dot active" id="hintDot0"></span>
+              <span class="hint-dot" id="hintDot1"></span>
+              <span class="hint-dot" id="hintDot2"></span>
+            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <span id="productSwipeHintText">Vuốt xem thêm</span>
           </div>
         </section>
         <!-- ══ END SẢN PHẨM ══ -->
@@ -4014,34 +4163,140 @@ body {
   var _allProducts = []; window._allProducts = _allProducts;
   var _activeTab = 'all';
 
+  /* ── Desktop pagination state ── */
+  var _desktopPage = 0;
+  var _desktopPerPage = 8; /* 2 hàng x 4 cột */
+  var _filteredCache = [];
+
+  /* ── Build card HTML ── */
+  function _buildCard(p) {
+    var imgHtml = p.imageUrl
+      ? '<div class="product-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.style.cssText=\'\';this.remove()"></div>'
+      : '<div class="product-card-img no-img"></div>';
+    var priceHtml = p.price ? '<div class="product-card-price">' + p.price + '</div>' : '';
+    var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
+    var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
+    var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
+    var _name  = (p.name||'').replace(/'/g, "\\'");
+    var _price = (p.price||'').replace(/'/g, "\\'");
+    var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
+    return '<div class="product-card">' + imgHtml +
+      '<div class="product-card-body">' + catHtml +
+      '<div class="product-card-name">' + p.name + '</div>' +
+      priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
+  }
+
+  /* ── Update desktop nav buttons + dots ── */
+  function _updateDesktopNav() {
+    var isDesktop = window.innerWidth >= 900;
+    var btnPrev = document.getElementById('productSliderPrev');
+    var btnNext = document.getElementById('productSliderNext');
+    var dotsEl  = document.getElementById('productSliderDots');
+    if (!btnPrev || !btnNext || !dotsEl) return;
+    var totalPages = Math.ceil(_filteredCache.length / _desktopPerPage);
+    if (!isDesktop || totalPages <= 1) {
+      btnPrev.classList.add('hidden');
+      btnNext.classList.add('hidden');
+      dotsEl.innerHTML = '';
+      return;
+    }
+    btnPrev.classList.toggle('hidden', _desktopPage === 0);
+    btnNext.classList.toggle('hidden', _desktopPage >= totalPages - 1);
+    var dotsHtml = '';
+    for (var i = 0; i < totalPages; i++) {
+      dotsHtml += '<button class="product-slider-dot' + (i === _desktopPage ? ' active' : '') +
+        '" onclick="productSliderGoTo(' + i + ')" aria-label="Trang ' + (i+1) + '"></button>';
+    }
+    dotsEl.innerHTML = dotsHtml;
+  }
+
+  /* ── Mobile swipe hint — cập nhật khi scroll ── */
+  function _initSwipeHint(grid) {
+    var hint    = document.getElementById('productSwipeHint');
+    var hintTxt = document.getElementById('productSwipeHintText');
+    if (!hint || !grid) return;
+    var total = _filteredCache.length;
+    if (total <= 2 || window.innerWidth >= 900) { hint.style.display = 'none'; return; }
+    hint.style.display = 'flex';
+
+    /* Tính trang hiện tại dựa theo scrollLeft */
+    function _updateHint() {
+      var cardW = grid.scrollWidth / total;
+      var pairsTotal = Math.ceil(total / 2);
+      var currentPair = Math.round(grid.scrollLeft / (cardW * 2));
+      var remaining = pairsTotal - 1 - currentPair;
+
+      /* Update dots (tối đa 5 dots) */
+      var dots = hint.querySelectorAll('.hint-dot');
+      var maxDots = Math.min(pairsTotal, 5);
+      var dotsHtml = '';
+      for (var i = 0; i < maxDots; i++) {
+        dotsHtml += '<span class="hint-dot' + (i === Math.min(currentPair, maxDots-1) ? ' active' : '') + '"></span>';
+      }
+      var dotWrap = hint.querySelector('.hint-dots');
+      if (dotWrap) dotWrap.innerHTML = dotsHtml;
+
+      /* Update text */
+      if (remaining <= 0) {
+        if (hintTxt) hintTxt.textContent = 'Đã xem hết ✓';
+        var svgEl = hint.querySelector('svg');
+        if (svgEl) svgEl.style.opacity = '0';
+      } else {
+        var moreCount = remaining * 2;
+        if (hintTxt) hintTxt.textContent = 'Còn ' + moreCount + ' sản phẩm →';
+        var svgEl = hint.querySelector('svg');
+        if (svgEl) svgEl.style.opacity = '.7';
+      }
+    }
+    _updateHint();
+    grid.addEventListener('scroll', _updateHint, { passive: true });
+  }
+
+  /* ── Render products ── */
   function renderProducts(list) {
     var grid = document.getElementById('productGrid');
     if (!grid) return;
-    var filtered = _activeTab === 'all' ? list : list.filter(function(p){ return p.category === _activeTab; });
-    if (!filtered.length) {
+    _filteredCache = _activeTab === 'all' ? list : list.filter(function(p){ return p.category === _activeTab; });
+    if (!_filteredCache.length) {
       grid.innerHTML = '<div class="product-empty">Chưa có sản phẩm trong mục này.</div>';
+      _updateDesktopNav();
       return;
     }
-    grid.innerHTML = filtered.map(function(p) {
-      var imgHtml = p.imageUrl
-        ? '<div class="product-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.remove()"></div>'
-        : '<div class="product-card-img no-img"></div>';
-      var priceHtml = p.price ? '<div class="product-card-price">' + p.price + '</div>' : '';
-      var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
-      var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
-      var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
-      // Zalo inquiry button — clipboard copy + open zalo.me
-      // (Zalo does NOT support ?text= pre-fill; use clipboard + open approach)
-      var zaloPrice = p.price ? (' — Giá: ' + p.price) : '';
-      var _name = p.name.replace(/'/g, "\\'");
-      var _price = (p.price||'').replace(/'/g, "\\'");
-      var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
-      return '<div class="product-card">' + imgHtml +
-        '<div class="product-card-body">' + catHtml +
-        '<div class="product-card-name">' + p.name + '</div>' +
-        priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
-    }).join('');
+    var isDesktop = window.innerWidth >= 900;
+    if (isDesktop) {
+      /* Desktop: phân trang */
+      var start = _desktopPage * _desktopPerPage;
+      var pageItems = _filteredCache.slice(start, start + _desktopPerPage);
+      grid.innerHTML = pageItems.map(_buildCard).join('');
+    } else {
+      /* Mobile: tất cả — scroll snap */
+      grid.innerHTML = _filteredCache.map(_buildCard).join('');
+      /* Reset scroll về đầu khi đổi tab */
+      grid.scrollLeft = 0;
+      setTimeout(function(){ _initSwipeHint(grid); }, 50);
+    }
+    _updateDesktopNav();
   }
+
+  /* ── Desktop slider navigation ── */
+  window.productSliderNav = function(dir) {
+    var totalPages = Math.ceil(_filteredCache.length / _desktopPerPage);
+    _desktopPage = Math.max(0, Math.min(totalPages - 1, _desktopPage + dir));
+    renderProducts(_allProducts);
+    var sec = document.getElementById('san-pham-section');
+    if (sec) { var h = document.getElementById('headerNav'); var o = h ? h.offsetHeight + 8 : 72; window.scrollTo({top: sec.getBoundingClientRect().top + window.pageYOffset - o, behavior: 'smooth'}); }
+  };
+  window.productSliderGoTo = function(page) {
+    _desktopPage = page;
+    renderProducts(_allProducts);
+  };
+
+  /* ── Re-render on resize (mobile <-> desktop) ── */
+  var _resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(function(){ _desktopPage = 0; renderProducts(_allProducts); }, 200);
+  });
 
   function buildTabBar(products) {
     var bar = document.getElementById('productTabBar');
@@ -4051,12 +4306,12 @@ body {
     var extra = cats.map(function(cat){
       return '<button class="product-tab-btn" data-cat="' + cat + '" onclick="filterProducts(this.dataset.cat,this)">' + cat + '</button>';
     }).join('');
-    // Chỉ giữ nút "Tất cả" + thêm category
-        bar.innerHTML = '<button class="product-tab-btn active" data-cat="all" onclick="filterProducts(this.dataset.cat,this)">Tất cả</button>' + extra;
+    bar.innerHTML = '<button class="product-tab-btn active" data-cat="all" onclick="filterProducts(this.dataset.cat,this)">Tất cả</button>' + extra;
   }
 
   window.filterProducts = function(cat, btn) {
     _activeTab = cat;
+    _desktopPage = 0;
     document.querySelectorAll('#productTabBar .product-tab-btn').forEach(function(b){ b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
     renderProducts(_allProducts);
@@ -6439,15 +6694,15 @@ function _cbAskAI(userMsg) {
   msgsEl.scrollTop = msgsEl.scrollHeight;
 
   _cbHistory.push({ role: 'user', content: userMsg });
-  if (_cbHistory.length > 10) _cbHistory = _cbHistory.slice(-10);
+  if (_cbHistory.length > 30) _cbHistory = _cbHistory.slice(-30);
 
   /* ── AI_ENDPOINT: thay bằng URL backend mới nếu cần ── */
-  var _aiEndpoint = window._AI_ENDPOINT || 'https://superagent-bbcd90c7.base44.app/functions/aiChat';
+  var _aiEndpoint = window._AI_ENDPOINT || 'https://superagent-47f29609.base44.app/functions/aiChat';
   
   fetch(_aiEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: userMsg, history: _cbHistory.slice(0, -1) })
+    body: JSON.stringify({ message: userMsg, history: _cbHistory.slice(0, -1).map(function(m){ return { role: m.role, content: m.content }; }) })
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
@@ -6464,7 +6719,7 @@ function _cbAskAI(userMsg) {
 
     var reply = data.reply || 'Xin lỗi, mình chưa hiểu. Bạn mô tả lại được không?';
     _cbHistory.push({ role: 'assistant', content: reply });
-    if (_cbHistory.length > 20) _cbHistory = _cbHistory.slice(-20);
+    if (_cbHistory.length > 40) _cbHistory = _cbHistory.slice(-40);
 
     var html = reply
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -6978,9 +7233,9 @@ window.copyPhone=function(btn){
 <script>
 /* ── AI CONFIG: thay đổi endpoint tại đây nếu cần ──
    Mặc định: base44 backend function (cần deploy aiChat function)
-   Để dùng backend cũ: window._AI_ENDPOINT = 'https://superagent-bbcd90c7.base44.app/functions/aiChat';
+   Để dùng backend cũ: window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
    ── */
-window._AI_ENDPOINT = 'https://superagent-bbcd90c7.base44.app/functions/aiChat';
+window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
 </script>
 </body>
 </html>
