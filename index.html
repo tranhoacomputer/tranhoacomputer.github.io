@@ -6368,21 +6368,28 @@ function rp(txt) {
       }
       /* Require at least 1 meaningful word match; multi-word phrases get bonus */
       if (kwMatched > 0) {
-        var wordBonus = kwMatched >= 2 ? kwMatched * 2 : 1;
-        score += wordBonus;
+        /* Only count single-word match if word is meaningful (>=4 chars) */
+        var kww0 = kwWords[0] || '';
+        if (kwMatched >= 2) {
+          score += kwMatched * 3; /* multi-word match → strong signal */
+        } else if (kww0.length >= 5) {
+          score += 4; /* single long word match */
+        } else if (kww0.length >= 4) {
+          score += 2; /* single medium word match */
+        }
+        /* single short word (< 4 chars) = 0 bonus, avoids false positives */
       }
     }
     if (score > bestScore) { secondScore = bestScore; bestScore = score; best = KB[i]; }
     else if (score > secondScore) { secondScore = score; }
   }
 
-  /* Require minimum confidence — avoid weak single-char matches */
-  var THRESHOLD = 1;
+  /* Require minimum confidence — raise threshold to avoid false positives */
+  var THRESHOLD = 8;
   if (best && bestScore >= THRESHOLD) {
-    /* Extra filter: if score is low and ambiguous, prefer a clearer response */
-    if (bestScore === 1 && secondScore === 1) {
-      /* Tie — too ambiguous, use tech fallback if relevant */
-    } else {
+    /* Extra filter: score must be clearly better than second best */
+    var scoreDiff = bestScore - secondScore;
+    if (bestScore >= 10 || (bestScore >= THRESHOLD && scoreDiff >= 3)) {
       var _ans = typeof best.a === 'function' ? best.a() : best.a;
       _cbCtx.budgetExpected = !!(_ans && typeof _ans === 'string' && (_ans.indexOf('ngan sach') > -1 || _ans.indexOf('budget') > -1));
       ty_then(_ans, best.q);
