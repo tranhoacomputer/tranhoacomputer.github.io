@@ -4863,6 +4863,339 @@ function chatLookupStatus(uid) {
 }
 window.chatLookupStatus = chatLookupStatus;
 
+/* ════════════════════════════════════════════════════════════
+   SMART AI QUOTE BOT — Trợ lý báo giá tự động v1.0
+   Tự động nhận diện dịch vụ → báo giá ngay + nút đặt lịch
+════════════════════════════════════════════════════════════ */
+
+/* ── DATABASE GIÁ DỊCH VỤ ── */
+var QUOTE_DB = [
+  /* Màn hình */
+  { id:'man-hinh-pt',
+    k:['thay màn hình','vỡ màn','sọc màn','đen màn','không lên hình','màn hình laptop','thay màn laptop','vỡ màn laptop','màn hình vỡ','man hinh','vo man','soc man','thay man'],
+    label:'🖥️ Thay màn hình laptop',
+    prices:[
+      {tier:'Phổ thông (FHD 14"–15.6")', price:'700K – 1.5 triệu'},
+      {tier:'Gaming / 2K / 144Hz',        price:'1.5 – 3.5 triệu'},
+      {tier:'MacBook Air (M1/M2)',         price:'3 – 5 triệu'},
+      {tier:'MacBook Pro 14"/16"',         price:'5 – 8 triệu'},
+    ],
+    note:'⚡ Kiểm tra model máy → báo giá chính xác trong 5 phút',
+    time:'30–60 phút',
+    warranty:'3 tháng lỗi kỹ thuật',
+    tags:['man-hinh']
+  },
+
+  /* Pin */
+  { id:'pin',
+    k:['thay pin','pin chai','hao pin','pin hao','pin hỏng','không nhận pin','sạc không vào','pin laptop','pin macbook','pin yếu','thay battery','doi pin'],
+    label:'🔋 Thay pin laptop',
+    prices:[
+      {tier:'Laptop phổ thông',  price:'350K – 800K'},
+      {tier:'Laptop gaming',     price:'600K – 1.4 triệu'},
+      {tier:'MacBook Air',       price:'1.5 – 2.5 triệu'},
+      {tier:'MacBook Pro',       price:'2 – 3.5 triệu'},
+    ],
+    note:'✅ Pin chính hãng, bảo hành 6 tháng',
+    time:'30–45 phút',
+    warranty:'6 tháng',
+    tags:['pin']
+  },
+
+  /* SSD */
+  { id:'ssd',
+    k:['nâng cấp ssd','thay ssd','gắn ssd','lắp ssd','ssd mới','nâng cấp ổ cứng','ổ cứng chậm','đổi sang ssd','ssd nvme','ssd m2','nang cap ssd','them ssd','lap ssd'],
+    label:'💿 Nâng cấp SSD',
+    prices:[
+      {tier:'SSD 256GB SATA',     price:'350K – 550K'},
+      {tier:'SSD 512GB SATA',     price:'550K – 850K'},
+      {tier:'SSD 1TB SATA',       price:'900K – 1.3 triệu'},
+      {tier:'SSD NVMe 512GB M.2', price:'650K – 1 triệu'},
+      {tier:'SSD NVMe 1TB M.2',   price:'1.1 – 1.8 triệu'},
+    ],
+    note:'🚀 Máy nhanh hơn 5–10 lần! Clone data miễn phí khi nâng cấp tại shop',
+    time:'45–90 phút (clone data)',
+    warranty:'Theo hãng SSD',
+    tags:['ssd']
+  },
+
+  /* RAM */
+  { id:'ram',
+    k:['nâng cấp ram','thêm ram','gắn ram','ram mới','máy thiếu ram','ram 8gb','ram 16gb','ram 32gb','ddr4','ddr5','nang cap ram','them ram','lap ram'],
+    label:'🧠 Nâng cấp RAM',
+    prices:[
+      {tier:'RAM 8GB DDR4',   price:'280K – 450K'},
+      {tier:'RAM 16GB DDR4',  price:'500K – 850K'},
+      {tier:'RAM 16GB DDR5',  price:'700K – 1.1 triệu'},
+      {tier:'RAM 32GB DDR4',  price:'950K – 1.5 triệu'},
+    ],
+    note:'✅ Máy đa nhiệm mượt hơn ngay lập tức',
+    time:'15–30 phút',
+    warranty:'Theo hãng RAM',
+    tags:['ram']
+  },
+
+  /* Cài Windows */
+  { id:'cai-windows',
+    k:['cài windows','cài win','cài lại windows','reinstall windows','format máy','cài win 10','cài win 11','win 10','win 11','cai win','cai lai windows','cai he dieu hanh'],
+    label:'⚙️ Cài Windows trọn gói',
+    prices:[
+      {tier:'Windows 10 / 11 Home',      price:'150K – 250K'},
+      {tier:'Trọn gói: Win + Driver + Office + PM', price:'250K – 350K'},
+      {tier:'MacBook (macOS reinstall)',  price:'200K – 400K'},
+    ],
+    note:'📦 Bao gồm: cài Win + Driver đầy đủ + Office + tối ưu hiệu năng',
+    time:'45–90 phút',
+    warranty:'1 tháng lỗi cài đặt',
+    tags:['win']
+  },
+
+  /* Bàn phím */
+  { id:'ban-phim',
+    k:['thay bàn phím','bàn phím liệt','phím không bấm','đổ nước bàn phím','phím hỏng','thay keyboard','ban phim hong','phim liet','ban phim laptop'],
+    label:'⌨️ Thay / sửa bàn phím laptop',
+    prices:[
+      {tier:'Vệ sinh / sửa nhẹ',      price:'80K – 150K'},
+      {tier:'Thay bàn phím (phổ thông)', price:'200K – 450K'},
+      {tier:'Thay bàn phím (gaming)',  price:'400K – 800K'},
+      {tier:'Thay bàn phím MacBook',   price:'1.2 – 2.5 triệu'},
+    ],
+    note:'⚠️ Đổ nước: tắt máy ngay, mang đến sớm để tránh hỏng nặng hơn!',
+    time:'30–60 phút',
+    warranty:'3 tháng',
+    tags:['ban-phim']
+  },
+
+  /* Diệt virus */
+  { id:'diet-virus',
+    k:['diệt virus','dọn virus','máy có virus','bị virus','malware','ransomware','máy bị hack','mã độc','diet virus','don virus'],
+    label:'🦠 Diệt virus & bảo mật',
+    prices:[
+      {tier:'Diệt virus + dọn rác phần mềm', price:'80K – 200K'},
+      {tier:'Hỗ trợ từ xa (lỗi vặt)',        price:'Miễn phí 🎁'},
+      {tier:'Phục hồi file bị mã hóa (cố gắng)', price:'300K – 800K'},
+    ],
+    note:'🌐 Lỗi nhẹ → hỗ trợ từ xa MIỄN PHÍ ngay!',
+    time:'30–120 phút',
+    warranty:'1 tháng tái phát',
+    tags:['virus']
+  },
+
+  /* Cứu dữ liệu */
+  { id:'cuu-du-lieu',
+    k:['cứu dữ liệu','phục hồi dữ liệu','xóa nhầm file','format nhầm','ổ cứng chết','mất file','ổ cứng hỏng','bad sector','ssd hỏng','cuu du lieu','mat du lieu','xoa nham'],
+    label:'💾 Cứu dữ liệu',
+    prices:[
+      {tier:'Xóa nhầm / format nhầm (SSD/HDD còn tốt)', price:'200K – 500K'},
+      {tier:'HDD bad sector / cơ học nhẹ',               price:'400K – 1.2 triệu'},
+      {tier:'HDD hỏng nặng / cơ học',                    price:'1.5 – 3 triệu'},
+      {tier:'SSD chip hỏng (cố gắng)',                   price:'1 – 2.5 triệu'},
+    ],
+    note:'🔬 Kiểm tra trước → báo kết quả + giá trước khi làm. Tỷ lệ phục hồi 80–95%',
+    time:'1–3 ngày tùy mức độ',
+    warranty:'Dữ liệu phục hồi xong mới tính tiền',
+    tags:['du-lieu']
+  },
+
+  /* Sửa nguồn / mainboard */
+  { id:'nguon-mainboard',
+    k:['sửa mainboard','lỗi mainboard','không lên nguồn','không bật máy','chết nguồn','sửa nguồn','thay mainboard','ic nguồn','lỗi nguồn laptop','thay nguồn pc','nguon hong','main hong','khong bat duoc'],
+    label:'⚡ Sửa nguồn / Mainboard',
+    prices:[
+      {tier:'Sửa lỗi nguồn PC (PSU)',     price:'150K – 400K'},
+      {tier:'Sửa IC nguồn laptop',        price:'300K – 700K'},
+      {tier:'Sửa / phục hồi mainboard',   price:'400K – 1.2 triệu'},
+      {tier:'Thay mainboard laptop mới',  price:'1.5 – 4 triệu'},
+    ],
+    note:'🔬 Chẩn đoán miễn phí — không sửa được không tính tiền!',
+    time:'1–3 ngày',
+    warranty:'3–6 tháng',
+    tags:['nguon']
+  },
+
+  /* Vệ sinh tản nhiệt */
+  { id:'ve-sinh',
+    k:['vệ sinh máy tính','vệ sinh laptop','máy nóng','quá nhiệt','thay keo tản nhiệt','keo tản nhiệt','dọn bụi','tản nhiệt','bảo dưỡng','ve sinh','may nong','qua nhiet','thay keo tan nhiet'],
+    label:'🧹 Vệ sinh & tản nhiệt',
+    prices:[
+      {tier:'Vệ sinh + thay keo tản nhiệt laptop',   price:'120K – 250K'},
+      {tier:'Vệ sinh + thay keo PC (bao gồm CPU)',   price:'100K – 200K'},
+      {tier:'Thay quạt CPU/Laptop',                  price:'150K – 500K'},
+    ],
+    note:'⏳ Nên vệ sinh 6–12 tháng/lần để máy bền hơn và mát hơn',
+    time:'30–60 phút',
+    warranty:'1 tháng',
+    tags:['ve-sinh']
+  },
+
+  /* Ráp PC */
+  { id:'rap-pc',
+    k:['ráp pc','lắp pc','build pc','ráp máy','lắp máy','pc gaming','máy gaming','cấu hình game','tư vấn cấu hình','pc văn phòng','lắp pc văn phòng','lap pc','rap may','xay pc'],
+    label:'🖥️ Lắp ráp PC theo yêu cầu',
+    prices:[
+      {tier:'PC văn phòng phổ thông',  price:'5 – 10 triệu'},
+      {tier:'PC văn phòng cao cấp',    price:'10 – 18 triệu'},
+      {tier:'PC gaming tầm trung',     price:'15 – 22 triệu'},
+      {tier:'PC gaming cao cấp',       price:'22 – 40 triệu+'},
+    ],
+    note:'💪 Tư vấn cấu hình tối ưu theo ngân sách — linh kiện chính hãng 100%',
+    time:'2–4 giờ lắp + test',
+    warranty:'Theo hãng từng linh kiện',
+    tags:['pc']
+  },
+
+  /* Mua laptop */
+  { id:'mua-laptop',
+    k:['mua laptop','mua máy tính','tư vấn laptop','laptop văn phòng','laptop học sinh','laptop gaming','laptop giá rẻ','tư vấn mua laptop','nên mua laptop','laptop sinh viên','tu van laptop','mua laptop moi'],
+    label:'💻 Mua laptop mới',
+    prices:[
+      {tier:'Laptop văn phòng phổ thông', price:'8 – 15 triệu'},
+      {tier:'Laptop đồ họa / kỹ thuật',   price:'15 – 25 triệu'},
+      {tier:'Laptop gaming tầm trung',    price:'18 – 28 triệu'},
+      {tier:'MacBook Air M2/M3',          price:'28 – 35 triệu'},
+      {tier:'MacBook Pro M3/M4',          price:'35 – 65 triệu'},
+    ],
+    note:'🎯 Tư vấn trực tiếp để chọn máy phù hợp nhu cầu & ngân sách!',
+    time:'Có máy sẵn hoặc đặt hàng 1–3 ngày',
+    warranty:'Theo hãng',
+    tags:['laptop']
+  },
+];
+
+/* ── SMART QUOTE MATCHING ENGINE ── */
+function _normalizeQ(s) {
+  if (!s) return '';
+  return s.toLowerCase()
+    .replace(/[àáạảãâầấậẩẫăằắặẳẵ]/g,'a')
+    .replace(/[èéẹẻẽêềếệểễ]/g,'e')
+    .replace(/[ìíịỉĩ]/g,'i')
+    .replace(/[òóọỏõôồốộổỗơờớợởỡ]/g,'o')
+    .replace(/[ùúụủũưừứựửữ]/g,'u')
+    .replace(/[ỳýỵỷỹ]/g,'y')
+    .replace(/[đ]/g,'d')
+    .replace(/[^a-z0-9\s]/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+
+function _quoteMatch(input) {
+  var norm = _normalizeQ(input);
+  var best = null, bestScore = 0;
+  for (var i = 0; i < QUOTE_DB.length; i++) {
+    var q = QUOTE_DB[i];
+    var score = 0;
+    for (var j = 0; j < q.k.length; j++) {
+      var kn = _normalizeQ(q.k[j]);
+      if (norm.indexOf(kn) > -1) {
+        score += kn.length >= 8 ? 10 : kn.length >= 5 ? 6 : 3;
+      } else {
+        // word-level
+        var kwords = kn.split(/\s+/).filter(function(w){ return w.length >= 3; });
+        var nwords = norm.split(/\s+/);
+        for (var kw = 0; kw < kwords.length; kw++) {
+          for (var nw = 0; nw < nwords.length; nw++) {
+            if (nwords[nw] === kwords[kw] || nwords[nw].indexOf(kwords[kw]) > -1 || kwords[kw].indexOf(nwords[nw]) > -1) {
+              score += 2; break;
+            }
+          }
+        }
+      }
+    }
+    if (score > bestScore) { bestScore = score; best = q; }
+  }
+  return bestScore >= 3 ? best : null;
+}
+
+function _buildQuoteCard(q) {
+  var rows = q.prices.map(function(p) {
+    return '<tr>'
+      + '<td style="padding:7px 10px;font-size:12.5px;color:#475569;border-bottom:1px solid #f1f5f9">' + p.tier + '</td>'
+      + '<td style="padding:7px 10px;font-size:13px;font-weight:700;color:#2563eb;border-bottom:1px solid #f1f5f9;white-space:nowrap"><b>' + p.price + '</b></td>'
+      + '</tr>';
+  }).join('');
+
+  return '<div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:14px;overflow:hidden;margin-top:4px;max-width:320px">'
+    // Header
+    + '<div style="background:linear-gradient(135deg,#2563eb,#0ea5e9);padding:11px 14px;display:flex;align-items:center;gap:8px">'
+    +   '<span style="font-size:18px">' + q.label.split(' ')[0] + '</span>'
+    +   '<div>'
+    +     '<div style="font-size:13px;font-weight:800;color:#fff">' + q.label.replace(/^[^\s]+\s/,'') + '</div>'
+    +     '<div style="font-size:10.5px;color:rgba(255,255,255,.8);margin-top:1px">⏱️ ' + q.time + ' &nbsp;|&nbsp; 🛡️ ' + q.warranty + '</div>'
+    +   '</div>'
+    + '</div>'
+    // Bảng giá
+    + '<table style="width:100%;border-collapse:collapse;background:#fff">'
+    +   '<thead><tr>'
+    +     '<th style="padding:7px 10px 5px;text-align:left;font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">Phân khúc</th>'
+    +     '<th style="padding:7px 10px 5px;text-align:left;font-size:10.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px">Giá ước tính</th>'
+    +   '</tr></thead>'
+    +   '<tbody>' + rows + '</tbody>'
+    + '</table>'
+    // Note
+    + '<div style="padding:8px 12px;font-size:11.5px;color:#0369a1;background:#e0f2fe;display:flex;align-items:flex-start;gap:6px">'
+    +   '<span style="flex-shrink:0">ℹ️</span><span>' + q.note + '</span>'
+    + '</div>'
+    // CTA buttons
+    + '<div style="padding:10px 12px 12px;display:flex;gap:8px;flex-wrap:wrap;background:#fff">'
+    +   '<button onclick="_qCbBook()" style="flex:1;min-width:120px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border:none;border-radius:9px;padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity .2s" onmouseover="this.style.opacity=\'.85\'" onmouseout="this.style.opacity=\'1\'">📅 Đặt lịch sửa ngay</button>'
+    +   '<button onclick="_qCbCall()" style="flex:0 0 auto;background:#f0fdf4;color:#059669;border:1.5px solid #86efac;border-radius:9px;padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s" onmouseover="this.style.background=\'#dcfce7\'" onmouseout="this.style.background=\'#f0fdf4\'">📞 Gọi ngay</button>'
+    + '</div>'
+    + '</div>';
+}
+
+/* ── CTA ACTIONS từ Quote Card ── */
+function _qCbBook() {
+  /* Đóng chatbot, scroll đến form đặt lịch */
+  var panel = document.getElementById('chatbotPanel');
+  if (panel) panel.style.display = 'none';
+  var toggle = document.getElementById('chatbotToggle');
+  if (toggle) toggle.setAttribute('data-open','false');
+  var section = document.getElementById('datlich-sua-chua');
+  if (section) {
+    setTimeout(function(){
+      section.scrollIntoView({behavior:'smooth',block:'start'});
+    }, 100);
+  }
+}
+
+function _qCbCall() {
+  window.location.href = 'tel:0963284044';
+}
+
+/* ── PATCH vào hàm rp() — intercept trước khi xử lý KB ── */
+var _origRp = null;
+function _patchRpWithQuote() {
+  if (typeof rp !== 'function' || _origRp) return;
+  _origRp = rp;
+  rp = function(txt) {
+    if (typeof botIsTyping !== 'undefined' && botIsTyping) return;
+    var q = _quoteMatch(txt || '');
+    if (q) {
+      /* Báo giá tức thì */
+      if (typeof uS === 'function') uS(txt);
+      if (typeof ty_then === 'function') {
+        var card = _buildQuoteCard(q);
+        ty_then(card, ['Đặt lịch sửa ngay', 'Xem dịch vụ khác', 'Zalo tư vấn']);
+        /* Thêm QRA cho 2 nút mới nếu chưa có */
+        if (typeof QRA !== 'undefined') {
+          QRA['Đặt lịch sửa ngay'] = function(){ uS('Đặt lịch sửa ngay'); _qCbBook(); };
+          QRA['Xem dịch vụ khác']  = function(){ uS('Xem các dịch vụ khác'); _origRp('dịch vụ'); };
+        }
+      }
+      return;
+    }
+    /* Không khớp quote → dùng engine KB gốc */
+    _origRp.call(this, txt);
+  };
+}
+
+/* Patch ngay khi script chạy và sau DOMContentLoaded */
+_patchRpWithQuote();
+document.addEventListener('DOMContentLoaded', function() {
+  _patchRpWithQuote();
+  /* Cũng patch window.cbSend để intercept đúng rp mới */
+  setTimeout(_patchRpWithQuote, 800);
+});
+
 var KB=[
  {k:['xin chào','hello','hi ','chào ','alo','hey','bắt đầu','start'],
   a:'👋 Xin chào! Mình là trợ lý AI của <b>Tran Hoa Computer</b>.<br>Bạn đang gặp vấn đề gì với máy tính? Mình sẵn sàng hỗ trợ 24/7!',
@@ -5674,6 +6007,8 @@ var QRA={
   'Ưu đãi hiện tại':   function(){uS('Có ưu đãi gì không?');rp('ưu đãi hiện tại');},
   'Vào nhóm Zalo':      function(){uS('Vào nhóm Zalo?');rp('vào nhóm zalo');},
   'Tư vấn cấu hình':    function(){uS('Tư vấn cấu hình PC');rp('giá lắp đặt pc');},
+  'Đặt lịch sửa ngay': function(){uS('Đặt lịch sửa ngay');_qCbBook();},
+  'Xem dịch vụ khác':  function(){uS('Xem dịch vụ khác');_origRp('dịch vụ');},
   'Máy không lên nguồn':function(){uS('Máy không lên nguồn');rp('máy không lên');},
   'Máy chạy chậm':      function(){uS('Máy chạy chậm');rp('máy chạy chậm');},
   'Màn hình lỗi':       function(){uS('Màn hình có vấn đề');rp('màn hình đen');},
