@@ -6398,16 +6398,63 @@ function rp(txt) {
               'sac','adapter','o dia','dvd','nuoc','uot','ngam','mainboard','ic','han','rom',
               'khoi dong','khong bat','khong len','man hinh','mau','den','xanh','do','tim'];
   var isTech = tech.some(function(w){ return low.indexOf(w) > -1; });
-  if (isTech) {
-    ty_then('🤔 Câu hỏi này mình chưa có câu trả lời sẵn.<br>Kỹ thuật viên sẽ giải đáp ngay!<br><br>📞 Hotline: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> &nbsp;·&nbsp; KTV: <a href="tel:0819120401" style="color:#059669;font-weight:700">0819.120.401</a>',
-      ['Gặp kỹ thuật viên','Đặt lịch sửa','Giá dịch vụ']);
-    return;
-  }
+  /* ── 4. Gọi AI (Cloudflare) cho câu hỏi kỹ thuật & off-topic ── */
+  _cbAskAI(raw);
+}
 
-  /* ── 4. Off-topic ── */
-  _cbCtx.budgetExpected = false;
-  ty_then(offT[offIdx % offT.length], ['Giá dịch vụ','Đặt lịch sửa','Dịch vụ của shop']);
-  offIdx++;
+/* ────────────────────────────────────────────────────────────
+   AI ENGINE — gọi backend Cloudflare AI, hiển thị typing...
+──────────────────────────────────────────────────────────── */
+var _cbHistory = []; /* lịch sử hội thoại gửi kèm context */
+
+function _cbAskAI(userMsg) {
+  /* Hiển thị typing indicator */
+  _cbSetBusy(true);
+  var tw = document.createElement('div');
+  tw.className = 'cb-m bot typing-indicator';
+  tw.id = '_aiTyping';
+  tw.innerHTML = '<span></span><span></span><span></span>';
+  var msgsEl = document.getElementById('cbMsgs');
+  msgsEl.appendChild(tw);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+
+  /* Thêm tin nhắn vào lịch sử */
+  _cbHistory.push({ role: 'user', content: userMsg });
+  /* Giữ tối đa 10 tin */
+  if (_cbHistory.length > 10) _cbHistory = _cbHistory.slice(-10);
+
+  fetch('https://superagent-d72f66dc.base44.app/functions/aiChat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: userMsg, history: _cbHistory.slice(0, -1) })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    /* Xoá typing indicator */
+    var t = document.getElementById('_aiTyping');
+    if (t) t.remove();
+    _cbSetBusy(false);
+
+    var reply = data.reply || 'Xin lỗi, mình chưa hiểu. Bạn mô tả lại được không?';
+    /* Lưu reply vào history */
+    _cbHistory.push({ role: 'assistant', content: reply });
+    if (_cbHistory.length > 20) _cbHistory = _cbHistory.slice(-20);
+
+    /* Render markdown đơn giản: **bold**, xuống dòng */
+    var html = reply
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .split('\n').join('<br>');
+
+    bS(html, ['Gặp kỹ thuật viên','Đặt lịch sửa','Giá dịch vụ']);
+  })
+  .catch(function(err) {
+    var t = document.getElementById('_aiTyping');
+    if (t) t.remove();
+    _cbSetBusy(false);
+    bS('⚠️ Kết nối AI tạm gián đoạn. Vui lòng gọi hotline <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a> để được hỗ trợ ngay!',
+      ['Gọi ngay','Đặt lịch sửa']);
+  });
 }
 
 
