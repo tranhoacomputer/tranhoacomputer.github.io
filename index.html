@@ -1068,6 +1068,12 @@
 .product-slider-wrap {
   position: relative;
   margin-top: 20px;
+  /* Padding hai bên để nút < > có chỗ hiện ra, không đè lên ảnh */
+  padding-left: 44px;
+  padding-right: 44px;
+}
+@media(max-width:899px) {
+  .product-slider-wrap { padding-left: 0; padding-right: 0; }
 }
 
 /* Desktop nav buttons */
@@ -1090,8 +1096,8 @@
   align-items: center; justify-content: center;
 }
 .product-slider-btn:hover { background: #f0f4ff; box-shadow: 0 4px 18px rgba(37,99,235,.18); }
-.product-slider-btn.prev { left: -22px; }
-.product-slider-btn.next { right: -22px; }
+.product-slider-btn.prev { left: -2px; }
+.product-slider-btn.next { right: -2px; }
 .product-slider-btn.hidden { opacity: 0; pointer-events: none; }
 
 /* Dot indicators */
@@ -1141,8 +1147,12 @@
   scrollbar-width: none;
   scroll-behavior: smooth;
   padding-bottom: 4px;
-  /* Căn đều chiều cao theo card cao nhất trong view */
   align-items: stretch;
+}
+/* Desktop: con trỏ grab khi drag */
+@media(min-width:900px) {
+  .product-grid { cursor: grab; user-select: none; }
+  .product-grid.dragging { cursor: grabbing; scroll-behavior: auto; }
 }
 .product-grid::-webkit-scrollbar { display: none; }
 
@@ -4252,6 +4262,29 @@ body {
     grid.addEventListener('scroll', _updateHint, { passive: true });
   }
 
+  /* ── Desktop drag-to-scroll ── */
+  function _initDragScroll(el) {
+    if (!el || el._dragBound) return;
+    el._dragBound = true;
+    var isDown = false, startX = 0, scrollLeft = 0;
+    el.addEventListener('mousedown', function(e) {
+      if (window.innerWidth < 900) return;
+      isDown = true;
+      el.classList.add('dragging');
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('mouseleave', function() { isDown = false; el.classList.remove('dragging'); });
+    el.addEventListener('mouseup', function() { isDown = false; el.classList.remove('dragging'); });
+    el.addEventListener('mousemove', function(e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var x = e.pageX - el.offsetLeft;
+      var walk = (x - startX) * 1.5;
+      el.scrollLeft = scrollLeft - walk;
+    });
+  }
+
   /* ── Render products ── */
   function renderProducts(list) {
     var grid = document.getElementById('productGrid');
@@ -4268,6 +4301,8 @@ body {
       var start = _desktopPage * _desktopPerPage;
       var pageItems = _filteredCache.slice(start, start + _desktopPerPage);
       grid.innerHTML = pageItems.map(_buildCard).join('');
+      /* Khởi tạo drag-to-scroll cho desktop */
+      _initDragScroll(grid);
     } else {
       /* Mobile: tất cả — scroll snap */
       grid.innerHTML = _filteredCache.map(_buildCard).join('');
@@ -5442,38 +5477,83 @@ function _qCbCall() {
 
 /* ── PATCH vào hàm rp() — intercept trước khi xử lý KB ── */
 var _origRp = null;
+
+/* ── AI conversation context tracker ──
+   _cbAiTurns: số lượt AI đã trả lời trong phiên này
+   Nếu đang trong "AI conversation mode" (>= 1 lượt AI),
+   các câu ngắn/không rõ ràng sẽ tiếp tục đi vào AI thay vì KB */
+var _cbAiTurns = 0;
+
+/* Câu "tiếp tục hội thoại" → luôn vào AI */
+var _CONTINUE_PATTERNS = [
+  'tiep','tiep tuc','tiep di','tra loi tiep','ke tiep','noi tiep',
+  'tiep theo','va con','con gi nua','co gi nua','va sao','uh','um','ok tiep',
+  'roi sao','roi the','the roi','vay','hay that','that vay','that a','that sao',
+  'hm','hmm','ohh','ohhh','a vay','a the','uh huh','oke','okay',
+  'tiep thi sao','the thi sao','xong thi sao','roi tiep',
+  'tiep ban oi','tiep di ban','co gi them','noi them','giai thich them',
+  'vi du','cho vi du','cu the hon','ro hon','chi tiet hon','mo ta them',
+  'y ban la gi','y muon noi gi','hieu roi','biet roi',
+  'that la','hay qua','tuyet','good','nice','wow',
+  'xin chao','hello','chao ban','hi ban','hi','hey'
+];
+
+/* Câu tự giới thiệu / hỏi cá nhân → vào AI để nhớ tên/context */
+var _PERSONAL_PATTERNS = [
+  'minh ten','toi ten','ten toi','ten minh','ban oi toi ten',
+  'ten toi la','ten minh la','toi la','minh la','moi nguoi goi toi',
+  'ban biet ten toi','biet ten toi','nho ten toi','ten toi la gi',
+  'ban co nho','co biet toi','biet toi la ai','toi la ai',
+  'ban khoe','ban the nao','hom nay the nao',
+  'cam on ban','cam on nhe','thanks','thank you','chuc mung',
+  'rat vui','vui qua','thich lam','hay lam',
+  'ban la ai','ban ten gi','ban duoc tao ra','ban la robot',
+  'ban co the lam gi','ban gioi','ban thong minh','ban co cam xuc',
+  'ban co nho khong','ban da quen','ban quen roi','ban nho khong'
+];
+
 function _patchRpWithQuote() {
   if (typeof rp !== 'function' || _origRp) return;
   _origRp = rp;
   rp = function(txt) {
     if (typeof botIsTyping !== 'undefined' && botIsTyping) return;
-    /* ── Early-exit cho câu hỏi ngoài lề — đi thẳng vào AI ── */
     var _normTxt = _normalizeQ(txt || '');
-    /* Mở rộng outScope: đẩy thẳng sang AI thay vì KB scoring */
-    var _outScope = ['tieng trung','tieng hoa','tieng nhat','tieng han','giao tiep','hoc tieng',
+    var _rawWords = _normTxt.split(/\s+/).filter(function(w){ return w.length >= 1; });
+
+    /* ── PRIORITY 0A: Câu "tiếp tục hội thoại" → luôn vào AI ── */
+    var _isContinue = _CONTINUE_PATTERNS.some(function(p){ return _normTxt === p || _normTxt.indexOf(p) > -1; });
+    if (_isContinue && typeof _cbAskAI === 'function') { _cbAskAI(txt); return; }
+
+    /* ── PRIORITY 0B: Câu tự giới thiệu / hỏi cá nhân → AI ── */
+    var _isPersonal = _PERSONAL_PATTERNS.some(function(p){ return _normTxt.indexOf(p) > -1; });
+    if (_isPersonal && typeof _cbAskAI === 'function') { _cbAskAI(txt); return; }
+
+    /* ── PRIORITY 1: Đang trong AI conversation mode ──
+       Nếu đã có >= 1 lượt AI và câu ngắn (< 7 từ) → tiếp tục vào AI */
+    if (_cbAiTurns >= 1 && _rawWords.length < 7 && typeof _cbAskAI === 'function') {
+      _cbAskAI(txt); return;
+    }
+
+    /* ── PRIORITY 2: Câu hỏi ngoài chủ đề website → AI ── */
+    var _outScope = [
+      'tieng trung','tieng hoa','tieng nhat','tieng han','hoc tieng',
       'tieng anh','thoi tiet','bai hat','ca nhac','da bong','bong da','tin tuc','gia vang',
       'ngoai le','lam duoc gi','ban lam gi','bot lam gi',
-      /* câu hỏi tổng quát → AI trả lời tốt hơn KB */
-      'la gi','nghia la','giai thich','huong dan','cach','lam the nao',
-      'tai sao','vi sao','khi nao','nhu the nao',
-      /* off-topic chủ đề khác */
+      'la gi','nghia la','giai thich them','tai sao','vi sao',
       'nau an','cong thuc','thu cung','lich su','dia ly','toan hoc','vat ly',
       'y te','suc khoe','benh','thuoc','ngan hang','tai chinh','phap luat',
-      'the thao','van hoc','nghe thuat','am nhac','phim','game','du lich',
-      /* câu hỏi cá nhân / chào hỏi thân thiện */
-      'ten ban la','ban o dau','ban bao nhieu tuoi','ban co the'];
+      'the thao','van hoc','nghe thuat','am nhac','phim','du lich',
+      'ten ban la','ban o dau','ban bao nhieu tuoi'
+    ];
     var _isOutScope = _outScope.some(function(p){ return _normTxt.indexOf(p) > -1; });
-    if (_isOutScope) {
-      /* Chuyển thẳng sang AI, không dùng KB hay quote engine */
-      if (typeof _cbAskAI === 'function') { _cbAskAI(txt); return; }
-    }
+    if (_isOutScope && typeof _cbAskAI === 'function') { _cbAskAI(txt); return; }
+
+    /* ── Quote match ── */
     var q = _quoteMatch(txt || '');
     if (q) {
-      /* Báo giá tức thì — uS(txt) đã được gọi bởi cbSend, không gọi lại */
       if (typeof ty_then === 'function') {
         var card = _buildQuoteCard(q);
         ty_then(card, ['Đặt lịch sửa ngay', 'Xem dịch vụ khác', 'Zalo tư vấn']);
-        /* Thêm QRA cho 2 nút mới nếu chưa có */
         if (typeof QRA !== 'undefined') {
           QRA['Đặt lịch sửa ngay'] = function(){ uS('Đặt lịch sửa ngay'); _qCbBook(); };
           QRA['Xem dịch vụ khác']  = function(){ uS('Xem các dịch vụ khác'); _origRp('dịch vụ'); };
@@ -5481,7 +5561,7 @@ function _patchRpWithQuote() {
       }
       return;
     }
-    /* Không khớp quote → dùng engine KB gốc */
+    /* KB engine */
     _origRp.call(this, txt);
   };
 }
@@ -5490,7 +5570,6 @@ function _patchRpWithQuote() {
 _patchRpWithQuote();
 document.addEventListener('DOMContentLoaded', function() {
   _patchRpWithQuote();
-  /* Cũng patch window.cbSend để intercept đúng rp mới */
   setTimeout(_patchRpWithQuote, 800);
 });
 
@@ -6441,7 +6520,11 @@ function setQR(list){
   (list||[]).slice(0,8).forEach(function(lbl){
     var btn=document.createElement('button');
     btn.className='cb-qb'; btn.textContent=lbl;
-    btn.onclick=function(){if(QRA[lbl])QRA[lbl]();};
+    btn.onclick=function(){
+      /* Track quick reply như một câu hỏi user */
+      window._lastUserMsg = lbl;
+      if(QRA[lbl])QRA[lbl]();
+    };
     qrDiv.appendChild(btn);
   });
 }
@@ -6465,6 +6548,12 @@ function ty_then(a,q){
     if(tw.parentNode) tw.parentNode.removeChild(tw);
     bS(a,q);
     _cbSetBusy(false);
+    /* Sync KB answer vào AI history để giữ context cho các câu hỏi tiếp theo */
+    if (typeof _cbSyncKbToHistory === 'function' && typeof _lastUserMsg !== 'undefined') {
+      /* Lấy text thuần từ HTML answer để đưa vào history */
+      var _plainAns = (typeof a === 'string') ? a.replace(/<[^>]+>/g, ' ').replace(/\s+/g,' ').trim().slice(0, 600) : '';
+      if (_plainAns) _cbSyncKbToHistory(_lastUserMsg, _plainAns);
+    }
   },800);
 }
 
@@ -6679,9 +6768,10 @@ function rp(txt) {
 }
 
 /* ──────────────────────────────────────────────────────────
-   AI ENGINE — Cloudflare Worker backend
+   AI ENGINE — Gemini 2.5 Flash backend
 ────────────────────────────────────────────────────────── */
 var _cbHistory = [];
+/* _cbAiTurns được khai báo trong _patchRpWithQuote block ở trên */
 
 function _cbAskAI(userMsg) {
   _cbSetBusy(true);
@@ -6690,19 +6780,21 @@ function _cbAskAI(userMsg) {
   tw.id = '_aiTyping';
   tw.innerHTML = '<span></span><span></span><span></span>';
   var msgsEl = document.getElementById('cbMsgs');
-  msgsEl.appendChild(tw);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
+  if (msgsEl) { msgsEl.appendChild(tw); msgsEl.scrollTop = msgsEl.scrollHeight; }
 
+  /* Lưu user message vào history */
   _cbHistory.push({ role: 'user', content: userMsg });
-  if (_cbHistory.length > 30) _cbHistory = _cbHistory.slice(-30);
+  if (_cbHistory.length > 40) _cbHistory = _cbHistory.slice(-40);
 
-  /* ── AI_ENDPOINT: thay bằng URL backend mới nếu cần ── */
   var _aiEndpoint = window._AI_ENDPOINT || 'https://superagent-47f29609.base44.app/functions/aiChat';
-  
+
+  /* Gửi history KHÔNG gồm message cuối (backend sẽ thêm vào) */
+  var historyToSend = _cbHistory.slice(0, -1);
+
   fetch(_aiEndpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: userMsg, history: _cbHistory.slice(0, -1).map(function(m){ return { role: m.role, content: m.content }; }) })
+    body: JSON.stringify({ message: userMsg, history: historyToSend })
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
@@ -6711,19 +6803,23 @@ function _cbAskAI(userMsg) {
     _cbSetBusy(false);
 
     if (data.error) {
-      /* Backend lỗi → fallback thân thiện */
-      var fallbackMsg = '🤖 ' + userMsg + '<br><br>Câu hỏi hay! Để được tư vấn chi tiết nhất, bạn có thể:<br>📞 Gọi trực tiếp: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>💬 Chat Zalo: <a href="https://zalo.me/0963284044" target="_blank" style="color:#2563eb;font-weight:700">Nhắn Zalo ngay</a>';
+      var fallbackMsg = '🤖 Câu hỏi hay! Để được tư vấn chi tiết nhất, bạn có thể:<br>📞 Gọi trực tiếp: <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a><br>💬 Chat Zalo: <a href="https://zalo.me/0963284044" target="_blank" style="color:#2563eb;font-weight:700">Nhắn Zalo ngay</a>';
       bS(fallbackMsg, ['Gọi ngay','Chat Zalo','Đặt lịch sửa']);
       return;
     }
 
     var reply = data.reply || 'Xin lỗi, mình chưa hiểu. Bạn mô tả lại được không?';
-    _cbHistory.push({ role: 'assistant', content: reply });
-    if (_cbHistory.length > 40) _cbHistory = _cbHistory.slice(-40);
 
+    /* Lưu AI reply vào history + tăng bộ đếm lượt AI */
+    _cbHistory.push({ role: 'assistant', content: reply });
+    if (_cbHistory.length > 50) _cbHistory = _cbHistory.slice(-50);
+    if (typeof _cbAiTurns !== 'undefined') _cbAiTurns++;
+
+    /* Render reply: sanitize HTML rồi format markdown */
     var html = reply
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g,'<em>$1</em>')
       .split('\n').join('<br>');
 
     bS(html, ['Gặp kỹ thuật viên','Đặt lịch sửa','Giá dịch vụ']);
@@ -6737,6 +6833,16 @@ function _cbAskAI(userMsg) {
   });
 }
 
+/* ── Sync KB answer vào AI history để AI có context ──
+   Gọi hàm này sau mỗi khi KB / ty_then trả lời */
+function _cbSyncKbToHistory(question, answer) {
+  if (!question || !answer) return;
+  /* Lưu như cặp user/assistant để AI biết context */
+  _cbHistory.push({ role: 'user', content: question });
+  _cbHistory.push({ role: 'assistant', content: answer });
+  if (_cbHistory.length > 50) _cbHistory = _cbHistory.slice(-50);
+}
+
 
 window.cbSend=function(){
   if(botIsTyping) return;
@@ -6744,6 +6850,8 @@ window.cbSend=function(){
   var t=(inp.value||'').trim();
   if(!t) return;
   inp.value='';
+  /* Track câu hỏi mới nhất để ty_then/KB có thể sync vào AI history */
+  window._lastUserMsg = t;
   uS(t); rp(t);
 };
 
@@ -7205,6 +7313,10 @@ window.copyPhone=function(btn){
         var msgs = document.getElementById('cbMsgs');
         if (msgs && confirm('Xóa toàn bộ hội thoại?')) {
           msgs.innerHTML = '';
+          /* Reset AI history và context khi xóa chat */
+          if (typeof _cbHistory !== 'undefined') _cbHistory = [];
+          if (typeof _cbAiTurns !== 'undefined') _cbAiTurns = 0;
+          window._lastUserMsg = '';
           try { sessionStorage.removeItem('thc_chat'); } catch(e) {}
         }
       };
