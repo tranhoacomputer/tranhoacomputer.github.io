@@ -5470,61 +5470,27 @@ function _qCbCall() {
 var _origRp = null;
 
 /* ══════════════════════════════════════════════════════════════
-   AI-FIRST ROUTING — v3
-   Quy tắc đơn giản:
-   1. _cbAiTurns >= 1  →  100% AI, KHÔNG qua KB dù câu nào
-   2. _cbAiTurns = 0   →  KB trước, nếu KB không khớp → AI
-   Mục tiêu: hội thoại liên tục, không bị KB "cướp" context
+   AI-FIRST ROUTING — v4 (PURE AI-FIRST)
+   MỌI câu hỏi → AI trước tiên, KHÔNG QUA KB.
+   KB + Quote chỉ chạy nếu AI endpoint bị lỗi/timeout.
+   → Hội thoại hoàn toàn tự nhiên, có bộ nhớ, không bị block.
 ══════════════════════════════════════════════════════════════ */
 var _cbAiTurns = 0;
-
-/* Câu chào / tự giới thiệu / câu ngắn → AI ngay kể cả lượt đầu */
-var _AI_FIRST_PATTERNS = [
-  /* Chào hỏi */
-  'xin chao','hello','hi','hey','chao ban','chao buoi','good morning','good evening',
-  /* Tự giới thiệu */
-  'minh ten','toi ten','ten toi','ten minh','toi la','minh la',
-  'moi nguoi goi toi','ten toi la','ten minh la',
-  /* Hỏi AI nhớ gì */
-  'ban biet ten','biet ten toi','nho ten','ten toi la gi',
-  'ban co nho','co biet toi','biet toi la ai','toi la ai',
-  'ban con nho','ban nho khong','ban quen roi',
-  /* Cảm ơn / phản hồi */
-  'cam on','thanks','thank you','chuc mung','tuyet','hay qua',
-  /* Về AI */
-  'ban la ai','ban ten gi','ban la robot','ban co cam xuc',
-  'ban thong minh','ban co the lam gi',
-  /* Tiếp tục hội thoại */
-  'tiep','tiep tuc','tiep di','ke tiep','noi tiep','tiep theo',
-  'roi sao','roi the','the roi','vay','that vay','that a',
-  'hm','hmm','ok','oke','okay','uh','um','a vay','a the',
-  'co gi them','noi them','giai thich them','vi du','cho vi du',
-  'cu the hon','ro hon','chi tiet hon'
-];
 
 function _patchRpWithQuote() {
   if (typeof rp !== 'function' || _origRp) return;
   _origRp = rp;
   rp = function(txt) {
     if (typeof botIsTyping !== 'undefined' && botIsTyping) return;
-    var _normTxt = _normalizeQ(txt || '');
 
-    /* ══ RULE 1: ĐÃ CÓ AI TURN → 100% AI, bypass toàn bộ KB ══ */
-    if (_cbAiTurns >= 1 && typeof _cbAskAI === 'function') {
+    /* ══ TẤT CẢ CÂU HỎI → AI ══
+       KB/Quote chỉ là fallback nếu _cbAskAI chưa sẵn sàng */
+    if (typeof _cbAskAI === 'function') {
       _cbAskAI(txt);
       return;
     }
 
-    /* ══ RULE 2: CÂU CHÀO / GIỚI THIỆU → AI ngay từ lượt đầu ══ */
-    var _isAiFirst = _AI_FIRST_PATTERNS.some(function(p){
-      return _normTxt === p || _normTxt.indexOf(p) > -1;
-    });
-    if (_isAiFirst && typeof _cbAskAI === 'function') {
-      _cbAskAI(txt);
-      return;
-    }
-
-    /* ══ RULE 3: LƯỢT ĐẦU — thử Quote engine trước ══ */
+    /* ── Fallback: Quote engine (khi AI chưa load xong) ── */
     var q = _quoteMatch(txt || '');
     if (q) {
       if (typeof ty_then === 'function') {
@@ -5538,7 +5504,7 @@ function _patchRpWithQuote() {
       return;
     }
 
-    /* ══ RULE 4: LƯỢT ĐẦU — KB engine ══ */
+    /* ── Fallback cuối: KB engine ── */
     _origRp.call(this, txt);
   };
 }
