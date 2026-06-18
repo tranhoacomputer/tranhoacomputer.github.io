@@ -2385,6 +2385,8 @@ body {
         }
     })();
     </script>
+    <!-- ══ AI CONFIG ══ -->
+    <script src="ai-config.js"></script>
 </head>
 <body>
     <div id="scrollProgressBar"></div>
@@ -6634,6 +6636,62 @@ function rp(txt) {
   var raw = (txt || '').trim();
   if (!raw) return;
 
+  /* ══════════════════════════════════════════════════════
+     "AI ƠI" FREE PASS MODE
+     Khi user gõ "Ai ơi" → bypass KB, gọi AI không giới hạn
+  ══════════════════════════════════════════════════════ */
+  (function checkFreePass() {
+    var cfg = window.AI_CONFIG || {};
+    if (cfg.freePassEnabled === false) return;
+    var _nv = function(s){var m={'à':'a','á':'a','ạ':'a','ả':'a','ã':'a','â':'a','ầ':'a','ấ':'a','ậ':'a','ẩ':'a','ẫ':'a','ă':'a','ằ':'a','ắ':'a','ặ':'a','ẳ':'a','ẵ':'a','è':'e','é':'e','ẹ':'e','ẻ':'e','ẽ':'e','ê':'e','ề':'e','ế':'e','ệ':'e','ể':'e','ễ':'e','ì':'i','í':'i','ị':'i','ỉ':'i','ĩ':'i','ò':'o','ó':'o','ọ':'o','ỏ':'o','õ':'o','ô':'o','ồ':'o','ố':'o','ộ':'o','ổ':'o','ỗ':'o','ơ':'o','ờ':'o','ớ':'o','ợ':'o','ở':'o','ỡ':'o','ù':'u','ú':'u','ụ':'u','ủ':'u','ũ':'u','ư':'u','ừ':'u','ứ':'u','ự':'u','ử':'u','ữ':'u','ỳ':'y','ý':'y','ỵ':'y','ỷ':'y','ỹ':'y','đ':'d'};return s.toLowerCase().split('').map(function(c){return m[c]||c;}).join('').trim();};
+    var normRaw = _nv(raw);
+    var trigger = _nv(cfg.freePassTrigger || 'ai oi');
+    var isExact = (normRaw === trigger);
+    var isPrefix = (normRaw.indexOf(trigger + ' ') === 0 || normRaw.indexOf(trigger + ',') === 0);
+
+    /* Đang trong free pass mode → exit check */
+    if (window._freePassMode) {
+      var exitList = ['thoat free pass','exit ai','thoat ai','chatbot thuong','quay lai chatbot'];
+      if (exitList.some(function(e){ return normRaw.indexOf(e) > -1; })) {
+        window._freePassMode = false;
+        ty_then('✅ Đã quay về chatbot cửa hàng bình thường!',
+          ['Báo giá sửa chữa','Đặt lịch sửa','Gặp kỹ thuật viên']);
+        return;
+      }
+      /* Tiếp tục gọi AI free */
+      _cbAskAIFree(raw);
+      return;
+    }
+
+    /* Chưa trong free pass → check trigger */
+    if (!isExact && !isPrefix) return;
+
+    window._freePassMode = true;
+
+    if (isExact) {
+      /* Chỉ "Ai ơi" → thông báo + chờ câu hỏi */
+      ty_then(cfg.freePassConfirm || '🤖✨ Chế độ AI tự do đã bật! Hỏi gì tôi cũng trả lời.', ['Thoát chế độ AI tự do']);
+      return;
+    }
+
+    /* "Ai ơi [câu hỏi]" → lấy phần sau trigger và hỏi ngay */
+    var afterTrigger = '';
+    var rawLow = raw.toLowerCase();
+    /* Tìm vị trí kết thúc trigger word trong chuỗi gốc */
+    var tLen = 0, normAccum = '';
+    for (var ci = 0; ci < raw.length; ci++) {
+      normAccum = _nv(raw.substring(0, ci+1));
+      if (normAccum.endsWith(trigger)) { tLen = ci + 1; break; }
+    }
+    afterTrigger = raw.substring(tLen).replace(/^[\s,]+/, '').trim();
+    if (afterTrigger) {
+      _cbAskAIFree(afterTrigger);
+    }
+  })();
+
+  /* Nếu đang free pass mode → rp() dừng lại (đã xử lý trong checkFreePass) */
+  if (window._freePassMode) return;
+
   /* ── Expand aliases ── */
   var _aliases = {
     'kv':'ky thuat vien','ktv':'ky thuat vien','bh':'bao hanh',
@@ -6744,6 +6802,72 @@ function rp(txt) {
   _cbAskAI(raw);
 }
 
+
+/* ══════════════════════════════════════════════════════════
+   _cbAskAIFree() — Gọi AI không giới hạn (Free Pass Mode)
+   Bypass KB, không có system prompt cửa hàng hạn chế,
+   gửi flag freePass=true để backend biết dùng prompt mở
+══════════════════════════════════════════════════════════ */
+function _cbAskAIFree(userMsg) {
+  _cbSetBusy(true);
+  var tw = document.createElement('div');
+  tw.className = 'cb-m bot typing-indicator';
+  tw.id = '_aiTyping';
+  tw.innerHTML = '<span></span><span></span><span></span>';
+  var msgsEl = document.getElementById('cbMsgs');
+  if (msgsEl) { msgsEl.appendChild(tw); msgsEl.scrollTop = msgsEl.scrollHeight; }
+
+  _cbHistory.push({ role: 'user', content: userMsg });
+  if (_cbHistory.length > 40) _cbHistory = _cbHistory.slice(-40);
+
+  var cfg = window.AI_CONFIG || {};
+  var _aiEndpoint = window._AI_ENDPOINT || 'https://superagent-47f29609.base44.app/functions/aiChat';
+  var historyToSend = _cbHistory.slice(0, -1);
+
+  fetch(_aiEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: userMsg,
+      history: historyToSend,
+      freePass: true,                              /* flag báo backend: không giới hạn */
+      systemExtra: cfg.freePassSystemExtra || '',  /* system prompt mở rộng */
+      model: cfg.preferredModel || 'gemini-2.5-flash'
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    var t = document.getElementById('_aiTyping');
+    if (t) t.remove();
+    _cbSetBusy(false);
+
+    if (data.error) {
+      bS('⚠️ AI đang bận. Thử lại sau hoặc gọi <a href="tel:0963284044" style="color:#2563eb;font-weight:700">0963.284.044</a>', []);
+      return;
+    }
+
+    var reply = data.reply || 'Xin lỗi, mình chưa hiểu rõ. Bạn hỏi lại được không?';
+    _cbHistory.push({ role: 'assistant', content: reply });
+    if (_cbHistory.length > 50) _cbHistory = _cbHistory.slice(-50);
+
+    var html = reply
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g,'<em>$1</em>')
+      .replace(/`([^`]+)`/g,'<code style="background:#f1f5f9;padding:1px 4px;border-radius:3px;font-family:monospace">$1</code>')
+      .split('\n').join('<br>');
+
+    /* Nút gợi ý khi ở free pass: chỉ hiện "Thoát AI tự do" */
+    bS('🤖 ' + html, ['Hỏi tiếp','Thoát chế độ AI tự do']);
+  })
+  .catch(function() {
+    var t = document.getElementById('_aiTyping');
+    if (t) t.remove();
+    _cbSetBusy(false);
+    bS('⚠️ Kết nối AI gián đoạn. Vui lòng thử lại!', ['Hỏi tiếp']);
+  });
+}
+
 /* ──────────────────────────────────────────────────────────
    AI ENGINE — Gemini 2.5 Flash backend
 ────────────────────────────────────────────────────────── */
@@ -6827,6 +6951,18 @@ window.cbSend=function(){
   var t=(inp.value||'').trim();
   if(!t) return;
   inp.value='';
+
+  /* ── Intercept nút "Thoát chế độ AI tự do" ── */
+  var _normExit = function(s){ var m={'à':'a','á':'a','ạ':'a','ả':'a','ã':'a','â':'a','ầ':'a','ấ':'a','ậ':'a','ẩ':'a','ẫ':'a','ă':'a','ằ':'a','ắ':'a','ặ':'a','ẳ':'a','ẵ':'a','è':'e','é':'e','ẹ':'e','ẻ':'e','ẽ':'e','ê':'e','ề':'e','ế':'e','ệ':'e','ể':'e','ễ':'e','ì':'i','í':'i','ị':'i','ỉ':'i','ĩ':'i','ò':'o','ó':'o','ọ':'o','ỏ':'o','õ':'o','ô':'o','ồ':'o','ố':'o','ộ':'o','ổ':'o','ỗ':'o','ơ':'o','ờ':'o','ớ':'o','ợ':'o','ở':'o','ỡ':'o','ù':'u','ú':'u','ụ':'u','ủ':'u','ũ':'u','ư':'u','ừ':'u','ứ':'u','ự':'u','ử':'u','ữ':'u','ỳ':'y','ý':'y','ỵ':'y','ỷ':'y','ỹ':'y','đ':'d'}; return s.toLowerCase().split('').map(function(c){return m[c]||c;}).join('').trim(); };
+  var _normT = _normExit(t);
+  if (_normT === 'thoat che do ai tu do' || _normT === 'thoat ai tu do' || _normT === 'thoat free pass' || _normT === 'exit ai' || t === 'Thoát chế độ AI tự do') {
+    window._freePassMode = false;
+    uS(t);
+    ty_then('✅ Đã quay về chatbot cửa hàng bình thường. Tôi có thể giúp gì cho bạn?',
+      ['Báo giá sửa chữa','Đặt lịch sửa','Gặp kỹ thuật viên','Xem sản phẩm']);
+    return;
+  }
+
   /* Track câu hỏi mới nhất để ty_then/KB có thể sync vào AI history */
   window._lastUserMsg = t;
   uS(t); rp(t);
@@ -7320,11 +7456,12 @@ window.copyPhone=function(btn){
 })();
 </script>
 <script>
-/* ── AI CONFIG: thay đổi endpoint tại đây nếu cần ──
-   Mặc định: base44 backend function (cần deploy aiChat function)
-   Để dùng backend cũ: window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
+/* ── AI CONFIG được load từ ai-config.js (xem file đó để chỉnh endpoint) ──
+   Fallback nếu ai-config.js chưa load
    ── */
-window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
+if (!window._AI_CONFIG_LOADED) {
+  window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
+}
 </script>
 </body>
 </html>
