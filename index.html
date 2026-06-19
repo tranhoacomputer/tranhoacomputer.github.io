@@ -1119,23 +1119,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 10px;
-  font-size: 11.5px;
-  color: #94a3b8;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 7px 16px;
+  background: linear-gradient(90deg,#eff6ff,#dbeafe);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #2563eb;
   letter-spacing: .2px;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 8px rgba(37,99,235,.10);
 }
-.product-swipe-hint svg { opacity: .7; animation: swipeAnim 1.6s ease-in-out infinite; }
+.product-swipe-hint .swipe-arrow-left { animation: swipeLeft 1.4s ease-in-out infinite; display:inline-block; }
+.product-swipe-hint .swipe-arrow-right { animation: swipeRight 1.4s ease-in-out infinite; display:inline-block; }
+@keyframes swipeLeft  { 0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)} }
+@keyframes swipeRight { 0%,100%{transform:translateX(0)}50%{transform:translateX(4px)} }
+.product-swipe-hint svg { opacity: .85; animation: swipeAnim 1.4s ease-in-out infinite; }
 @keyframes swipeAnim {
   0%,100% { transform: translateX(0); }
   50%      { transform: translateX(5px); }
 }
-.product-swipe-hint .hint-dots { display: flex; gap: 4px; align-items: center; }
+.product-swipe-hint .hint-dots { display: flex; gap: 5px; align-items: center; }
 .product-swipe-hint .hint-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: #cbd5e1;
-  transition: background .3s;
+  width: 6px; height: 6px; border-radius: 50%; background: #bfdbfe;
+  transition: background .3s, transform .3s;
 }
-.product-swipe-hint .hint-dot.active { background: #3b82f6; }
+.product-swipe-hint .hint-dot.active { background: #2563eb; transform: scale(1.3); }
 
 /* ── MOBILE: scroll snap slider — 2 card hiển thị ── */
 .product-grid {
@@ -2379,7 +2392,91 @@ body {
     .s-chip.s-note{background:#ede9fe;color:#5b21b6;border-color:#ddd6fe;}
     [data-theme="dark"] .s-chip.s-note{background:#1e1040;border-color:#5b21b6;color:#c4b5fd;}
 
-    </style>
+    
+/* ══ POPUP KHUYẾN MÃI ══ */
+#promoOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,.55); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  animation: promoFadeIn .35s ease;
+}
+@keyframes promoFadeIn { from{opacity:0} to{opacity:1} }
+#promoOverlay.hidden { display: none !important; }
+
+#promoBox {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f2044 100%);
+  border: 1.5px solid rgba(250,204,21,.35);
+  border-radius: 20px;
+  max-width: 400px; width: 100%;
+  padding: 28px 24px 22px;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(250,204,21,.08);
+  animation: promoSlideUp .4s cubic-bezier(.22,1,.36,1);
+}
+@keyframes promoSlideUp { from{transform:translateY(40px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+#promoBox .promo-badge {
+  display: inline-block;
+  background: linear-gradient(90deg,#facc15,#f97316);
+  color: #0f172a; font-size: 10px; font-weight: 900;
+  padding: 3px 12px; border-radius: 20px; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+#promoBox .promo-title {
+  font-size: clamp(18px,5vw,24px); font-weight: 900;
+  color: #facc15; line-height: 1.25; margin-bottom: 8px;
+}
+#promoBox .promo-subtitle {
+  font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 16px;
+}
+#promoBox .promo-items {
+  list-style: none; padding: 0; margin: 0 0 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+#promoBox .promo-items li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 13px; color: #e2e8f0; line-height: 1.4;
+}
+#promoBox .promo-items li .pi {
+  font-size: 16px; flex-shrink: 0; margin-top: -1px;
+}
+#promoBox .promo-cta-btn {
+  display: block; width: 100%;
+  background: linear-gradient(90deg,#facc15,#f97316);
+  color: #0f172a; font-weight: 900; font-size: 14px;
+  padding: 13px; border-radius: 12px; border: none;
+  cursor: pointer; text-align: center;
+  margin-bottom: 12px;
+  transition: opacity .2s, transform .1s;
+  box-shadow: 0 4px 16px rgba(249,115,22,.3);
+}
+#promoBox .promo-cta-btn:active { transform: scale(.98); opacity: .9; }
+
+#promoBox .promo-close-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+#promoBox .promo-close-btn {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  color: #94a3b8; font-size: 12px; padding: 7px 14px; border-radius: 8px;
+  cursor: pointer; transition: background .2s;
+}
+#promoBox .promo-close-btn:hover { background: rgba(255,255,255,.13); color: #cbd5e1; }
+#promoBox .promo-snooze-btn {
+  background: none; border: none; color: #64748b; font-size: 11px;
+  cursor: pointer; text-decoration: underline; padding: 4px;
+}
+#promoBox .promo-snooze-btn:hover { color: #94a3b8; }
+#promoBox .promo-x {
+  position: absolute; top: 12px; right: 14px;
+  background: rgba(255,255,255,.08); border: none;
+  color: #64748b; width: 28px; height: 28px; border-radius: 50%;
+  cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+#promoBox .promo-x:hover { background: rgba(255,255,255,.16); color: #e2e8f0; }
+
+</style>
     <!-- ── Áp dụng theme NGAY LẬP TỨC để tránh nhấp nháy sáng/tối khi tải trang ── -->
     <script>
     (function(){
@@ -2393,6 +2490,28 @@ body {
     <script src="ai-config.js"></script>
 </head>
 <body>
+
+<!-- ══ POPUP KHUYẾN MÃI ══ -->
+<div id="promoOverlay" class="hidden" role="dialog" aria-modal="true" aria-label="Thông báo khuyến mãi">
+  <div id="promoBox">
+    <button class="promo-x" onclick="promoClose()" aria-label="Đóng">✕</button>
+    <div class="promo-badge">🔥 Ưu đãi tháng này</div>
+    <div class="promo-title">Tiết kiệm đến 30%<br>cho mọi dịch vụ!</div>
+    <div class="promo-subtitle">Tran Hoa Computer đang có nhiều chương trình hấp dẫn dành cho khách hàng tháng 6.</div>
+    <ul class="promo-items">
+      <li><span class="pi">💻</span><span><b>Laptop văn phòng</b> — giá sinh viên từ <b style="color:#facc15">8.990.000đ</b></span></li>
+      <li><span class="pi">🖥️</span><span><b>PC Gaming</b> Core i5-12400F + RTX 3060 chỉ còn <b style="color:#facc15">14.900.000đ</b></span></li>
+      <li><span class="pi">🔧</span><span><b>Sửa chữa miễn phí kiểm tra</b> — vệ sinh máy giảm 20%</span></li>
+      <li><span class="pi">🎁</span><span>Tặng <b>chuột không dây</b> khi mua laptop &gt; 12 triệu</span></li>
+    </ul>
+    <button class="promo-cta-btn" onclick="promoGoShop()">🛒 Xem sản phẩm ngay</button>
+    <div class="promo-close-row">
+      <button class="promo-close-btn" onclick="promoClose()">✕ Đóng thông báo</button>
+      <button class="promo-snooze-btn" onclick="promoSnooze()">Tắt trong 1 giờ</button>
+    </div>
+  </div>
+</div>
+
     <div id="scrollProgressBar"></div>
 <div id="toast-container"></div>
 
@@ -2696,13 +2815,14 @@ body {
           <div class="product-slider-dots" id="productSliderDots"></div>
           <!-- Mobile swipe hint -->
           <div class="product-swipe-hint" id="productSwipeHint">
+            <span class="swipe-arrow-left">←</span>
             <span class="hint-dots">
               <span class="hint-dot active" id="hintDot0"></span>
               <span class="hint-dot" id="hintDot1"></span>
               <span class="hint-dot" id="hintDot2"></span>
             </span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             <span id="productSwipeHintText">Vuốt xem thêm</span>
+            <span class="swipe-arrow-right">→</span>
           </div>
         </section>
         <!-- ══ END SẢN PHẨM ══ -->
@@ -4189,8 +4309,18 @@ body {
     var imgHtml = p.imageUrl
       ? '<div class="product-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.style.cssText=\'\';this.remove()"></div>'
       : '<div class="product-card-img no-img"></div>';
-    var origHtml  = p.originalPrice ? '<div class="product-card-orig-price">' + p.originalPrice + '</div>' : '';
-    var priceHtml = p.price ? '<div class="product-card-price">' + p.price + '</div>' : '';
+    function _fmtPrice(s) {
+      if (!s) return s;
+      s = String(s).trim();
+      // Đã có ký hiệu giá → giữ nguyên
+      if (/[đĐ₫]/.test(s) || /[kK]\s*$/.test(s) || /[kK]\s*[-–]/.test(s)) return s;
+      // Chỉ là số thuần → thêm đ
+      var clean = s.replace(/[.,\s]/g,'');
+      if (/^\d+$/.test(clean)) return Number(clean).toLocaleString('vi-VN') + 'đ';
+      return s;
+    }
+    var origHtml  = p.originalPrice ? '<div class="product-card-orig-price">' + _fmtPrice(p.originalPrice) + '</div>' : '';
+    var priceHtml = p.price ? '<div class="product-card-price">' + _fmtPrice(p.price) + '</div>' : '';
     var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
     var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
     var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
@@ -7467,6 +7597,51 @@ window.copyPhone=function(btn){
 if (!window._AI_CONFIG_LOADED) {
   window._AI_ENDPOINT = 'https://superagent-47f29609.base44.app/functions/aiChat';
 }
+</script>
+<script>
+
+/* ══ POPUP KHUYẾN MÃI ══ */
+(function(){
+  var SNOOZE_KEY = 'thc_promo_snooze';
+  var DELAY_MS   = 1200; // hiện sau 1.2s
+
+  function promoShouldShow() {
+    var snooze = localStorage.getItem(SNOOZE_KEY);
+    if (!snooze) return true;
+    return Date.now() > Number(snooze);
+  }
+
+  function _show() {
+    var el = document.getElementById('promoOverlay');
+    if (el) el.classList.remove('hidden');
+  }
+
+  window.promoClose = function() {
+    var el = document.getElementById('promoOverlay');
+    if (el) { el.style.animation = 'promoFadeIn .2s ease reverse'; setTimeout(function(){ el.classList.add('hidden'); }, 180); }
+  };
+
+  window.promoSnooze = function() {
+    localStorage.setItem(SNOOZE_KEY, String(Date.now() + 60 * 60 * 1000)); // 1 giờ
+    promoClose();
+  };
+
+  window.promoGoShop = function() {
+    promoClose();
+    setTimeout(function(){
+      var el = document.getElementById('san-pham-section') || document.querySelector('[id*="san-pham"]');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 220);
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (promoShouldShow()) {
+      setTimeout(_show, DELAY_MS);
+    }
+  });
+})();
+/* ══ END POPUP KHUYẾN MÃI ══ */
+
 </script>
 </body>
 </html>
