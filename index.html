@@ -4185,14 +4185,7 @@ body {
     var imgHtml = p.imageUrl
       ? '<div class="product-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.style.cssText=\'\';this.remove()"></div>'
       : '<div class="product-card-img no-img"></div>';
-    
-    // Hiển thị giá gốc gạch ngang mờ nhỏ phía trên giá bán thực tế nếu có
-    var originalPriceHtml = '';
-    if (p.originalPrice && p.originalPrice.trim() !== '') {
-      originalPriceHtml = '<div class="product-card-original-price" style="font-size: 11px; text-decoration: line-through; color: #94a3b8; margin-bottom: 2px; line-height: 1;">' + p.originalPrice + '</div>';
-    }
-    
-    var priceHtml = p.price ? '<div class="product-card-price" style="color: #dc2626; font-weight: 900;">' + p.price + '</div>' : '';
+    var priceHtml = p.price ? '<div class="product-card-price">' + p.price + '</div>' : '';
     var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
     var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
     var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
@@ -4202,7 +4195,7 @@ body {
     return '<div class="product-card">' + imgHtml +
       '<div class="product-card-body">' + catHtml +
       '<div class="product-card-name">' + p.name + '</div>' +
-      originalPriceHtml + priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
+      priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
   }
 
   /* ── Update desktop nav buttons + dots ── */
