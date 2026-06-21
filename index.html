@@ -4110,7 +4110,13 @@ body {
     <button id="backToTop">↑</button>
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
-    var GAS_URL = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
+    /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec';
+    (function(){
+      var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
+      window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
+    })();
+    var GAS_URL = window.GAS_URL;
     var USE_GAS = true;
 
     function lookupRepairStatus() {
@@ -7750,6 +7756,438 @@ if (!window._AI_CONFIG_LOADED) {
   });
 })();
 /* ══ END POPUP KHUYẾN MÃI ══ */
+
+</script>
+
+<script id="thc-config-bridge">
+/* ════════════════════════════════════════════════════════════════════════
+   THC CONFIG BRIDGE v2.0  –  localStorage ↔ index.html sync
+   
+   KIẾN TRÚC:
+   ┌─────────────┐  localStorage  ┌──────────────┐
+   │  admin.html │ ─────────────► │  index.html  │
+   │  (quản trị) │  thc_*_cfg    │  (trang KH)  │
+   └─────────────┘                └──────────────┘
+                  GAS/SheetDB vẫn hoạt động như cũ
+                  (booking, tra cứu, comments)
+                  
+   KEYS QUẢN LÝ:
+   • thc_promo_cfg    – popup khuyến mãi
+   • thc_client_cfg   – thông tin cửa hàng (tên, địa chỉ, giờ, stats)
+   • thc_pricing_cfg  – bảng giá dịch vụ
+   • thc_gasUrl       – Google Apps Script URL (đã có sẵn trong gốc)
+   • thc_books        – danh sách đặt lịch (đã có sẵn)
+   
+   GAS VẪN GIỮ NGUYÊN CHO:
+   • loadProducts()   – tải sản phẩm từ GAS
+   • lookupRepairStatus() – tra cứu sửa chữa  
+   • form booking submit  – ghi lên Google Sheet
+   • /api/comments    – bình luận
+   ════════════════════════════════════════════════════════════════════════ */
+
+(function () {
+  'use strict';
+
+  /* ── Util: đọc JSON từ localStorage ───────────────────────────────── */
+  function safeGet(key) {
+    try {
+      var v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : null;
+    } catch (e) { return null; }
+  }
+
+  /* ── Util: format số điện thoại "0963284044" → "0963.284.044" ─────── */
+  function fmtPhone(raw) {
+    var s = (raw || '').replace(/\D/g, '');
+    if (s.length === 10) return s.slice(0, 4) + '.' + s.slice(4, 7) + '.' + s.slice(7);
+    return raw || '';
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     APPLY PROMO CONFIG
+     Fields: show, badge, title, subtitle, items[], btnText, snoozeHours
+     ══════════════════════════════════════════════════════════════════ */
+  function applyPromo(cfg) {
+    if (!cfg) return;
+
+    var overlay = document.getElementById('promoOverlay');
+    if (!overlay) return;
+
+    /* Ẩn popup nếu admin tắt */
+    if (cfg.show === false) {
+      overlay.classList.add('hidden');
+      return;
+    }
+
+    /* Badge */
+    var badge = overlay.querySelector('.promo-badge');
+    if (badge && cfg.badge) badge.textContent = cfg.badge;
+
+    /* Title – cho phép <br> */
+    var titleEl = overlay.querySelector('.promo-title');
+    if (titleEl && cfg.title) titleEl.innerHTML = cfg.title;
+
+    /* Subtitle */
+    var subEl = overlay.querySelector('.promo-subtitle');
+    if (subEl && cfg.subtitle !== undefined) subEl.innerHTML = cfg.subtitle;
+
+    /* Items list */
+    var ul = overlay.querySelector('.promo-items');
+    if (ul && Array.isArray(cfg.items) && cfg.items.length > 0) {
+      ul.innerHTML = cfg.items.map(function (item) {
+        return '<li><span class="pi">💠</span><span>' + item + '</span></li>';
+      }).join('');
+    }
+
+    /* CTA button */
+    var cta = overlay.querySelector('.promo-cta-btn');
+    if (cta && cfg.btnText) cta.innerHTML = cfg.btnText;
+
+    /* Snooze button label */
+    var snoozeBtn = overlay.querySelector('.promo-snooze-btn');
+    if (snoozeBtn && cfg.snoozeHours) {
+      snoozeBtn.textContent = 'Tắt trong ' + cfg.snoozeHours + ' giờ';
+    }
+
+    /* Override promoSnooze để dùng snoozeHours từ config */
+    window.promoSnooze = function () {
+      var h = (cfg && parseInt(cfg.snoozeHours)) || 1;
+      localStorage.setItem('thc_promo_snooze', String(Date.now() + h * 3600000));
+      if (typeof window.promoClose === 'function') window.promoClose();
+    };
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     APPLY CLIENT CONFIG
+     Fields: shopName, slogan, phone, phoneNorm, email, address,
+             openTime, closeTime, workDays,
+             statsRepair, statsExperience, statsSatisfaction,
+             forceStatus, closedReason
+     ══════════════════════════════════════════════════════════════════ */
+  function applyClient(cfg) {
+    if (!cfg) return;
+
+    var shopName  = cfg.shopName  || '';
+    var slogan    = cfg.slogan    || '';
+    var phone     = (cfg.phone    || '').replace(/\D/g, '');
+    var phoneNorm = cfg.phoneNorm || fmtPhone(phone);
+    var email     = cfg.email     || '';
+    var address   = cfg.address   || '';
+    var openTime  = cfg.openTime  || '07:00';
+    var closeTime = cfg.closeTime || '22:00';
+    var workDays  = cfg.workDays  || 'T2 – CN';
+
+    /* ── Tên shop: hero H1 + navbar brand ── */
+    var h1s = document.querySelectorAll('h1.logo-animation');
+    h1s.forEach(function (el) { if (shopName) el.textContent = shopName; });
+
+    /* ── Slogan ── */
+    var slogEls = document.querySelectorAll('p.slogan-animation');
+    slogEls.forEach(function (el) { if (slogan) el.textContent = slogan; });
+
+    /* ── Title trang ── */
+    if (shopName && document.title) {
+      document.title = document.title.replace(/Tran Hoa Computer|Trần Hoà Computer/gi, shopName);
+    }
+
+    /* ── Top-bar: giờ mở cửa ── */
+    var timeSpans = document.querySelectorAll('.time > span:first-child');
+    timeSpans.forEach(function (sp) {
+      if (/\d{2}:\d{2}/.test(sp.textContent)) {
+        sp.textContent = openTime + ' – ' + closeTime + ' (' + workDays + ')';
+      }
+    });
+    /* fallback tìm span bất kỳ chứa pattern giờ */
+    if (timeSpans.length === 0) {
+      document.querySelectorAll('.time span').forEach(function (sp) {
+        if (/\d{2}:\d{2}\s*[–-]\s*\d{2}:\d{2}/.test(sp.textContent)) {
+          sp.textContent = openTime + ' – ' + closeTime + ' (' + workDays + ')';
+        }
+      });
+    }
+
+    /* ── Top-bar: hotline ── */
+    document.querySelectorAll('a.phone.copy-ph').forEach(function (a) {
+      a.href = 'tel:' + phone;
+      a.textContent = phoneNorm;
+      a.setAttribute('onclick', "event.preventDefault();copyPhone('" + phone + "')");
+      a.setAttribute('title', 'Bấm để sao chép số');
+    });
+
+    /* ── Footer: tên shop H3 ── */
+    document.querySelectorAll('footer h3').forEach(function (h) {
+      if (/COMPUTER|Computer/.test(h.textContent)) {
+        h.textContent = shopName.toUpperCase();
+      }
+    });
+
+    /* ── Footer: địa chỉ ── */
+    document.querySelectorAll('footer p').forEach(function (p) {
+      var t = p.textContent.trim();
+      if (t.startsWith('Địa chỉ:') && address) {
+        p.textContent = 'Địa chỉ: ' + address;
+      }
+      if (t.startsWith('Điện thoại:') && phone) {
+        p.innerHTML = 'Điện thoại: <a href="tel:' + phone +
+          '" style="color:#facc15;font-weight:bold;text-decoration:none;">' +
+          phoneNorm + '</a>';
+      }
+      if (t.startsWith('Email:') && email) {
+        p.innerHTML = 'Email: <a href="mailto:' + email +
+          '" style="color:#7dd3fc;font-weight:600;text-decoration:none;">' +
+          email + '</a>';
+      }
+    });
+
+    /* ── Footer: map query ── */
+    if (address) {
+      document.querySelectorAll('footer iframe').forEach(function (iframe) {
+        var src = iframe.src || '';
+        if (src.includes('maps.google.com')) {
+          iframe.src = 'https://maps.google.com/maps?q=' +
+            encodeURIComponent(address) + '&output=embed&z=14';
+        }
+      });
+    }
+
+    /* ── Hero stats ── */
+    var allStats = document.querySelectorAll('.hero-stat .stat-num');
+    if (cfg.statsRepair !== undefined && allStats[0]) {
+      allStats[0].setAttribute('data-target', cfg.statsRepair);
+      allStats[0].textContent = cfg.statsRepair + (allStats[0].dataset.suffix || '+');
+    }
+    if (cfg.statsExperience !== undefined && allStats[1]) {
+      allStats[1].setAttribute('data-target', cfg.statsExperience);
+      allStats[1].textContent = cfg.statsExperience + (allStats[1].dataset.suffix || '+');
+    }
+    if (cfg.statsSatisfaction !== undefined && allStats[2]) {
+      allStats[2].setAttribute('data-target', cfg.statsSatisfaction);
+      allStats[2].textContent = cfg.statsSatisfaction + (allStats[2].dataset.suffix || '%');
+    }
+
+    /* ── Shop status badge (forceStatus override) ── */
+    var dot2 = document.getElementById('shopDot2');
+    var txt2 = document.getElementById('shopStatusText2');
+    if (cfg.forceStatus && cfg.forceStatus !== 'auto') {
+      if (cfg.forceStatus === 'open') {
+        if (dot2) { dot2.style.background = '#22c55e'; dot2.style.animation = 'pulseDot 2s infinite'; }
+        if (txt2) txt2.textContent = 'Đang mở cửa';
+      } else if (cfg.forceStatus === 'closed') {
+        if (dot2) { dot2.style.background = '#ef4444'; dot2.style.animation = 'none'; }
+        if (txt2) txt2.textContent = cfg.closedReason ? 'Tạm đóng' : 'Đã đóng cửa';
+        /* Hiện lý do đóng cửa nếu có */
+        if (cfg.closedReason) {
+          var closeNote = document.getElementById('thcCloseNote');
+          if (!closeNote) {
+            closeNote = document.createElement('div');
+            closeNote.id = 'thcCloseNote';
+            closeNote.style.cssText = 'background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:10px 16px;margin:8px 0;color:#991b1b;font-size:13px;text-align:center;';
+            var topbar = document.querySelector('.top-bar');
+            if (topbar) topbar.parentNode.insertBefore(closeNote, topbar.nextSibling);
+          }
+          closeNote.textContent = '⚠️ ' + cfg.closedReason;
+          closeNote.style.display = 'block';
+        }
+      }
+    } else {
+      /* forceStatus = auto → ẩn close note nếu có */
+      var n = document.getElementById('thcCloseNote');
+      if (n) n.style.display = 'none';
+    }
+
+    /* ── Patch openMin/closeMin trong updateShopStatus (auto mode) ──
+       Ghi đè hàm sau khi DOM load để giờ auto theo config          */
+    if (cfg.forceStatus === 'auto' || !cfg.forceStatus) {
+      var openH  = parseInt((openTime  || '07:00').split(':')[0]) || 7;
+      var openM  = parseInt((openTime  || '07:00').split(':')[1]) || 0;
+      var closeH = parseInt((closeTime || '22:00').split(':')[0]) || 22;
+      var closeM = parseInt((closeTime || '22:00').split(':')[1]) || 0;
+      window.__thcOpenMin  = openH  * 60 + openM;
+      window.__thcCloseMin = closeH * 60 + closeM;
+      /* updateShopStatus sẽ đọc window.__thcOpenMin nếu được patch */
+    }
+
+    /* ── Cập nhật JSON-LD structured data ── */
+    try {
+      var ld = document.querySelector('script[type="application/ld+json"]');
+      if (ld) {
+        var data = JSON.parse(ld.textContent);
+        if (shopName) data.name = shopName;
+        if (address)  data.address = address;
+        if (phone)    { if (data.telephone) data.telephone = '+84' + phone.replace(/^0/,''); }
+        if (email)    data.email = email;
+        if (data.openingHoursSpecification) {
+          data.openingHoursSpecification.forEach(function(oh){
+            oh.opens  = openTime;
+            oh.closes = closeTime;
+          });
+        }
+        ld.textContent = JSON.stringify(data, null, 2);
+      }
+    } catch(e) { /* JSON-LD patch không bắt buộc */ }
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     APPLY PRICING CONFIG
+     Fields: categories[{ id, name, note, rows[{ service, price, note }] }]
+     Render bảng giá vào section #pricing-section hoặc tương đương
+     ══════════════════════════════════════════════════════════════════ */
+  function applyPricing(cfg) {
+    if (!cfg || !cfg.categories || !cfg.categories.length) return;
+
+    /* Lưu để các script khác truy cập */
+    window.__thcPricingCfg = cfg;
+
+    /* Tìm section bảng giá */
+    var section = document.querySelector('.pricing-section') ||
+                  document.getElementById('bang-gia-section') ||
+                  document.getElementById('pricing-section') ||
+                  (function(){
+                    var all = document.querySelectorAll('section, div[id*="gia"], div[id*="bang"]');
+                    for(var i=0;i<all.length;i++){
+                      if(/bảng giá|bang gia|pricing/i.test(all[i].textContent.slice(0,200)))
+                        return all[i];
+                    }
+                    return null;
+                  })();
+
+    if (!section) return; /* Section chưa tồn tại - bỏ qua */
+
+    /* Render tab buttons */
+    var tabWrap = section.querySelector('.pricing-tabs') || section.querySelector('[class*="tab"]');
+    var contentWrap = section.querySelector('.pricing-content') || section.querySelector('[class*="content"]');
+    if (!tabWrap || !contentWrap) return;
+
+    tabWrap.innerHTML = cfg.categories.map(function(cat, i){
+      return '<button class="pricing-tab' + (i===0?' active':'') +
+             '" data-tab="' + cat.id + '">' + cat.name + '</button>';
+    }).join('');
+
+    contentWrap.innerHTML = cfg.categories.map(function(cat, i){
+      var rows = (cat.rows||[]).map(function(r){
+        return '<tr><td>' + (r.service||'') + '</td><td>' + (r.price||'') + '</td><td>' + (r.note||'') + '</td></tr>';
+      }).join('');
+      return '<div class="pricing-pane' + (i===0?' active':'') +
+             '" data-pane="' + cat.id + '">' +
+             (cat.note ? '<div class="pricing-note-box"><p class="note-title">📌 Lưu ý</p><p>'+cat.note+'</p></div>' : '') +
+             '<table class="table-responsive"><thead><tr><th>Dịch vụ</th><th>Giá</th><th>Ghi chú</th></tr></thead><tbody>' +
+             rows + '</tbody></table></div>';
+    }).join('');
+
+    /* Tab click handler */
+    tabWrap.querySelectorAll('.pricing-tab').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = this.getAttribute('data-tab');
+        tabWrap.querySelectorAll('.pricing-tab').forEach(function(b){ b.classList.remove('active'); });
+        contentWrap.querySelectorAll('.pricing-pane').forEach(function(p){ p.classList.remove('active'); });
+        this.classList.add('active');
+        var pane = contentWrap.querySelector('[data-pane="'+id+'"]');
+        if(pane) pane.classList.add('active');
+      }.bind(btn));
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     MAIN APPLY – chạy tất cả
+     ══════════════════════════════════════════════════════════════════ */
+  function applyAll() {
+    applyPromo(safeGet('thc_promo_cfg'));
+    applyClient(safeGet('thc_client_cfg'));
+    applyPricing(safeGet('thc_pricing_cfg'));
+  }
+
+  /* ── Chạy ngay khi DOM sẵn sàng ─────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyAll);
+  } else {
+    applyAll();
+  }
+
+  /* ══════════════════════════════════════════════════════════════════
+     REAL-TIME SYNC – storage event
+     Khi admin.html và index.html cùng mở trên 1 trình duyệt,
+     mọi thay đổi từ admin sẽ phản ánh ngay lập tức lên index
+     ══════════════════════════════════════════════════════════════════ */
+  window.addEventListener('storage', function (e) {
+    if (!e.key) return;
+    switch (e.key) {
+      case 'thc_promo_cfg':
+        applyPromo(safeGet('thc_promo_cfg'));
+        break;
+      case 'thc_client_cfg':
+        applyClient(safeGet('thc_client_cfg'));
+        break;
+      case 'thc_pricing_cfg':
+        applyPricing(safeGet('thc_pricing_cfg'));
+        break;
+      /* thc_gasUrl – GAS URL thay đổi: reload products */
+      case 'thc_gasUrl':
+        if (e.newValue && e.newValue.startsWith('https://')) {
+          window.GAS_URL = e.newValue;
+          if (typeof window.loadProducts === 'function') window.loadProducts();
+        }
+        break;
+    }
+  });
+
+  /* ══════════════════════════════════════════════════════════════════
+     GITHUB PAGES / STATIC HOSTING COMPATIBILITY
+     
+     Khi deploy lên GitHub Pages:
+     - GAS làm backend cho: products, booking, tra cứu
+     - localStorage làm config cho: promo, client info, pricing  
+     - Không cần server riêng
+     
+     Để sync cross-origin (admin host ≠ index host):
+     admin.html export config → file JSON → index.html import
+     ══════════════════════════════════════════════════════════════════ */
+
+  /* Export config ra JSON (admin gọi window.thcExportConfig()) */
+  window.thcExportConfig = function () {
+    var cfg = {
+      version: '2.0',
+      exported: new Date().toISOString(),
+      promo:   safeGet('thc_promo_cfg'),
+      client:  safeGet('thc_client_cfg'),
+      pricing: safeGet('thc_pricing_cfg'),
+      gasUrl:  localStorage.getItem('thc_gasUrl') || ''
+    };
+    var blob = new Blob([JSON.stringify(cfg, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'thc-config.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    return cfg;
+  };
+
+  /* Import config từ JSON file (index.html tự fetch nếu có thc-config.json) */
+  window.thcImportConfig = function (cfg) {
+    if (!cfg) return;
+    if (cfg.promo)   { localStorage.setItem('thc_promo_cfg',   JSON.stringify(cfg.promo));   applyPromo(cfg.promo); }
+    if (cfg.client)  { localStorage.setItem('thc_client_cfg',  JSON.stringify(cfg.client));  applyClient(cfg.client); }
+    if (cfg.pricing) { localStorage.setItem('thc_pricing_cfg', JSON.stringify(cfg.pricing)); applyPricing(cfg.pricing); }
+    if (cfg.gasUrl && cfg.gasUrl.startsWith('https://')) {
+      localStorage.setItem('thc_gasUrl', cfg.gasUrl);
+      window.GAS_URL = cfg.gasUrl;
+    }
+  };
+
+  /* Auto-load thc-config.json nếu có (cùng thư mục với index.html) */
+  (function autoLoadJson() {
+    /* Chỉ load nếu KHÔNG có config trong localStorage */
+    var hasLocal = localStorage.getItem('thc_client_cfg') ||
+                   localStorage.getItem('thc_promo_cfg');
+    if (hasLocal) return; /* Đã có config local → ưu tiên */
+
+    fetch('./thc-config.json?_=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (cfg) { if (cfg) window.thcImportConfig(cfg); })
+      .catch(function () { /* file không tồn tại – bỏ qua */ });
+  })();
+
+})();
+/* ══ END THC CONFIG BRIDGE v2.0 ══ */
 
 </script>
 </body>
