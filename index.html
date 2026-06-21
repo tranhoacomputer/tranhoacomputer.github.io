@@ -8173,17 +8173,33 @@ if (!window._AI_CONFIG_LOADED) {
     }
   };
 
-  /* Auto-load thc-config.json nếu có (cùng thư mục với index.html) */
-  (function autoLoadJson() {
-    /* Chỉ load nếu KHÔNG có config trong localStorage */
-    var hasLocal = localStorage.getItem('thc_client_cfg') ||
-                   localStorage.getItem('thc_promo_cfg');
-    if (hasLocal) return; /* Đã có config local → ưu tiên */
+  /* ── GIST CLOUD SYNC v3.0 – Tự động tải config từ GitHub Gist ── */
+  var THC_GIST_RAW_URL = 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
 
-    fetch('./thc-config.json?_=' + Date.now())
+  (function autoLoadFromGist() {
+    /* Luôn fetch từ Gist để lấy config mới nhất từ admin */
+    fetch(THC_GIST_RAW_URL + '?_=' + Date.now())
       .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (cfg) { if (cfg) window.thcImportConfig(cfg); })
-      .catch(function () { /* file không tồn tại – bỏ qua */ });
+      .then(function (cfg) {
+        if (cfg && cfg._version) {
+          window.thcImportConfig(cfg);
+          /* Lưu timestamp lần sync cuối */
+          try { localStorage.setItem('thc_gist_last_sync', new Date().toISOString()); } catch(e) {}
+        } else {
+          /* Gist chưa có data → fallback localStorage */
+          var hasLocal = localStorage.getItem('thc_client_cfg') || localStorage.getItem('thc_promo_cfg');
+          if (!hasLocal) {
+            fetch('./thc-config.json?_=' + Date.now())
+              .then(function(r2) { return r2.ok ? r2.json() : null; })
+              .then(function(cfg2) { if (cfg2) window.thcImportConfig(cfg2); })
+              .catch(function() {});
+          }
+        }
+      })
+      .catch(function () {
+        /* Gist lỗi → fallback localStorage */
+        console.warn('[THC] Gist fetch failed, using localStorage config');
+      });
   })();
 
 })();
