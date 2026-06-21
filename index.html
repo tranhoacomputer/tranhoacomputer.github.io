@@ -8180,10 +8180,21 @@ if (!window._AI_CONFIG_LOADED) {
                    localStorage.getItem('thc_promo_cfg');
     if (hasLocal) return; /* Đã có config local → ưu tiên */
 
-    fetch('./thc-config.json?_=' + Date.now())
+    /* ── Gist Sync v3.0: Ưu tiên Gist URL → fallback local file ── */
+    var gistUrl = localStorage.getItem('thc_gist_raw_url');
+    var targetUrl = gistUrl || ('./thc-config.json');
+    fetch(targetUrl + '?_=' + Date.now())
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (cfg) { if (cfg) window.thcImportConfig(cfg); })
-      .catch(function () { /* file không tồn tại – bỏ qua */ });
+      .catch(function () {
+        /* Gist thất bại → thử fallback local nếu đang dùng Gist */
+        if (gistUrl) {
+          fetch('./thc-config.json?_=' + Date.now())
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(cfg) { if (cfg) window.thcImportConfig(cfg); })
+            .catch(function() {});
+        }
+      });
   })();
 
 })();
