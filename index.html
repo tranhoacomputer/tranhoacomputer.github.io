@@ -1,4 +1,4 @@
-<!-- index_v32.html | Tran Hoa Computer | 2026-06-20 | v32: fix GAS_URL + hiển thị originalPrice gạch ngang trên card sản phẩm -->
+<!-- index_v33.html | Tran Hoa Computer | 2026-06-22 | v33: fix GAS_URL_DEFAULT → URL chính xác, cải thiện đồng bộ chỉ mục tệp admin ↔ index -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -4109,9 +4109,10 @@ body {
     </div>
     <button id="backToTop">↑</button>
         <script>
-    /* ── GAS Backend URL (Google Apps Script) ── */
-    /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec';
+    /* ── GAS Backend URL v33 – đồng bộ với admin.html qua localStorage "thc_gasUrl"
+       Ưu tiên: localStorage > GAS_URL_DEFAULT > THC_GAS_CONFIG_URL (auto-fetch)
+       Tất cả 3 URL đều trỏ cùng 1 script sau khi fix v33 ── */
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -8173,36 +8174,55 @@ if (!window._AI_CONFIG_LOADED) {
     }
   };
 
-  /* ── GIST CLOUD SYNC v3.0 – Tự động tải config từ GitHub Gist ── */
-  var THC_GIST_RAW_URL = 'https://gist.githubusercontent.com/tranhoacomputer/7b466d50da0c565f7d8dfbf6995034cc/raw/thc-config.json';
+  /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
 
-  (function autoLoadFromGist() {
-    /* Luôn fetch từ Gist để lấy config mới nhất từ admin */
-    fetch(THC_GIST_RAW_URL + '?_=' + Date.now())
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (cfg) {
-        if (cfg && cfg._version) {
+  (function autoLoadFromGAS() {
+    fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(res) {
+        if (res && res.success && res.data) {
+          var cfg = res.data;
           window.thcImportConfig(cfg);
-          /* Lưu timestamp lần sync cuối */
-          try { localStorage.setItem('thc_gist_last_sync', new Date().toISOString()); } catch(e) {}
-        } else {
-          /* Gist chưa có data → fallback localStorage */
-          var hasLocal = localStorage.getItem('thc_client_cfg') || localStorage.getItem('thc_promo_cfg');
-          if (!hasLocal) {
-            fetch('./thc-config.json?_=' + Date.now())
-              .then(function(r2) { return r2.ok ? r2.json() : null; })
-              .then(function(cfg2) { if (cfg2) window.thcImportConfig(cfg2); })
-              .catch(function() {});
+          if (cfg.gasUrl && cfg.gasUrl.startsWith('https://')) {
+            window.GAS_URL = cfg.gasUrl;
+            localStorage.setItem('thc_gasUrl', cfg.gasUrl);
           }
+          try { localStorage.setItem('thc_gas_last_sync', new Date().toISOString()); } catch(e) {}
+        } else {
+          /* GAS chưa có config → fallback localStorage */
+          console.warn('[THC] GAS config empty, using localStorage fallback');
         }
       })
-      .catch(function () {
-        /* Gist lỗi → fallback localStorage */
-        console.warn('[THC] Gist fetch failed, using localStorage config');
+      .catch(function() {
+        console.warn('[THC] GAS config fetch failed, using localStorage fallback');
       });
   })();
 
 })();
+
+  /* ── v33: Sync Status Reporter – log trạng thái đồng bộ vào console ── */
+  (function reportSyncStatus() {
+    var GAS_OK = typeof window.GAS_URL === 'string' && window.GAS_URL.startsWith('https://');
+    var lastSync = localStorage.getItem('thc_gas_last_sync') || 'chưa có';
+    var hasPromo   = !!localStorage.getItem('thc_promo_cfg');
+    var hasClient  = !!localStorage.getItem('thc_client_cfg');
+    var hasPricing = !!localStorage.getItem('thc_pricing_cfg');
+    var hasGasUrl  = !!localStorage.getItem('thc_gasUrl');
+    console.info(
+      '%c[THC v33] Sync Status',
+      'color:#22c55e;font-weight:bold;font-size:13px'
+    );
+    console.table({
+      'GAS URL': GAS_OK ? '✅ ' + window.GAS_URL.slice(0,60) + '…' : '❌ chưa có',
+      'GAS từ localStorage': hasGasUrl ? '✅' : '⬜ dùng default',
+      'Lần sync GAS gần nhất': lastSync,
+      'Config promo': hasPromo  ? '✅' : '⬜',
+      'Config cửa hàng': hasClient  ? '✅' : '⬜',
+      'Config giá': hasPricing ? '✅' : '⬜'
+    });
+  })();
+
 /* ══ END THC CONFIG BRIDGE v2.0 ══ */
 
 </script>
