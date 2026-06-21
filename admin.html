@@ -1078,6 +1078,172 @@ Hành động này sẽ xóa dữ liệu cả offline và trên Google Sheets.`)
 })();
 /* ══ END THC Admin Export Tool ══ */
 </script>
+
+<script id="thc-gist-sync">
+(function() {
+  var S = 'thc_gist_cfg';
+  function getG() { try { return JSON.parse(localStorage.getItem(S) || 'null'); } catch(e) { return null; } }
+
+  window.thcSyncToGist = async function(dataObj) {
+    var g = getG();
+    if (!g || !g.token || !g.gistId) return { ok: false, msg: 'Chưa cấu hình Gist' };
+    try {
+      var res = await fetch('https://api.github.com/gists/' + g.gistId, {
+        method: 'PATCH',
+        headers: { 'Authorization': 'token ' + g.token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: { 'thc-config.json': { content: JSON.stringify(dataObj, null, 2) } } })
+      });
+      if (!res.ok) { var e = await res.json(); return { ok: false, msg: e.message || 'Loi ' + res.status }; }
+      var data = await res.json();
+      var rawUrl = 'https://gist.githubusercontent.com/' + data.owner.login + '/' + data.id + '/raw/thc-config.json';
+      localStorage.setItem('thc_gist_raw_url', rawUrl);
+      return { ok: true, msg: 'Da dong bo len cloud!', rawUrl: rawUrl };
+    } catch(e) { return { ok: false, msg: e.message }; }
+  };
+
+  window.thcCreateGist = async function(token) {
+    if (!token || token.length < 10) return { ok: false, msg: 'Token khong hop le' };
+    try {
+      var res = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description: 'THC Config - Tran Hoa Computer',
+          public: true,
+          files: { 'thc-config.json': { content: '{"_version":"3.0"}' } }
+        })
+      });
+      if (!res.ok) { var e = await res.json(); return { ok: false, msg: e.message || 'Token loi' }; }
+      var data = await res.json();
+      var gistId = data.id;
+      var rawUrl = 'https://gist.githubusercontent.com/' + data.owner.login + '/' + gistId + '/raw/thc-config.json';
+      localStorage.setItem(S, JSON.stringify({ gistId: gistId, token: token, owner: data.owner.login }));
+      localStorage.setItem('thc_gist_raw_url', rawUrl);
+      return { ok: true, gistId: gistId, rawUrl: rawUrl, owner: data.owner.login };
+    } catch(e) { return { ok: false, msg: e.message }; }
+  };
+
+  window.thcCollectConfig = function() {
+    function sg(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+    return {
+      _version: '3.0',
+      _updated: new Date().toISOString(),
+      gasUrl: localStorage.getItem('thc_gasUrl') || '',
+      promo: sg('thc_promo_cfg'),
+      client: sg('thc_client_cfg'),
+      pricing: sg('thc_pricing_cfg')
+    };
+  };
+
+  window.thcGistStatus = function() {
+    var g = getG();
+    var rawUrl = localStorage.getItem('thc_gist_raw_url');
+    return { configured: !!(g && g.token && g.gistId), gistId: g && g.gistId, owner: g && g.owner, rawUrl: rawUrl };
+  };
+})();
+</script>
+
+<div id="thcGistModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#1e293b;border:1px solid #334155;border-radius:16px;padding:24px;width:92%;max-width:480px;color:#f1f5f9;max-height:90vh;overflow-y:auto;">
+    <h3 style="margin:0 0 4px;font-size:18px;font-weight:700;color:#60a5fa;">&#9729;&#65039; Gist Cloud Sync</h3>
+    <p style="margin:0 0 16px;font-size:12px;color:#94a3b8;">Dong bo tu dong Admin &#8594; Web khach hang qua GitHub Gist (mien phi, khong can server)</p>
+    <div id="thcGistSetup">
+      <div style="background:#0f172a;border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;color:#94a3b8;line-height:1.7;">
+        <strong style="color:#fbbf24;">Huong dan lay GitHub Token:</strong><br>
+        1. Vao <strong>github.com/settings/tokens/new</strong><br>
+        2. Note: <code style="background:#1e293b;padding:1px 4px;border-radius:3px;">THC Sync</code> &nbsp; Expiration: <strong>No expiration</strong><br>
+        3. Tich &#9989; <strong>gist</strong> &#8594; Generate token &#8594; Copy
+      </div>
+      <label style="display:block;font-size:12px;color:#94a3b8;margin-bottom:4px;">GitHub Personal Access Token:</label>
+      <input id="thcTokenIn" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+        style="width:100%;box-sizing:border-box;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 12px;color:#f1f5f9;font-family:monospace;font-size:13px;outline:none;margin-bottom:12px;" />
+      <div style="display:flex;gap:8px;">
+        <button onclick="thcDoSetup()" style="flex:1;background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;">&#128640; Thiet lap & Tao Gist</button>
+        <button onclick="document.getElementById('thcGistModal').style.display='none'" style="background:#334155;color:#94a3b8;border:none;border-radius:8px;padding:10px 16px;cursor:pointer;">Dong</button>
+      </div>
+    </div>
+    <div id="thcGistConn" style="display:none;">
+      <div style="background:#064e3b;border:1px solid #065f46;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <p style="margin:0 0 4px;font-size:13px;color:#34d399;font-weight:700;">&#10003; Da ket noi Gist</p>
+        <p style="margin:0;font-size:11px;color:#6ee7b7;word-break:break-all;">Raw URL: <span id="thcRawUrl"></span></p>
+      </div>
+      <p style="margin:0 0 6px;font-size:12px;color:#94a3b8;">Dan URL nay vao <code style="background:#0f172a;padding:2px 5px;border-radius:3px;">index.html</code> neu can override hardcode:</p>
+      <div style="position:relative;margin-bottom:12px;">
+        <textarea id="thcUrlBox" readonly style="width:100%;box-sizing:border-box;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;color:#7dd3fc;font-family:monospace;font-size:11px;height:52px;resize:none;"></textarea>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('thcUrlBox').value).then(()=>document.getElementById('thcMsg').textContent='Da copy!')" style="position:absolute;top:6px;right:6px;background:#334155;color:#94a3b8;border:none;border-radius:5px;padding:3px 8px;font-size:11px;cursor:pointer;">Copy</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="thcDoSync()" style="flex:1;background:#059669;color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;">&#9729;&#65039; Dong bo ngay</button>
+        <button onclick="thcDoDisconnect()" style="background:#7f1d1d;color:#fca5a5;border:none;border-radius:8px;padding:10px 12px;font-size:12px;cursor:pointer;">Ngat KN</button>
+        <button onclick="document.getElementById('thcGistModal').style.display='none'" style="background:#334155;color:#94a3b8;border:none;border-radius:8px;padding:10px 12px;cursor:pointer;">Dong</button>
+      </div>
+    </div>
+    <p id="thcMsg" style="margin:12px 0 0;font-size:13px;min-height:18px;color:#fbbf24;"></p>
+  </div>
+</div>
+
+<button id="thcGistFloatBtn" onclick="thcOpenGist()"
+  style="position:fixed;bottom:70px;right:20px;z-index:9998;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(99,102,241,0.4);display:flex;align-items:center;gap:6px;transition:all .2s;">
+  &#9729;&#65039; <span id="thcGistBtnTxt">Dong bo Cloud</span>
+</button>
+
+<script>
+function thcOpenGist() {
+  var st = window.thcGistStatus();
+  var modal = document.getElementById('thcGistModal');
+  if (st.configured) {
+    document.getElementById('thcGistSetup').style.display = 'none';
+    document.getElementById('thcGistConn').style.display = 'block';
+    document.getElementById('thcRawUrl').textContent = st.rawUrl || '';
+    document.getElementById('thcUrlBox').value = st.rawUrl || '';
+  } else {
+    document.getElementById('thcGistSetup').style.display = 'block';
+    document.getElementById('thcGistConn').style.display = 'none';
+  }
+  document.getElementById('thcMsg').textContent = '';
+  modal.style.display = 'block';
+}
+async function thcDoSetup() {
+  var token = document.getElementById('thcTokenIn').value.trim();
+  var msg = document.getElementById('thcMsg');
+  if (!token) { msg.textContent = 'Vui long nhap token!'; return; }
+  msg.style.color = '#fbbf24'; msg.textContent = 'Dang tao Gist...';
+  var res = await window.thcCreateGist(token);
+  if (!res.ok) { msg.style.color = '#f87171'; msg.textContent = 'Loi: ' + res.msg; return; }
+  msg.style.color = '#fbbf24'; msg.textContent = 'Dang dong bo lan dau...';
+  var s2 = await window.thcSyncToGist(window.thcCollectConfig());
+  if (s2.ok) {
+    msg.style.color = '#34d399'; msg.textContent = 'Thanh cong! Da tao Gist va dong bo.';
+    document.getElementById('thcGistBtnTxt').textContent = 'Da ket noi';
+    document.getElementById('thcGistFloatBtn').style.background = 'linear-gradient(135deg,#065f46,#064e3b)';
+    setTimeout(thcOpenGist, 800);
+  } else { msg.style.color = '#f87171'; msg.textContent = 'Gist tao OK nhung sync loi: ' + s2.msg; }
+}
+async function thcDoSync() {
+  var msg = document.getElementById('thcMsg');
+  msg.style.color = '#fbbf24'; msg.textContent = 'Dang dong bo...';
+  var res = await window.thcSyncToGist(window.thcCollectConfig());
+  if (res.ok) {
+    msg.style.color = '#34d399'; msg.textContent = 'Da dong bo luc ' + new Date().toLocaleTimeString('vi-VN');
+  } else { msg.style.color = '#f87171'; msg.textContent = 'Loi: ' + res.msg; }
+}
+function thcDoDisconnect() {
+  if (!confirm('Ngat ket noi Gist? Token se bi xoa.')) return;
+  localStorage.removeItem('thc_gist_cfg');
+  localStorage.removeItem('thc_gist_raw_url');
+  document.getElementById('thcGistBtnTxt').textContent = 'Dong bo Cloud';
+  document.getElementById('thcGistFloatBtn').style.background = 'linear-gradient(135deg,#1d4ed8,#7c3aed)';
+  thcOpenGist();
+}
+(function() {
+  var st = window.thcGistStatus ? window.thcGistStatus() : null;
+  if (st && st.configured) {
+    document.getElementById('thcGistBtnTxt').textContent = 'Da ket noi';
+    document.getElementById('thcGistFloatBtn').style.background = 'linear-gradient(135deg,#065f46,#064e3b)';
+  }
+})();
+</script>
+
 </body>
 </html>
 
