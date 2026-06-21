@@ -1,7 +1,6 @@
 {
   "_version": "2.0",
-  "_description": "Tran Hoa Computer – config xuất từ admin.html, đặt cùng thư mục index.html",
-  "_howto": "Vào admin → tab Cài đặt → Xuất cấu hình → thay file này trên GitHub",
+  "_exported": "2026-06-21T19:21:04.553Z",
   "gasUrl": "https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec",
   "promo": {
     "show": true,
