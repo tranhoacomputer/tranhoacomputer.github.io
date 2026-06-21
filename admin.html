@@ -1330,238 +1330,267 @@ function thcDoDisconnect() {
 </script>
 
 
-<script id="thc-v31-patch">
-/* THC Admin Patch v3.2 – 2026-06-22
-   1. Sync binh luan tu Base44 API
-   2. Auto-push config len GAS
-   3. Inject card Dong bo vao tab "Cai dat ket noi"
+<script id="thc-v33">
+/* THC Admin Patch v3.3 – 2026-06-22
+   - NO localStorage intercept (fix "B is not defined")
+   - Comment sync via polling
+   - Config push via explicit button only
+   - Inject sync card into Cai dat tab via DOM text search
 */
 (function(){
   var CAPI = 'https://superagent-4c87a66a.base44.app/functions/comments';
   var GAS  = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
 
-  /* ── 1. SAFE localStorage patch (chi patch SAU khi load xong) ── */
-  var _patchDone = false;
-  function patchLocalStorage(){
-    if (_patchDone) return;
-    _patchDone = true;
-    var _orig = localStorage.setItem.bind(localStorage);
-    localStorage.setItem = function(k, v){
-      try { _orig(k, v); } catch(e){}
-      try {
-        if (k === 'thc_comments'){
-          clearTimeout(window._thcCT);
-          window._thcCT = setTimeout(function(){ pushComments(v); }, 700);
-        }
-        if (k === 'thc_pricing_cfg' || k === 'thc_promo_cfg' || k === 'thc_client_cfg'){
-          clearTimeout(window._thcGT);
-          window._thcGT = setTimeout(function(){ pushConfig(false); }, 1000);
-        }
-      } catch(e){}
-    };
-  }
-
-  /* ── 2. Sync binh luan tu API ── */
-  function syncComments(done){
+  /* ── COMMENT SYNC (safe polling, no intercept) ── */
+  function syncComments(cb){
     fetch(CAPI + '?_=' + Date.now())
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){
-        if (!d || !d.success || !Array.isArray(d.data)) { if(done) done(null); return; }
+        if (!d || !d.success || !Array.isArray(d.data)) { if(cb) cb(null); return; }
         var mapped = d.data.map(function(c){
           return {
-            id: c.id || ('' + Date.now() + Math.random()),
-            name: c.name || '', phone: c.phone || '',
-            content: c.content || c.body || '',
-            stars: c.stars || c.rating || 5,
-            approved: c.approved !== undefined ? c.approved : false,
-            reply: c.reply || '', repliedAt: c.repliedAt || c.replied_at || '',
+            id:        c.id || ('' + Date.now() + Math.random()),
+            name:      c.name    || '',
+            phone:     c.phone   || '',
+            content:   c.content || c.body || '',
+            stars:     c.stars   || c.rating || 5,
+            approved:  c.approved !== undefined ? c.approved : false,
+            reply:     c.reply   || '',
+            repliedAt: c.repliedAt || c.replied_at || '',
             createdAt: c.created_at || c.createdAt || new Date().toISOString(),
-            _apiId: c.id
+            _apiId:    c.id
           };
         });
-        try { localStorage.setItem('thc_comments', JSON.stringify(mapped)); } catch(e){}
-        try { localStorage.setItem('thc_comments_last_sync', new Date().toISOString()); } catch(e){}
-        if (done) done(mapped);
+        try {
+          // Use native setItem to avoid any potential intercept issues
+          Object.getPrototypeOf(localStorage).setItem.call(localStorage, 'thc_comments', JSON.stringify(mapped));
+          Object.getPrototypeOf(localStorage).setItem.call(localStorage, 'thc_comments_sync', new Date().toISOString());
+        } catch(e){}
+        if (cb) cb(mapped);
+        return mapped;
       })
-      .catch(function(){ if(done) done(null); });
+      .catch(function(e){ console.warn('[THC] Comment sync err:', e.message); if(cb) cb(null); });
   }
 
-  function pushComments(v){
-    var arr; try { arr = JSON.parse(v || '[]'); } catch(e){ return; }
-    arr.forEach(function(c){
-      if (!c._apiId) return;
-      fetch(CAPI, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({action:'updateComment', data:{
-          id: c._apiId, approved: c.approved,
-          reply: c.reply || '', repliedAt: c.repliedAt || ''
-        }})
-      }).catch(function(){});
-    });
-  }
+  /* ── CONFIG PUSH TO GAS ── */
+  function sg(k){ try{ var x=localStorage.getItem(k); return x ? JSON.parse(x) : null; }catch(e){ return null; } }
 
-  /* ── 3. Push config len GAS ── */
-  function sg(k){ try{ var x=localStorage.getItem(k); return x?JSON.parse(x):null; }catch(e){return null;} }
-
-  function pushConfig(silent){
+  function pushConfig(onDone){
     var payload = {
-      action: 'saveConfig',
+      action:  'saveConfig',
       promo:   sg('thc_promo_cfg'),
       client:  sg('thc_client_cfg'),
       pricing: sg('thc_pricing_cfg'),
       gasUrl:  localStorage.getItem('thc_gasUrl') || ''
     };
     return fetch(GAS, {
-      method: 'POST', headers: {'Content-Type':'application/json'},
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
     })
     .then(function(r){ return r.json(); })
     .then(function(d){
       var ok = !!(d && d.success);
-      if (!silent) showStatus(ok, ok ? 'Da dong bo len GAS!' : 'Loi GAS: '+(d&&d.error||'?'));
-      if (ok) try{ localStorage.setItem('thc_gas_last_sync', new Date().toISOString()); }catch(e){}
+      try {
+        if (ok) Object.getPrototypeOf(localStorage).setItem.call(localStorage, 'thc_gas_last_sync', new Date().toISOString());
+      } catch(e){}
+      if (onDone) onDone(ok, ok ? 'Da dong bo thanh cong!' : ('GAS loi: ' + (d && d.error || '?')));
       return ok;
     })
-    .catch(function(e){ if(!silent) showStatus(false, 'Loi ket noi: '+e.message); return false; });
+    .catch(function(e){
+      if (onDone) onDone(false, 'Loi ket noi: ' + e.message);
+      return false;
+    });
   }
 
-  function showStatus(ok, msg){
-    var lbl = document.getElementById('thcPatchStatus');
-    if (!lbl) return;
-    lbl.textContent = msg;
-    lbl.style.color = ok ? '#34d399' : '#f87171';
-    clearTimeout(window._thcST);
-    window._thcST = setTimeout(function(){ lbl.textContent = ''; }, 5000);
-  }
-
-  /* ── 4. Inject card vao tab "Cai dat ket noi" ── */
-  function buildCard(){
-    var wrap = document.createElement('div');
-    wrap.id = 'thcSyncCard';
-    wrap.style.cssText = [
+  /* ── BUILD SYNC CARD ── */
+  function buildSyncCard(){
+    var card = document.createElement('div');
+    card.id = 'thcSyncCard33';
+    card.style.cssText = [
       'background:#1e293b',
-      'border:1px solid #334155',
-      'border-radius:14px',
-      'padding:18px 16px',
-      'margin:12px 0',
-      'color:#f1f5f9'
+      'border:1px solid #3b82f6',
+      'border-radius:12px',
+      'padding:16px',
+      'margin:0 0 16px 0',
+      'color:#f1f5f9',
+      'font-family:inherit'
     ].join(';');
 
-    /* Header */
-    var hd = document.createElement('div');
-    hd.style.cssText = 'display:flex;align-items:center;gap:10px;margin-bottom:14px;';
-    hd.innerHTML = '<span style="font-size:22px;">&#9729;</span>'
-      + '<div>'
-      + '<div style="font-weight:700;font-size:14px;">Dong bo & Xuat cau hinh</div>'
-      + '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Dong bo len GAS (Google Sheets) hoac tai thc-config.json</div>'
-      + '</div>';
-    wrap.appendChild(hd);
+    var title = document.createElement('div');
+    title.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px;';
+    title.innerHTML = '<span style="font-size:18px;">&#9729;</span>'
+      + '<span style="font-weight:700;font-size:13px;color:#93c5fd;">Dong bo Cloud & Xuat cau hinh</span>';
+    card.appendChild(title);
 
-    /* Buttons row */
     var row = document.createElement('div');
-    row.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
+    row.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;';
 
-    var btnSync = document.createElement('button');
-    btnSync.textContent = '\u2601 Dong bo Cloud';
-    btnSync.style.cssText = 'flex:1;min-width:120px;background:linear-gradient(135deg,#065f46,#0f766e);color:#fff;border:none;border-radius:9px;padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer;';
-    btnSync.onclick = function(){
-      showStatus(true, 'Dang dong bo...');
-      pushConfig(false);
+    /* Nut 1: Dong bo GAS */
+    var b1 = document.createElement('button');
+    b1.innerHTML = '&#9729; Dong bo Cloud';
+    b1.style.cssText = 'flex:1;min-width:120px;padding:9px 10px;background:linear-gradient(135deg,#0f766e,#065f46);'
+      + 'color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
+    b1.onclick = function(){
+      setStatus('Dang dong bo...', '#fbbf24');
+      pushConfig(function(ok, msg){
+        setStatus(msg, ok ? '#34d399' : '#f87171');
+      });
     };
 
-    var btnExport = document.createElement('button');
-    btnExport.textContent = '\ud83d\udce4 Xuat cau hinh';
-    btnExport.style.cssText = 'flex:1;min-width:120px;background:#1e40af;color:#fff;border:none;border-radius:9px;padding:10px 12px;font-size:13px;font-weight:700;cursor:pointer;';
-    btnExport.onclick = function(){
-      if (window.thcAdminExport) window.thcAdminExport();
-      else {
-        /* Fallback: tu tao json file */
+    /* Nut 2: Xuat cau hinh JSON */
+    var b2 = document.createElement('button');
+    b2.innerHTML = '&#128228; Xuat cau hinh';
+    b2.style.cssText = 'flex:1;min-width:120px;padding:9px 10px;background:#1e40af;'
+      + 'color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
+    b2.onclick = function(){
+      try {
+        if (window.thcAdminExport) { window.thcAdminExport(); return; }
         var cfg = window.thcCollectConfig ? window.thcCollectConfig() : {
-          _version:'3.2', _updated: new Date().toISOString(),
-          promo: sg('thc_promo_cfg'), client: sg('thc_client_cfg'),
-          pricing: sg('thc_pricing_cfg'), gasUrl: localStorage.getItem('thc_gasUrl')||''
+          _version:'3.3', _updated:new Date().toISOString(),
+          promo:sg('thc_promo_cfg'), client:sg('thc_client_cfg'),
+          pricing:sg('thc_pricing_cfg'), gasUrl:localStorage.getItem('thc_gasUrl')||''
         };
-        var blob = new Blob([JSON.stringify(cfg,null,2)], {type:'application/json'});
-        var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-        a.download = 'thc-config.json'; a.click();
-      }
+        var blob = new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'});
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'thc-config.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setStatus('Da tai thc-config.json', '#34d399');
+      } catch(e){ setStatus('Loi: '+e.message,'#f87171'); }
     };
 
-    row.appendChild(btnSync);
-    row.appendChild(btnExport);
-    wrap.appendChild(row);
+    /* Nut 3: Reload binh luan */
+    var b3 = document.createElement('button');
+    b3.innerHTML = '&#8635; Tai binh luan';
+    b3.style.cssText = 'flex:1;min-width:120px;padding:9px 10px;background:#7c3aed;'
+      + 'color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
+    b3.onclick = function(){
+      setStatus('Dang tai binh luan...', '#fbbf24');
+      syncComments(function(data){
+        if (data) {
+          setStatus('Da tai ' + data.length + ' binh luan', '#34d399');
+          // Trigger React re-read by dispatching storage event
+          try { window.dispatchEvent(new StorageEvent('storage', {key:'thc_comments'})); } catch(e){}
+        } else {
+          setStatus('Khong tai duoc binh luan', '#f87171');
+        }
+      });
+    };
 
-    /* Status label */
-    var lbl = document.createElement('div');
-    lbl.id = 'thcPatchStatus';
-    lbl.style.cssText = 'font-size:12px;font-weight:600;margin-top:10px;min-height:18px;';
-    wrap.appendChild(lbl);
+    row.appendChild(b1);
+    row.appendChild(b2);
+    row.appendChild(b3);
+    card.appendChild(row);
 
-    return wrap;
+    var stat = document.createElement('div');
+    stat.id = 'thcStat33';
+    stat.style.cssText = 'font-size:11px;font-weight:600;min-height:16px;color:#94a3b8;';
+    var last = localStorage.getItem('thc_gas_last_sync');
+    if (last) stat.textContent = 'Lan cuoi dong bo: ' + new Date(last).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
+    card.appendChild(stat);
+
+    return card;
   }
 
-  var _cardInjected = false;
-  function tryInjectCard(){
-    /* Tim header h2 cua admin */
-    var h2 = document.querySelector('header h2');
-    if (!h2) return false;
-    var txt = h2.textContent || '';
-    /* "Cai dat ket noi" – so sanh khong dau */
-    var norm = txt.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    if (norm.indexOf('cai dat') === -1) return false;
-    if (document.getElementById('thcSyncCard')) { _cardInjected = true; return true; }
+  function setStatus(msg, color){
+    var el = document.getElementById('thcStat33');
+    if (el){ el.textContent = msg; el.style.color = color || '#94a3b8'; }
+  }
 
-    /* Tim vung noi dung chinh (div sau header) */
-    var main = document.querySelector('main')
-      || document.querySelector('[class*="overflow-y-auto"][class*="flex-1"]')
-      || document.querySelector('[class*="p-4 md:p-6"]');
-    if (!main) {
-      /* Fallback: chen sau header */
-      var hdr = document.querySelector('header');
-      if (hdr && hdr.nextSibling) {
-        hdr.parentNode.insertBefore(buildCard(), hdr.nextSibling);
-        _cardInjected = true; return true;
+  /* ── INJECT CARD INTO SETTINGS TAB ── */
+  var _injTick = 0;
+  function tryInject(){
+    if (document.getElementById('thcSyncCard33')) return; // already there
+
+    // Method 1: Look for "Sao luu & Dong bo" text to find the settings container
+    var allH4 = document.querySelectorAll('h4');
+    var target = null;
+    for (var i = 0; i < allH4.length; i++){
+      var txt = allH4[i].textContent || '';
+      if (txt.indexOf('Sao l') !== -1 && txt.indexOf('ng b') !== -1){
+        target = allH4[i];
+        break;
       }
-      return false;
     }
-    main.insertBefore(buildCard(), main.firstChild);
-    _cardInjected = true;
-    return true;
-  }
 
-  /* Poll nhanh de detect tab change */
-  var _lastH2 = '';
-  function pollTab(){
+    if (target){
+      // Walk up to find the card wrapper (usually 3-4 levels up)
+      var wrap = target;
+      for (var j = 0; j < 6; j++){
+        wrap = wrap.parentElement;
+        if (!wrap) break;
+        // The settings page container - find the scrollable div
+        if (wrap.parentElement && wrap.parentElement.children.length <= 3
+            && (wrap.parentElement.style.overflow === 'auto' || wrap.parentElement.style.overflowY === 'auto'
+                || wrap.parentElement.className.indexOf('overflow') !== -1)){
+          break;
+        }
+      }
+      if (wrap){
+        var parent = wrap.parentElement || wrap;
+        parent.insertBefore(buildSyncCard(), parent.firstChild);
+        console.info('[THC v3.3] Card injected');
+        return;
+      }
+    }
+
+    // Method 2 fallback: inject after header if on settings page
     var h2 = document.querySelector('header h2');
-    var txt = h2 ? h2.textContent : '';
-    if (txt !== _lastH2){
-      _lastH2 = txt;
-      _cardInjected = false;
-      setTimeout(tryInjectCard, 400);
-    } else if (!_cardInjected) {
-      tryInjectCard();
+    if (!h2) return;
+    var norm = (h2.textContent||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    if (norm.indexOf('cai dat') === -1) return;
+
+    // Find main scroll container
+    var main = document.querySelector('main')
+      || document.querySelector('[class*="overflow-y-auto"]')
+      || document.querySelector('[class*="flex-1"][class*="overflow"]');
+    if (main){
+      main.insertBefore(buildSyncCard(), main.firstChild);
+      console.info('[THC v3.3] Card injected (fallback)');
     }
   }
 
-  /* ── KHOI DONG ── */
+  /* ── WATCH TAB CHANGES ── */
+  var _lastH2 = null;
+  function watchTabs(){
+    setInterval(function(){
+      var h2 = document.querySelector('header h2');
+      var txt = h2 ? h2.textContent : '';
+      if (txt !== _lastH2){
+        _lastH2 = txt;
+        // Remove card when leaving settings tab
+        var old = document.getElementById('thcSyncCard33');
+        if (old) old.parentNode.removeChild(old);
+        // Try inject after short delay (React needs time to render)
+        setTimeout(tryInject, 500);
+        setTimeout(tryInject, 1200);
+      }
+    }, 800);
+  }
+
+  /* ── BOOT ── */
   window.addEventListener('load', function(){
-    /* Doi React render xong roi moi patch localStorage */
-    setTimeout(patchLocalStorage, 2000);
+    // Initial comment sync
+    setTimeout(function(){ syncComments(null); }, 1500);
 
-    /* Sync binh luan */
-    syncComments(null);
-
-    /* Load config tu GAS ve (neu chua co) */
-    if (window.thcLoadConfigFromGAS) {
+    // Load config from GAS on startup
+    if (window.thcLoadConfigFromGAS){
       window.thcLoadConfigFromGAS().then(function(r){
-        if (r && r.ok) console.info('[THC v3.2] Config loaded from GAS');
+        if (r && r.ok) console.info('[THC v3.3] Config from GAS loaded');
       });
     }
 
-    /* Poll tab 1 lan/giay */
-    setInterval(pollTab, 1000);
+    // Start tab watcher
+    watchTabs();
 
-    console.info('[THC v3.2] Patch OK');
+    // Try inject immediately in case already on settings tab
+    setTimeout(tryInject, 1500);
+    setTimeout(tryInject, 3000);
+
+    console.info('[THC v3.3] OK - no localStorage intercept');
   });
 })();
 </script>
