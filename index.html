@@ -4110,7 +4110,13 @@ body {
     <button id="backToTop">↑</button>
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
-    var GAS_URL = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
+    /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec';
+    (function(){
+      var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
+      window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
+    })();
+    var GAS_URL = window.GAS_URL;
     var USE_GAS = true;
 
     function lookupRepairStatus() {
