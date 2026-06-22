@@ -89,6 +89,42 @@
     <meta name="theme-color" content="#2563eb">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><text x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white' font-family='Arial,sans-serif' font-weight='bold'>TC</text></svg>">
     <!-- Tailwind CDN removed: no utility classes used in this project -->
+    <!-- ===== ĐỒNG BỘ DỮ LIỆU VỚI ADMIN.HTML ===== -->
+    <script>
+        (function(){
+            window.THC_ADMIN_DATA = {
+                pricing: null,
+                config: null,
+                comments: [],
+                syncTime: null
+            };
+
+            window.syncFromAdmin = function() {
+                try {
+                    const pricing = localStorage.getItem('thc_pricing_cfg');
+                    const config = localStorage.getItem('thc_cfg');
+                    const comments = localStorage.getItem('thc_comments');
+
+                    if (pricing) window.THC_ADMIN_DATA.pricing = JSON.parse(pricing);
+                    if (config) window.THC_ADMIN_DATA.config = JSON.parse(config);
+                    if (comments) window.THC_ADMIN_DATA.comments = JSON.parse(comments);
+                    
+                    window.THC_ADMIN_DATA.syncTime = new Date().toISOString();
+                    window.dispatchEvent(new CustomEvent('THC_SYNC_COMPLETE', {detail: window.THC_ADMIN_DATA}));
+                } catch(e) {
+                    console.warn('[INDEX] Sync error:', e);
+                }
+            };
+
+            window.addEventListener('storage', (event) => {
+                if (event.key && event.key.startsWith('thc_')) {
+                    window.syncFromAdmin();
+                }
+            });
+
+            window.syncFromAdmin();
+        })();
+    </script>
     <style>
         html { max-width: 100%; scroll-padding-top: 72px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         #datlich-sua-chua { scroll-margin-top: 72px; }

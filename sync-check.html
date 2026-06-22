@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm Tra Đồng Bộ - Trần Hoà Computer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background: #0f172a; color: #fff; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; }
+        h1 { color: #60a5fa; margin-bottom: 30px; }
+        .status { margin: 20px 0; padding: 15px; border-radius: 8px; }
+        .status.ok { background: #065f46; border-left: 4px solid #10b981; }
+        .status.error { background: #7f1d1d; border-left: 4px solid #ef4444; }
+        .status.info { background: #1e3a8a; border-left: 4px solid #60a5fa; }
+        .data-preview { background: #0f172a; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 12px; max-height: 300px; overflow-y: auto; font-family: monospace; }
+        button { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 10px 5px 10px 0; }
+        button:hover { background: #2563eb; }
+        .actions { margin-top: 30px; }
+        .timestamp { font-size: 12px; color: #94a3b8; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Kiểm Tra Đồng Bộ Dữ Liệu</h1>
+        
+        <div class="status info">
+            <strong>📍 URL Hiện Tại:</strong>
+            <div id="current-url" style="margin-top: 5px;"></div>
+        </div>
+
+        <div id="storage-status"></div>
+
+        <div class="data-preview" id="data-preview"></div>
+
+        <div class="actions">
+            <button onclick="location.reload()">🔄 Làm Mới</button>
+            <button onclick="clearAllData()">🗑️ Xóa Tất Cả Dữ Liệu</button>
+            <button onclick="downloadData()">📥 Tải Dữ Liệu (JSON)</button>
+            <button onclick="openAdmin()">📊 Mở Admin</button>
+            <button onclick="openIndex()">🛍️ Mở Index</button>
+        </div>
+
+        <div id="sync-log" style="margin-top: 30px;"></div>
+    </div>
+
+    <script>
+        // Hiển thị URL hiện tại
+        document.getElementById('current-url').innerText = window.location.href;
+
+        // Kiểm tra localStorage
+        function checkStorage() {
+            const storageStatus = document.getElementById('storage-status');
+            const html = [];
+
+            const keys = [
+                'thc_pricing_cfg',
+                'thc_cfg',
+                'thc_comments',
+                'thc_books',
+                'thc_products',
+                'thc_auth',
+                'thc_del'
+            ];
+
+            let hasData = false;
+
+            keys.forEach(key => {
+                const data = localStorage.getItem(key);
+                if (data) {
+                    hasData = true;
+                    html.push(`
+                        <div class="status ok">
+                            <strong>✅ ${key}</strong>
+                            <div class="timestamp">Kích thước: ${(data.length / 1024).toFixed(2)} KB</div>
+                        </div>
+                    `);
+                } else {
+                    html.push(`
+                        <div class="status error">
+                            <strong>❌ ${key}</strong>
+                            <div class="timestamp">Không tìm thấy</div>
+                        </div>
+                    `);
+                }
+            });
+
+            if (!hasData) {
+                html.unshift(`
+                    <div class="status error">
+                        <strong>⚠️ Không có dữ liệu!</strong>
+                        <div>Vui lòng mở admin.html trước để tạo dữ liệu</div>
+                    </div>
+                `);
+            }
+
+            storageStatus.innerHTML = html.join('');
+        }
+
+        // Hiển thị dữ liệu
+        function showDataPreview() {
+            const preview = document.getElementById('data-preview');
+            const data = {};
+            
+            ['thc_pricing_cfg', 'thc_cfg', 'thc_comments', 'thc_books'].forEach(key => {
+                const item = localStorage.getItem(key);
+                if (item) {
+                    try {
+                        data[key] = JSON.parse(item);
+                    } catch {
+                        data[key] = item;
+                    }
+                }
+            });
+
+            preview.innerText = JSON.stringify(data, null, 2) || 'Không có dữ liệu';
+        }
+
+        // Xóa dữ liệu
+        function clearAllData() {
+            if (confirm('Bạn có chắc muốn xóa TẤT CẢ dữ liệu?')) {
+                localStorage.clear();
+                alert('✅ Đã xóa');
+                location.reload();
+            }
+        }
+
+        // Tải dữ liệu
+        function downloadData() {
+            const data = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                data[key] = localStorage.getItem(key);
+            }
+
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `thc-data-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+        }
+
+        // Mở admin
+        function openAdmin() {
+            const adminUrl = window.location.pathname.includes('admin.html')
+                ? window.location.href
+                : window.location.href.replace('sync-check.html', 'admin.html').replace('index.html', 'admin.html');
+            window.open(adminUrl, '_blank');
+        }
+
+        // Mở index
+        function openIndex() {
+            const indexUrl = window.location.pathname.includes('index.html')
+                ? window.location.href
+                : window.location.href.replace('admin.html', 'index.html').replace('sync-check.html', 'index.html');
+            window.open(indexUrl, '_blank');
+        }
+
+        // Lắng nghe storage changes
+        window.addEventListener('storage', () => {
+            console.log('📢 Dữ liệu đã thay đổi từ tab khác');
+            checkStorage();
+            showDataPreview();
+            addSyncLog('📢 Phát hiện thay đổi từ tab khác');
+        });
+
+        // Thêm log
+        function addSyncLog(msg) {
+            const log = document.getElementById('sync-log');
+            const time = new Date().toLocaleTimeString('vi-VN');
+            const entry = document.createElement('div');
+            entry.className = 'status info';
+            entry.innerHTML = `<strong>${time}</strong>: ${msg}`;
+            log.insertBefore(entry, log.firstChild);
+            if (log.children.length > 5) log.removeChild(log.lastChild);
+        }
+
+        // Khởi tạo
+        checkStorage();
+        showDataPreview();
+        addSyncLog('🚀 Trang kiểm tra đã tải');
+
+        // Tự động làm mới mỗi 5 giây
+        setInterval(checkStorage, 5000);
+    </script>
+</body>
+</html>
