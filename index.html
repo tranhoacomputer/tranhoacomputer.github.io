@@ -2850,8 +2850,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
   function fmtPrice(s){
     if(!s) return '';
-    var n = parseInt((s+'').replace(/[^\d]/g,''));
-    if(isNaN(n)) return s;
+    // If it contains range chars (–, -, ~) or letters (K, M), return as-is
+    var str = (s+'').trim();
+    if(/[–\-~KkMm]/.test(str) || str.indexOf(' ')>=0) return str;
+    var n = parseInt(str.replace(/[^\d]/g,''));
+    if(isNaN(n)) return str;
     return n.toLocaleString('vi-VN') + 'đ';
   }
 
@@ -2868,7 +2871,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var tabBtns = cats.map(function(cat, i){
       var id = cat.id || ('cat_'+i);
       return '<button class="tab-btn'+(i===0?' active':'')+'" id="tabBtn-'+id+'" '
-        +'role="tab" onclick="switchTab(''+id+'',this)">'+
+        +'role="tab" onclick="switchTab('\''+id+'\'',this)">'+
         (cat.icon||'')+ ' ' +(cat.name||('Nhóm '+(i+1)))+'</button>';
     }).join('\n');
 
@@ -2877,16 +2880,23 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       var id = cat.id || ('cat_'+i);
       var services = cat.services || [];
       var tableRows = services.map(function(svc, j){
-        var price = svc.price ? fmtPrice(svc.price) : (svc.priceNote||'Liên hệ');
+        var rawPrice = svc.price || svc.priceNote || 'Liên hệ';
+        // Format multiline prices (space-separated ranges → <br>)
+        var priceLines = rawPrice.trim().split(/\s{2,}|(?<=[KkĐđ])\s+(?=\d)/);
+        if(priceLines.length <= 1) priceLines = rawPrice.trim().split(/(?<=K)\s+(?=[0-9])|(?<=đ)\s+(?=[0-9])/);
+        var priceHtml = priceLines.map(function(p){return fmtPrice(p.trim());}).filter(Boolean).join('<br>');
+        if(!priceHtml) priceHtml = rawPrice;
+        var noteText = (svc.note||svc.description||'').replace(/\|/g,'<br>').replace(/;/g,' | ');
+        var warrantyText = svc.warranty ? ('<br><span style="color:#059669;font-size:11px;">🛡 '+svc.warranty+'</span>') : '';
         return '<tr>'
           +'<td><div class="mobile-row"><span class="mobile-label">STT:</span>'
           +'<span class="mobile-value">'+(j+1)+'</span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Dịch vụ:</span>'
-          +'<span class="mobile-value"><strong>'+(svc.name||'')+'</strong></span></div></td>'
+          +'<span class="mobile-value"><strong>'+(svc.name||'')+'</strong>'+warrantyText+'</span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span>'
-          +'<span class="mobile-value">'+(svc.description||svc.note||'')+'</span></div></td>'
+          +'<span class="mobile-value">'+noteText+'</span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Giá:</span>'
-          +'<span class="mobile-value price-highlight">'+price+'</span></div></td>'
+          +'<span class="mobile-value highlight-price">'+priceHtml+'</span></div></td>'
           +'</tr>';
       }).join('');
       return '<div id="tab-'+id+'" class="price-table-section'+(i===0?' active':'')+' reveal">'
@@ -2904,7 +2914,12 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       +'<div id="priceTabsWrapper">\n'+tabContents+'\n</div>'
       +'<!-- end #priceTabsWrapper -->';
 
-    // Re-init swipe if available
+    // Re-init tabs and swipe
+    var firstCat = cats[0];
+    if(firstCat && window.switchTab){
+      var firstBtn = document.getElementById('tabBtn-'+(firstCat.id||'cat_0'));
+      switchTab(firstCat.id||'cat_0', firstBtn);
+    }
     if(window._initSwipeHint) window._initSwipeHint();
     if(window._initDragScroll) window._initDragScroll();
   }
