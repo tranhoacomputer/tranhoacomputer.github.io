@@ -1071,7 +1071,7 @@ Hành động này sẽ xóa dữ liệu cả offline và trên Google Sheets.`)
     var btn = document.createElement('button');
     btn.id = 'thcExportBtn';
     btn.textContent = '📤 Xuất cấu hình (GitHub)';
-    btn.style.cssText = 'display:none;position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e40af;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(30,64,175,.4);';
+    btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#1e40af;color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(30,64,175,.4);';
     btn.onclick = window.thcAdminExport;
     document.body.appendChild(btn);
   });
@@ -1330,185 +1330,178 @@ function thcDoDisconnect() {
 </script>
 
 
-<script id="thc-v34">
-/* THC Admin Patch v3.4 – 2026-06-22
-   Fix: B(-1) bug fixed directly in bundle above
-   Fix: GAS CORS uses text/plain (no preflight)
-   Card: Inject into Cai dat tab
-   Sync: Safe comment polling
+<script id="thc-v35">
+/* THC Admin Patch v3.5 – 2026-06-22
+   FIX: B(-1) patched in bundle (k(null))
+   FIX: Comment reply/approve → push to Base44 API via storage event
+   FIX: GAS CORS → text/plain
+   ADD: Sync card in Cai dat tab
 */
 (function(){
   var CAPI = 'https://superagent-4c87a66a.base44.app/functions/comments';
   var GAS  = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
 
   function sg(k){ try{ var x=localStorage.getItem(k); return x?JSON.parse(x):null; }catch(e){return null;} }
+  function ss(k,v){ try{ Storage.prototype.setItem.call(localStorage,k,typeof v==='string'?v:JSON.stringify(v)); }catch(e){} }
 
-  /* ── SYNC COMMENTS (safe, polling) ── */
-  function syncComments(cb){
-    fetch(CAPI + '?_=' + Date.now())
-      .then(function(r){ return r.ok ? r.json() : null; })
+  /* ── LISTEN to thc_comments storage change → push to Base44 API ── */
+  window.addEventListener('storage', function(e){
+    if(e.key !== 'thc_comments') return;
+    var val = e.newValue||'';
+    setTimeout(function(){ syncRepliesUp(val); }, 150);
+  });
+
+  function syncRepliesUp(val){
+    var arr; try{ arr=JSON.parse(val||'[]'); }catch(e){return;}
+    arr.forEach(function(c){
+      var apiId = c._apiId || c.id;
+      if(!apiId) return;
+      fetch(CAPI, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify({
+          action: 'updateComment',
+          data: { id: apiId, approved: !!c.approved, reply: c.reply||'', repliedAt: c.repliedAt||'' }
+        })
+      })
+      .then(function(r){ return r.json().catch(function(){return{};}); })
+      .then(function(d){ if(d && d.success) console.info('[THC] Comment synced:', apiId); })
+      .catch(function(e){ console.warn('[THC] Comment sync err:', e.message); });
+    });
+  }
+
+  /* ── LOAD COMMENTS from API ── */
+  function syncCommentsDown(cb){
+    fetch(CAPI + '?_='+Date.now())
+      .then(function(r){ return r.ok?r.json():null; })
       .then(function(d){
-        if (!d || !d.success || !Array.isArray(d.data)) { if(cb)cb(null); return; }
+        if(!d||!d.success||!Array.isArray(d.data)){if(cb)cb(null);return;}
         var mapped = d.data.map(function(c){
-          return {
-            id: c.id || ('' + Date.now()+Math.random()),
-            name: c.name||'', phone: c.phone||'',
-            content: c.content||c.body||'',
-            stars: c.stars||c.rating||5,
-            approved: c.approved!==undefined?c.approved:false,
-            reply: c.reply||'', repliedAt: c.repliedAt||c.replied_at||'',
-            createdAt: c.created_at||c.createdAt||new Date().toISOString(),
-            _apiId: c.id
-          };
+          return { id:c.id||(''+Date.now()+Math.random()), name:c.name||'',
+            phone:c.phone||'', content:c.content||c.body||'',
+            stars:c.stars||c.rating||5,
+            approved:c.approved!==undefined?c.approved:false,
+            reply:c.reply||'', repliedAt:c.repliedAt||c.replied_at||'',
+            createdAt:c.created_at||c.createdAt||new Date().toISOString(),
+            _apiId:c.id };
         });
-        /* Use native Storage prototype to avoid any override */
-        try{ Storage.prototype.setItem.call(localStorage,'thc_comments',JSON.stringify(mapped)); }catch(e){}
-        try{ Storage.prototype.setItem.call(localStorage,'thc_comments_sync',new Date().toISOString()); }catch(e){}
+        ss('thc_comments',JSON.stringify(mapped));
+        ss('thc_comments_sync',new Date().toISOString());
         if(cb)cb(mapped);
+        // Notify React to re-render
+        try{ window.dispatchEvent(new StorageEvent('storage',{key:'thc_comments',newValue:JSON.stringify(mapped)})); }catch(er){}
       })
       .catch(function(e){ if(cb)cb(null); });
   }
 
-  /* ── PUSH CONFIG TO GAS (text/plain, no CORS preflight) ── */
+  /* ── PUSH CONFIG TO GAS ── */
   function pushConfig(done){
-    var body = JSON.stringify({
-      action:'saveConfig',
-      promo:   sg('thc_promo_cfg'),
-      client:  sg('thc_client_cfg'),
-      pricing: sg('thc_pricing_cfg'),
-      gasUrl:  localStorage.getItem('thc_gasUrl')||''
+    var body = JSON.stringify({ action:'saveConfig',
+      promo:sg('thc_promo_cfg'), client:sg('thc_client_cfg'),
+      pricing:sg('thc_pricing_cfg'), gasUrl:localStorage.getItem('thc_gasUrl')||''
     });
-    fetch(GAS, { method:'POST', headers:{'Content-Type':'text/plain'}, body: body })
+    fetch(GAS,{method:'POST',headers:{'Content-Type':'text/plain'},body:body})
       .then(function(r){
-        var ok = r.ok || r.type==='opaque';
-        return r.json().then(function(d){ return {ok: d.success||ok, msg: d.error||''}; })
-                       .catch(function(){ return {ok:ok, msg:''}; });
+        var ok=r.ok||r.type==='opaque';
+        return r.json().then(function(d){return{ok:!!(d.success||ok),msg:d.error||''};})
+                       .catch(function(){return{ok:ok,msg:''};});
       })
       .then(function(res){
-        if(res.ok){ try{ Storage.prototype.setItem.call(localStorage,'thc_gas_last_sync',new Date().toISOString()); }catch(e){} }
-        if(done) done(res.ok, res.ok?'Da dong bo thanh cong!':('Loi: '+res.msg));
+        if(res.ok) ss('thc_gas_last_sync',new Date().toISOString());
+        if(done) done(res.ok, res.ok?'Da dong bo thanh cong!':'Loi: '+res.msg);
       })
       .catch(function(e){ if(done) done(false,'Loi: '+e.message); });
   }
 
-  /* ── STATUS LABEL ── */
-  function setStatus(msg, color){
-    var el = document.getElementById('thcStat34');
-    if(!el) return;
-    el.textContent = msg; el.style.color = color||'#94a3b8';
-    clearTimeout(window._thcST34);
-    window._thcST34 = setTimeout(function(){ el.textContent=''; }, 6000);
+  /* ── STATUS ── */
+  function setStatus(msg,color){
+    var el=document.getElementById('thcStat35');
+    if(!el)return;
+    el.textContent=msg; el.style.color=color||'#94a3b8';
+    clearTimeout(window._ts35);
+    window._ts35=setTimeout(function(){el.textContent='';},7000);
   }
 
-  /* ── BUILD CARD ── */
+  /* ── CARD ── */
+  function makeBtn(label,bg,fn){
+    var b=document.createElement('button');
+    b.innerHTML=label;
+    b.style.cssText='flex:1;min-width:100px;padding:9px 6px;background:'+bg+
+      ';color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
+    b.onclick=fn; return b;
+  }
   function buildCard(){
-    var card = document.createElement('div');
-    card.id = 'thcCard34';
-    card.style.cssText = 'background:#1e293b;border:1.5px solid #3b82f6;border-radius:12px;padding:16px;margin:0 0 14px 0;color:#f1f5f9;font-family:inherit;';
-
-    var hd = document.createElement('div');
-    hd.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px;';
-    hd.innerHTML = '<span style="font-size:20px;">&#9729;</span><span style="font-weight:700;font-size:13px;color:#93c5fd;">Dong bo Cloud & Xuat cau hinh</span>';
+    var card=document.createElement('div');
+    card.id='thcCard35';
+    card.style.cssText='background:#1e293b;border:1.5px solid #3b82f6;border-radius:12px;'
+      +'padding:16px;margin:0 0 14px 0;color:#f1f5f9;font-family:inherit;';
+    var hd=document.createElement('div');
+    hd.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:12px;';
+    hd.innerHTML='<span style="font-size:18px;">&#9729;</span>'
+      +'<span style="font-weight:700;font-size:13px;color:#93c5fd;">Dong bo Cloud & Xuat cau hinh</span>';
     card.appendChild(hd);
-
-    var row = document.createElement('div');
-    row.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;';
-
-    function makeBtn(label, bg, fn){
-      var b = document.createElement('button');
-      b.innerHTML = label;
-      b.style.cssText = 'flex:1;min-width:110px;padding:9px 8px;background:'+bg+';color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
-      b.onclick = fn; return b;
-    }
-
+    var row=document.createElement('div');
+    row.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;';
     row.appendChild(makeBtn('&#9729; Dong bo Cloud','linear-gradient(135deg,#0f766e,#065f46)',function(){
       setStatus('Dang dong bo...','#fbbf24');
-      pushConfig(function(ok,msg){ setStatus(msg, ok?'#34d399':'#f87171'); });
+      pushConfig(function(ok,msg){ setStatus(msg,ok?'#34d399':'#f87171'); });
     }));
-
     row.appendChild(makeBtn('&#128228; Xuat JSON','#1e40af',function(){
       try{
-        if(window.thcAdminExport){ window.thcAdminExport(); return; }
-        var cfg = {_v:'3.4',_t:new Date().toISOString(),
+        var cfg={_v:'3.5',_t:new Date().toISOString(),
           promo:sg('thc_promo_cfg'),client:sg('thc_client_cfg'),
           pricing:sg('thc_pricing_cfg'),gasUrl:localStorage.getItem('thc_gasUrl')||''};
         var a=document.createElement('a');
         a.href=URL.createObjectURL(new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}));
         a.download='thc-config.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setStatus('Da tai thc-config.json','#34d399');
-      }catch(e){ setStatus('Loi: '+e.message,'#f87171'); }
+      }catch(e){setStatus('Loi: '+e.message,'#f87171');}
     }));
-
-    row.appendChild(makeBtn('&#8635; Tai Binh luan','#7c3aed',function(){
+    row.appendChild(makeBtn('&#8635; Tai BL','#7c3aed',function(){
       setStatus('Dang tai...','#fbbf24');
-      syncComments(function(data){
-        if(data){
-          setStatus('Da tai '+data.length+' bl','#34d399');
-          try{ window.dispatchEvent(new StorageEvent('storage',{key:'thc_comments'})); }catch(e){}
-        } else { setStatus('Khong tai duoc','#f87171'); }
+      syncCommentsDown(function(data){
+        setStatus(data?'Da tai '+data.length+' binh luan':'Khong tai duoc', data?'#34d399':'#f87171');
       });
     }));
-
     card.appendChild(row);
-
-    var lbl = document.createElement('div');
-    lbl.id = 'thcStat34';
-    lbl.style.cssText = 'font-size:11px;font-weight:600;min-height:16px;color:#94a3b8;';
-    var ls = localStorage.getItem('thc_gas_last_sync');
-    if(ls){ var d=new Date(ls); lbl.textContent='Lan cuoi sync: '+d.toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'}); }
+    var lbl=document.createElement('div');
+    lbl.id='thcStat35';
+    lbl.style.cssText='font-size:11px;font-weight:600;min-height:16px;color:#94a3b8;';
+    var ls=localStorage.getItem('thc_gas_last_sync');
+    if(ls){try{lbl.textContent='Lan cuoi: '+new Date(ls).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});}catch(er){}}
     card.appendChild(lbl);
     return card;
   }
-
-  /* ── INJECT INTO SETTINGS TAB ── */
   function tryInject(){
-    if(document.getElementById('thcCard34')) return;
-    /* Find settings page by unique text "Sao luu & Dong bo" */
-    var found = null;
-    document.querySelectorAll('h4,p,span').forEach(function(el){
-      if(found) return;
-      var t = el.textContent||'';
-      if(t.indexOf('Sao l') !== -1 && (t.indexOf('ng b') !== -1 || t.indexOf('ong b') !== -1)){
-        found = el;
-      }
+    if(document.getElementById('thcCard35')) return;
+    var found=null;
+    document.querySelectorAll('h4').forEach(function(el){
+      if(found)return;
+      if((el.textContent||'').indexOf('Sao l')!==-1) found=el;
     });
     if(!found) return;
-    /* Walk up to a meaningful container (should be a card/section) */
-    var container = found;
-    for(var i=0;i<8;i++){
-      container = container.parentElement;
-      if(!container) return;
-      /* Look for a div that is a direct child of the scrollable area */
-      var p = container.parentElement;
-      if(p && (p.tagName==='MAIN' || p.className.indexOf('overflow')!==-1 || p.className.indexOf('flex-1')!==-1)){
-        break;
-      }
+    var node=found;
+    for(var i=0;i<10;i++){
+      node=node.parentElement; if(!node)return;
+      var p=node.parentElement;
+      if(p&&(/overflow/.test(p.className)||/flex-1/.test(p.className)||p.tagName==='MAIN')) break;
     }
-    if(container && container.parentElement){
-      container.parentElement.insertBefore(buildCard(), container);
-      console.info('[THC v3.4] Card injected');
-    }
+    if(node&&node.parentElement){ node.parentElement.insertBefore(buildCard(),node); }
   }
-
-  /* ── TAB WATCH ── */
-  var _last = '';
+  var _lastH='';
   setInterval(function(){
-    var h2 = document.querySelector('header h2');
-    var txt = h2 ? h2.textContent : '';
-    if(txt !== _last){
-      _last = txt;
-      var old = document.getElementById('thcCard34');
-      if(old) old.parentNode.removeChild(old);
-      setTimeout(tryInject, 600);
-      setTimeout(tryInject, 1500);
+    var h2=document.querySelector('header h2');
+    var txt=h2?h2.textContent:'';
+    if(txt!==_lastH){
+      _lastH=txt;
+      var old=document.getElementById('thcCard35');
+      if(old)old.parentNode.removeChild(old);
+      setTimeout(tryInject,600); setTimeout(tryInject,1500); setTimeout(tryInject,3000);
     }
-  }, 800);
-
-  window.addEventListener('load', function(){
-    setTimeout(function(){ syncComments(null); }, 1500);
-    setTimeout(tryInject, 2000);
-    setTimeout(tryInject, 4000);
-    console.info('[THC v3.4] OK');
+  },800);
+  window.addEventListener('load',function(){
+    setTimeout(function(){syncCommentsDown(null);},1500);
+    setTimeout(tryInject,2000); setTimeout(tryInject,4000);
   });
 })();
 </script>
