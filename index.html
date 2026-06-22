@@ -3949,20 +3949,23 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     }catch(e){}
     /* Render best available immediately */
     renderDynamicPricing(_best);
-    /* 2. Async: try Gist for newer data */
-    var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
-    fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
+    /* 2. Async: fetch GAS getConfig for newest pricing (replaces Gist) */
+    var _gasUrlForPricing = (typeof window.GAS_URL !== 'undefined' && window.GAS_URL)
+      ? window.GAS_URL
+      : (localStorage.getItem('thc_gasUrl') || 'https://script.google.com/macros/s/AKfycbx4hvXFTf7S0HE0nb-GxXq1ES4Gy8S0YP9sOPS0RCo_u0YoanCZWRnmxLILgtkbz0L8/exec');
+    fetch(_gasUrlForPricing + '?action=getConfig&_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(d){
+      .then(function(resp){
+        var d = resp && resp.success ? resp.data : null;
         if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 5){
           try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
           renderDynamicPricing(d.pricing);
           if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
           if(d.client) try{ localStorage.setItem('thc_client_cfg', JSON.stringify(d.client)); }catch(er){}
-          console.info('[THC] Pricing upgraded from Gist:', d.pricing.categories.length, 'categories');
+          console.info('[THC] Pricing upgraded from GAS:', d.pricing.categories.length, 'categories');
         }
       })
-      .catch(function(){ /* Gist offline - already showing best available */ });
+      .catch(function(){ /* GAS offline – already showing best available */ });
   }
 
   // Load on DOMContentLoaded
@@ -4265,7 +4268,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyTDdIWGctsK8fW04lAQcrrApScGYAHmPWjg6YHFXYTSm6TactGJUdSpgwyWWyu9SEf/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbx4hvXFTf7S0HE0nb-GxXq1ES4Gy8S0YP9sOPS0RCo_u0YoanCZWRnmxLILgtkbz0L8/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
