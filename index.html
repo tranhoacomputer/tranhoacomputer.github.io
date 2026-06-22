@@ -89,42 +89,6 @@
     <meta name="theme-color" content="#2563eb">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><text x='50%25' y='58%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white' font-family='Arial,sans-serif' font-weight='bold'>TC</text></svg>">
     <!-- Tailwind CDN removed: no utility classes used in this project -->
-    <!-- ===== ĐỒNG BỘ DỮ LIỆU VỚI ADMIN.HTML ===== -->
-    <script>
-        (function(){
-            window.THC_ADMIN_DATA = {
-                pricing: null,
-                config: null,
-                comments: [],
-                syncTime: null
-            };
-
-            window.syncFromAdmin = function() {
-                try {
-                    const pricing = localStorage.getItem('thc_pricing_cfg');
-                    const config = localStorage.getItem('thc_cfg');
-                    const comments = localStorage.getItem('thc_comments');
-
-                    if (pricing) window.THC_ADMIN_DATA.pricing = JSON.parse(pricing);
-                    if (config) window.THC_ADMIN_DATA.config = JSON.parse(config);
-                    if (comments) window.THC_ADMIN_DATA.comments = JSON.parse(comments);
-                    
-                    window.THC_ADMIN_DATA.syncTime = new Date().toISOString();
-                    window.dispatchEvent(new CustomEvent('THC_SYNC_COMPLETE', {detail: window.THC_ADMIN_DATA}));
-                } catch(e) {
-                    console.warn('[INDEX] Sync error:', e);
-                }
-            };
-
-            window.addEventListener('storage', (event) => {
-                if (event.key && event.key.startsWith('thc_')) {
-                    window.syncFromAdmin();
-                }
-            });
-
-            window.syncFromAdmin();
-        })();
-    </script>
     <style>
         html { max-width: 100%; scroll-padding-top: 72px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
         #datlich-sua-chua { scroll-margin-top: 72px; }
@@ -3978,8 +3942,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       if(raw){
         var cfg = JSON.parse(raw);
         var _lsIds = (cfg&&cfg.categories||[]).map(function(c){return c.id;});
-        var _expIds = ['hardware','software','install','laptop','accessory'];
-        var _lsValid = _expIds.every(function(id){return _lsIds.indexOf(id)>=0;});
+        // Chấp nhận localStorage data nếu có ít nhất 1 category có đủ id
+        var _lsValid = cfg.categories.length >= 1 && cfg.categories.every(function(c){ return c.id && c.name; });
         if(_lsValid) _best = cfg;
       }
     }catch(e){}
@@ -3988,12 +3952,12 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     /* 2. Async: fetch GAS getConfig for newest pricing (replaces Gist) */
     var _gasUrlForPricing = (typeof window.GAS_URL !== 'undefined' && window.GAS_URL)
       ? window.GAS_URL
-      : (localStorage.getItem('thc_gasUrl') || 'https://script.google.com/macros/s/AKfycbx4hvXFTf7S0HE0nb-GxXq1ES4Gy8S0YP9sOPS0RCo_u0YoanCZWRnmxLILgtkbz0L8/exec');
+      : (localStorage.getItem('thc_gasUrl') || 'https://script.google.com/macros/s/AKfycbxq9UXw4nGs072Lj-d8GsenT-8cwLWHSvnuKiuB0VYx5MdnQn2nt60VSNiY_zLdNpaB/exec');
     fetch(_gasUrlForPricing + '?action=getConfig&_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(resp){
         var d = resp && resp.success ? resp.data : null;
-        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 5){
+        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 1){
           try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
           renderDynamicPricing(d.pricing);
           if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
@@ -4304,7 +4268,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbx4hvXFTf7S0HE0nb-GxXq1ES4Gy8S0YP9sOPS0RCo_u0YoanCZWRnmxLILgtkbz0L8/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxq9UXw4nGs072Lj-d8GsenT-8cwLWHSvnuKiuB0VYx5MdnQn2nt60VSNiY_zLdNpaB/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -4431,8 +4395,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         if(_cached){
           _lookupFetch = Promise.resolve(_cached);
         } else {
-          _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0))
-            .then(function(r){ return r.json(); })
+          // timeout 8s để không chờ mãi
+            var _ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+            var _tid = _ctrl ? setTimeout(function(){ _ctrl.abort(); }, 8000) : null;
+            _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0), _ctrl?{signal:_ctrl.signal,cache:'no-store'}:{cache:'no-store'})
+            .then(function(r){ if(_tid) clearTimeout(_tid); return r.json(); })
             .then(function(d){ return d.success ? (d.data||[]) : []; })
             .catch(function(){
               // GAS lỗi → thử đọc localStorage
@@ -4705,9 +4672,19 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
   };
 
   function loadProducts() {
-    var url = GAS_URL + '?action=getProducts';
-    fetch(url)
-      .then(function(r){ return r.json(); })
+    // Thử GAS #2 trước (có 19 sản phẩm thực tế), fallback GAS #1
+    var GAS2_URL = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
+    var primaryUrl = GAS2_URL + '?action=getProducts&_=' + Date.now();
+    var fallbackUrl = GAS_URL + '?action=getProducts&_=' + Date.now();
+    var _lpCtrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    if(_lpCtrl) setTimeout(function(){ _lpCtrl.abort(); }, 10000);
+    fetch(primaryUrl, _lpCtrl ? {signal:_lpCtrl.signal, cache:'no-store'} : {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : {success:false}; })
+      .then(function(d){
+        if(d && d.success && d.data && d.data.length > 0){ return d; }
+        // GAS #2 trống/fail → fallback GAS #1
+        return fetch(fallbackUrl, {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {success:false}; });
+      })
       .then(function(d){
         if (d.success && d.data) {
           _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; }); window._allProducts = _allProducts;
@@ -5101,8 +5078,9 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         issue:        obj['note'] || '',
                         status:       'pending'
                     }};
-                    var _gasEncoded = encodeURIComponent(JSON.stringify(_gasBody));
-                    fetch(gsUrl + '?method=POST&body=' + _gasEncoded).catch(function(){});
+                    // GAS v2.2: dùng ?action=create&data=JSON (stable, bypass proxy)
+                    var _gasData = encodeURIComponent(JSON.stringify(_gasBody.data));
+                    fetch(gsUrl + '?action=create&data=' + _gasData, {cache:'no-store'}).catch(function(){});
                   }
                 } catch(pushErr) {}
 
@@ -8395,10 +8373,12 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbyTDdIWGctsK8fW04lAQcrrApScGYAHmPWjg6YHFXYTSm6TactGJUdSpgwyWWyu9SEf/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxq9UXw4nGs072Lj-d8GsenT-8cwLWHSvnuKiuB0VYx5MdnQn2nt60VSNiY_zLdNpaB/exec';
 
   (function autoLoadFromGAS() {
-    fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
+    // Dùng GAS_URL đã được set (từ localStorage hoặc default) - KHÔNG dùng hardcode THC_GAS_CONFIG_URL riêng
+    var _url = (typeof window.GAS_URL !== 'undefined' && window.GAS_URL) ? window.GAS_URL : THC_GAS_CONFIG_URL;
+    fetch(_url + '?action=getConfig&_=' + Date.now(), {cache:'no-store'})
       .then(function(r) { return r.ok ? r.json() : null; })
       .then(function(res) {
         if (res && res.success && res.data) {
