@@ -2908,24 +2908,25 @@ body {
         }
       }
     }catch(e){}
-    /* 2. Try Gist (synced from admin) */
-    var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
-    fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
+    /* 2. Load config from GAS */
+    fetch('https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec?action=getConfig&_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){
-        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length > 0){
-          /* Cache in localStorage for next load */
-          try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
-          renderDynamicPricing(d.pricing);
-          /* Also update other configs */
-          if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
-          if(d.client) try{ localStorage.setItem('thc_client_cfg', JSON.stringify(d.client)); }catch(er){}
-          console.info('[THC] Pricing loaded from Gist:', d.pricing.categories.length, 'categories');
-        } else {
-          renderDynamicPricing(null); /* Fall back to hardcoded */
+        if(d && d.success && d.data) {
+          var cfg = d.data;
+          if(cfg.pricing) {
+            try {
+              var p = typeof cfg.pricing === 'string' ? JSON.parse(cfg.pricing) : cfg.pricing;
+              if(p && p.categories && p.categories.length > 0) {
+                renderDynamicPricing(p);
+                return;
+              }
+            } catch(e) {}
+          }
         }
+        renderDynamicPricing(null);
       })
-      .catch(function(){ renderDynamicPricing(null); });
+      .catch(function(){ renderDynamicPricing(null); }); });
   }
 
   // Load on DOMContentLoaded
@@ -3227,7 +3228,7 @@ body {
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -7318,7 +7319,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
