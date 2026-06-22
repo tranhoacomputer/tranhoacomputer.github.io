@@ -1,4 +1,4 @@
-<!-- index_v33.html | Tran Hoa Computer | 2026-06-22 | v33: merge static pricing from 1.html + fix dynamicPricingSection + hiển thị originalPrice gạch ngang trên card sản phẩm -->
+<!-- index_v32.html | Tran Hoa Computer | 2026-06-20 | v32: fix GAS_URL + hiển thị originalPrice gạch ngang trên card sản phẩm -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -2829,1040 +2829,16 @@ body {
 
         <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai minh bạch</p>
         <div id="dynamicPricingSection">
-        <div class="tab-container reveal" id="priceTabContainer">
-            <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
-            <button class="tab-btn" id="tabBtn-software" role="tab" aria-label="Cài Phần Mềm" aria-controls="tab-software" onclick="switchTab('software',this)">Cài Phần Mềm</button>
-            <button class="tab-btn" id="tabBtn-install" role="tab" aria-label="Lắp đặt PC" aria-controls="tab-install" onclick="switchTab('install',this)">Lắp đặt PC</button>
-            <button class="tab-btn" id="tabBtn-laptop" role="tab" aria-label="Laptop/iPad/MacBook" aria-controls="tab-laptop" onclick="switchTab('laptop',this)">Laptop/iPad/MacBook</button>
-            <button class="tab-btn" id="tabBtn-accessory" role="tab" aria-label="Phụ kiện" aria-controls="tab-accessory" onclick="switchTab('accessory',this)">Phụ kiện</button>
-        </div>
-        <!-- Swipe hint (mobile) -->
-        <div id="swipeHint" style="text-align:center;font-size:12px;color:var(--text-light);margin-bottom:12px;opacity:1;transition:opacity 1s;">
-            ← Vuốt trái / phải để chuyển mục →
-        </div>
-
-        <div id="priceTabsWrapper">
-        <div id="tab-hardware" class="price-table-section active reveal">
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>STT</th><th>HẠNG MỤC LỖI</th><th>CHI TIẾT DỊCH VỤ SỬA CHỮA CHUYÊN SÂU</th><th>GIÁ TRỌN GÓI</th></tr></thead>
-                    <tbody>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI NGUỒN</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; <strong>Thay Nguồn mới</strong><br><span class="badge-time">Xử lý: 45 - 60 phút (Xem sửa trực tiếp)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200K – 300K<br>500K – 700K<br>500K – 900K<br>400K – 600K<br>550K – 950K</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">LỖI ROM</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)<br><span class="badge-time">Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">PASS BIOS</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Phá mật mã bảo mật (pass) dòng máy tính thông dụng hiện nay trên thị trường<br><span class="badge-time">Xử lý: 15 - 20 phút lấy liền</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200.000 - 400.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">MAIN BOARD</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa VGA / Thay VGA mới; Thay thế thanh chip IO cũ; Thay CHIP sound xử lý âm thanh công suất máy; Sửa linh kiện chip LAN mạng từ xa<br><span class="badge-time">Xử lý: Trong ngày (Hẹn giờ trả máy)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">400K – 600K / 1.100K – 1.600K<br>500K – 900K<br>400K – 600K</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Vệ sinh máy</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Làm sạch sâu hệ thống quạt hút gió làm mát, bôi keo tản nhiệt gốm cao cấp cho vi xử lý CPU, vệ sinh bàn phím màn hình sạch bóng<br><span class="badge-time">Xử lý: 20 - 30 phút (Xem trực tiếp)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">150.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Bo cao áp</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Căn chỉnh sửa chữa vi mạch cao áp màn hình điện tử hiển thị<br><span class="badge-time">Xử lý: 30 - 45 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 800.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Bản lề</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Gia cố cơ cấu trục gập mở cơ học cứng cáp, đổ keo chuyên dụng phục hồi vỏ laptop nhựa nứt vỡ văng góc<br><span class="badge-time">Xử lý: 60 - 90 phút (Nhận máy trả liền)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">200.000 đ / 1 bên bản lề</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">8</span></div></td><td><div class="mobile-row"><span class="mobile-label">Lỗi:</span><span class="mobile-value highlight-error">Quạt CPU</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa lỗi kẹt trục, chạy phát tiếng ồn rồ to khó chịu hoặc tiến hành thay mới cụm quạt tản nhiệt<br><span class="badge-time">Xử lý: 20 - 30 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">300.000 – 600.000 đ</span></div></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="tab-software" class="price-table-section reveal">
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>STT</th><th>THIẾT BỊ HỖ TRỢ</th><th>DANH MỤC PHẦM MỀM CÀI ĐẶT</th><th>GIÁ TRỌN GÓI</th></tr></thead>
-                    <tbody>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">1</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">PC (Máy bàn)</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt mới Windows 7, 8, 10, 11 Pro kích hoạt đầy đủ Driver chuẩn + bộ Office cơ bản mượt mà + Vệ sinh bụi linh kiện nhanh<br><span class="badge-time">Xử lý: 30 - 45 phút lấy ngay</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 120.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">2</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Laptop</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài hệ điều hành tối ưu chạy siêu mượt cho dòng Laptop văn phòng, đồ họa, Gaming. Khôi phục Recovery bản quyền gốc nhà sản xuất<br><span class="badge-time">Xử lý: 40 - 50 phút lấy luôn</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">100.000 – 150.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">3</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Phần mềm lẻ</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt ứng dụng Văn phòng bộ Office lẻ, gõ tiếng Việt Unikey, đọc PDF, font thiết kế. Ứng dụng kỹ thuật nặng đồ họa AutoCad, Photoshop...<br><span class="badge-time">Xử lý: 10 - 15 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">50.000 – 100.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">4</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Diệt Virus</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cài đặt, cấu hình chuẩn ứng dụng quét diệt virus chuyên nghiệp hàng đầu bảo vệ tài khoản ngân hàng<br><span class="badge-time">Xử lý: 15 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">70.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">5</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Cứu dữ liệu</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Khôi phục tệp tin tài liệu dữ liệu quý giá bị format nhầm ổ, xóa vĩnh viễn trong sọt rác, phân vùng ghost lỗi<br><span class="badge-time">Xử lý: Tùy thuộc dung lượng ổ đĩa</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">Từ 300.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">6</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Mạng & Wifi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Cấu hình đồng bộ thông số kĩ thuật cục phát Router Modem phát sóng mạng Wifi gia đình ổn định không chập chờn<br><span class="badge-time">Xử lý: 20 phút</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80.000 - 150.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">7</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value highlight-error">Sửa Máy In & Thiết Bị Ngoại Vi</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Sửa lỗi kẹt giấy, in mờ, mực không ra; thay mực/hộp mực; cài driver máy in từ xa; sửa chuột, bàn phím, màn hình ngoài, USB hub<br><span class="badge-time">Xử lý: 20 – 60 phút (tùy thiết bị)</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value highlight-price">80.000 – 250.000 đ</span></div></td></tr>
-                        <tr><td><div class="mobile-row"><span class="mobile-label">STT:</span><span class="mobile-value">8</span></div></td><td><div class="mobile-row"><span class="mobile-label">Mục:</span><span class="mobile-value" style="color:#10b981; font-weight:700;">Hỗ trợ từ xa</span></div></td><td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span><span class="mobile-value">Xử lý sửa lỗi vặt ứng dụng văn phòng, kết nối máy in văn phòng qua Teamviewer / UltraViewer cấp tốc<br><span class="badge-time" style="color:#d97706; background-color:#fffbeb; border-color:#fde68a;">Xử lý: Kết nối lập tức</span></span></div></td><td><div class="mobile-row"><span class="mobile-label">Giá:</span><span class="mobile-value" style="color: #10b981; font-weight: 800; background: #ecfdf5; padding: 4px 8px; border-radius: 4px;">MIỄN PHÍ TRỌN ĐỜI</span></div></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ══ TAB: LẮP ĐẶT PC ══ -->
-        <div id="tab-install" class="price-table-section reveal">
-
-            <!-- MOBILE CARD VIEW -->
-            <div class="mobile-price-cards">
-
-                <!-- === VĂN PHÒNG === -->
-                <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    MÁY TÍNH VĂN PHÒNG
-                </div>
-
-                <!-- VP Cơ bản -->
-                <div class="mobile-price-card" style="border-left:4px solid #3b82f6;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#2563eb;">Gói Cơ Bản — Văn Phòng</span>
-                        <span class="mobile-card-price" style="color:#2563eb;">~6.500.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">Intel Core i3-12100 (4 nhân 8 luồng)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">H610M DDR4</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">8GB DDR4 3200MHz (1 thanh)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">240GB SSD SATA</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">Intel UHD Graphics 730 (tích hợp)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">350W 80+ White</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Vỏ mini ITX / mATX gọn nhẹ</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#eff6ff;"><span class="spec-lbl">Phù hợp</span><span class="spec-val" style="color:#1d4ed8;font-weight:600;">Word, Excel, Zalo, in ấn, kế toán cơ bản</span></div>
-                    </div>
-                </div>
-
-                <!-- VP Trung bình -->
-                <div class="mobile-price-card" style="border-left:4px solid #0ea5e9;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#0369a1;">Gói Trung Bình — Đa Nhiệm</span>
-                        <span class="mobile-card-price" style="color:#0369a1;">~9.500.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">Intel Core i5-12400 (6 nhân 12 luồng)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">B660M DDR4</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">16GB DDR4 3200MHz (2×8GB)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">512GB SSD NVMe PCIe 3.0</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">Intel UHD Graphics 730 (tích hợp)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">450W 80+ Bronze</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Vỏ mATX thông gió tốt</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#f0f9ff;"><span class="spec-lbl">Phù hợp</span><span class="spec-val" style="color:#0369a1;font-weight:600;">Kế toán, thiết kế nhẹ (Canva, Corel), đa nhiệm 10+ tab</span></div>
-                    </div>
-                </div>
-
-                <!-- VP Cao cấp -->
-                <div class="mobile-price-card" style="border-left:4px solid #6366f1;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#4f46e5;"> Gói Cao Cấp — Chuyên Nghiệp</span>
-                        <span class="mobile-card-price" style="color:#4f46e5;">~13.000.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">Intel Core i5-13400 (10 nhân 16 luồng)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">B760M DDR4/DDR5</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">16GB DDR4 3600MHz (2×8GB)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">1TB SSD NVMe PCIe 4.0</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">Intel UHD 770 tích hợp / tuỳ chọn rời thêm</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">550W 80+ Bronze</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Vỏ ATX mid-tower, lọc bụi từ tính</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#f5f3ff;"><span class="spec-lbl">Phù hợp</span><span class="spec-val" style="color:#4f46e5;font-weight:600;">Photoshop, Illustrator, AutoCAD 2D, quản lý doanh nghiệp</span></div>
-                    </div>
-                </div>
-
-                <!-- === GAMING === -->
-                <div style="background:linear-gradient(135deg,#7f1d1d,#dc2626);color:#fff;border-radius:14px;padding:14px 18px;margin:20px 0 14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    PC GAMING
-                </div>
-
-                <!-- Gaming Entry -->
-                <div class="mobile-price-card" style="border-left:4px solid #ef4444;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#dc2626;"> Gaming Nhập Môn — 1080p</span>
-                        <span class="mobile-card-price" style="color:#dc2626;">~15.000.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">AMD Ryzen 5 5600 (6 nhân 12 luồng, 4.4GHz)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">A520M / B550M DDR4</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">16GB DDR4 3200MHz (2×8GB)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">512GB SSD NVMe + 1TB HDD</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">NVIDIA GTX 1650 4GB GDDR6</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">550W 80+ Bronze</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Vỏ ATX kính cường lực, RGB</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#fff1f2;"><span class="spec-lbl">FPS</span><span class="spec-val" style="color:#be123c;font-weight:600;">60–90 FPS: Valorant, CS2, FIFA, LOL Ultra (1080p)</span></div>
-                    </div>
-                </div>
-
-                <!-- Gaming Mid -->
-                <div class="mobile-price-card" style="border-left:4px solid #f97316;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">5</span>
-                        <span class="mobile-card-title" style="color:#ea580c;"> Gaming Tầm Trung — 1080p High</span>
-                        <span class="mobile-card-price" style="color:#ea580c;">~22.000.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">AMD Ryzen 5 7600 (6 nhân 12 luồng, 5.1GHz)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">B650M DDR5</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">16GB DDR5 6000MHz (2×8GB)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">1TB SSD NVMe PCIe 4.0</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">NVIDIA RTX 4060 8GB GDDR6</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">650W 80+ Gold</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Vỏ ATX kính cường lực ARGB, 3 quạt</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#fff7ed;"><span class="spec-lbl">FPS</span><span class="spec-val" style="color:#c2410c;font-weight:600;">120–165 FPS: PUBG, GTA V, Elden Ring, Cyberpunk 1080p High</span></div>
-                    </div>
-                </div>
-
-                <!-- Gaming High -->
-                <div class="mobile-price-card" style="border-left:4px solid #a855f7;">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">6</span>
-                        <span class="mobile-card-title" style="color:#9333ea;">Gaming Cao Cấp — 2K/4K</span>
-                        <span class="mobile-card-price" style="color:#9333ea;">~32.000.000 ₫</span>
-                    </div>
-                    <div class="mobile-card-body">
-                        <div class="pc-spec"><span class="spec-lbl">CPU</span><span class="spec-val">Intel Core i7-13700F (16 nhân 24 luồng, 5.2GHz)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Main</span><span class="spec-val">Z790 DDR5 (có WiFi 6E)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">RAM</span><span class="spec-val">32GB DDR5 6400MHz (2×16GB)</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Lưu trữ</span><span class="spec-val">1TB SSD NVMe PCIe 5.0 + 2TB HDD</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">GPU</span><span class="spec-val">NVIDIA RTX 4070 12GB GDDR6X</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Nguồn</span><span class="spec-val">750W 80+ Gold Full Modular</span></div>
-                        <div class="pc-spec"><span class="spec-lbl">Case</span><span class="spec-val">Full Tower ATX kính cường lực, 5 quạt ARGB</span></div>
-                        <div class="pc-spec pc-spec-use" style="background:#faf5ff;"><span class="spec-lbl">FPS</span><span class="spec-val" style="color:#7e22ce;font-weight:600;">144+ FPS 2K / 60 FPS 4K: mọi tựa game hiện đại</span></div>
-                    </div>
-                </div>
-
-
-            </div><!-- end .mobile-price-cards -->
-
-            <!-- DESKTOP TABLE VIEW -->
-            <div class="table-responsive" style="display:none;" id="installTableDesktop">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:5%;">STT</th>
-                            <th style="width:22%;">GÓI MÁY</th>
-                            <th style="width:48%;">CẤU HÌNH CHI TIẾT</th>
-                            <th style="width:25%;">GIÁ ƯỚC TÍNH</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td colspan="4" style="background:#dbeafe;color:#1e3a8a;font-weight:800;text-align:center;padding:10px;font-size:13px;">🏢 MÁY TÍNH VĂN PHÒNG</td></tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">1</td>
-                            <td style="color:#2563eb;font-weight:700;">Cơ Bản</td>
-                            <td>CPU: Intel i3-12100 | Main: H610M | RAM: 8GB DDR4 | SSD: 240GB SATA | GPU: Tích hợp | Nguồn: 350W | Case mini</td>
-                            <td style="color:#2563eb;font-weight:800;">~6.500.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">2</td>
-                            <td style="color:#0369a1;font-weight:700;">Trung Bình</td>
-                            <td>CPU: Intel i5-12400 | Main: B660M | RAM: 16GB DDR4 | SSD: 512GB NVMe | GPU: Tích hợp | Nguồn: 450W Bronze</td>
-                            <td style="color:#0369a1;font-weight:800;">~9.500.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">3</td>
-                            <td style="color:#4f46e5;font-weight:700;"> Cao Cấp</td>
-                            <td>CPU: Intel i5-13400 | Main: B760M | RAM: 16GB DDR4 | SSD: 1TB NVMe PCIe 4.0 | Nguồn: 550W Bronze | Case ATX</td>
-                            <td style="color:#4f46e5;font-weight:800;">~13.000.000 ₫</td>
-                        </tr>
-                        <tr><td colspan="4" style="background:#fee2e2;color:#7f1d1d;font-weight:800;text-align:center;padding:10px;font-size:13px;">🎮 PC GAMING</td></tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">4</td>
-                            <td style="color:#dc2626;font-weight:700;">Nhập Môn</td>
-                            <td>CPU: Ryzen 5 5600 | Main: B550M | RAM: 16GB DDR4 | SSD: 512GB + HDD 1TB | GPU: GTX 1650 4GB | Nguồn: 550W Bronze</td>
-                            <td style="color:#dc2626;font-weight:800;">~15.000.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">5</td>
-                            <td style="color:#ea580c;font-weight:700;">Tầm Trung</td>
-                            <td>CPU: Ryzen 5 7600 | Main: B650M DDR5 | RAM: 16GB DDR5 6000 | SSD: 1TB NVMe PCIe 4.0 | GPU: RTX 4060 8GB | Nguồn: 650W Gold</td>
-                            <td style="color:#ea580c;font-weight:800;">~22.000.000 ₫</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:center;font-weight:700;">6</td>
-                            <td style="color:#9333ea;font-weight:700;"> Cao Cấp</td>
-                            <td>CPU: i7-13700F | Main: Z790 DDR5 | RAM: 32GB DDR5 6400 | SSD: 1TB PCIe 5.0 + 2TB HDD | GPU: RTX 4070 12GB | Nguồn: 750W Gold Full Mod</td>
-                            <td style="color:#9333ea;font-weight:800;">~32.000.000 ₫</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-
-            <!-- ── Lưu ý lắp đặt PC ── -->
-            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
-                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-                    <span style="font-size:17px;">❗</span> Lưu ý
-                </div>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
-                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
-                    Mang đến cửa hàng để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!
-                </p>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#16a34a;font-weight:700;">✅</span>
-                    <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.
-                </p>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
-                    <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.
-                </p>
-                <p style="margin:0;color:#92400e;background:#fef3c7;border-radius:8px;padding:9px 12px;font-weight:600;">
-                    <span style="font-size:15px;">📦</span>
-                    Giá trên <b>chưa bao gồm</b> các phụ kiện đi kèm gồm: màn hình, chuột, bàn phím, loa...
-                </p>
-            </div>
-
-        </div><!-- end #tab-install -->
-
-        <div id="tab-laptop" class="price-table-section reveal">
-            <div class="mobile-price-cards">
-                <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    LAPTOP VĂN PHÒNG
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#2563eb;">Laptop VP phổ thông</span>
-                        <span class="mobile-card-price" style="color:#2563eb;">8 – 12 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Intel Core i3-12th / AMD Ryzen 3</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8GB DDR4, màn 15.6" FHD IPS</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Pin</span><span class="mobile-value">7–10 giờ, nhẹ 1.7–1.9kg</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">ASUS VivoBook X515, Acer Aspire 3, HP 240 G9</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">8.000.000 – 12.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#1d4ed8;">Laptop VP tầm trung</span>
-                        <span class="mobile-card-price" style="color:#1d4ed8;">12 – 18 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Intel Core i5-12th/13th gen</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8–16GB DDR4, SSD 512GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">15.6" FHD IPS 60–75Hz</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Pin</span><span class="mobile-value">8–12 giờ</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Dell Inspiron 15, Lenovo IdeaPad 5, HP 15s</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">12.000.000 – 18.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#1e40af;"> Doanh nhân cao cấp</span>
-                        <span class="mobile-card-price" style="color:#1e40af;">18 – 35 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Core i5/i7-13th / Ryzen 5 PRO</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">16GB DDR5, SSD 512GB–1TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">14" 2K IPS / OLED mỏng</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Vỏ</span><span class="mobile-value">Nhôm siêu nhẹ < 1.4kg</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Dell XPS 13, Lenovo ThinkPad X1, ASUS ZenBook</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">18.000.000 – 35.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#7c2d12,#dc2626);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    LAPTOP GAMING
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#dc2626;">🎮 Gaming nhập môn</span>
-                        <span class="mobile-card-price" style="color:#dc2626;">15 – 20 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Intel Core i5-12th / AMD Ryzen 5 6600H</span></div>
-                    <div class="mobile-row"><span class="mobile-label">GPU</span><span class="mobile-value">NVIDIA RTX 3050 4GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8–16GB DDR5, SSD 512GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">15.6" FHD 144Hz</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">ASUS TUF F15, Acer Nitro 5, Lenovo IdeaPad Gaming</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">15.000.000 – 20.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#b91c1c;">🎮 Gaming tầm trung</span>
-                        <span class="mobile-card-price" style="color:#b91c1c;">20 – 30 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Intel Core i7-13th / Ryzen 7 7745HX</span></div>
-                    <div class="mobile-row"><span class="mobile-label">GPU</span><span class="mobile-value">NVIDIA RTX 4060 8GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">16GB DDR5, SSD 1TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">15.6" FHD 165Hz / 16" QHD 240Hz</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">MSI Katana 15, ASUS TUF A15, Lenovo Legion 5</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">20.000.000 – 30.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#991b1b;">🎮 Gaming cao cấp</span>
-                        <span class="mobile-card-price" style="color:#991b1b;">35 – 60 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Intel Core i9-13th / Ryzen 9 7945HX</span></div>
-                    <div class="mobile-row"><span class="mobile-label">GPU</span><span class="mobile-value">RTX 4070 / RTX 4080 12GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">32GB DDR5, SSD 1–2TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">16" QHD+ 240Hz / MiniLED</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">ASUS ROG Strix, MSI GT76, Lenovo Legion Pro 7</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">35.000.000 – 60.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     LAPTOP ĐỒ HỌA / VIDEO EDITING
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#7c3aed;"> Laptop Đồ họa / Creative</span>
-                        <span class="mobile-card-price" style="color:#7c3aed;">28 – 55 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">CPU</span><span class="mobile-value">Core i7-13th / Ryzen 7 PRO</span></div>
-                    <div class="mobile-row"><span class="mobile-label">GPU</span><span class="mobile-value">RTX 4060 / RTX 4070 Laptop</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">16–32GB DDR5, SSD 1TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">15"–16" 2K OLED / 100% sRGB DCI-P3</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">ASUS ProArt StudioBook, MSI Creator, Dell XPS 15</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">28.000.000 – 55.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#064e3b,#059669);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    iPAD
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#059669;">📱 iPad Gen 10 (2022)</span>
-                        <span class="mobile-card-price" style="color:#059669;">9 – 14 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple A14 Bionic</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">10.9" Liquid Retina 2360×1640</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">64GB / 256GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Kết nối</span><span class="mobile-value">WiFi / WiFi + 5G</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Phụ kiện</span><span class="mobile-value">Apple Pencil 1st gen, Magic Keyboard</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">9.000.000 – 14.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#047857;">📱 iPad mini Gen 7 (2024)</span>
-                        <span class="mobile-card-price" style="color:#047857;">14 – 20 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple A17 Pro</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">8.3" Liquid Retina, nhỏ gọn</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">128GB / 512GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Kết nối</span><span class="mobile-value">WiFi / WiFi + 5G</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Phụ kiện</span><span class="mobile-value">Apple Pencil Pro</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">14.000.000 – 20.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#065f46;">📱 iPad Air M2 (2024)</span>
-                        <span class="mobile-card-price" style="color:#065f46;">17 – 28 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M2</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">11" / 13" Liquid Retina</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">128GB – 1TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Kết nối</span><span class="mobile-value">WiFi / WiFi + 5G</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Phụ kiện</span><span class="mobile-value">Apple Pencil 2, Magic Keyboard Folio</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">17.000.000 – 28.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#064e3b;">📱 iPad Pro M4 (2024)</span>
-                        <span class="mobile-card-price" style="color:#064e3b;">27 – 65 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M4</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">11" / 13" Ultra Retina XDR OLED</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">256GB – 2TB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Tính năng</span><span class="mobile-value">Siêu mỏng 5.1mm, Apple Pencil Pro</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Apple chính hãng VN/A</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">27.000.000 – 65.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#1c1917,#57534e);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     MacBook
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#57534e;">MacBook Air 13" M3</span>
-                        <span class="mobile-card-price" style="color:#57534e;">27 – 42 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M3 (8-core CPU, 10-core GPU)</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8GB / 16GB Unified Memory</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">256GB – 2TB SSD</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">13.6" Liquid Retina 2560×1664</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Pin</span><span class="mobile-value">Lên đến 18 giờ, nạp MagSafe</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">27.000.000 – 42.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#44403c;">MacBook Air 15" M3</span>
-                        <span class="mobile-card-price" style="color:#44403c;">32 – 52 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M3 (8-core CPU, 10-core GPU)</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8GB / 16GB / 24GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">256GB – 2TB SSD</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">15.3" Liquid Retina 2880×1864</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Pin</span><span class="mobile-value">Lên đến 18 giờ</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">32.000.000 – 52.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#292524;"> MacBook Pro 14" M3</span>
-                        <span class="mobile-card-price" style="color:#292524;">43 – 75 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M3 / M3 Pro (11-core CPU)</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">8GB – 36GB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">512GB – 4TB SSD</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">14.2" Liquid Retina XDR 120Hz ProMotion</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Cổng</span><span class="mobile-value">HDMI, SD card reader, 3x Thunderbolt 4</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">43.000.000 – 75.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#1c1917;"> MacBook Pro 16" M3 Pro/Max</span>
-                        <span class="mobile-card-price" style="color:#1c1917;">62 – 130 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chip</span><span class="mobile-value">Apple M3 Pro / M3 Max</span></div>
-                    <div class="mobile-row"><span class="mobile-label">RAM</span><span class="mobile-value">18GB – 128GB Unified Memory</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Bộ nhớ</span><span class="mobile-value">512GB – 8TB SSD</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Màn hình</span><span class="mobile-value">16.2" Liquid Retina XDR 120Hz</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Dùng cho</span><span class="mobile-value">Video/Audio production, AI, 3D, render</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">62.000.000 – 130.000.000 đ</span></span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="table-responsive" id="laptopTableDesktop" style="display:none;">
-                <table>
-                    <colgroup><col style="width:4%"><col style="width:18%"><col style="width:36%"><col style="width:22%"><col style="width:20%"></colgroup>
-                    <thead><tr><th>STT</th><th>LOẠI SẢN PHẨM</th><th>CẤU HÌNH / THÔNG SỐ CHI TIẾT</th><th>THƯƠNG HIỆU GỢI Ý</th><th>GIÁ THAM KHẢO</th></tr></thead>
-                    <tbody>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">💼 LAPTOP VĂN PHÒNG</td></tr>
-                        <tr><td>1</td><td>Laptop VP phổ thông</td><td>i3-12th / Ryzen 3 | 8GB RAM | 15.6" FHD | 7–10 giờ pin</td><td>ASUS VivoBook, Acer Aspire 3, HP 240 G9</td><td class="highlight-price">8.000.000 – 12.000.000 đ</td></tr>
-                        <tr><td>2</td><td>Laptop VP tầm trung</td><td>i5-12/13th | 8–16GB | 15.6" FHD IPS | pin 8–12 giờ</td><td>Dell Inspiron 15, Lenovo IdeaPad 5, HP 240 G9</td><td class="highlight-price">12.000.000 – 18.000.000 đ</td></tr>
-                        <tr><td>3</td><td>Laptop doanh nhân cao cấp</td><td>i5/i7-13th / Ryzen 5 Pro | 16GB DDR5 | 14" 2K/OLED | nhôm < 1.4kg</td><td>Dell XPS 13, Lenovo ThinkPad X1, ASUS ZenBook</td><td class="highlight-price">18.000.000 – 35.000.000 đ</td></tr>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#7c2d12,#dc2626);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🎮 LAPTOP GAMING</td></tr>
-                        <tr><td>1</td><td>Gaming nhập môn</td><td>i5-12th/Ryzen 5 6600H | RTX 3050 | 15.6" 144Hz | 16GB</td><td>ASUS TUF F15, Acer Nitro 5, Lenovo IdeaPad Gaming</td><td class="highlight-price">15.000.000 – 20.000.000 đ</td></tr>
-                        <tr><td>2</td><td>Gaming tầm trung</td><td>i7-13th/Ryzen 7 7745HX | RTX 4060 | 15.6" 165Hz / 2K | 16GB DDR5</td><td>MSI Katana 15, ASUS TUF A15, Lenovo Legion 5</td><td class="highlight-price">20.000.000 – 30.000.000 đ</td></tr>
-                        <tr><td>3</td><td>Gaming cao cấp</td><td>i9-13th/Ryzen 9 7945HX | RTX 4070/4080 | 16" QHD+ 240Hz | 32GB DDR5</td><td>ASUS ROG Strix, MSI GT76, Lenovo Legion Pro 7</td><td class="highlight-price">35.000.000 – 60.000.000 đ</td></tr>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🎨 LAPTOP ĐỒ HỌA / VIDEO EDITING</td></tr>
-                        <tr><td>1</td><td>Laptop Đồ họa / Creative</td><td>i7-13th/Ryzen 7 Pro | RTX 4060/4070 | 15"–16" 2K OLED 100% sRGB | 16–32GB</td><td>ASUS ProArt, MSI Creator M16, Dell XPS 15</td><td class="highlight-price">28.000.000 – 55.000.000 đ</td></tr>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#064e3b,#059669);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">📱 iPAD</td></tr>
-                        <tr><td>1</td><td>iPad Gen 10 (2022)</td><td>A14 Bionic | 10.9" Liquid Retina | 64/256GB | WiFi/5G | Pencil 1st gen</td><td>Apple chính hãng VN/A</td><td class="highlight-price">9.000.000 – 14.000.000 đ</td></tr>
-                        <tr><td>2</td><td>iPad Air (M2, 2024)</td><td>Apple M2 | 11"/13" Liquid Retina | 128GB–1TB | Pencil 2, Magic KB Folio</td><td>Apple chính hãng VN/A</td><td class="highlight-price">17.000.000 – 28.000.000 đ</td></tr>
-                        <tr><td>3</td><td>iPad Pro (M4, 2024)</td><td>Apple M4 | 11"/13" OLED Ultra Retina XDR | 256GB–2TB | Pencil Pro</td><td>Apple chính hãng VN/A</td><td class="highlight-price">27.000.000 – 65.000.000 đ</td></tr>
-                        <tr><td>4</td><td>iPad mini (Gen 7, 2024)</td><td>A17 Pro | 8.3" Liquid Retina | 128/512GB | Pencil Pro</td><td>Apple chính hãng VN/A</td><td class="highlight-price">14.000.000 – 20.000.000 đ</td></tr>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#1c1917,#57534e);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🍎 MacBook</td></tr>
-                        <tr><td>1</td><td>MacBook Air 13" (M3)</td><td>M3 8-core | 8/16GB RAM | 256GB–2TB SSD | 13.6" Retina | pin 18h</td><td>Apple chính hãng VN/A</td><td class="highlight-price">27.000.000 – 42.000.000 đ</td></tr>
-                        <tr><td>2</td><td>MacBook Air 15" (M3)</td><td>M3 8-core | 8/16/24GB | 256GB–2TB | 15.3" Retina | pin 18h</td><td>Apple chính hãng VN/A</td><td class="highlight-price">32.000.000 – 52.000.000 đ</td></tr>
-                        <tr><td>3</td><td>MacBook Pro 14" (M3/M3 Pro)</td><td>M3/M3 Pro 11-core | 8–36GB | 512GB–4TB | 14.2" XDR 120Hz | HDMI+SD</td><td>Apple chính hãng VN/A</td><td class="highlight-price">43.000.000 – 75.000.000 đ</td></tr>
-                        <tr><td>4</td><td>MacBook Pro 16" (M3 Pro/Max)</td><td>M3 Pro/Max | 18–128GB | 512GB–8TB | 16.2" XDR 120Hz | Pro-level</td><td>Apple chính hãng VN/A</td><td class="highlight-price">62.000.000 – 130.000.000 đ</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-
-            <!-- ── Lưu ý laptop/iPad/MacBook ── -->
-            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
-                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-                    <span style="font-size:17px;">❗</span> Lưu ý
-                </div>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
-                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
-                    Mang đến cửa hàng để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!
-                </p>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#16a34a;font-weight:700;">✅</span>
-                    <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.
-                </p>
-                <p style="margin:0;color:#374151;">
-                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
-                    <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.
-                </p>
-            </div>
-
-        </div><!-- end #tab-laptop -->
-
-        <div id="tab-accessory" class="price-table-section reveal">
-            <!-- MOBILE CARD VIEW -->
-            <div class="mobile-price-cards">
-                <div style="background:linear-gradient(135deg,#064e3b,#059669);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    CHUỘT MÁY TÍNH
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#059669;">Chuột văn phòng có dây</span>
-                        <span class="mobile-card-price" style="color:#059669;">80K – 200K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Quang học, DPI 800–1600, cắm là dùng ngay</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech B100, A4Tech OP-330</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">80.000 – 200.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#047857;">Chuột không dây</span>
-                        <span class="mobile-card-price" style="color:#047857;">200K – 500K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">USB nano receiver, pin AA, tầm bắt 10m</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech M185, M330 Silent</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">200.000 – 500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#065f46;">Chuột gaming tầm trung</span>
-                        <span class="mobile-card-price" style="color:#065f46;">350K – 800K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Tính năng</span><span class="mobile-value">DPI 6400+, RGB, polling rate 1000Hz, 6 nút</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech G102, Razer Deathadder E</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">350.000 – 800.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#064e3b;">Chuột gaming cao cấp</span>
-                        <span class="mobile-card-price" style="color:#064e3b;">800K – 2 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Tính năng</span><span class="mobile-value">DPI 25600+, trọng lượng < 75g, cảm biến quang đỉnh</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Razer DeathAdder V3, Logitech G Pro X</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">800.000 – 2.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    ⌨️ BÀN PHÍM
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#2563eb;">Bàn phím màng (Membrane)</span>
-                        <span class="mobile-card-price" style="color:#2563eb;">80K – 250K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Phím cao su, gõ êm, 104 phím full size</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech K120, A4Tech FK10</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">80.000 – 250.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#1d4ed8;">Bàn phím giả cơ</span>
-                        <span class="mobile-card-price" style="color:#1d4ed8;">250K – 600K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Cơ chế mô phỏng, RGB, compact 87 phím TKL</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">E-Dra EK387 Pro, Akko 3087</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">250.000 – 600.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#1e40af;">Bàn phím cơ (Switch thật)</span>
-                        <span class="mobile-card-price" style="color:#1e40af;">600K – 3 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Cherry/Gateron/Kailh switch, hot-swap, per-key RGB</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Keychron K2, Akko 3068B</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">600.000 – 3.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#1e3a8a;">Bàn phím gaming cao cấp</span>
-                        <span class="mobile-card-price" style="color:#1e3a8a;">2 – 5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Razer/SteelSeries switch, RGB Chroma, wrist rest</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Razer BlackWidow V3, SteelSeries Apex Pro</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">2.000.000 – 5.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     MÀN HÌNH
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#7c3aed;">HD 720p (18–20 inch)</span>
-                        <span class="mobile-card-price" style="color:#7c3aed;">800K – 1.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Thông số</span><span class="mobile-value">1366×768, 60Hz, TN, phù hợp văn phòng nhẹ</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Acer V196L, LG 19M38A</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">800.000 – 1.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#6d28d9;">Full HD 1080p (21–24 inch)</span>
-                        <span class="mobile-card-price" style="color:#6d28d9;">1.8 – 4.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Thông số</span><span class="mobile-value">1920×1080, 60–75Hz, IPS/VA – phổ biến nhất</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Dell E2221H, Acer V227Q, LG 24MP60G</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">1.800.000 – 4.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#5b21b6;">FHD Gaming 144Hz (24–27 inch)</span>
-                        <span class="mobile-card-price" style="color:#5b21b6;">3.5 – 7 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Thông số</span><span class="mobile-value">1080p–1440p, 144–165Hz, IPS, 1ms</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">ASUS VG249Q, MSI G243, ViewSonic XG2405</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">3.500.000 – 7.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#4c1d95;">2K QHD (27 inch)</span>
-                        <span class="mobile-card-price" style="color:#4c1d95;">4.5 – 10 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Thông số</span><span class="mobile-value">2560×1440, 75–144Hz, IPS, đồ họa/video editing</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">LG 27QN600, Dell S2721D, BenQ GW2780</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">4.500.000 – 10.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">5</span>
-                        <span class="mobile-card-title" style="color:#3b0764;">4K UHD (27–32 inch)</span>
-                        <span class="mobile-card-price" style="color:#3b0764;">8 – 20 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Thông số</span><span class="mobile-value">3840×2160, 60–144Hz, thiết kế chuyên nghiệp</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">LG 27UK850, Samsung U28R550, ASUS ProArt</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">8.000.000 – 20.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#7c2d12,#ea580c);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     LOA VI TÍNH
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#ea580c;">Loa mini 2.0 cơ bản</span>
-                        <span class="mobile-card-price" style="color:#ea580c;">80K – 250K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">USB hoặc jack 3.5mm, âm thanh stereo</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Soundmax B30, Kisonli A9</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">80.000 – 250.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#c2410c;">Loa 2.0 tầm trung</span>
-                        <span class="mobile-card-price" style="color:#c2410c;">400K – 1.2 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Treble rõ, bass vừa, volume riêng</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Microlab M-109, Edifier R1000T4</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">400.000 – 1.200.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#9a3412;">Loa 2.1 có Subwoofer</span>
-                        <span class="mobile-card-price" style="color:#9a3412;">1 – 4 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Subwoofer 15–30W, optical/Bluetooth, bass mạnh</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Edifier C3X, Creative Inspire T3130</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">1.000.000 – 4.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#134e4a,#0d9488);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     LÓT CHUỘT (MOUSEPAD)
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#0d9488;">Lót nhỏ văn phòng (21×26cm)</span>
-                        <span class="mobile-card-price" style="color:#0d9488;">30K – 80K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chất liệu</span><span class="mobile-value">Vải mịn, đế cao su chống trượt</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">30.000 – 80.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#0f766e;">Lót cỡ vừa (30×35cm)</span>
-                        <span class="mobile-card-price" style="color:#0f766e;">80K – 250K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chất liệu</span><span class="mobile-value">Cloth control/speed, cạnh may viền</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">SteelSeries QcK, Corsair MM300</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">80.000 – 250.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#134e4a;">Lót XL trải bàn (40×90cm)</span>
-                        <span class="mobile-card-price" style="color:#134e4a;">200K – 600K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Chất liệu</span><span class="mobile-value">Phủ chuột + bàn phím, đế dày, LED cạnh (tùy loại)</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Razer Goliathus, Logitech Desk Mat</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">200.000 – 600.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#1c1917,#57534e);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                    MÁY IN
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#78716c;">Máy in phun màu (Inkjet)</span>
-                        <span class="mobile-card-price" style="color:#78716c;">1.5 – 3.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">In màu + đen trắng, mực rời EcoTank tiết kiệm</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Canon E410, Epson L3110, HP Deskjet</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">1.500.000 – 3.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#57534e;">Máy in laser đen trắng</span>
-                        <span class="mobile-card-price" style="color:#57534e;">2.8 – 5.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">In 20–30 trang/phút, cartridge bền, văn phòng</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Canon LBP2900+, HP LaserJet M107a</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">2.800.000 – 5.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#44403c;">Máy in đa năng 3-in-1</span>
-                        <span class="mobile-card-price" style="color:#44403c;">4 – 12 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Print + Scan + Copy, WiFi, điều khiển qua app</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Canon MF3010, Epson L5290, HP M130fw</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">4.000.000 – 12.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div style="background:linear-gradient(135deg,#312e81,#6366f1);color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:14px;font-size:13px;font-weight:700;letter-spacing:.5px;">
-                     PHỤ KIỆN KHÁC
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">1</span>
-                        <span class="mobile-card-title" style="color:#6366f1;">Tai nghe / Headset</span>
-                        <span class="mobile-card-price" style="color:#6366f1;">150K – 2.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">Over-ear, mic tích hợp, USB / jack 3.5mm</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech H390, HyperX Cloud II</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">150.000 – 2.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">2</span>
-                        <span class="mobile-card-title" style="color:#4f46e5;">Webcam</span>
-                        <span class="mobile-card-price" style="color:#4f46e5;">250K – 1.5 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">720p–1080p autofocus, học online & Zoom</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Logitech C270, C920, A4Tech PK-940H</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">250.000 – 1.500.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">3</span>
-                        <span class="mobile-card-title" style="color:#4338ca;">USB Hub / Bộ chia cổng</span>
-                        <span class="mobile-card-price" style="color:#4338ca;">80K – 400K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">USB 3.0 x4, Type-C hub (HDMI+USB+SD)</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Ugreen CM219, Anker 4-Port</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">80.000 – 400.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">4</span>
-                        <span class="mobile-card-title" style="color:#3730a3;">Bộ lưu điện UPS</span>
-                        <span class="mobile-card-price" style="color:#3730a3;">600K – 3 triệu</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">600VA–2000VA, bảo vệ PC khi mất điện đột ngột</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">APC BX600CI, CyberPower CP900</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">600.000 – 3.000.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">5</span>
-                        <span class="mobile-card-title" style="color:#312e81;">Đế tản nhiệt Laptop</span>
-                        <span class="mobile-card-price" style="color:#312e81;">150K – 600K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">1–2 quạt USB, hỗ trợ 12–17 inch</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Havit HV-F2056, Thermaltake Massive</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">150.000 – 600.000 đ</span></span></div>
-                    </div>
-                </div>
-                <div class="mobile-price-card">
-                    <div class="mobile-card-header">
-                        <span class="mobile-card-num">6</span>
-                        <span class="mobile-card-title" style="color:#4a1d96;">Cáp HDMI / DP / USB-C</span>
-                        <span class="mobile-card-price" style="color:#4a1d96;">30K – 200K</span>
-                    </div>
-                    <div class="mobile-card-body">
-                    <div class="mobile-row"><span class="mobile-label">Loại</span><span class="mobile-value">HDMI 2.0, DP 1.4 — hỗ trợ 4K@60Hz</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Hãng</span><span class="mobile-value">Ugreen, Cable Matters, Vention</span></div>
-                    <div class="mobile-row"><span class="mobile-label">Giá</span><span class="mobile-value"><span class="highlight-price">30.000 – 200.000 đ</span></span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="table-responsive" id="accessoryTableDesktop" style="display:none;">
-                <table>
-                    <colgroup><col style="width:4%"><col style="width:18%"><col style="width:36%"><col style="width:22%"><col style="width:20%"></colgroup>
-                    <thead><tr><th>STT</th><th>LOẠI PHỤ KIỆN</th><th>CHI TIẾT / THÔNG SỐ</th><th>THƯƠNG HIỆU GỢI Ý</th><th>GIÁ THAM KHẢO</th></tr></thead>
-                    <tbody>
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#064e3b,#059669);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🖱️ CHUỘT MÁY TÍNH</td></tr>
-                        
-<tr><td>1</td><td>Chuột văn phòng có dây</td><td>Quang học, DPI 800–1600, cắm là dùng ngay</td><td>Logitech B100, A4Tech OP-330</td><td class="highlight-price">80.000 – 200.000 đ</td></tr>
-<tr><td>2</td><td>Chuột không dây</td><td>USB nano receiver, pin AA, tầm bắt 10m</td><td>Logitech M185, M330 Silent</td><td class="highlight-price">200.000 – 500.000 đ</td></tr>
-<tr><td>3</td><td>Chuột gaming tầm trung</td><td>DPI 6400+, RGB, polling rate 1000Hz, 6 nút</td><td>Logitech G102, Razer Deathadder E</td><td class="highlight-price">350.000 – 800.000 đ</td></tr>
-<tr><td>4</td><td>Chuột gaming cao cấp</td><td>DPI 25600+, trọng lượng nhẹ (&lt;75g), cảm biến quang đỉnh</td><td>Razer DeathAdder V3, Logitech G Pro X</td><td class="highlight-price">800.000 – 2.000.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">⌨️ BÀN PHÍM</td></tr>
-                        
-<tr><td>1</td><td>Bàn phím màng (membrane)</td><td>Phím cao su, gõ êm, 104 phím full size</td><td>Logitech K120, A4Tech FK10</td><td class="highlight-price">80.000 – 250.000 đ</td></tr>
-<tr><td>2</td><td>Bàn phím giả cơ</td><td>Cơ chế mô phỏng, RGB, compact 87 phím TKL</td><td>E-Dra EK387 Pro, Akko 3087</td><td class="highlight-price">250.000 – 600.000 đ</td></tr>
-<tr><td>3</td><td>Bàn phím cơ (switch thật)</td><td>Cherry/Gateron/Kailh switch, hot-swap, per-key RGB</td><td>Keychron K2, Akko 3068B</td><td class="highlight-price">600.000 – 3.000.000 đ</td></tr>
-<tr><td>4</td><td>Bàn phím cơ gaming cao cấp</td><td>Razer/SteelSeries switch, RGB Chroma, wrist rest</td><td>Razer BlackWidow V3, SteelSeries Apex Pro</td><td class="highlight-price">2.000.000 – 5.000.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🖥️ MÀN HÌNH</td></tr>
-                        
-<tr><td>1</td><td>HD 720p (18–20 inch)</td><td>1366×768, 60Hz, TN – văn phòng nhẹ</td><td>Acer V196L, LG 19M38A</td><td class="highlight-price">800.000 – 1.500.000 đ</td></tr>
-<tr><td>2</td><td>Full HD 1080p (21–24 inch)</td><td>1920×1080, 60–75Hz, IPS/VA – phổ biến nhất</td><td>Dell E2221H, Acer V227Q, LG 24MP60G</td><td class="highlight-price">1.800.000 – 4.500.000 đ</td></tr>
-<tr><td>3</td><td>FHD Gaming 144Hz+ (24–27 inch)</td><td>1080p–1440p, 144–165Hz, IPS, 1ms – game FPS mượt</td><td>ASUS VG249Q, MSI G243, ViewSonic XG2405</td><td class="highlight-price">3.500.000 – 7.000.000 đ</td></tr>
-<tr><td>4</td><td>2K QHD (27 inch)</td><td>2560×1440, 75–144Hz, IPS – đồ họa, video editing</td><td>LG 27QN600, Dell S2721D, BenQ GW2780</td><td class="highlight-price">4.500.000 – 10.000.000 đ</td></tr>
-<tr><td>5</td><td>4K UHD (27–32 inch)</td><td>3840×2160, 60–144Hz – thiết kế chuyên nghiệp</td><td>LG 27UK850, Samsung U28R550, ASUS ProArt</td><td class="highlight-price">8.000.000 – 20.000.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#7c2d12,#ea580c);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🔊 LOA VI TÍNH</td></tr>
-                        
-<tr><td>1</td><td>Loa mini 2.0 cơ bản</td><td>USB hoặc jack 3.5mm, âm thanh stereo cơ bản</td><td>Soundmax B30, Kisonli A9</td><td class="highlight-price">80.000 – 250.000 đ</td></tr>
-<tr><td>2</td><td>Loa 2.0 tầm trung</td><td>Treble rõ, bass vừa, volume điều chỉnh riêng</td><td>Microlab M-109, Edifier R1000T4</td><td class="highlight-price">400.000 – 1.200.000 đ</td></tr>
-<tr><td>3</td><td>Loa 2.1 có subwoofer</td><td>Subwoofer 15–30W, optical/Bluetooth, bass mạnh</td><td>Edifier C3X, Creative Inspire T3130</td><td class="highlight-price">1.000.000 – 4.000.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#134e4a,#0d9488);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🎯 LÓT CHUỘT (MOUSEPAD)</td></tr>
-                        
-<tr><td>1</td><td>Lót nhỏ văn phòng (21×26 cm)</td><td>Vải mịn, đế cao su chống trượt</td><td>Generic, Logitech</td><td class="highlight-price">30.000 – 80.000 đ</td></tr>
-<tr><td>2</td><td>Lót cỡ vừa (30×35 cm)</td><td>Bề mặt cloth control/speed, cạnh may viền chắc</td><td>SteelSeries QcK, Corsair MM300</td><td class="highlight-price">80.000 – 250.000 đ</td></tr>
-<tr><td>3</td><td>Lót XL trải bàn (40×90 cm)</td><td>Phủ chuột + bàn phím, đế cao su dày, viền LED (tùy loại)</td><td>Razer Goliathus, Logitech Desk Mat</td><td class="highlight-price">200.000 – 600.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#1c1917,#57534e);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🖨️ MÁY IN</td></tr>
-                        
-<tr><td>1</td><td>Máy in phun màu (Inkjet)</td><td>In màu + đen trắng, mực rời EcoTank tiết kiệm</td><td>Canon E410, Epson L3110, HP Deskjet</td><td class="highlight-price">1.500.000 – 3.500.000 đ</td></tr>
-<tr><td>2</td><td>Máy in laser đen trắng</td><td>In 20–30 trang/phút, cartridge bền, văn phòng</td><td>Canon LBP2900+, HP LaserJet M107a</td><td class="highlight-price">2.800.000 – 5.500.000 đ</td></tr>
-<tr><td>3</td><td>Máy in đa năng 3-in-1</td><td>Print + Scan + Copy, WiFi, điều khiển qua app</td><td>Canon MF3010, Epson L5290, HP M130fw</td><td class="highlight-price">4.000.000 – 12.000.000 đ</td></tr>
-
-                        <tr><td colspan="5" style="background:linear-gradient(135deg,#312e81,#6366f1);color:#fff;font-weight:700;text-align:center;padding:9px;font-size:13px;letter-spacing:.5px;">🎧 PHỤ KIỆN KHÁC</td></tr>
-                        
-<tr><td>1</td><td>Tai nghe / Headset</td><td>Over-ear, mic tích hợp, USB/3.5mm</td><td>Logitech H390, HyperX Cloud II</td><td class="highlight-price">150.000 – 2.500.000 đ</td></tr>
-<tr><td>2</td><td>Webcam</td><td>720p / 1080p autofocus, học online &amp; Zoom</td><td>Logitech C270, C920, A4Tech PK-940H</td><td class="highlight-price">250.000 – 1.500.000 đ</td></tr>
-<tr><td>3</td><td>USB Hub / Bộ chia cổng</td><td>USB 3.0 x4, Type-C hub đa năng (HDMI+USB+SD)</td><td>Ugreen CM219, Anker 4-Port</td><td class="highlight-price">80.000 – 400.000 đ</td></tr>
-<tr><td>4</td><td>Đế tản nhiệt laptop</td><td>1–2 quạt USB, hỗ trợ 12–17 inch, điều chỉnh góc</td><td>Havit HV-F2056, Thermaltake Massive</td><td class="highlight-price">150.000 – 600.000 đ</td></tr>
-<tr><td>5</td><td>Bộ lưu điện UPS</td><td>600VA–2000VA, bảo vệ PC khi mất điện đột ngột</td><td>APC BX600CI, CyberPower CP900</td><td class="highlight-price">600.000 – 3.000.000 đ</td></tr>
-<tr><td>6</td><td>Cáp HDMI / DisplayPort</td><td>HDMI 2.0 / DP 1.4, hỗ trợ 4K@60Hz</td><td>Ugreen, Cable Matters, Vention</td><td class="highlight-price">30.000 – 200.000 đ</td></tr>
-<tr><td>7</td><td>Giá đỡ màn hình / Monitor Arm</td><td>Điều chỉnh góc, nâng hạ, tiết kiệm không gian bàn</td><td>Brateck, NB North Bayou, Ergotron</td><td class="highlight-price">200.000 – 1.200.000 đ</td></tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-
-            <!-- ── Lưu ý phụ kiện ── -->
-            <div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">
-                <div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-                    <span style="font-size:17px;">❗</span> Lưu ý
-                </div>
-                <p style="margin:0 0 8px 0;color:#374151;">
-                    <span style="color:#dc2626;font-weight:700;">⚠️</span>
-                    <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường.
-                    Mang đến cửa hàng để được tư vấn chi tiết và báo giá thực tế ngay!
-                </p>
-                <p style="margin:0;color:#374151;">
-                    <span style="color:#2563eb;font-weight:700;">🛡️</span>
-                    <b>Bảo hành:</b> Theo hãng sản xuất, hỗ trợ kỹ thuật trọn đời cho phụ kiện mua tại tiệm.
-                </p>
-            </div>
-
-        </div><!-- end #tab-accessory -->
-
-        </div><!-- end #priceTabsWrapper -->
-
-        </div><!-- end #dynamicPricingSection -->
-
-<script>/* THC Default Pricing Data v32 */
-window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần Cứng","icon":"","services":[{"id":"hardware-1","name":"LỖI NGUỒN","price":"200K – 300K 500K – 700K 500K – 900K 400K – 600K 550K – 950K","warranty":"Không bảo hành","note":"⏱ 45 - 60 phút (Xem sửa trực tiếp) | Thay JACK nguồn; Thay IC nguồn + Fet nguồn; Thay chipset, IO, ROM; Thay IC charge; Thay Nguồn mới"},{"id":"hardware-2","name":"LỖI ROM","price":"300.000 – 600.000 đ","warranty":"Không bảo hành","note":"⏱ 30 - 45 phút lấy ngay | Thay ROM (nạp lại cấu hình phần mềm hệ thống hoặc tiến hành thay thế linh kiện mới)"},{"id":"hardware-3","name":"PASS BIOS","price":"200.000 - 400.000 đ","warranty":"Không bảo hành","note":"⏱ 15 - 20 phút lấy liền | Phá mật mã bảo mật (pass) dòng máy tính thông dụng hiện nay trên thị trường"},{"id":"hardware-4","name":"MAIN BOARD","price":"400K – 600K / 1.100K – 1.600K 500K – 900K 400K – 600K","warranty":"Không bảo hành","note":"⏱ Trong ngày (Hẹn giờ trả máy) | Sửa VGA / Thay VGA mới; Thay thế thanh chip IO cũ; Thay CHIP sound xử lý âm thanh công suất máy; Sửa linh kiện chip LAN mạng từ xa"},{"id":"hardware-5","name":"Vệ sinh máy","price":"150.000 đ","warranty":"Không bảo hành","note":"⏱ 20 - 30 phút (Xem trực tiếp) | Làm sạch sâu hệ thống quạt hút gió làm mát, bôi keo tản nhiệt gốm cao cấp cho vi xử lý CPU, vệ sinh bàn phím màn hình sạch bóng"},{"id":"hardware-6","name":"Bo cao áp","price":"300.000 – 800.000 đ","warranty":"Không bảo hành","note":"⏱ 30 - 45 phút | Căn chỉnh sửa chữa vi mạch cao áp màn hình điện tử hiển thị"},{"id":"hardware-7","name":"Bản lề","price":"200.000 đ / 1 bên bản lề","warranty":"Không bảo hành","note":"⏱ 60 - 90 phút (Nhận máy trả liền) | Gia cố cơ cấu trục gập mở cơ học cứng cáp, đổ keo chuyên dụng phục hồi vỏ laptop nhựa nứt vỡ văng góc"},{"id":"hardware-8","name":"Quạt CPU","price":"300.000 – 600.000 đ","warranty":"Không bảo hành","note":"⏱ 20 - 30 phút lấy ngay | Sửa lỗi kẹt trục, chạy phát tiếng ồn rồ to khó chịu hoặc tiến hành thay mới cụm quạt tản nhiệt"}]},{"id":"software","name":"Cài Phần Mềm","icon":"","services":[{"id":"software-1","name":"PC (Máy bàn)","price":"100.000 – 120.000 đ","warranty":"Không bảo hành","note":"⏱ 30 - 45 phút lấy ngay | Cài đặt mới Windows 7, 8, 10, 11 Pro kích hoạt đầy đủ Driver chuẩn + bộ Office cơ bản mượt mà + Vệ sinh bụi linh kiện nhanh"},{"id":"software-2","name":"Laptop","price":"100.000 – 150.000 đ","warranty":"Không bảo hành","note":"⏱ 40 - 50 phút lấy luôn | Cài hệ điều hành tối ưu chạy siêu mượt cho dòng Laptop văn phòng, đồ họa, Gaming. Khôi phục Recovery bản quyền gốc nhà sản xuất"},{"id":"software-3","name":"Phần mềm lẻ","price":"50.000 – 100.000 đ","warranty":"Không bảo hành","note":"⏱ 10 - 15 phút | Cài đặt ứng dụng Văn phòng bộ Office lẻ, gõ tiếng Việt Unikey, đọc PDF, font thiết kế. Ứng dụng kỹ thuật nặng đồ họa AutoCad, Photoshop..."},{"id":"software-4","name":"Diệt Virus","price":"70.000 đ","warranty":"Không bảo hành","note":"⏱ 15 phút | Cài đặt, cấu hình chuẩn ứng dụng quét diệt virus chuyên nghiệp hàng đầu bảo vệ tài khoản ngân hàng"},{"id":"software-5","name":"Cứu dữ liệu","price":"Từ 300.000 đ","warranty":"Không bảo hành","note":"⏱ Tùy thuộc dung lượng ổ đĩa | Khôi phục tệp tin tài liệu dữ liệu quý giá bị format nhầm ổ, xóa vĩnh viễn trong sọt rác, phân vùng ghost lỗi"},{"id":"software-6","name":"Mạng & Wifi","price":"80.000 - 150.000 đ","warranty":"Không bảo hành","note":"⏱ 20 phút | Cấu hình đồng bộ thông số kĩ thuật cục phát Router Modem phát sóng mạng Wifi gia đình ổn định không chập chờn"},{"id":"software-7","name":"Sửa Máy In & Thiết Bị Ngoại Vi","price":"80.000 – 250.000 đ","warranty":"Không bảo hành","note":"⏱ 20 – 60 phút (tùy thiết bị) | Sửa lỗi kẹt giấy, in mờ, mực không ra; thay mực/hộp mực; cài driver máy in từ xa; sửa chuột, bàn phím, màn hình ngoài, USB hub"},{"id":"software-8","name":"Hỗ trợ từ xa","price":"MIỄN PHÍ TRỌN ĐỜI","warranty":"Không bảo hành","note":"⏱ Kết nối lập tức | Xử lý sửa lỗi vặt ứng dụng văn phòng, kết nối máy in văn phòng qua Teamviewer / UltraViewer cấp tốc"}]},{"id":"install","name":"Lắp đặt PC","icon":"","services":[{"id":"install-1","name":"PC Văn Phòng Cơ Bản (Intel i3)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: Intel i3-12100 | Main: H610M | RAM: 8GB DDR4 | SSD: 240GB SATA | GPU: Tích hợp | Nguồn: 350W | Case mini"},{"id":"install-2","name":"PC Văn Phòng Tầm Trung (i5-12400)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: Intel i5-12400 | Main: B660M | RAM: 16GB DDR4 | SSD: 512GB NVMe | GPU: Tích hợp | Nguồn: 450W Bronze"},{"id":"install-3","name":"PC Làm Việc Mạnh (i5-13400)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: Intel i5-13400 | Main: B760M | RAM: 16GB DDR4 | SSD: 1TB NVMe PCIe 4.0 | Nguồn: 550W Bronze | Case ATX"},{"id":"install-4","name":"PC Gaming Nhập Môn (Ryzen 5 + GTX 1650)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: Ryzen 5 5600 | Main: B550M | RAM: 16GB DDR4 | SSD: 512GB + HDD 1TB | GPU: GTX 1650 4GB | Nguồn: 550W Bronze"},{"id":"install-5","name":"PC Gaming Tầm Trung (Ryzen 5 7600 + RTX 4060)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: Ryzen 5 7600 | Main: B650M DDR5 | RAM: 16GB DDR5 6000 | SSD: 1TB NVMe PCIe 4.0 | GPU: RTX 4060 8GB | Nguồn: 650W Gold"},{"id":"install-6","name":"PC Gaming Cao Cấp (i7-13700F + RTX 4070)","price":"Liên hệ","warranty":"12 tháng","note":"CPU: i7-13700F | Main: Z790 DDR5 | RAM: 32GB DDR5 6400 | SSD: 1TB PCIe 5.0 + 2TB HDD | GPU: RTX 4070 12GB | Nguồn: 750W Gold Full Mod"}]},{"id":"laptop","name":"Laptop/iPad/MacBook","icon":"","services":[{"id":"laptop-1","name":"Laptop VP phổ thông","price":"Liên hệ","warranty":"12 tháng","note":"i3-12th / Ryzen 3 | 8GB RAM | 15.6\" FHD | 7–10 giờ pin | ASUS VivoBook, Acer Aspire 3, HP 240 G9"},{"id":"laptop-2","name":"Laptop VP tầm trung","price":"Liên hệ","warranty":"12 tháng","note":"i5-12/13th | 8–16GB | 15.6\" FHD IPS | pin 8–12 giờ | Dell Inspiron 15, Lenovo IdeaPad 5, HP 240 G9"},{"id":"laptop-3","name":"Laptop doanh nhân cao cấp","price":"Liên hệ","warranty":"12 tháng","note":"i5/i7-13th / Ryzen 5 Pro | 16GB DDR5 | 14\" 2K/OLED | nhôm < 1.4kg | Dell XPS 13, Lenovo ThinkPad X1, ASUS ZenBook"},{"id":"laptop-4","name":"Gaming nhập môn","price":"Liên hệ","warranty":"12 tháng","note":"i5-12th/Ryzen 5 6600H | RTX 3050 | 15.6\" 144Hz | 16GB | ASUS TUF F15, Acer Nitro 5, Lenovo IdeaPad Gaming"},{"id":"laptop-5","name":"Gaming tầm trung","price":"Liên hệ","warranty":"12 tháng","note":"i7-13th/Ryzen 7 7745HX | RTX 4060 | 15.6\" 165Hz / 2K | 16GB DDR5 | MSI Katana 15, ASUS TUF A15, Lenovo Legion 5"},{"id":"laptop-6","name":"Gaming cao cấp","price":"Liên hệ","warranty":"12 tháng","note":"i9-13th/Ryzen 9 7945HX | RTX 4070/4080 | 16\" QHD+ 240Hz | 32GB DDR5 | ASUS ROG Strix, MSI GT76, Lenovo Legion Pro 7"},{"id":"laptop-7","name":"Laptop Đồ họa / Creative","price":"Liên hệ","warranty":"12 tháng","note":"i7-13th/Ryzen 7 Pro | RTX 4060/4070 | 15\"–16\" 2K OLED 100% sRGB | 16–32GB | ASUS ProArt, MSI Creator M16, Dell XPS 15"},{"id":"laptop-8","name":"iPad Gen 10 (2022)","price":"Liên hệ","warranty":"12 tháng","note":"A14 Bionic | 10.9\" Liquid Retina | 64/256GB | WiFi/5G | Pencil 1st gen | Apple chính hãng VN/A"},{"id":"laptop-9","name":"iPad Air (M2, 2024)","price":"Liên hệ","warranty":"12 tháng","note":"Apple M2 | 11\"/13\" Liquid Retina | 128GB–1TB | Pencil 2, Magic KB Folio | Apple chính hãng VN/A"},{"id":"laptop-10","name":"iPad Pro (M4, 2024)","price":"Liên hệ","warranty":"12 tháng","note":"Apple M4 | 11\"/13\" OLED Ultra Retina XDR | 256GB–2TB | Pencil Pro | Apple chính hãng VN/A"},{"id":"laptop-11","name":"iPad mini (Gen 7, 2024)","price":"Liên hệ","warranty":"12 tháng","note":"A17 Pro | 8.3\" Liquid Retina | 128/512GB | Pencil Pro | Apple chính hãng VN/A"},{"id":"laptop-12","name":"MacBook Air 13\" (M3)","price":"Liên hệ","warranty":"12 tháng","note":"M3 8-core | 8/16GB RAM | 256GB–2TB SSD | 13.6\" Retina | pin 18h | Apple chính hãng VN/A"},{"id":"laptop-13","name":"MacBook Air 15\" (M3)","price":"Liên hệ","warranty":"12 tháng","note":"M3 8-core | 8/16/24GB | 256GB–2TB | 15.3\" Retina | pin 18h | Apple chính hãng VN/A"},{"id":"laptop-14","name":"MacBook Pro 14\" (M3/M3 Pro)","price":"Liên hệ","warranty":"12 tháng","note":"M3/M3 Pro 11-core | 8–36GB | 512GB–4TB | 14.2\" XDR 120Hz | HDMI+SD | Apple chính hãng VN/A"},{"id":"laptop-15","name":"MacBook Pro 16\" (M3 Pro/Max)","price":"Liên hệ","warranty":"12 tháng","note":"M3 Pro/Max | 18–128GB | 512GB–8TB | 16.2\" XDR 120Hz | Pro-level | Apple chính hãng VN/A"}]},{"id":"accessory","name":"Phụ kiện","icon":"","services":[{"id":"acc-1","name":"Chuột văn phòng có dây","price":"Liên hệ","warranty":"Không bảo hành","note":"Quang học, DPI 800–1600, cắm là dùng ngay | Ref: Logitech B100, A4Tech OP-330"},{"id":"acc-2","name":"Chuột không dây","price":"Liên hệ","warranty":"Không bảo hành","note":"USB nano receiver, pin AA, tầm bắt 10m | Ref: Logitech M185, M330 Silent"},{"id":"acc-3","name":"Chuột gaming tầm trung","price":"Liên hệ","warranty":"Không bảo hành","note":"DPI 6400+, RGB, polling rate 1000Hz, 6 nút | Ref: Logitech G102, Razer Deathadder E"},{"id":"acc-4","name":"Chuột gaming cao cấp","price":"Liên hệ","warranty":"Không bảo hành","note":"DPI 25600+, trọng lượng nhẹ (<75g), cảm biến quang đỉnh | Ref: Razer DeathAdder V3, Logitech G Pro X"},{"id":"acc-5","name":"Bàn phím màng (membrane)","price":"Liên hệ","warranty":"Không bảo hành","note":"Phím cao su, gõ êm, 104 phím full size | Ref: Logitech K120, A4Tech FK10"},{"id":"acc-6","name":"Bàn phím giả cơ","price":"Liên hệ","warranty":"Không bảo hành","note":"Cơ chế mô phỏng, RGB, compact 87 phím TKL | Ref: E-Dra EK387 Pro, Akko 3087"},{"id":"acc-7","name":"Bàn phím cơ (switch thật)","price":"Liên hệ","warranty":"Không bảo hành","note":"Cherry/Gateron/Kailh switch, hot-swap, per-key RGB | Ref: Keychron K2, Akko 3068B"},{"id":"acc-8","name":"Bàn phím cơ gaming cao cấp","price":"Liên hệ","warranty":"Không bảo hành","note":"Razer/SteelSeries switch, RGB Chroma, wrist rest | Ref: Razer BlackWidow V3, SteelSeries Apex Pro"},{"id":"acc-9","name":"HD 720p (18–20 inch)","price":"Liên hệ","warranty":"Không bảo hành","note":"1366×768, 60Hz, TN – văn phòng nhẹ | Ref: Acer V196L, LG 19M38A"},{"id":"acc-10","name":"Full HD 1080p (21–24 inch)","price":"Liên hệ","warranty":"Không bảo hành","note":"1920×1080, 60–75Hz, IPS/VA – phổ biến nhất | Ref: Dell E2221H, Acer V227Q, LG 24MP60G"},{"id":"acc-11","name":"FHD Gaming 144Hz+ (24–27 inch)","price":"Liên hệ","warranty":"Không bảo hành","note":"1080p–1440p, 144–165Hz, IPS, 1ms – game FPS mượt | Ref: ASUS VG249Q, MSI G243, ViewSonic XG2405"},{"id":"acc-12","name":"2K QHD (27 inch)","price":"Liên hệ","warranty":"Không bảo hành","note":"2560×1440, 75–144Hz, IPS – đồ họa, video editing | Ref: LG 27QN600, Dell S2721D, BenQ GW2780"},{"id":"acc-13","name":"4K UHD (27–32 inch)","price":"Liên hệ","warranty":"Không bảo hành","note":"3840×2160, 60–144Hz – thiết kế chuyên nghiệp | Ref: LG 27UK850, Samsung U28R550, ASUS ProArt"},{"id":"acc-14","name":"Loa mini 2.0 cơ bản","price":"Liên hệ","warranty":"Không bảo hành","note":"USB hoặc jack 3.5mm, âm thanh stereo cơ bản | Ref: Soundmax B30, Kisonli A9"},{"id":"acc-15","name":"Loa 2.0 tầm trung","price":"Liên hệ","warranty":"Không bảo hành","note":"Treble rõ, bass vừa, volume điều chỉnh riêng | Ref: Microlab M-109, Edifier R1000T4"},{"id":"acc-16","name":"Loa 2.1 có subwoofer","price":"Liên hệ","warranty":"Không bảo hành","note":"Subwoofer 15–30W, optical/Bluetooth, bass mạnh | Ref: Edifier C3X, Creative Inspire T3130"},{"id":"acc-17","name":"Lót nhỏ văn phòng (21×26 cm)","price":"Liên hệ","warranty":"Không bảo hành","note":"Vải mịn, đế cao su chống trượt | Ref: Generic, Logitech"},{"id":"acc-18","name":"Lót cỡ vừa (30×35 cm)","price":"Liên hệ","warranty":"Không bảo hành","note":"Bề mặt cloth control/speed, cạnh may viền chắc | Ref: SteelSeries QcK, Corsair MM300"},{"id":"acc-19","name":"Lót XL trải bàn (40×90 cm)","price":"Liên hệ","warranty":"Không bảo hành","note":"Phủ chuột + bàn phím, đế cao su dày, viền LED (tùy loại) | Ref: Razer Goliathus, Logitech Desk Mat"},{"id":"acc-20","name":"Máy in phun màu (Inkjet)","price":"Liên hệ","warranty":"Không bảo hành","note":"In màu + đen trắng, mực rời EcoTank tiết kiệm | Ref: Canon E410, Epson L3110, HP Deskjet"},{"id":"acc-21","name":"Máy in laser đen trắng","price":"Liên hệ","warranty":"Không bảo hành","note":"In 20–30 trang/phút, cartridge bền, văn phòng | Ref: Canon LBP2900+, HP LaserJet M107a"},{"id":"acc-22","name":"Máy in đa năng 3-in-1","price":"Liên hệ","warranty":"Không bảo hành","note":"Print + Scan + Copy, WiFi, điều khiển qua app | Ref: Canon MF3010, Epson L5290, HP M130fw"},{"id":"acc-23","name":"Tai nghe / Headset","price":"Liên hệ","warranty":"Không bảo hành","note":"Over-ear, mic tích hợp, USB/3.5mm | Ref: Logitech H390, HyperX Cloud II"},{"id":"acc-24","name":"Webcam","price":"Liên hệ","warranty":"Không bảo hành","note":"720p / 1080p autofocus, học online & Zoom | Ref: Logitech C270, C920, A4Tech PK-940H"},{"id":"acc-25","name":"USB Hub / Bộ chia cổng","price":"Liên hệ","warranty":"Không bảo hành","note":"USB 3.0 x4, Type-C hub đa năng (HDMI+USB+SD) | Ref: Ugreen CM219, Anker 4-Port"},{"id":"acc-26","name":"Đế tản nhiệt laptop","price":"Liên hệ","warranty":"Không bảo hành","note":"1–2 quạt USB, hỗ trợ 12–17 inch, điều chỉnh góc | Ref: Havit HV-F2056, Thermaltake Massive"},{"id":"acc-27","name":"Bộ lưu điện UPS","price":"Liên hệ","warranty":"Không bảo hành","note":"600VA–2000VA, bảo vệ PC khi mất điện đột ngột | Ref: APC BX600CI, CyberPower CP900"},{"id":"acc-28","name":"Cáp HDMI / DisplayPort","price":"Liên hệ","warranty":"Không bảo hành","note":"HDMI 2.0 / DP 1.4, hỗ trợ 4K@60Hz | Ref: Ugreen, Cable Matters, Vention"},{"id":"acc-29","name":"Giá đỡ màn hình / Monitor Arm","price":"Liên hệ","warranty":"Không bảo hành","note":"Điều chỉnh góc, nâng hạ, tiết kiệm không gian bàn | Ref: Brateck, NB North Bayou, Ergotron"},{"id":"acc-30","name":"Dịch vụ: ' +' '+(svc.name||'')+'","price":"Liên hệ","warranty":"Không bảo hành","note":"Chi tiết: ' +' '+(svc.description||svc.note||'')+' | Ref: Giá: ' +' '+price+'"},{"id":"acc-31","name":"' + (r.price||'') + '","price":"Liên hệ","warranty":"Không bảo hành","note":"' + (r.note||'') + '"}]}]};
-/* Smart init: reset localStorage if it has bad/incomplete pricing */
-(function(){
-  try{
-    var _ex=localStorage.getItem("thc_pricing_cfg");
-    var _needsReset=true;
-    if(_ex&&_ex.length>100){
-      try{
-        var _pd=JSON.parse(_ex);
-        var _ids=(_pd&&_pd.categories||[]).map(function(c){return c.id;});
-        var _exp=['hardware','software','install','laptop','accessory'];
-        _needsReset=!_exp.every(function(id){return _ids.indexOf(id)>=0;});
-      }catch(e){_needsReset=true;}
-    }
-    if(_needsReset){
-      localStorage.setItem("thc_pricing_cfg",JSON.stringify(window._thcDefaultPricing));
-      console.log('[THC] Auto-reset pricing to embedded defaults');
-    }
-  }catch(e){}
-})();
-</script>
+<!-- Pricing loaded dynamically from thc_pricing_cfg or falls back to hardcoded -->
+</div>
 <script>
 (function(){
   var _originalPricingHTML = document.getElementById('dynamicPricingSection');
 
   function fmtPrice(s){
     if(!s) return '';
-    // If it contains range chars (–, -, ~) or letters (K, M), return as-is
-    var str = (s+'').trim();
-    if(/[–\-~KkMm]/.test(str) || str.indexOf(' ')>=0) return str;
-    var n = parseInt(str.replace(/[^\d]/g,''));
-    if(isNaN(n)) return str;
+    var n = parseInt((s+'').replace(/[^\d]/g,''));
+    if(isNaN(n)) return s;
     return n.toLocaleString('vi-VN') + 'đ';
   }
 
@@ -3879,7 +2855,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var tabBtns = cats.map(function(cat, i){
       var id = cat.id || ('cat_'+i);
       return '<button class="tab-btn'+(i===0?' active':'')+'" id="tabBtn-'+id+'" '
-        +'role="tab" onclick="switchTab('\''+id+'\'',this)">'+
+        +'role="tab" onclick="switchTab(''+id+'',this)">'+
         (cat.icon||'')+ ' ' +(cat.name||('Nhóm '+(i+1)))+'</button>';
     }).join('\n');
 
@@ -3888,23 +2864,16 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       var id = cat.id || ('cat_'+i);
       var services = cat.services || [];
       var tableRows = services.map(function(svc, j){
-        var rawPrice = svc.price || svc.priceNote || 'Liên hệ';
-        // Format multiline prices (space-separated ranges → <br>)
-        var priceLines = rawPrice.trim().split(/\s{2,}|(?<=[KkĐđ])\s+(?=\d)/);
-        if(priceLines.length <= 1) priceLines = rawPrice.trim().split(/(?<=K)\s+(?=[0-9])|(?<=đ)\s+(?=[0-9])/);
-        var priceHtml = priceLines.map(function(p){return fmtPrice(p.trim());}).filter(Boolean).join('<br>');
-        if(!priceHtml) priceHtml = rawPrice;
-        var noteText = (svc.note||svc.description||'').replace(/\|/g,'<br>').replace(/;/g,' | ');
-        var warrantyText = svc.warranty ? ('<br><span style="color:#059669;font-size:11px;">🛡 '+svc.warranty+'</span>') : '';
+        var price = svc.price ? fmtPrice(svc.price) : (svc.priceNote||'Liên hệ');
         return '<tr>'
           +'<td><div class="mobile-row"><span class="mobile-label">STT:</span>'
           +'<span class="mobile-value">'+(j+1)+'</span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Dịch vụ:</span>'
-          +'<span class="mobile-value"><strong>'+(svc.name||'')+'</strong>'+warrantyText+'</span></div></td>'
+          +'<span class="mobile-value"><strong>'+(svc.name||'')+'</strong></span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Chi tiết:</span>'
-          +'<span class="mobile-value">'+noteText+'</span></div></td>'
+          +'<span class="mobile-value">'+(svc.description||svc.note||'')+'</span></div></td>'
           +'<td><div class="mobile-row"><span class="mobile-label">Giá:</span>'
-          +'<span class="mobile-value highlight-price">'+priceHtml+'</span></div></td>'
+          +'<span class="mobile-value price-highlight">'+price+'</span></div></td>'
           +'</tr>';
       }).join('');
       return '<div id="tab-'+id+'" class="price-table-section'+(i===0?' active':'')+' reveal">'
@@ -3922,50 +2891,42 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       +'<div id="priceTabsWrapper">\n'+tabContents+'\n</div>'
       +'<!-- end #priceTabsWrapper -->';
 
-    // Re-init tabs and swipe
-    var firstCat = cats[0];
-    if(firstCat && window.switchTab){
-      var firstBtn = document.getElementById('tabBtn-'+(firstCat.id||'cat_0'));
-      switchTab(firstCat.id||'cat_0', firstBtn);
-    }
+    // Re-init swipe if available
     if(window._initSwipeHint) window._initSwipeHint();
     if(window._initDragScroll) window._initDragScroll();
   }
 
   function loadPricing(){
-    /* === NEW: Always render embedded defaults FIRST (instant, no network) === */
-    var _embedded = window._thcDefaultPricing;
-    /* 1. Check localStorage for admin-synced data (takes priority over embedded) */
-    var _best = _embedded;
+    /* 1. Try localStorage first (fast, no network) */
     try{
       var raw = localStorage.getItem('thc_pricing_cfg');
       if(raw){
         var cfg = JSON.parse(raw);
-        var _lsIds = (cfg&&cfg.categories||[]).map(function(c){return c.id;});
-        // Chấp nhận localStorage data nếu có ít nhất 1 category có đủ id
-        var _lsValid = cfg.categories.length >= 1 && cfg.categories.every(function(c){ return c.id && c.name; });
-        if(_lsValid) _best = cfg;
+        if(cfg && cfg.categories && cfg.categories.length > 0){
+          renderDynamicPricing(cfg);
+          return;
+        }
       }
     }catch(e){}
-    /* Render best available immediately */
-    renderDynamicPricing(_best);
-    /* 2. Async: fetch GAS getConfig for newest pricing (replaces Gist) */
-    var _gasUrlForPricing = (typeof window.GAS_URL !== 'undefined' && window.GAS_URL)
-      ? window.GAS_URL
-      : (localStorage.getItem('thc_gasUrl') || 'https://script.google.com/macros/s/AKfycbxq9UXw4nGs072Lj-d8GsenT-8cwLWHSvnuKiuB0VYx5MdnQn2nt60VSNiY_zLdNpaB/exec');
-    fetch(_gasUrlForPricing + '?action=getConfig&_=' + Date.now(), {cache:'no-store'})
+    /* 2. Load config from GAS */
+    fetch('https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec?action=getConfig&_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(resp){
-        var d = resp && resp.success ? resp.data : null;
-        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 1){
-          try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
-          renderDynamicPricing(d.pricing);
-          if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
-          if(d.client) try{ localStorage.setItem('thc_client_cfg', JSON.stringify(d.client)); }catch(er){}
-          console.info('[THC] Pricing upgraded from GAS:', d.pricing.categories.length, 'categories');
+      .then(function(d){
+        if(d && d.success && d.data) {
+          var cfg = d.data;
+          if(cfg.pricing) {
+            try {
+              var p = typeof cfg.pricing === 'string' ? JSON.parse(cfg.pricing) : cfg.pricing;
+              if(p && p.categories && p.categories.length > 0) {
+                renderDynamicPricing(p);
+                return;
+              }
+            } catch(e) {}
+          }
         }
+        renderDynamicPricing(null);
       })
-      .catch(function(){ /* GAS offline – already showing best available */ });
+      .catch(function(){ renderDynamicPricing(null); }); });
   }
 
   // Load on DOMContentLoaded
@@ -3982,7 +2943,6 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
   window._reloadPricing = loadPricing;
 })();
 </script>
-
 
 
 
@@ -4268,7 +3228,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -4395,11 +3355,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         if(_cached){
           _lookupFetch = Promise.resolve(_cached);
         } else {
-          // timeout 8s để không chờ mãi
-            var _ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-            var _tid = _ctrl ? setTimeout(function(){ _ctrl.abort(); }, 8000) : null;
-            _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0), _ctrl?{signal:_ctrl.signal,cache:'no-store'}:{cache:'no-store'})
-            .then(function(r){ if(_tid) clearTimeout(_tid); return r.json(); })
+          _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0))
+            .then(function(r){ return r.json(); })
             .then(function(d){ return d.success ? (d.data||[]) : []; })
             .catch(function(){
               // GAS lỗi → thử đọc localStorage
@@ -4672,19 +3629,9 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
   };
 
   function loadProducts() {
-    // Thử GAS #2 trước (có 19 sản phẩm thực tế), fallback GAS #1
-    var GAS2_URL = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
-    var primaryUrl = GAS2_URL + '?action=getProducts&_=' + Date.now();
-    var fallbackUrl = GAS_URL + '?action=getProducts&_=' + Date.now();
-    var _lpCtrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-    if(_lpCtrl) setTimeout(function(){ _lpCtrl.abort(); }, 10000);
-    fetch(primaryUrl, _lpCtrl ? {signal:_lpCtrl.signal, cache:'no-store'} : {cache:'no-store'})
-      .then(function(r){ return r.ok ? r.json() : {success:false}; })
-      .then(function(d){
-        if(d && d.success && d.data && d.data.length > 0){ return d; }
-        // GAS #2 trống/fail → fallback GAS #1
-        return fetch(fallbackUrl, {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {success:false}; });
-      })
+    var url = GAS_URL + '?action=getProducts';
+    fetch(url)
+      .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.success && d.data) {
           _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; }); window._allProducts = _allProducts;
@@ -5078,9 +4025,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         issue:        obj['note'] || '',
                         status:       'pending'
                     }};
-                    // GAS v2.2: dùng ?action=create&data=JSON (stable, bypass proxy)
-                    var _gasData = encodeURIComponent(JSON.stringify(_gasBody.data));
-                    fetch(gsUrl + '?action=create&data=' + _gasData, {cache:'no-store'}).catch(function(){});
+                    var _gasEncoded = encodeURIComponent(JSON.stringify(_gasBody));
+                    fetch(gsUrl + '?method=POST&body=' + _gasEncoded).catch(function(){});
                   }
                 } catch(pushErr) {}
 
@@ -8373,12 +7319,10 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxq9UXw4nGs072Lj-d8GsenT-8cwLWHSvnuKiuB0VYx5MdnQn2nt60VSNiY_zLdNpaB/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec';
 
   (function autoLoadFromGAS() {
-    // Dùng GAS_URL đã được set (từ localStorage hoặc default) - KHÔNG dùng hardcode THC_GAS_CONFIG_URL riêng
-    var _url = (typeof window.GAS_URL !== 'undefined' && window.GAS_URL) ? window.GAS_URL : THC_GAS_CONFIG_URL;
-    fetch(_url + '?action=getConfig&_=' + Date.now(), {cache:'no-store'})
+    fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
       .then(function(r) { return r.ok ? r.json() : null; })
       .then(function(res) {
         if (res && res.success && res.data) {
