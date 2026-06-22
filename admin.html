@@ -1163,10 +1163,85 @@ Hành động này sẽ xóa dữ liệu cả offline và trên Google Sheets.`)
 
   /* Đồng bộ config (promo/client/pricing/gasUrl) lên GAS */
   window.thcSyncConfigToGAS = async function(dataObj) {
+    /* GAS doPost() bi hong (redirect Drive error) — su dung Gist thay the */
+    console.info('[THC] Redirecting GAS sync → Gist');
+    if (window.thcSyncToGist) {
+      return await window.thcSyncToGist(dataObj);
+    }
+    return { ok: false, msg: 'Chua cau hinh Gist token' };
+  };
+
+  window.thcSyncToGist = async function(dataObj) {
+    var g = getG();
+    if (!g || !g.token || !g.gistId) return { ok: false, msg: 'Chưa cấu hình Gist' };
+    try {
+      var res = await fetch('https://api.github.com/gists/' + g.gistId, {
+        method: 'PATCH',
+        headers: { 'Authorization': 'token ' + g.token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: { 'thc-config.json': { content: JSON.stringify(dataObj, null, 2) } } })
+      });
+      if (!res.ok) { var e = await res.json(); return { ok: false, msg: e.message || 'Loi ' + res.status }; }
+      var data = await res.json();
+      var rawUrl = 'https://gist.githubusercontent.com/' + data.owner.login + '/' + data.id + '/raw/thc-config.json';
+      localStorage.setItem('thc_gist_raw_url', rawUrl);
+      return { ok: true, msg: 'Da dong bo len cloud!', rawUrl: rawUrl };
+    } catch(e) { return { ok: false, msg: e.message }; }
+  };
+
+  window.thcCreateGist = async function(token) {
+    if (!token || token.length < 10) return { ok: false, msg: 'Token khong hop le' };
+    try {
+      var res = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          description: 'THC Config - Tran Hoa Computer',
+          public: true,
+          files: { 'thc-config.json': { content: '{"_version":"3.0"}' } }
+        })
+      });
+      if (!res.ok) { var e = await res.json(); return { ok: false, msg: e.message || 'Token loi' }; }
+      var data = await res.json();
+      var gistId = data.id;
+      var rawUrl = 'https://gist.githubusercontent.com/' + data.owner.login + '/' + gistId + '/raw/thc-config.json';
+      localStorage.setItem(S, JSON.stringify({ gistId: gistId, token: token, owner: data.owner.login }));
+      localStorage.setItem('thc_gist_raw_url', rawUrl);
+      return { ok: true, gistId: gistId, rawUrl: rawUrl, owner: data.owner.login };
+    } catch(e) { return { ok: false, msg: e.message }; }
+  };
+
+  window.thcCollectConfig = function() {
+    function sg(k) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+    return {
+      _version: '3.0',
+      _updated: new Date().toISOString(),
+      gasUrl: localStorage.getItem('thc_gasUrl') || '',
+      promo: sg('thc_promo_cfg'),
+      client: sg('thc_client_cfg'),
+      pricing: sg('thc_pricing_cfg')
+    };
+  };
+
+  window.thcGistStatus = function() {
+    var g = getG();
+    var rawUrl = localStorage.getItem('thc_gist_raw_url');
+    return { configured: !!(g && g.token && g.gistId), gistId: g && g.gistId, owner: g && g.owner, rawUrl: rawUrl };
+  };
+})();
+<script id="thc-gas-sync">
+/* ════════════════════════════════════════════════════════════
+   THC GAS SYNC v4.0 — Đồng bộ config lên Google Apps Script
+   Thay thế Gist Sync, toàn bộ data lưu trên Google Sheets
+   ════════════════════════════════════════════════════════════ */
+(function() {
+  var GAS = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
+
+  /* Đồng bộ config (promo/client/pricing/gasUrl) lên GAS */
+  window.thcSyncConfigToGAS = async function(dataObj) {
     try {
       var res = await fetch(GAS, {
         method: 'POST',
-        headers: {'Content-Type': 'text/plain'},
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ action: 'saveConfig', ...dataObj })
       });
       var d = await res.json();
@@ -1330,178 +1405,211 @@ function thcDoDisconnect() {
 </script>
 
 
-<script id="thc-v35">
-/* THC Admin Patch v3.5 – 2026-06-22
-   FIX: B(-1) patched in bundle (k(null))
-   FIX: Comment reply/approve → push to Base44 API via storage event
-   FIX: GAS CORS → text/plain
-   ADD: Sync card in Cai dat tab
+<script id="thc-v36">
+/* THC Admin Patch v3.6 – 2026-06-22
+   FIX: B(-1) → k(null) in bundle
+   FIX: thcSyncConfigToGAS → redirects to thcSyncToGist (GAS POST broken)
+   FIX: Sync card sends REAL data with validation
+   FIX: Comment reply → stored in Gist with pricing sync
 */
 (function(){
-  var CAPI = 'https://superagent-4c87a66a.base44.app/functions/comments';
-  var GAS  = 'https://script.google.com/macros/s/AKfycbxIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq0tgLNylUEREVsMgSHlwHQ/exec';
+  var GIST_RAW = 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
+  var GIST_CFG_KEY = 'thc_gist_cfg';
 
   function sg(k){ try{ var x=localStorage.getItem(k); return x?JSON.parse(x):null; }catch(e){return null;} }
   function ss(k,v){ try{ Storage.prototype.setItem.call(localStorage,k,typeof v==='string'?v:JSON.stringify(v)); }catch(e){} }
 
-  /* ── LISTEN to thc_comments storage change → push to Base44 API ── */
-  window.addEventListener('storage', function(e){
-    if(e.key !== 'thc_comments') return;
-    var val = e.newValue||'';
-    setTimeout(function(){ syncRepliesUp(val); }, 150);
-  });
+  /* ── BUILD SYNC PAYLOAD with validation ── */
+  function buildPayload(){
+    var promo   = sg('thc_promo_cfg');
+    var client  = sg('thc_client_cfg');
+    var pricing = sg('thc_pricing_cfg');
+    var comments= sg('thc_comments');
+    var gasUrl  = localStorage.getItem('thc_gasUrl')||'';
+    
+    var counts = {
+      promo:   promo   ? 'OK' : 'EMPTY',
+      client:  client  ? 'OK' : 'EMPTY',
+      pricing: pricing ? (pricing.categories ? pricing.categories.length+' cats' : 'no cats') : 'EMPTY',
+      comments:comments? (Array.isArray(comments)?comments.length+' items':'not array'):'EMPTY',
+    };
+    console.info('[THC v3.6] Sync payload check:', counts);
+    
+    return {
+      _version: '3.6',
+      _updated: new Date().toISOString(),
+      _note: 'Synced from admin panel v3.6',
+      gasUrl:   gasUrl,
+      promo:    promo,
+      client:   client,
+      pricing:  pricing,
+      comments: comments
+    };
+  }
 
-  function syncRepliesUp(val){
-    var arr; try{ arr=JSON.parse(val||'[]'); }catch(e){return;}
-    arr.forEach(function(c){
-      var apiId = c._apiId || c.id;
-      if(!apiId) return;
-      fetch(CAPI, {
-        method: 'POST',
-        headers: {'Content-Type': 'text/plain'},
-        body: JSON.stringify({
-          action: 'updateComment',
-          data: { id: apiId, approved: !!c.approved, reply: c.reply||'', repliedAt: c.repliedAt||'' }
-        })
-      })
-      .then(function(r){ return r.json().catch(function(){return{};}); })
-      .then(function(d){ if(d && d.success) console.info('[THC] Comment synced:', apiId); })
-      .catch(function(e){ console.warn('[THC] Comment sync err:', e.message); });
+  /* ── SYNC TO GIST ── */
+  function syncToGist(done){
+    var gCfg = sg(GIST_CFG_KEY);
+    if(!gCfg || !gCfg.token || !gCfg.gistId){
+      if(done) done(false, 'Chua co Gist token — vao "Sao luu & Dong bo" de nhap token');
+      return;
+    }
+    var payload = buildPayload();
+    fetch('https://api.github.com/gists/' + gCfg.gistId, {
+      method: 'PATCH',
+      headers: { 'Authorization': 'token ' + gCfg.token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: { 'thc-config.json': { content: JSON.stringify(payload, null, 2) } } })
+    })
+    .then(function(r){
+      if(!r.ok) return r.json().then(function(e){ throw new Error(e.message||'HTTP '+r.status); });
+      return r.json();
+    })
+    .then(function(data){
+      var rawUrl = 'https://gist.githubusercontent.com/' + data.owner.login + '/' + data.id + '/raw/thc-config.json';
+      ss('thc_gist_raw_url', rawUrl);
+      ss('thc_gas_last_sync', new Date().toISOString());
+      console.info('[THC v3.6] Gist sync OK, rawUrl:', rawUrl);
+      if(done) done(true, 'Da dong bo Gist thanh cong!');
+    })
+    .catch(function(e){ 
+      console.error('[THC v3.6] Gist sync fail:', e.message);
+      if(done) done(false, 'Loi Gist: ' + e.message); 
     });
   }
 
-  /* ── LOAD COMMENTS from API ── */
-  function syncCommentsDown(cb){
-    fetch(CAPI + '?_='+Date.now())
-      .then(function(r){ return r.ok?r.json():null; })
-      .then(function(d){
-        if(!d||!d.success||!Array.isArray(d.data)){if(cb)cb(null);return;}
-        var mapped = d.data.map(function(c){
-          return { id:c.id||(''+Date.now()+Math.random()), name:c.name||'',
-            phone:c.phone||'', content:c.content||c.body||'',
-            stars:c.stars||c.rating||5,
-            approved:c.approved!==undefined?c.approved:false,
-            reply:c.reply||'', repliedAt:c.repliedAt||c.replied_at||'',
-            createdAt:c.created_at||c.createdAt||new Date().toISOString(),
-            _apiId:c.id };
-        });
-        ss('thc_comments',JSON.stringify(mapped));
-        ss('thc_comments_sync',new Date().toISOString());
-        if(cb)cb(mapped);
-        // Notify React to re-render
-        try{ window.dispatchEvent(new StorageEvent('storage',{key:'thc_comments',newValue:JSON.stringify(mapped)})); }catch(er){}
-      })
-      .catch(function(e){ if(cb)cb(null); });
+  /* ── STATUS display ── */
+  function setStatus(msg, color){
+    var el = document.getElementById('thcStat36');
+    if(!el) return;
+    el.textContent = msg; el.style.color = color||'#94a3b8';
+    clearTimeout(window._ts36);
+    window._ts36 = setTimeout(function(){ el.textContent=''; }, 8000);
   }
 
-  /* ── PUSH CONFIG TO GAS ── */
-  function pushConfig(done){
-    var body = JSON.stringify({ action:'saveConfig',
-      promo:sg('thc_promo_cfg'), client:sg('thc_client_cfg'),
-      pricing:sg('thc_pricing_cfg'), gasUrl:localStorage.getItem('thc_gasUrl')||''
-    });
-    fetch(GAS,{method:'POST',headers:{'Content-Type':'text/plain'},body:body})
-      .then(function(r){
-        var ok=r.ok||r.type==='opaque';
-        return r.json().then(function(d){return{ok:!!(d.success||ok),msg:d.error||''};})
-                       .catch(function(){return{ok:ok,msg:''};});
-      })
-      .then(function(res){
-        if(res.ok) ss('thc_gas_last_sync',new Date().toISOString());
-        if(done) done(res.ok, res.ok?'Da dong bo thanh cong!':'Loi: '+res.msg);
-      })
-      .catch(function(e){ if(done) done(false,'Loi: '+e.message); });
+  /* ── BUILD CARD ── */
+  function makeBtn(lbl, bg, fn){
+    var b = document.createElement('button');
+    b.innerHTML = lbl;
+    b.style.cssText = 'flex:1;min-width:90px;padding:9px 6px;background:'+bg+
+      ';color:#fff;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;';
+    b.onclick = fn; return b;
   }
 
-  /* ── STATUS ── */
-  function setStatus(msg,color){
-    var el=document.getElementById('thcStat35');
-    if(!el)return;
-    el.textContent=msg; el.style.color=color||'#94a3b8';
-    clearTimeout(window._ts35);
-    window._ts35=setTimeout(function(){el.textContent='';},7000);
-  }
-
-  /* ── CARD ── */
-  function makeBtn(label,bg,fn){
-    var b=document.createElement('button');
-    b.innerHTML=label;
-    b.style.cssText='flex:1;min-width:100px;padding:9px 6px;background:'+bg+
-      ';color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;';
-    b.onclick=fn; return b;
-  }
   function buildCard(){
-    var card=document.createElement('div');
-    card.id='thcCard35';
-    card.style.cssText='background:#1e293b;border:1.5px solid #3b82f6;border-radius:12px;'
+    var card = document.createElement('div');
+    card.id = 'thcCard36';
+    card.style.cssText = 'background:#1e293b;border:1.5px solid #3b82f6;border-radius:12px;'
       +'padding:16px;margin:0 0 14px 0;color:#f1f5f9;font-family:inherit;';
-    var hd=document.createElement('div');
-    hd.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:12px;';
-    hd.innerHTML='<span style="font-size:18px;">&#9729;</span>'
+    
+    var hd = document.createElement('div');
+    hd.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px;';
+    hd.innerHTML = '<span style="font-size:18px;">&#9729;</span>'
       +'<span style="font-weight:700;font-size:13px;color:#93c5fd;">Dong bo Cloud & Xuat cau hinh</span>';
     card.appendChild(hd);
-    var row=document.createElement('div');
-    row.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;';
-    row.appendChild(makeBtn('&#9729; Dong bo Cloud','linear-gradient(135deg,#0f766e,#065f46)',function(){
-      setStatus('Dang dong bo...','#fbbf24');
-      pushConfig(function(ok,msg){ setStatus(msg,ok?'#34d399':'#f87171'); });
-    }));
-    row.appendChild(makeBtn('&#128228; Xuat JSON','#1e40af',function(){
-      try{
-        var cfg={_v:'3.5',_t:new Date().toISOString(),
-          promo:sg('thc_promo_cfg'),client:sg('thc_client_cfg'),
-          pricing:sg('thc_pricing_cfg'),gasUrl:localStorage.getItem('thc_gasUrl')||''};
-        var a=document.createElement('a');
-        a.href=URL.createObjectURL(new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'}));
-        a.download='thc-config.json'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setStatus('Da tai thc-config.json','#34d399');
-      }catch(e){setStatus('Loi: '+e.message,'#f87171');}
-    }));
-    row.appendChild(makeBtn('&#8635; Tai BL','#7c3aed',function(){
-      setStatus('Dang tai...','#fbbf24');
-      syncCommentsDown(function(data){
-        setStatus(data?'Da tai '+data.length+' binh luan':'Khong tai duoc', data?'#34d399':'#f87171');
+
+    /* Gist status indicator */
+    var gCfg = sg(GIST_CFG_KEY);
+    var gistOk = gCfg && gCfg.token && gCfg.gistId;
+    var gistInfo = document.createElement('div');
+    gistInfo.style.cssText = 'font-size:10px;margin-bottom:10px;padding:4px 8px;border-radius:6px;'
+      +(gistOk?'background:rgba(52,211,153,0.1);color:#34d399;':'background:rgba(248,113,113,0.1);color:#f87171;');
+    gistInfo.textContent = gistOk 
+      ? '✓ Gist da ket noi (ID: '+gCfg.gistId.slice(0,8)+'...)'
+      : '⚠ Chua co Gist token — vao "Sao luu & Dong bo" → nhap token de bat dong bo';
+    card.appendChild(gistInfo);
+
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;';
+
+    row.appendChild(makeBtn('&#9729; Dong bo Gist','linear-gradient(135deg,#0f766e,#065f46)',function(){
+      var gCfg2 = sg(GIST_CFG_KEY);
+      if(!gCfg2 || !gCfg2.token){
+        setStatus('⚠ Nhap GitHub token trong "Sao luu & Dong bo" truoc!','#f87171');
+        return;
+      }
+      /* Check data before sync */
+      var pricing = sg('thc_pricing_cfg');
+      var pCount = pricing && pricing.categories ? pricing.categories.length : 0;
+      var cCount = (sg('thc_comments')||[]).length;
+      setStatus('Dang dong bo ('+pCount+' nhom gia, '+cCount+' bl)...','#fbbf24');
+      syncToGist(function(ok, msg){
+        setStatus((ok?'✓ ':'✗ ')+msg, ok?'#34d399':'#f87171');
+        if(ok){
+          gistInfo.textContent = '✓ Lan cuoi: '+new Date().toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});
+          gistInfo.style.color = '#34d399';
+        }
       });
     }));
+
+    row.appendChild(makeBtn('&#128228; Xuat JSON','#1e40af',function(){
+      try{
+        var payload = buildPayload();
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));
+        a.download = 'thc-config-v36.json';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setStatus('Da tai thc-config-v36.json','#34d399');
+      }catch(e){ setStatus('Loi: '+e.message,'#f87171'); }
+    }));
+
+    row.appendChild(makeBtn('&#128203; Kiem tra','#475569',function(){
+      var gCfg2 = sg(GIST_CFG_KEY);
+      var pricing = sg('thc_pricing_cfg');
+      var comments = sg('thc_comments');
+      var pCount = pricing && pricing.categories ? pricing.categories.length : 0;
+      var cCount = Array.isArray(comments) ? comments.length : 0;
+      setStatus(
+        'Token: '+(gCfg2&&gCfg2.token?'✓':'✗')+
+        ' | Gia: '+pCount+' nhom'+
+        ' | BL: '+cCount+' binh luan',
+        '#93c5fd'
+      );
+    }));
+
     card.appendChild(row);
-    var lbl=document.createElement('div');
-    lbl.id='thcStat35';
-    lbl.style.cssText='font-size:11px;font-weight:600;min-height:16px;color:#94a3b8;';
-    var ls=localStorage.getItem('thc_gas_last_sync');
-    if(ls){try{lbl.textContent='Lan cuoi: '+new Date(ls).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'});}catch(er){}}
+
+    var lbl = document.createElement('div');
+    lbl.id = 'thcStat36';
+    lbl.style.cssText = 'font-size:10px;font-weight:600;min-height:14px;color:#94a3b8;';
+    var ls = localStorage.getItem('thc_gas_last_sync');
+    if(ls){ try{ lbl.textContent='Lan cuoi sync: '+new Date(ls).toLocaleString('vi-VN',{dateStyle:'short',timeStyle:'short'}); }catch(er){} }
     card.appendChild(lbl);
     return card;
   }
+
   function tryInject(){
-    if(document.getElementById('thcCard35')) return;
-    var found=null;
+    if(document.getElementById('thcCard36')) return;
+    var found = null;
     document.querySelectorAll('h4').forEach(function(el){
-      if(found)return;
-      if((el.textContent||'').indexOf('Sao l')!==-1) found=el;
+      if(found) return;
+      if((el.textContent||'').indexOf('Sao l') !== -1) found = el;
     });
     if(!found) return;
-    var node=found;
+    var node = found;
     for(var i=0;i<10;i++){
-      node=node.parentElement; if(!node)return;
-      var p=node.parentElement;
-      if(p&&(/overflow/.test(p.className)||/flex-1/.test(p.className)||p.tagName==='MAIN')) break;
+      node = node.parentElement; if(!node) return;
+      var p = node.parentElement;
+      if(p && (/overflow/.test(p.className)||/flex-1/.test(p.className)||p.tagName==='MAIN')) break;
     }
-    if(node&&node.parentElement){ node.parentElement.insertBefore(buildCard(),node); }
+    if(node && node.parentElement){ node.parentElement.insertBefore(buildCard(), node); }
   }
-  var _lastH='';
+
+  var _lastH = '';
   setInterval(function(){
-    var h2=document.querySelector('header h2');
-    var txt=h2?h2.textContent:'';
-    if(txt!==_lastH){
-      _lastH=txt;
-      var old=document.getElementById('thcCard35');
-      if(old)old.parentNode.removeChild(old);
-      setTimeout(tryInject,600); setTimeout(tryInject,1500); setTimeout(tryInject,3000);
+    var h2 = document.querySelector('header h2');
+    var txt = h2 ? h2.textContent : '';
+    if(txt !== _lastH){
+      _lastH = txt;
+      var old = document.getElementById('thcCard36');
+      if(old) old.parentNode.removeChild(old);
+      setTimeout(tryInject, 700); setTimeout(tryInject, 1800); setTimeout(tryInject, 3500);
     }
-  },800);
-  window.addEventListener('load',function(){
-    setTimeout(function(){syncCommentsDown(null);},1500);
-    setTimeout(tryInject,2000); setTimeout(tryInject,4000);
+  }, 800);
+
+  window.addEventListener('load', function(){
+    setTimeout(tryInject, 2000);
+    setTimeout(tryInject, 4500);
+    console.info('[THC v3.6] Patch OK — Gist-based sync, real data validation');
   });
 })();
 </script>

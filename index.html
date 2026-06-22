@@ -2897,13 +2897,35 @@ body {
   }
 
   function loadPricing(){
+    /* 1. Try localStorage first (fast, no network) */
     try{
       var raw = localStorage.getItem('thc_pricing_cfg');
-      var cfg = raw ? JSON.parse(raw) : null;
-      renderDynamicPricing(cfg);
-    }catch(e){
-      renderDynamicPricing(null);
-    }
+      if(raw){
+        var cfg = JSON.parse(raw);
+        if(cfg && cfg.categories && cfg.categories.length > 0){
+          renderDynamicPricing(cfg);
+          return;
+        }
+      }
+    }catch(e){}
+    /* 2. Try Gist (synced from admin) */
+    var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
+    fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length > 0){
+          /* Cache in localStorage for next load */
+          try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
+          renderDynamicPricing(d.pricing);
+          /* Also update other configs */
+          if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
+          if(d.client) try{ localStorage.setItem('thc_client_cfg', JSON.stringify(d.client)); }catch(er){}
+          console.info('[THC] Pricing loaded from Gist:', d.pricing.categories.length, 'categories');
+        } else {
+          renderDynamicPricing(null); /* Fall back to hardcoded */
+        }
+      })
+      .catch(function(){ renderDynamicPricing(null); });
   }
 
   // Load on DOMContentLoaded
@@ -6596,11 +6618,39 @@ window.copyPhone=function(btn){
         // Tải bình luận đã duyệt từ /api/comments
         var API_COMMENTS = (typeof window.API_BASE !== 'undefined') ? window.API_BASE + '/comments' : 'https://superagent-4c87a66a.base44.app/functions/comments';
         function loadReviews() {
-            fetch(API_COMMENTS + '?approved=true')
-                .then(function(r){ return r.json(); })
-                .then(function(d){
-                    if (d && d.success && Array.isArray(d.data)) renderReviews(d.data);
-                }).catch(function(){});
+          /* Load reviews from Base44 API, then merge replies from Gist */
+          var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
+          var apiData = null, gistData = null;
+          var done = 0;
+          function tryRender(){
+            if(++done < 2) return; /* Wait for both */
+            var items = apiData || [];
+            /* Merge replies from Gist comments */
+            if(gistData && Array.isArray(gistData)){
+              items = items.map(function(it){
+                var gc = gistData.find(function(g){ return g._apiId===it.id || g.id===it.id; });
+                if(gc && gc.reply){ return Object.assign({}, it, {reply: gc.reply, repliedAt: gc.repliedAt}); }
+                return it;
+              });
+              /* Also show Gist-only approved comments not in API */
+              gistData.forEach(function(gc){
+                if(gc.approved && !items.find(function(it){ return it.id===gc._apiId||it.id===gc.id; })){
+                  items.push(gc);
+                }
+              });
+            }
+            if(items.length) renderReviews(items);
+          }
+          /* Fetch Base44 API */
+          fetch(API_COMMENTS + '?approved=true')
+            .then(function(r){ return r.json(); })
+            .then(function(d){ apiData = (d&&d.success&&d.data)?d.data:[]; tryRender(); })
+            .catch(function(){ tryRender(); });
+          /* Fetch Gist for replies */
+          fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
+            .then(function(r){ return r.ok?r.json():null; })
+            .then(function(d){ gistData = (d&&Array.isArray(d.comments))?d.comments:null; tryRender(); })
+            .catch(function(){ tryRender(); });
         }
         function renderReviews(items) {
             var wrap = document.getElementById('thc-reviews-list');
