@@ -2897,36 +2897,31 @@ body {
   }
 
   function loadPricing(){
-    /* 1. Try localStorage first (fast, no network) */
-    try{
-      var raw = localStorage.getItem('thc_pricing_cfg');
-      if(raw){
-        var cfg = JSON.parse(raw);
-        if(cfg && cfg.categories && cfg.categories.length > 0){
-          renderDynamicPricing(cfg);
-          return;
-        }
-      }
-    }catch(e){}
-    /* 2. Load config from GAS */
-    fetch('https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec?action=getConfig&_=' + Date.now(), {cache:'no-store'})
-      .then(function(r){ return r.ok ? r.json() : null; })
+    /* Always fetch fresh from GAS – no localStorage cache */
+    var _ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var _tid = _ctrl ? setTimeout(function(){ _ctrl.abort(); }, 12000) : null;
+    fetch('https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec' + '?action=getConfig&_=' + Date.now(),
+      _ctrl ? {signal:_ctrl.signal, cache:'no-store'} : {cache:'no-store'})
+      .then(function(r){ if(_tid) clearTimeout(_tid); return r.ok ? r.json() : null; })
       .then(function(d){
-        if(d && d.success && d.data) {
+        if(d && d.success && d.data){
           var cfg = d.data;
-          if(cfg.pricing) {
-            try {
+          if(cfg.pricing){
+            try{
               var p = typeof cfg.pricing === 'string' ? JSON.parse(cfg.pricing) : cfg.pricing;
-              if(p && p.categories && p.categories.length > 0) {
+              if(p && p.categories && p.categories.length > 0){
                 renderDynamicPricing(p);
                 return;
               }
-            } catch(e) {}
+            }catch(e){}
           }
         }
         renderDynamicPricing(null);
       })
-      .catch(function(){ renderDynamicPricing(null); }); });
+      .catch(function(err){
+        console.warn('[THC] loadPricing failed:', err);
+        renderDynamicPricing(null);
+      }); });
   }
 
   // Load on DOMContentLoaded
@@ -7238,7 +7233,7 @@ if (!window._AI_CONFIG_LOADED) {
   function applyAll() {
     applyPromo(safeGet('thc_promo_cfg'));
     applyClient(safeGet('thc_client_cfg'));
-    applyPricing(safeGet('thc_pricing_cfg'));
+    loadPricing(); /* always fetch fresh from GAS */
   }
 
   /* ── Chạy ngay khi DOM sẵn sàng ─────────────────────────────────── */
@@ -7263,7 +7258,7 @@ if (!window._AI_CONFIG_LOADED) {
         applyClient(safeGet('thc_client_cfg'));
         break;
       case 'thc_pricing_cfg':
-        applyPricing(safeGet('thc_pricing_cfg'));
+        loadPricing(); /* always fetch fresh from GAS */
         break;
       /* thc_gasUrl – GAS URL thay đổi: reload products */
       case 'thc_gasUrl':
@@ -7311,7 +7306,7 @@ if (!window._AI_CONFIG_LOADED) {
     if (!cfg) return;
     if (cfg.promo)   { localStorage.setItem('thc_promo_cfg',   JSON.stringify(cfg.promo));   applyPromo(cfg.promo); }
     if (cfg.client)  { localStorage.setItem('thc_client_cfg',  JSON.stringify(cfg.client));  applyClient(cfg.client); }
-    if (cfg.pricing) { localStorage.setItem('thc_pricing_cfg', JSON.stringify(cfg.pricing)); applyPricing(cfg.pricing); }
+    if (cfg.pricing) { /* pricing no-cache */ loadPricing(); }
     if (cfg.gasUrl && cfg.gasUrl.startsWith('https://')) {
       localStorage.setItem('thc_gasUrl', cfg.gasUrl);
       window.GAS_URL = cfg.gasUrl;
@@ -7319,7 +7314,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbw8vjUDz9PlmsFq097n3K0_SnysVbH76O_Y0z0Q7BZuviWHmuDHVof8l0rZ9zD56Y4c/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
