@@ -2900,7 +2900,7 @@ body {
     /* Always fetch fresh from GAS – no localStorage cache */
     var _ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var _tid = _ctrl ? setTimeout(function(){ _ctrl.abort(); }, 12000) : null;
-    fetch('https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec' + '?action=getConfig&_=' + Date.now(),
+    fetch('https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec' + '?action=getConfig&_=' + Date.now(),
       _ctrl ? {signal:_ctrl.signal, cache:'no-store'} : {cache:'no-store'})
       .then(function(r){ if(_tid) clearTimeout(_tid); return r.ok ? r.json() : null; })
       .then(function(d){
@@ -3223,7 +3223,7 @@ body {
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -3624,9 +3624,10 @@ body {
   };
 
   function loadProducts() {
-    var url = GAS_URL + '?action=getProducts';
-    fetch(url)
-      .then(function(r){ return r.json(); })
+    var url = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec' + '?action=getProducts&_=' + Date.now();var url_fallback = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec' + '?action=getProducts&_=' + Date.now();
+    fetch(url,{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+      .catch(function(){ return fetch(url_fallback,{cache:'no-store'}).then(function(r){return r.json();}); })
       .then(function(d){
         if (d.success && d.data) {
           _allProducts = d.data.filter(function(p){ return p.isActive !== false && p.isActive !== 'false'; }); window._allProducts = _allProducts;
@@ -6612,7 +6613,7 @@ window.copyPhone=function(btn){
         paintStars(5);
 
         // Tải bình luận đã duyệt từ /api/comments
-        var API_COMMENTS = (typeof window.API_BASE !== 'undefined') ? window.API_BASE + '/comments' : 'https://superagent-4c87a66a.base44.app/functions/comments';
+        var API_COMMENTS = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
         function loadReviews() {
           /* Load reviews from Base44 API, then merge replies from Gist */
           var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
@@ -6638,7 +6639,7 @@ window.copyPhone=function(btn){
             if(items.length) renderReviews(items);
           }
           /* Fetch Base44 API */
-          fetch(API_COMMENTS + '?approved=true')
+          fetch(API_COMMENTS + '?action=getComments&approved=true&_=' + Date.now(), {cache:'no-store'})
             .then(function(r){ return r.json(); })
             .then(function(d){ apiData = (d&&d.success&&d.data)?d.data:[]; tryRender(); })
             .catch(function(){ tryRender(); });
@@ -6697,11 +6698,7 @@ window.copyPhone=function(btn){
             msg.textContent = '';
 
             var payload = { action:'createComment', data:{ name:name, phone:phone, content:content_t, stars:rating } };
-            fetch(API_COMMENTS, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(function(r){ return r.json(); })
+            fetch('https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec' + '?action=createComment&data=' + encodeURIComponent(JSON.stringify(payload.data || payload)) + '&_=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.json(); })
                 .then(function(d){
                     if (d && d.success) {
                         msg.style.color = '#10b981';
@@ -7314,7 +7311,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
