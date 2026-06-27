@@ -3949,18 +3949,20 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     }catch(e){}
     /* Render best available immediately */
     renderDynamicPricing(_best);
-    /* 2. Async: Fetch pricing từ GAS (đáng tin cậy, không bị mất) */
-    var _gasUrl = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
-    fetch(_gasUrl + '?action=getPricing&_=' + Date.now(), {cache:'no-store'})
+    /* 2. Async: try Gist for newer data */
+    var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
+    fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){
-        if(d && d.success && d.data && d.data.categories && d.data.categories.length >= 5){
-          try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.data)); }catch(er){}
-          renderDynamicPricing(d.data);
-          console.info('[THC] Pricing loaded from GAS:', d.data.categories.length, 'categories');
+        if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 5){
+          try{ localStorage.setItem('thc_pricing_cfg', JSON.stringify(d.pricing)); }catch(er){}
+          renderDynamicPricing(d.pricing);
+          if(d.promo)  try{ localStorage.setItem('thc_promo_cfg',  JSON.stringify(d.promo));  }catch(er){}
+          if(d.client) try{ localStorage.setItem('thc_client_cfg', JSON.stringify(d.client)); }catch(er){}
+          console.info('[THC] Pricing upgraded from Gist:', d.pricing.categories.length, 'categories');
         }
       })
-      .catch(function(){ /* GAS offline - đang hiển thị dữ liệu mặc định */ });
+      .catch(function(){ /* Gist offline - already showing best available */ });
   }
 
   // Load on DOMContentLoaded
@@ -4265,11 +4267,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
     var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
     (function(){
-      /* v33: GAS_URL cố định = GAS_URL_DEFAULT, xoá cache gasUrl cũ */
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem('thc_gasUrl');
-      }
-      window.GAS_URL = GAS_URL_DEFAULT;
+      var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
+      window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
     })();
     var GAS_URL = window.GAS_URL;
     var USE_GAS = true;
@@ -8303,9 +8302,12 @@ if (!window._AI_CONFIG_LOADED) {
       case 'thc_pricing_cfg':
         applyPricing(safeGet('thc_pricing_cfg'));
         break;
-      /* thc_gasUrl – GAS URL cố định, không override */
+      /* thc_gasUrl – GAS URL thay đổi: reload products */
       case 'thc_gasUrl':
-        if (typeof window.loadProducts === 'function') window.loadProducts();
+        if (e.newValue && e.newValue.startsWith('https://')) {
+          window.GAS_URL = e.newValue;
+          if (typeof window.loadProducts === 'function') window.loadProducts();
+        }
         break;
     }
   });
@@ -8347,7 +8349,10 @@ if (!window._AI_CONFIG_LOADED) {
     if (cfg.promo)   { localStorage.setItem('thc_promo_cfg',   JSON.stringify(cfg.promo));   applyPromo(cfg.promo); }
     if (cfg.client)  { localStorage.setItem('thc_client_cfg',  JSON.stringify(cfg.client));  applyClient(cfg.client); }
     if (cfg.pricing) { localStorage.setItem('thc_pricing_cfg', JSON.stringify(cfg.pricing)); applyPricing(cfg.pricing); }
-    /* gasUrl override bị vô hiệu hoá – GAS_URL cố định theo GAS_URL_DEFAULT */
+    if (cfg.gasUrl && cfg.gasUrl.startsWith('https://')) {
+      localStorage.setItem('thc_gasUrl', cfg.gasUrl);
+      window.GAS_URL = cfg.gasUrl;
+    }
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
@@ -8360,7 +8365,10 @@ if (!window._AI_CONFIG_LOADED) {
         if (res && res.success && res.data) {
           var cfg = res.data;
           window.thcImportConfig(cfg);
-          /* gasUrl override bị vô hiệu hoá */
+          if (cfg.gasUrl && cfg.gasUrl.startsWith('https://')) {
+            window.GAS_URL = cfg.gasUrl;
+            localStorage.setItem('thc_gasUrl', cfg.gasUrl);
+          }
           try { localStorage.setItem('thc_gas_last_sync', new Date().toISOString()); } catch(e) {}
         } else {
           /* GAS chưa có config → fallback localStorage */
