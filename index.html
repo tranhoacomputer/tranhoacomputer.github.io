@@ -3950,7 +3950,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     /* Render best available immediately */
     renderDynamicPricing(_best);
     /* 2. Async: Fetch pricing từ GAS (đáng tin cậy, không bị mất) */
-    var _gasUrl = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
+    var _gasUrl = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
     fetch(_gasUrl + '?action=getPricing&_=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(d){
@@ -4263,7 +4263,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
     (function(){
       /* v33: GAS_URL cố định = GAS_URL_DEFAULT, xoá cache gasUrl cũ */
       if (typeof localStorage !== 'undefined') {
@@ -8351,7 +8351,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbz0mMSjk2wmGaG0ldGV1DtToJs4yfxJYqWiebg8BF9uuMtRl6aZX6kbjmLZHVmm39glWg/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
