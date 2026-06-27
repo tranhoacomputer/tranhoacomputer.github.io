@@ -20,10 +20,10 @@ window.THC_CONFIG = {
   shop: {
     name:    'Tran Hoa Computer',
     address: 'Phú Thịnh, Thái Nguyên',
-    hours:   '07:30 – 21:00',
-    phone:   '0834.089.xxx',         // cập nhật SĐT thực
-    zalo:    'https://zalo.me/0834089xxx',
-    fanpage: 'https://facebook.com/tranhoacomputer',
+    hours:   '07:00 – 22:00',
+    phone:   '0963284044',         // cập nhật SĐT thực
+    zalo:    'https://zalo.me/0963284044',
+    fanpage: 'https://facebook.com/tranhoa84373',
   },
 
   // ═══════════════════════════════════════════
