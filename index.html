@@ -1,4 +1,4 @@
-<!-- index_v34.html | Tran Hoa Computer | 2026-06-28 | v34: fix GAS URL + đồng bộ toàn bộ logic bình luận/đánh giá qua GAS -->
+<!-- index_v35.html | Tran Hoa Computer | 2026-06-28 | v35: cập nhật GAS URL mới -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -4265,7 +4265,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxCSqf3vKq4sYiv1cA9jUsLnDBFTbixVRYQrqe9O2Yi7srQ37NlXYbtHrxuqBBy4HaEZQ/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -8337,7 +8337,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxCSqf3vKq4sYiv1cA9jUsLnDBFTbixVRYQrqe9O2Yi7srQ37NlXYbtHrxuqBBy4HaEZQ/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
