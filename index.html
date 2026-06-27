@@ -1,4 +1,4 @@
-<!-- index_v35.html | Tran Hoa Computer | 2026-06-28 | v35: cập nhật GAS URL mới -->
+<!-- index_v35.html | Tran Hoa Computer | 2026-06-28 | v35: fix hiển thị sản phẩm (price number→string) -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -4496,13 +4496,13 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       if (/^\d+$/.test(clean)) return Number(clean).toLocaleString('vi-VN') + 'đ';
       return s;
     }
-    var origHtml  = p.originalPrice ? '<div class="product-card-orig-price">' + _fmtPrice(p.originalPrice) + '</div>' : '';
-    var priceHtml = p.price ? '<div class="product-card-price">' + _fmtPrice(p.price) + '</div>' : '';
+    var origHtml  = p.originalPrice ? '<div class="product-card-orig-price">' + _fmtPrice(String(p.originalPrice)) + '</div>' : '';
+    var priceHtml = p.price ? '<div class="product-card-price">' + _fmtPrice(String(p.price)) + '</div>' : '';
     var noteHtml  = p.priceNote ? '<div class="product-card-note">' + p.priceNote + '</div>' : '';
     var descHtml  = p.description ? '<div class="product-card-desc">' + p.description + '</div>' : '';
     var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
-    var _name  = (p.name||'').replace(/'/g, "\\'");
-    var _price = (p.price||'').replace(/'/g, "\\'");
+    var _name  = String(p.name||'').replace(/'/g, "\\'");
+    var _price = String(p.price||'').replace(/'/g, "\\'");
     var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
     return '<div class="product-card">' + imgHtml +
       '<div class="product-card-body">' + catHtml +
@@ -4685,9 +4685,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
           if (section) section.style.display = 'none';
         }
       })
-      .catch(function(){
-        var section = document.getElementById('san-pham-section');
-        if (section) section.style.display = 'none';
+      .catch(function(err){
+        console.warn('[THC] loadProducts error:', err);
+        /* Giữ section hiển thị, hiện skeleton thay vì ẩn hoàn toàn */
+        var grid = document.getElementById('productGrid');
+        if (grid) grid.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:24px 0;font-size:13px;">Đang tải sản phẩm…</p>';
       });
   }
 
