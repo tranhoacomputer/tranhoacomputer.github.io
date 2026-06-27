@@ -1,4 +1,4 @@
-<!-- index_v33.html | Tran Hoa Computer | 2026-06-22 | v33: merge static pricing from 1.html + fix dynamicPricingSection + hiển thị originalPrice gạch ngang trên card sản phẩm -->
+<!-- index_v34.html | Tran Hoa Computer | 2026-06-28 | v34: fix GAS URL + đồng bộ toàn bộ logic bình luận/đánh giá qua GAS -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -4265,7 +4265,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
     /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
+    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxCSqf3vKq4sYiv1cA9jUsLnDBFTbixVRYQrqe9O2Yi7srQ37NlXYbtHrxuqBBy4HaEZQ/exec';
     (function(){
       var _saved = (typeof localStorage !== 'undefined') ? localStorage.getItem('thc_gasUrl') : null;
       window.GAS_URL = (_saved && _saved.startsWith('https://')) ? _saved : GAS_URL_DEFAULT;
@@ -7653,53 +7653,35 @@ window.copyPhone=function(btn){
         });
         paintStars(5);
 
-        // Tải bình luận đã duyệt từ /api/comments
-        var API_COMMENTS = (typeof window.API_BASE !== 'undefined') ? window.API_BASE + '/comments' : 'https://superagent-4c87a66a.base44.app/functions/comments';
+        // Tải bình luận đã duyệt từ Google Apps Script
+        var API_COMMENTS = GAS_URL + '?action=getComments';
         function loadReviews() {
-          /* Load reviews from Base44 API, then merge replies from Gist */
-          var gistUrl = localStorage.getItem('thc_gist_raw_url') || 'https://gist.githubusercontent.com/tranhoacomputer/4666bcfdf70cef5a5a17bb242de0f0ce/raw/thc-config.json';
-          var apiData = null, gistData = null;
-          var done = 0;
-          function tryRender(){
-            if(++done < 2) return; /* Wait for both */
-            var items = apiData || [];
-            /* Merge replies from Gist comments */
-            if(gistData && Array.isArray(gistData)){
-              items = items.map(function(it){
-                var gc = gistData.find(function(g){ return g._apiId===it.id || g.id===it.id; });
-                if(gc && gc.reply){ return Object.assign({}, it, {reply: gc.reply, repliedAt: gc.repliedAt}); }
-                return it;
-              });
-              /* Also show Gist-only approved comments not in API */
-              gistData.forEach(function(gc){
-                if(gc.approved && !items.find(function(it){ return it.id===gc._apiId||it.id===gc.id; })){
-                  items.push(gc);
-                }
-              });
-            }
-            if(items.length) renderReviews(items);
-          }
-          /* Fetch Base44 API */
-          fetch(API_COMMENTS + '?approved=true')
-            .then(function(r){ return r.json(); })
-            .then(function(d){ apiData = (d&&d.success&&d.data)?d.data:[]; tryRender(); })
-            .catch(function(){ tryRender(); });
-          /* Fetch Gist for replies */
-          fetch(gistUrl + '?_=' + Date.now(), {cache:'no-store'})
-            .then(function(r){ return r.ok?r.json():null; })
-            .then(function(d){ gistData = (d&&Array.isArray(d.comments))?d.comments:null; tryRender(); })
-            .catch(function(){ tryRender(); });
+            fetch(GAS_URL + '?action=getComments&_=' + Date.now())
+                .then(function(r){ return r.json(); })
+                .then(function(d){
+                    if (d && d.success && Array.isArray(d.data)) {
+                        var approvedOnly = d.data.filter(function(c){
+                            return c.approved === true || c.approved === 'true' || c.approved === 'TRUE';
+                        });
+                        renderReviews(approvedOnly);
+                    }
+                }).catch(function(e){ console.error('Lỗi khi tải bình luận từ GAS:', e); });
         }
         function renderReviews(items) {
             var wrap = document.getElementById('thc-reviews-list');
             if (!wrap) return;
             if (!items.length) { wrap.innerHTML = '<p style="color:var(--text-light); font-size:13px; text-align:center;">Chưa có đánh giá nào. Hãy là người đầu tiên!</p>'; return; }
             // Sắp xếp: 5 sao → 1 sao, mới nhất trước
-            items.sort(function(a,b){ return (b.stars||0)-(a.stars||0) || (new Date(b.created_at||0)-new Date(a.created_at||0)); });
+            items.sort(function(a,b){
+                var dA = a.created_at || a.createdAt || 0;
+                var dB = b.created_at || b.createdAt || 0;
+                return (b.stars||0)-(a.stars||0) || (new Date(dB)-new Date(dA));
+            });
             wrap.innerHTML = items.slice(0, 12).map(function(it){
                 var s = it.stars||5;
                 var stars = '★'.repeat(s) + '<span style="color:#cbd5e1;">' + '★'.repeat(5-s) + '</span>';
-                var date = it.created_at ? new Date(it.created_at).toLocaleDateString('vi-VN') : '';
+                var dateStr = it.created_at || it.createdAt;
+                var date = dateStr ? new Date(dateStr).toLocaleDateString('vi-VN') : '';
                 var initials = (it.name||'?').trim().split(' ').slice(-2).map(function(w){return w[0]||'';}).join('').toUpperCase() || '?';
                 var replyHtml = '';
                 if (it.reply) {
@@ -7710,8 +7692,8 @@ window.copyPhone=function(btn){
                 return '<div class="thc-review-item">' +
                     '<div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">' +
                         '<div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--primary),#38bdf8); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:13px; flex-shrink:0;">' + escapeHtml(initials) + '</div>' +
-                        '<div><div class="thc-rv-name" style="font-size:14px;">' + escapeHtml(it.name||'') + '</div>' +
-                        '<div class="thc-rv-stars-show" style="margin-bottom:0;">' + stars + '</div></div>' +
+                        '<div><div class="thc-rv-name" style="font-size:14px; font-weight:700;">' + escapeHtml(it.name||'') + '</div>' +
+                        '<div class="thc-rv-stars-show" style="color:#facc15; margin-bottom:0;">' + stars + '</div></div>' +
                         '<span style="margin-left:auto; font-size:11px; color:var(--text-light);">' + escapeHtml(date) + '</span>' +
                     '</div>' +
                     '<div class="thc-rv-body">"' + escapeHtml(it.content||'') + '"</div>' +
@@ -7739,24 +7721,23 @@ window.copyPhone=function(btn){
             msg.textContent = '';
 
             var payload = { action:'createComment', data:{ name:name, phone:phone, content:content_t, stars:rating } };
-            fetch(API_COMMENTS, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).then(function(r){ return r.json(); })
+            // Gửi qua GAS bằng GET (tránh CORS preflight)
+            var targetUrl = GAS_URL + '?method=POST&body=' + encodeURIComponent(JSON.stringify(payload));
+            fetch(targetUrl)
+                .then(function(r){ return r.json(); })
                 .then(function(d){
                     if (d && d.success) {
                         msg.style.color = '#10b981';
-                        msg.textContent = '✓ Cảm ơn! Đánh giá của bạn đã được gửi và sẽ hiển thị sau khi quản trị viên duyệt.';
+                        msg.textContent = '✓ Gửi thành công! Đánh giá đang chờ được duyệt để xuất hiện công khai trên trang chủ.';
                         form.reset();
                         currentRating = 5; ratingInput.value = 5; paintStars(5);
                     } else {
                         msg.style.color = '#ef4444';
-                        msg.textContent = (d && d.error) ? d.error : 'Gửi thất bại, vui lòng thử lại.';
+                        msg.textContent = d.error || 'Có lỗi hệ thống, vui lòng thử lại sau.';
                     }
                 }).catch(function(err){
                     msg.style.color = '#ef4444';
-                    msg.textContent = 'Lỗi kết nối: ' + err.message;
+                    msg.textContent = 'Lỗi kết nối đến Google Apps Script: ' + err.message;
                 }).finally(function(){
                     btn.disabled = false;
                     btn.textContent = 'Gửi đánh giá';
@@ -8356,7 +8337,7 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   /* ── GAS CONFIG SYNC v4.0 – Tải config từ Google Apps Script ── */
-  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
+  var THC_GAS_CONFIG_URL = 'https://script.google.com/macros/s/AKfycbxCSqf3vKq4sYiv1cA9jUsLnDBFTbixVRYQrqe9O2Yi7srQ37NlXYbtHrxuqBBy4HaEZQ/exec';
 
   (function autoLoadFromGAS() {
     fetch(THC_GAS_CONFIG_URL + '?action=getConfig&_=' + Date.now())
