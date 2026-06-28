@@ -1,7 +1,218 @@
 <!doctype html>
 <html lang="vi">
   <head>
-  <script src="config.js"></script>
+<script id="thc-interceptor">
+/* ═══════════════════════════════════════════════════════════════
+   THC GitHub Pages — Fetch Interceptor v2
+   Redirect mọi /api/* → GAS (không cần server backend)
+   Đã kiểm tra từng GAS action thực tế 2026-06-28
+   ═══════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /* ── Lấy GAS URL ── */
+  var GAS = (function () {
+    try { var s = localStorage.getItem('thc_gasUrl'); if (s && s.startsWith('https://script.google.com')) return s; } catch (e) {}
+    if (window.THC_CONFIG && window.THC_CONFIG.GAS_URL) return window.THC_CONFIG.GAS_URL;
+    return 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
+  })();
+
+  /* ── helpers ── */
+  function gasGET(params) {
+    var qs = Object.keys(params).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(params[k] == null ? '' : params[k]);
+    }).join('&');
+    return fetch(GAS + '?' + qs);
+  }
+  function gasPOST(bodyObj) {
+    /* GAS không hỗ trợ real POST trên doGet → gửi body qua query string */
+    var encoded = encodeURIComponent(JSON.stringify(bodyObj));
+    return fetch(GAS + '?method=POST&body=' + encoded);
+  }
+  function jsonResp(obj) {
+    return new Response(JSON.stringify(obj), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+  function parseBody(init) {
+    if (!init || !init.body) return Promise.resolve({});
+    try { return Promise.resolve(JSON.parse(init.body)); } catch (e) { return Promise.resolve({}); }
+  }
+
+  /* ── Route handlers ── */
+  var handlers = {
+
+    /* ─── COMMENTS ─── */
+    'GET /api/comments': function () {
+      return gasGET({ action: 'getComments', includeAll: 'true' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          return jsonResp(d.success
+            ? { success: true, data: d.data || [] }
+            : { success: false, error: d.error || 'Lỗi tải bình luận' });
+        });
+    },
+
+    'POST /api/comments': function (body) {
+      var action = body.action;
+      var id = body.id;
+
+      /* Xoá bình luận */
+      if (action === 'delete') {
+        return gasPOST({ action: 'deleteComment', id: id })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            return jsonResp(d.success
+              ? { success: true }
+              : { success: false, error: d.error || 'Lỗi xoá bình luận' });
+          });
+      }
+
+      /* Duyệt / ẩn bình luận — GAS dùng action:"approve" */
+      if (action === 'approve' || action === 'unapprove') {
+        var approved = (action === 'approve');
+        return gasPOST({ action: 'approve', id: id, approved: approved })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            return jsonResp({ success: true, data: { id: id, approved: approved }, _gas: d });
+          });
+      }
+
+      /* Trả lời bình luận */
+      if (action === 'replyComment') {
+        return gasPOST({ action: 'replyComment', id: id, reply: body.reply || '' })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            return jsonResp(d.success
+              ? { success: true }
+              : { success: false, error: d.error || 'Lỗi lưu phản hồi' });
+          });
+      }
+
+      return Promise.resolve(jsonResp({ success: false, error: 'Unknown comment action: ' + action }));
+    },
+
+    /* ─── CLIENT CONFIG ─── */
+    'GET /api/client-config': function () {
+      return gasGET({ action: 'getConfig', type: 'client' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var cfg = (d.data && d.data.client) ? d.data.client : (d.data || {});
+          return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+        });
+    },
+
+    'POST /api/client-config': function (body) {
+      return gasPOST({ action: 'saveConfig', type: 'client', data: body })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          return jsonResp(d.success
+            ? { success: true, message: 'Đã lưu cấu hình trang khách' }
+            : { success: false, error: d.error || 'Lỗi lưu client config' });
+        });
+    },
+
+    /* ─── PROMO CONFIG ─── */
+    'GET /api/promo-config': function () {
+      return gasGET({ action: 'getConfig', type: 'promo' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var cfg = (d.data && d.data.promo) ? d.data.promo : (d.data || {});
+          return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+        });
+    },
+
+    'POST /api/promo-config': function (body) {
+      return gasPOST({ action: 'saveConfig', type: 'promo', data: body })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          return jsonResp(d.success
+            ? { success: true, message: 'Đã lưu cấu hình thông báo popup' }
+            : { success: false, error: d.error || 'Lỗi lưu promo config' });
+        });
+    },
+
+    /* ─── PRICING CONFIG ─── */
+    /* GAS dùng action:"savePricing" với {data:{categories:[...]}} */
+    'GET /api/pricing-config': function () {
+      return gasGET({ action: 'getConfig', type: 'pricing' })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var cfg = (d.data && d.data.pricing) ? d.data.pricing : (d.data || {});
+          return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+        });
+    },
+
+    'POST /api/pricing-config': function (body) {
+      /* GAS không nhận saveConfig type=pricing → dùng savePricing */
+      var cats = body.categories || (body.data && body.data.categories) || [];
+      return gasPOST({ action: 'savePricing', data: { categories: cats } })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          return jsonResp(d.success
+            ? { success: true, message: d.message || 'Đã lưu bảng giá' }
+            : { success: false, error: d.error || 'Lỗi lưu pricing' });
+        });
+    },
+
+    /* ─── GAS PROXY pass-through ─── */
+    'POST /api/gas-proxy': function (body) {
+      var params = body.params || {};
+      if (body.method === 'POST' || (params && params.method === 'POST')) {
+        var innerBody = params.body ? (typeof params.body === 'string' ? JSON.parse(params.body) : params.body) : params;
+        return gasPOST(innerBody).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
+      }
+      return gasGET(params).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
+    },
+
+    /* ─── ZALO (cần server riêng, không chạy được trên GitHub Pages) ─── */
+    'POST /api/zalo-send': function () {
+      return Promise.resolve(jsonResp({ success: false, error: 'Zalo API cần server proxy riêng — không hoạt động trên GitHub Pages tĩnh.' }));
+    },
+    'POST /api/zalo-test': function () {
+      return Promise.resolve(jsonResp({ success: true, message: 'GitHub Pages mode: Zalo cần server. Format token OK.', data: { oa_id: 'github-pages-static' } }));
+    },
+
+    /* ─── DOWNLOAD HTML (không có server → hướng dẫn thay thế) ─── */
+    'GET /api/admin-html-content': function () {
+      return Promise.resolve(jsonResp({ success: false, error: 'Tải file HTML cần server. Hãy tải trực tiếp từ GitHub repo.' }));
+    },
+    'GET /api/client-html-content': function () {
+      return Promise.resolve(jsonResp({ success: false, error: 'Tải file HTML cần server. Hãy tải trực tiếp từ GitHub repo.' }));
+    },
+  };
+
+  /* ── Patch window.fetch ── */
+  var _orig = window.fetch.bind(window);
+  window.fetch = function (input, init) {
+    var url    = typeof input === 'string' ? input : (input && input.url) || String(input);
+    var method = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+
+    /* Chỉ intercept relative /api/* path */
+    var m = url.match(/^(\/api\/[^?#]*)/);
+    if (!m) return _orig(input, init);
+
+    var routeKey = method + ' ' + m[1];
+    var handler  = handlers[routeKey];
+    /* fallback: POST không có handler → thử GET */
+    if (!handler && method !== 'GET') handler = handlers['GET ' + m[1]];
+
+    if (!handler) {
+      console.warn('[THC interceptor] No handler for:', routeKey);
+      return Promise.resolve(jsonResp({ success: false, error: 'Endpoint không hỗ trợ trên GitHub Pages: ' + routeKey }));
+    }
+
+    return parseBody(init).then(function (body) {
+      return handler(body, init);
+    });
+  };
+
+  console.info('[THC interceptor v2] active | GAS:', GAS.slice(0, 72) + '…');
+})();
+
+</script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trần Hoà Computer – Quản Trị Hệ Thống</title>
