@@ -50,6 +50,43 @@
     try { return Promise.resolve(JSON.parse(init.body)); } catch (e) { return Promise.resolve({}); }
   }
 
+  function normalizeClientCfg(cfg) {
+    cfg = cfg || {};
+    function pickText() {
+      for (var i = 0; i < arguments.length; i++) {
+        var v = arguments[i];
+        if (v !== undefined && v !== null && String(v).trim() !== '') return String(v);
+      }
+      return '';
+    }
+    function pickNum() {
+      for (var i = 0; i < arguments.length; i++) {
+        var v = arguments[i];
+        if (v === undefined || v === null || v === '') continue;
+        var n = Number(v);
+        if (!isNaN(n)) return n;
+      }
+      return undefined;
+    }
+    return {
+      shopName: pickText(cfg.shopName, cfg.storeName, cfg.name),
+      slogan: pickText(cfg.slogan, cfg.tagline, cfg.description),
+      phone: pickText(cfg.phone, cfg.hotline, cfg.phoneRaw),
+      phoneNorm: pickText(cfg.phoneNorm, cfg.hotlineDisplay),
+      email: pickText(cfg.email, cfg.contactEmail),
+      address: pickText(cfg.address, cfg.storeAddress, cfg.location),
+      openTime: pickText(cfg.openTime, cfg.opens, cfg.openingTime, cfg.businessOpen) || '07:00',
+      closeTime: pickText(cfg.closeTime, cfg.closes, cfg.closingTime, cfg.businessClose) || '22:00',
+      workDays: pickText(cfg.workDays, cfg.openDays, cfg.workingDays, cfg.businessDays) || 'T2 – CN',
+      statsRepair: pickNum(cfg.statsRepair, cfg.totalRepairs, cfg.repairCount, cfg.totalRepair, 50),
+      statsExperience: pickNum(cfg.statsExperience, cfg.experienceYears, cfg.yearsExperience, 3),
+      statsSatisfaction: pickNum(cfg.statsSatisfaction, cfg.satisfactionRate, cfg.customerSatisfaction, 99),
+      forceStatus: pickText(cfg.forceStatus) || 'auto',
+      closedReason: pickText(cfg.closedReason, cfg.closeReason),
+      gasUrl: pickText(cfg.gasUrl, cfg.GAS_URL)
+    };
+  }
+
   /* ── Route handlers ── */
   var handlers = {
 
@@ -108,13 +145,13 @@
       return gasGET({ action: 'getConfig', type: 'client' })
         .then(function (r) { return r.json(); })
         .then(function (d) {
-          var cfg = (d.data && d.data.client) ? d.data.client : (d.data || {});
+          var cfg = normalizeClientCfg((d.data && d.data.client) ? d.data.client : (d.data || {}));
           return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
         });
     },
 
     'POST /api/client-config': function (body) {
-      return gasPOST({ action: 'saveConfig', type: 'client', data: body })
+      return gasPOST({ action: 'saveConfig', type: 'client', data: normalizeClientCfg(body) })
         .then(function (r) { return r.json(); })
         .then(function (d) {
           return jsonResp(d.success
