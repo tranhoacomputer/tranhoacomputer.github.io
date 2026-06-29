@@ -318,14 +318,14 @@
   }
 
   function buildUI() {
+    // Nút được gắn trong mục "Cài đặt" (hoặc gần "Sổ tay đơn giá") thay vì nút nổi góc phải.
     var btn = h('button', {
       type: 'button',
       style:
-        'position:fixed;right:16px;bottom:16px;z-index:999998;' +
-        'background:#2563eb;color:#fff;border:none;border-radius:999px;' +
-        'padding:10px 14px;font:800 12.5px/1 system-ui,-apple-system,Segoe UI,Roboto;cursor:pointer;' +
-        'box-shadow:0 10px 30px rgba(37,99,235,.35)'
-    }, ['Bảng giá (JSON)']);
+        'background:#2563eb;color:#fff;border:none;border-radius:10px;' +
+        'padding:9px 12px;font:800 12px system-ui,-apple-system,Segoe UI,Roboto;cursor:pointer;' +
+        'box-shadow:0 10px 30px rgba(37,99,235,.22)'
+    }, ['Mở bảng giá (JSON)']);
 
     var overlay = h('div', {
       style:
@@ -427,8 +427,67 @@
     card.appendChild(status);
     overlay.appendChild(card);
 
-    document.body.appendChild(btn);
     document.body.appendChild(overlay);
+
+    function normText(s) {
+      try {
+        return String(s || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .toUpperCase();
+      } catch (e) {
+        return String(s || '').trim().toUpperCase();
+      }
+    }
+
+    function findAnchor() {
+      // Ưu tiên neo vào "Cài đặt" nếu có, nếu không neo vào "Sổ tay đơn giá"
+      var needles = [
+        'CAI DAT',
+        'SETTINGS',
+        'SO TAY DON GIA',
+        'DON GIA'
+      ];
+      var els = document.querySelectorAll('h1,h2,h3,h4,div,span,p');
+      for (var i = 0; i < els.length; i++) {
+        var t = normText(els[i].textContent);
+        for (var j = 0; j < needles.length; j++) {
+          if (t === needles[j] || t.indexOf(needles[j]) >= 0) return els[i];
+        }
+      }
+      return null;
+    }
+
+    function mountIntoSettings() {
+      var anchor = findAnchor();
+      var mountBox = h('div', {
+        style:
+          'margin-top:12px;padding:12px 14px;border:1px dashed #cbd5e1;border-radius:12px;' +
+          'background:#f8fafc;max-width:520px'
+      }, [
+        h('div', { style: 'font:900 13px/1.2 system-ui;color:#0f172a;margin-bottom:6px' }, ['Cài đặt bảng giá (JSON)']),
+        h('div', { style: 'font:600 12px/1.55 system-ui;color:#64748b;margin-bottom:10px' }, [
+          'Sửa nhanh schema `categories/services` và lưu lên GAS. Trang khách (`index.html`) sẽ tự đồng bộ.'
+        ]),
+        h('div', { style: 'display:flex;justify-content:flex-end' }, [btn])
+      ]);
+
+      if (anchor && anchor.parentElement) {
+        anchor.parentElement.appendChild(mountBox);
+        return true;
+      }
+      return false;
+    }
+
+    // React app có thể render chậm, nên thử gắn nhiều lần trong 10s.
+    var tries = 0;
+    var timer = setInterval(function () {
+      tries++;
+      if (mountIntoSettings()) { clearInterval(timer); }
+      if (tries >= 20) { clearInterval(timer); document.body.appendChild(btn); } // fallback nếu không tìm thấy khu vực cài đặt
+    }, 500);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildUI);
