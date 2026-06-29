@@ -5355,33 +5355,41 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     
         /* scrollProgressBar is now handled by the merged rAF scroll listener above */
 
-        // ---- Shop open/closed badge (Vietnam UTC+7, open 07:00–22:00) ----
+        // ---- Shop open/closed badge (Vietnam UTC+7, theo cấu hình admin) ----
         function updateShopStatus() {
-            const dot  = null; // removed hero badge
-            const txt  = null; // removed hero badge
-            // Get current Vietnam time
             const now = new Date();
             const vnTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
             const h = vnTime.getHours();
             const m = vnTime.getMinutes();
             const totalMin = h * 60 + m;
-            const openMin  = 7 * 60;   // 07:00
-            const closeMin = 22 * 60;  // 22:00
-            const isOpen = totalMin >= openMin && totalMin < closeMin;
+            const openMin  = Number.isFinite(window.__thcOpenMin) ? window.__thcOpenMin : 7 * 60;
+            const closeMin = Number.isFinite(window.__thcCloseMin) ? window.__thcCloseMin : 22 * 60;
+            const forceStatus = String(window.__thcForceStatus || 'auto').toLowerCase();
+            const isOpen = forceStatus === 'open'
+              ? true
+              : forceStatus === 'closed'
+                ? false
+                : (openMin <= closeMin
+                    ? (totalMin >= openMin && totalMin < closeMin)
+                    : (totalMin >= openMin || totalMin < closeMin));
 
-            // Next open time string
-            function nextOpenStr() {
-                if (totalMin < openMin) return 'Mở cửa lúc 7:00 sáng hôm nay';
-                return 'Mở cửa lúc 7:00 sáng ngày mai';
+            function fmtMin(min) {
+                var hh = Math.floor((min % 1440) / 60);
+                var mm = min % 60;
+                return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
             }
-            // Minutes until close
+            function nextOpenStr() {
+                if (forceStatus === 'closed' && window.__thcClosedReason) return window.__thcClosedReason;
+                if (totalMin < openMin) return 'Mở cửa lúc ' + fmtMin(openMin) + ' hôm nay';
+                return 'Mở cửa lúc ' + fmtMin(openMin) + ' ngày mai';
+            }
             function minsUntilClose() {
-                const mins = closeMin - totalMin;
-                if (mins <= 60) return ' · Đóng cửa sau ' + mins + ' phút';
+                var mins = closeMin - totalMin;
+                if (mins < 0) mins += 1440;
+                if (mins <= 60 && mins > 0) return ' · Đóng cửa sau ' + mins + ' phút';
                 return '';
             }
 
-            // Update topbar badge
             const dot2 = document.getElementById('shopDot2');
             const txt2 = document.getElementById('shopStatusText2');
             if (isOpen) {
@@ -8133,50 +8141,63 @@ if (!window._AI_CONFIG_LOADED) {
 /* ══ POPUP KHUYẾN MÃI ══ */
 (function(){
   var SNOOZE_KEY = 'thc_promo_snooze';
-  var DELAY_MS   = 1200; // hiện sau 1.2s
-  var POPUP_DISABLED = true; // giữ lại banner ưu đãi trong trang, bỏ popup overlay bị dư
+  var DELAY_MS   = 1200;
+
+  function getRuntimeCfg() {
+    return window.__thcPromoRuntime || {};
+  }
+
+  function getSnoozeKey() {
+    var cfg = getRuntimeCfg();
+    return cfg.snoozeKey || SNOOZE_KEY;
+  }
 
   function promoShouldShow() {
-    if (POPUP_DISABLED) return false;
-    var snooze = localStorage.getItem(SNOOZE_KEY);
+    var cfg = getRuntimeCfg();
+    if (cfg.show === false) return false;
+    var snooze = localStorage.getItem(getSnoozeKey());
     if (!snooze) return true;
     return Date.now() > Number(snooze);
   }
 
   function _show() {
-    if (POPUP_DISABLED) return;
+    if (!promoShouldShow()) return;
     var el = document.getElementById('promoOverlay');
-    if (el) el.classList.remove('hidden');
+    if (!el) return;
+    el.style.animation = '';
+    el.classList.remove('hidden');
   }
 
   window.promoClose = function() {
     var el = document.getElementById('promoOverlay');
-    if (el) { el.style.animation = 'promoFadeIn .2s ease reverse'; setTimeout(function(){ el.classList.add('hidden'); }, 180); }
+    if (el) {
+      el.style.animation = 'promoFadeIn .2s ease reverse';
+      setTimeout(function(){ el.classList.add('hidden'); }, 180);
+    }
   };
 
   window.promoSnooze = function() {
-    localStorage.setItem(SNOOZE_KEY, String(Date.now() + 60 * 60 * 1000)); // 1 giờ
+    var cfg = getRuntimeCfg();
+    var hours = Number(cfg.snoozeHours);
+    if (!isFinite(hours) || hours <= 0) hours = 1;
+    localStorage.setItem(getSnoozeKey(), String(Date.now() + hours * 60 * 60 * 1000));
     promoClose();
   };
 
   window.promoGoShop = function() {
     promoClose();
     setTimeout(function(){
-      var el = document.getElementById('san-pham-section') || document.querySelector('[id*="san-pham"]');
+      var targetId = getRuntimeCfg().targetId || 'san-pham-section';
+      var el = document.getElementById(targetId) || document.querySelector('[id*="san-pham"]');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 220);
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (POPUP_DISABLED) {
-      var overlay = document.getElementById('promoOverlay');
-      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-      return;
-    }
-    if (promoShouldShow()) {
-      setTimeout(_show, DELAY_MS);
-    }
+    if (promoShouldShow()) setTimeout(_show, DELAY_MS);
   });
+
+  window.__thcShowPromoOverlay = _show;
 })();
 /* ══ END POPUP KHUYẾN MÃI ══ */
 
@@ -8236,9 +8257,79 @@ if (!window._AI_CONFIG_LOADED) {
     var overlay = document.getElementById('promoOverlay');
     if (!overlay) return;
 
-    /* Popup overlay đã được bỏ để tránh trùng với banner thông báo trong trang */
-    overlay.classList.add('hidden');
-    return;
+    function pickText() {
+      for (var i = 0; i < arguments.length; i++) {
+        var v = arguments[i];
+        if (v !== undefined && v !== null && String(v).trim() !== '') return String(v);
+      }
+      return '';
+    }
+
+    function normalizeItems(items) {
+      if (Array.isArray(items)) return items.map(function (item) { return String(item || '').trim(); }).filter(Boolean);
+      if (typeof items === 'string') {
+        return items.split(/\r?\n|\|/).map(function (item) { return item.trim(); }).filter(Boolean);
+      }
+      return [];
+    }
+
+    var show = cfg.show;
+    if (typeof show === 'string') show = !/^(false|0|off|no)$/i.test(show.trim());
+    if (show === undefined || show === null) show = true;
+
+    var badge = pickText(cfg.badge, cfg.label) || '🔥 Ưu đãi tháng này';
+    var title = pickText(cfg.title, cfg.heading) || 'Tiết kiệm đến 30%<br>cho mọi dịch vụ!';
+    var subtitle = pickText(cfg.subtitle, cfg.description) || 'Tran Hoa Computer đang có nhiều chương trình hấp dẫn dành cho khách hàng.';
+    var btnText = pickText(cfg.btnText, cfg.cta, cfg.ctaText) || '🛒 Xem sản phẩm ngay';
+    var snoozeHours = Number(cfg.snoozeHours);
+    if (!isFinite(snoozeHours) || snoozeHours <= 0) snoozeHours = 1;
+    var items = normalizeItems(cfg.items);
+    if (!items.length) {
+      items = [
+        '✅ Giảm giá dịch vụ theo chương trình hiện hành',
+        '🎁 Tặng vệ sinh máy miễn phí khi sửa chữa',
+        '⚡ Hỗ trợ từ xa miễn phí cho lỗi phần mềm nhẹ'
+      ];
+    }
+
+    var badgeEl = overlay.querySelector('.promo-badge');
+    var titleEl = overlay.querySelector('.promo-title');
+    var subtitleEl = overlay.querySelector('.promo-subtitle');
+    var listEl = overlay.querySelector('.promo-items');
+    var ctaBtn = overlay.querySelector('.promo-cta-btn');
+    var snoozeBtn = overlay.querySelector('.promo-snooze-btn');
+
+    if (badgeEl) badgeEl.textContent = badge;
+    if (titleEl) titleEl.innerHTML = title;
+    if (subtitleEl) subtitleEl.innerHTML = subtitle;
+    if (listEl) {
+      listEl.innerHTML = items.map(function (item) {
+        return '<li><span class="pi">✨</span><span>' + item + '</span></li>';
+      }).join('');
+    }
+    if (ctaBtn) ctaBtn.textContent = btnText;
+    if (snoozeBtn) snoozeBtn.textContent = 'Tắt trong ' + (snoozeHours % 1 === 0 ? snoozeHours : snoozeHours.toFixed(1)) + ' giờ';
+
+    window.__thcPromoRuntime = {
+      show: !!show,
+      snoozeHours: snoozeHours,
+      snoozeKey: 'thc_promo_snooze',
+      targetId: 'san-pham-section'
+    };
+
+    if (!show) {
+      overlay.classList.add('hidden');
+      return;
+    }
+
+    try {
+      var snooze = localStorage.getItem(window.__thcPromoRuntime.snoozeKey);
+      if (!snooze || Date.now() > Number(snooze)) {
+        if (typeof window.__thcShowPromoOverlay === 'function') {
+          setTimeout(window.__thcShowPromoOverlay, 250);
+        }
+      }
+    } catch (e) {}
   }
 
   /* ══════════════════════════════════════════════════════════════════
@@ -8358,18 +8449,20 @@ if (!window._AI_CONFIG_LOADED) {
     var allStats = document.querySelectorAll('.hero-stat .stat-num');
     if (statsRepair !== undefined && allStats[0]) {
       allStats[0].setAttribute('data-target', statsRepair);
-      allStats[0].textContent = statsRepair + (allStats[0].dataset.suffix || '+');
+      allStats[0].textContent = statsRepair;
     }
     if (statsExperience !== undefined && allStats[1]) {
       allStats[1].setAttribute('data-target', statsExperience);
-      allStats[1].textContent = statsExperience + (allStats[1].dataset.suffix || '+');
+      allStats[1].textContent = statsExperience;
     }
     if (statsSatisfaction !== undefined && allStats[2]) {
       allStats[2].setAttribute('data-target', statsSatisfaction);
-      allStats[2].textContent = statsSatisfaction + (allStats[2].dataset.suffix || '%');
+      allStats[2].textContent = statsSatisfaction;
     }
 
     /* ── Shop status badge (forceStatus override) ── */
+    window.__thcForceStatus = cfg.forceStatus || 'auto';
+    window.__thcClosedReason = cfg.closedReason || '';
     var dot2 = document.getElementById('shopDot2');
     var txt2 = document.getElementById('shopStatusText2');
     if (cfg.forceStatus && cfg.forceStatus !== 'auto') {
@@ -8456,6 +8549,24 @@ if (!window._AI_CONFIG_LOADED) {
                   })();
 
     if (!section) return; /* Section chưa tồn tại - bỏ qua */
+
+    function normText(v) {
+      return String(v || '').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/đ/g,'d').trim();
+    }
+
+    cfg.categories = (cfg.categories || []).slice().sort(function(a, b){
+      var an = normText(a && (a.name || a.title));
+      var bn = normText(b && (b.name || b.title));
+      var aExtra = /bo sung|hang muc bo sung/.test(an);
+      var bExtra = /bo sung|hang muc bo sung/.test(bn);
+      var aAccessory = /phu kien|accessory/.test(an);
+      var bAccessory = /phu kien|accessory/.test(bn);
+      if (aExtra && bAccessory) return 1;
+      if (aAccessory && bExtra) return -1;
+      return 0;
+    });
 
     /* Render tab buttons */
     var tabWrap = section.querySelector('.pricing-tabs') || section.querySelector('[class*="tab"]');

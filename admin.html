@@ -535,7 +535,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trần Hoà Computer – Quản Trị Hệ Thống</title>
-    <script type="module" crossorigin>var _E=Object.defineProperty;var ME=(e,t,r)=>t in e?_E(e,t,{enumerable:!0,configurable:!0,writable:!0,value:r}):e[t]=r;var Hd=(e,t,r)=>ME(e,typeof t!="symbol"?t+"":t,r);function DE(e,t){for(var r=0;r<t.length;r++){const a=t[r];if(typeof a!="string"&&!Array.isArray(a)){for(const s in a)if(s!=="default"&&!(s in e)){const c=Object.getOwnPropertyDescriptor(a,s);c&&Object.defineProperty(e,s,c.get?c:{enumerable:!0,get:()=>a[s]})}}}return Object.freeze(Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}))}(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))a(s);new MutationObserver(s=>{for(const c of s)if(c.type==="childList")for(const u of c.addedNodes)u.tagName==="LINK"&&u.rel==="modulepreload"&&a(u)}).observe(document,{childList:!0,subtree:!0});function r(s){const c={};return s.integrity&&(c.integrity=s.integrity),s.referrerPolicy&&(c.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?c.credentials="include":s.crossOrigin==="anonymous"?c.credentials="omit":c.credentials="same-origin",c}function a(s){if(s.ep)return;s.ep=!0;const c=r(s);fetch(s.href,c)}})();function IN(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var vm={exports:{}},kc={};/**
+    <script id="thc-admin-hotfix">
+(function () {
+  'use strict';
+
+  function normText(v) {
+    return String(v || '').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/đ/g,'d').trim();
+  }
+
+  function sortPricingCategories(payload) {
+    if (!payload || !Array.isArray(payload.categories)) return payload;
+    payload.categories = payload.categories.slice().sort(function (a, b) {
+      var an = normText(a && (a.name || a.title));
+      var bn = normText(b && (b.name || b.title));
+      var aExtra = /bo sung|hang muc bo sung/.test(an);
+      var bExtra = /bo sung|hang muc bo sung/.test(bn);
+      var aAccessory = /phu kien|accessory/.test(an);
+      var bAccessory = /phu kien|accessory/.test(bn);
+      if (aExtra && bAccessory) return 1;
+      if (aAccessory && bExtra) return -1;
+      return 0;
+    });
+    return payload;
+  }
+
+  window.__thcSortPricingCategories = sortPricingCategories;
+
+  var _fetch = window.fetch ? window.fetch.bind(window) : null;
+  if (!_fetch) return;
+
+  window.fetch = function (input, init) {
+    var url = '';
+    try {
+      url = typeof input === 'string' ? input : (input && input.url) || '';
+    } catch (e) {}
+
+    if (/\/api\/pricing-config\b/.test(url)) {
+      var method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+
+      if (method !== 'GET' && init && init.body) {
+        try {
+          var body = JSON.parse(init.body);
+          if (body && Array.isArray(body.categories)) {
+            body = sortPricingCategories(body);
+            init = Object.assign({}, init, { body: JSON.stringify(body) });
+          }
+        } catch (e) {}
+      }
+
+      return _fetch(input, init).then(function (res) {
+        if (method !== 'GET') return res;
+        try {
+          return res.clone().json().then(function (data) {
+            if (data && data.success && data.data && Array.isArray(data.data.categories)) {
+              data.data = sortPricingCategories(data.data);
+              return new Response(JSON.stringify(data), {
+                status: res.status,
+                statusText: res.statusText,
+                headers: res.headers
+              });
+            }
+            return res;
+          }).catch(function(){ return res; });
+        } catch (e) {
+          return res;
+        }
+      });
+    }
+
+    return _fetch(input, init);
+  };
+})();
+</script>
+<script type="module" crossorigin>var _E=Object.defineProperty;var ME=(e,t,r)=>t in e?_E(e,t,{enumerable:!0,configurable:!0,writable:!0,value:r}):e[t]=r;var Hd=(e,t,r)=>ME(e,typeof t!="symbol"?t+"":t,r);function DE(e,t){for(var r=0;r<t.length;r++){const a=t[r];if(typeof a!="string"&&!Array.isArray(a)){for(const s in a)if(s!=="default"&&!(s in e)){const c=Object.getOwnPropertyDescriptor(a,s);c&&Object.defineProperty(e,s,c.get?c:{enumerable:!0,get:()=>a[s]})}}}return Object.freeze(Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}))}(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const s of document.querySelectorAll('link[rel="modulepreload"]'))a(s);new MutationObserver(s=>{for(const c of s)if(c.type==="childList")for(const u of c.addedNodes)u.tagName==="LINK"&&u.rel==="modulepreload"&&a(u)}).observe(document,{childList:!0,subtree:!0});function r(s){const c={};return s.integrity&&(c.integrity=s.integrity),s.referrerPolicy&&(c.referrerPolicy=s.referrerPolicy),s.crossOrigin==="use-credentials"?c.credentials="include":s.crossOrigin==="anonymous"?c.credentials="omit":c.credentials="same-origin",c}function a(s){if(s.ep)return;s.ep=!0;const c=r(s);fetch(s.href,c)}})();function IN(e){return e&&e.__esModule&&Object.prototype.hasOwnProperty.call(e,"default")?e.default:e}var vm={exports:{}},kc={};/**
  * @license React
  * react-jsx-runtime.production.js
  *
