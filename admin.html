@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
   <head>
+<script src="sync.js"></script>
 <script id="thc-interceptor">
 /* ═══════════════════════════════════════════════════════════════
    THC GitHub Pages — Fetch Interceptor v2
@@ -16,7 +17,9 @@
        Không cache cố định GAS URL để đảm bảo đồng bộ realtime với index.html
        khi admin thay đổi localStorage key "thc_gasUrl". */
     if (window.THC_CONFIG && window.THC_CONFIG.GAS_URL) return window.THC_CONFIG.GAS_URL;
-    return 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
+    if (window.GAS_URL && String(window.GAS_URL).startsWith('https://')) return window.GAS_URL;
+    /* Fallback: sync.js phải được load trước để cung cấp GAS URL */
+    throw new Error('[THC] Missing GAS URL. Hãy đảm bảo file sync.js nằm cùng thư mục và được load trước admin.html');
   }
 
   /* ── helpers ── */

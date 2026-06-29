@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <script src="sync.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sửa Chữa Lắp Ráp Máy Tính Laptop Tại Thái Nguyên - Tran Hoa Computer | Phú Thịnh, Thái Nguyên</title>
@@ -4236,14 +4237,16 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     <button id="backToTop">↑</button>
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
-    /* ── GAS Backend URL – đồng bộ với admin.html qua localStorage key "thc_gasUrl" ── */
-    var GAS_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
+    /* Đồng nhất endpoint qua sync.js (chỉ 1 nơi cấu hình). */
+    var GAS_URL_DEFAULT = (window.THC_CONFIG && window.THC_CONFIG.GAS_URL)
+      ? window.THC_CONFIG.GAS_URL
+      : (window.GAS_URL || '');
     (function(){
-      /* Đảm bảo endpoint GAS đồng nhất khi deploy GitHub Pages:
-         - Luôn dùng GAS_URL_DEFAULT
-         - Overwrite localStorage để tránh máy người dùng còn lưu endpoint cũ */
-      window.GAS_URL = GAS_URL_DEFAULT;
-      try { if (typeof localStorage !== 'undefined') localStorage.setItem('thc_gasUrl', GAS_URL_DEFAULT); } catch(e) {}
+      if (!GAS_URL_DEFAULT || !String(GAS_URL_DEFAULT).startsWith('https://')) {
+        console.warn('[THC] Missing GAS URL. Hãy đảm bảo file sync.js được load trong <head>.');
+      } else {
+        window.GAS_URL = GAS_URL_DEFAULT;
+      }
     })();
     var GAS_URL = window.GAS_URL;
     var USE_GAS = true;
@@ -8287,7 +8290,7 @@ if (!window._AI_CONFIG_LOADED) {
       promo:   (typeof THC_LAST_CFG !== 'undefined' ? (THC_LAST_CFG.promo   || null) : null),
       client:  (typeof THC_LAST_CFG !== 'undefined' ? (THC_LAST_CFG.client  || null) : null),
       pricing: (typeof THC_LAST_CFG !== 'undefined' ? (THC_LAST_CFG.pricing || null) : null),
-      gasUrl:  localStorage.getItem('thc_gasUrl') || ''
+      gasUrl:  (window.THC_CONFIG && window.THC_CONFIG.GAS_URL) ? window.THC_CONFIG.GAS_URL : (window.GAS_URL || '')
     };
     var blob = new Blob([JSON.stringify(cfg, null, 2)], { type: 'application/json' });
     var a = document.createElement('a');
@@ -8312,7 +8315,7 @@ if (!window._AI_CONFIG_LOADED) {
   /* ── GAS CONFIG SYNC v5.0 – Long-polling (mạnh hơn polling định kỳ) ── */
   var THC_GAS_CONFIG_URL = (window.GAS_URL && window.GAS_URL.startsWith('https://'))
     ? window.GAS_URL
-    : 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
+    : ((window.THC_CONFIG && window.THC_CONFIG.GAS_URL) ? window.THC_CONFIG.GAS_URL : '');
 
   var THC_CFG_VERSION = null;
   var THC_LP_ABORT = null;
