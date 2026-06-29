@@ -195,12 +195,41 @@
       return Promise.resolve(jsonResp({ success: true, message: 'GitHub Pages mode: Zalo cần server. Format token OK.', data: { oa_id: 'github-pages-static' } }));
     },
 
-    /* ─── DOWNLOAD HTML (không có server → hướng dẫn thay thế) ─── */
+    /* ─── DOWNLOAD HTML (hỗ trợ GitHub Pages / hosting tĩnh) ─── */
     'GET /api/admin-html-content': function () {
-      return Promise.resolve(jsonResp({ success: false, error: 'Tải file HTML cần server. Hãy tải trực tiếp từ GitHub repo.' }));
+      var url = new URL('admin.html', window.location.href);
+      url.searchParams.set('_', String(Date.now()));
+      return _orig(url.toString())
+        .then(function (r) {
+          if (!r.ok) throw new Error('Không tải được admin.html: HTTP ' + r.status);
+          return r.text();
+        })
+        .then(function (html) {
+          return jsonResp({ success: true, html: html });
+        })
+        .catch(function () {
+          var html = '<!doctype html>\n' + document.documentElement.outerHTML;
+          return jsonResp({ success: true, html: html, fallback: 'dom' });
+        });
     },
     'GET /api/client-html-content': function () {
-      return Promise.resolve(jsonResp({ success: false, error: 'Tải file HTML cần server. Hãy tải trực tiếp từ GitHub repo.' }));
+      var url = new URL('index.html', window.location.href);
+      url.searchParams.set('_', String(Date.now()));
+      return _orig(url.toString())
+        .then(function (r) {
+          if (!r.ok) throw new Error('Không tải được index.html: HTTP ' + r.status);
+          return r.text();
+        })
+        .then(function (html) {
+          return jsonResp({ success: true, html: html });
+        })
+        .catch(function (err) {
+          return jsonResp({
+            success: false,
+            error: 'Không thể đọc trực tiếp index.html trên hosting hiện tại.',
+            details: err && err.message ? err.message : 'Unknown error'
+          });
+        });
     },
   };
 
