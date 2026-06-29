@@ -19,12 +19,10 @@
   /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
   function getGasUrl(override) {
     if (isValidGasUrl(override)) return override;
-    try {
-      var s = localStorage.getItem('thc_gasUrl');
-      if (isValidGasUrl(s)) return s;
-    } catch (e) {}
     if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return window.THC_CONFIG.GAS_URL;
-    return 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
+    if (window.GAS_URL && isValidGasUrl(window.GAS_URL)) return window.GAS_URL;
+    /* Default: cố định theo GAS URL hiện tại (không dùng localStorage/sessionStorage) */
+    return 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
   }
 
   /* ── helpers ── */
@@ -33,13 +31,13 @@
     var qs = Object.keys(params).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(params[k] == null ? '' : params[k]);
     }).join('&');
-    return fetch(GAS + '?' + qs);
+    return fetch(GAS + '?' + qs, { cache: 'no-store' });
   }
   function gasPOST(bodyObj, overrideUrl) {
     var GAS = getGasUrl(overrideUrl);
     /* GAS không hỗ trợ real POST trên doGet → gửi body qua query string */
     var encoded = encodeURIComponent(JSON.stringify(bodyObj));
-    return fetch(GAS + '?method=POST&body=' + encoded);
+    return fetch(GAS + '?method=POST&body=' + encoded + '&_=' + Date.now(), { cache: 'no-store' });
   }
   function jsonResp(obj) {
     return new Response(JSON.stringify(obj), {

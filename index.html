@@ -3864,7 +3864,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var tabBtns = cats.map(function(cat, i){
       var id = cat.id || ('cat_'+i);
       return '<button class="tab-btn'+(i===0?' active':'')+'" id="tabBtn-'+id+'" '
-        +'role="tab" onclick="switchTab('\''+id+'\'',this)">'+
+        +'role="tab" onclick="switchTab(\''+id+'\',this)">'+
         (cat.icon||'')+ ' ' +(cat.name||('Nhóm '+(i+1)))+'</button>';
     }).join('\n');
 
@@ -4362,27 +4362,14 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
             return p === phoneNorm || p === phoneWith0.replace(/\D/g,'');
         }
 
-        // Lookup qua GAS (nguồn chính) → fallback localStorage nếu GAS lỗi
-        var _cacheKey = 'lookup_'+phoneWith0;
-        var _cached = null;
-        try{ var _cs=sessionStorage.getItem(_cacheKey); if(_cs){var _co=JSON.parse(_cs);if(Date.now()-_co.t<60000)_cached=_co.d;} }catch(e){}
-        var _lookupFetch;
-        if(_cached){
-          _lookupFetch = Promise.resolve(_cached);
-        } else {
-          _lookupFetch = fetch(GAS_URL+'?action=searchByPhone&phone='+encodeURIComponent(phoneNorm)+'&phone0='+encodeURIComponent(phoneWith0))
-            .then(function(r){ return r.json(); })
-            .then(function(d){ return d.success ? (d.data||[]) : []; })
-            .catch(function(){
-              // GAS lỗi → thử đọc localStorage
-              var _local=[];
-              try{
-                var _s=localStorage.getItem('thc_books');
-                if(_s){ var _p=JSON.parse(_s); if(Array.isArray(_p)) _local=_p.filter(matchPhone); }
-              }catch(e){}
-              return _local;
-            });
-        }
+        // Lookup trực tiếp qua GAS (không cache / không localStorage / không sessionStorage)
+        var _lookupFetch = fetch(
+          GAS_URL + '?action=searchByPhone&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0) + '&_=' + Date.now(),
+          { cache: 'no-store' }
+        )
+          .then(function(r){ return r.json(); })
+          .then(function(d){ return d.success ? (d.data||[]) : []; });
+
         _lookupFetch.then(function(rawRows) {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
             // GAS trả về camelCase → normalize sang SheetDB format để render được
@@ -4409,40 +4396,13 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
             var seen = new Set(); allRows = allRows.filter(function(r){
               var id=r.id||r.Id||JSON.stringify(r); if(seen.has(id))return false; seen.add(id); return true;
             });
-            // Chỉ cache khi có kết quả
-            try{ if(!_cached && allRows.length>0) sessionStorage.setItem(_cacheKey, JSON.stringify({t:Date.now(),d:allRows})); }catch(e){}
             if (allRows.length) {
                 var html = buildResultHTML(allRows);
                 if (html) { resultEl.innerHTML = html; return; }
             }
-            // 2) Dự phòng: dùng localStorage nếu SheetDB không trả kết quả (offline / mới đặt)
-            var localRows = [];
-            try {
-                var stored = localStorage.getItem('thc_books');
-                if (stored) {
-                    var parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed)) localRows = parsed.filter(matchPhone);
-                }
-            } catch(e) {}
-            if (localRows.length > 0) {
-                var html2 = buildResultHTML(localRows);
-                if (html2) { resultEl.innerHTML = html2; return; }
-            }
             resultEl.innerHTML = '<div class="status-not-found">😔 Không tìm thấy lịch hẹn nào với số điện thoại này.<br><span style="font-size:12px;margin-top:6px;display:block;">Vui lòng kiểm tra lại hoặc gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</span></div>';
         }).catch(function() {
             btn.disabled = false; btn.innerHTML = '🔍 Kiểm tra';
-            var localRows = [];
-            try {
-                var stored = localStorage.getItem('thc_books');
-                if (stored) {
-                    var parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed)) localRows = parsed.filter(matchPhone);
-                }
-            } catch(e) {}
-            if (localRows.length > 0) {
-                var html = buildResultHTML(localRows);
-                if (html) { resultEl.innerHTML = html; return; }
-            }
             resultEl.innerHTML = '<div class="status-not-found">⚠️ Không thể kết nối lúc này. Vui lòng gọi <a href="tel:0963284044" style="color:#10b981;font-weight:700;">0963.284.044</a> để hỏi trực tiếp.</div>';
         });
     }
@@ -4999,38 +4959,9 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                 var ph = document.getElementById('inputPhone');
                 if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
 
-                /* ── Lưu booking vào localStorage NGAY LẬP TỨC (trước khi gửi email)
-                   → đảm bảo tra cứu & admin panel hoạt động kể cả khi mạng chậm/lỗi ── */
+                /* ── Không lưu booking vào localStorage/sessionStorage:
+                   dữ liệu nguồn chính là Google Apps Script (GAS) ── */
                 var _lsBookingId = 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
-                try {
-                  var _lsBooking = {
-                    id:           _lsBookingId,
-                    customerName: obj['fullname'] || '',
-                    'Full name':  obj['fullname'] || '',
-                    Phone:        obj['phone'] || '',
-                    phone:        obj['phone'] || '',
-                    Service:      obj['service'] || '',
-                    service:      obj['service'] || '',
-                    deviceType:   obj['service'] || '',
-                    Date:         obj['date'] || '',
-                    date:         obj['date'] || '',
-                    scheduledAt:  obj['date'] ? (obj['date'] + (obj['time-slot'] ? 'T' + obj['time-slot'] : '')) : '',
-                    Time_slot:    obj['time-slot'] || '',
-                    timeSlot:     obj['time-slot'] || '',
-                    Note:         obj['note'] || '',
-                    note:         obj['note'] || '',
-                    issue:        obj['note'] || '',
-                    Status:       'pending',
-                    status:       'pending',
-                    createdAt:    new Date().toISOString(),
-                    source:       'customer_form'
-                  };
-                  var _lsRaw = localStorage.getItem('thc_books');
-                  var _lsArr = _lsRaw ? JSON.parse(_lsRaw) : [];
-                  if (!Array.isArray(_lsArr)) _lsArr = [];
-                  _lsArr.unshift(_lsBooking);
-                  localStorage.setItem('thc_books', JSON.stringify(_lsArr));
-                } catch(lsErr) {}
 
                 /* ── Đẩy booking lên SheetDB & Google Apps Script NGAY LẬP TỨC
                    (độc lập với kết quả gửi email — đảm bảo tra cứu hoạt động trên mọi thiết bị) ── */
@@ -5049,7 +4980,10 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         status:       'pending'
                     }};
                     var _gasEncoded = encodeURIComponent(JSON.stringify(_gasBody));
-                    fetch(gsUrl + '?method=POST&body=' + _gasEncoded).catch(function(){});
+                    fetch(
+                      gsUrl + '?method=POST&body=' + _gasEncoded + '&_=' + Date.now(),
+                      { cache: 'no-store' }
+                    ).catch(function(){});
                   }
                 } catch(pushErr) {}
 
@@ -5061,7 +4995,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                     signal: ctrl.signal
                 }).catch(function(){});
 
-                // Hiển thị thành công ngay sau 800ms (dữ liệu đã lưu GAS + localStorage)
+                // Hiển thị thành công ngay sau 800ms (đã đẩy dữ liệu lên GAS)
                 setTimeout(function() {
                     clearTimeout(tOut);
                     form.reset();
@@ -8354,9 +8288,8 @@ if (!window._AI_CONFIG_LOADED) {
           var _v = _thcExtractVersion(res) || _thcExtractVersion({ data: cfg });
           if (_v) THC_CFG_VERSION = _v;
           /* Không auto-switch endpoint theo cfg.gasUrl để đảm bảo admin/index đồng nhất */
-          try { localStorage.setItem('thc_gas_last_sync', new Date().toISOString()); } catch(e) {}
         } else {
-          /* GAS chưa có config → fallback localStorage */
+          /* GAS chưa có config */
           console.warn('[THC] GAS config empty');
         }
       })
