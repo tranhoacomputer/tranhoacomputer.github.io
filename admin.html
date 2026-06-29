@@ -195,7 +195,8 @@
 
     /* ─── DOWNLOAD HTML (hỗ trợ GitHub Pages / hosting tĩnh) ─── */
     'GET /api/admin-html-content': function () {
-      var url = new URL('admin.html', window.location.href);
+      /* Luôn lấy đúng file admin.html hiện tại (đang mở), kể cả khi đặt trong thư mục con */
+      var url = new URL(window.location.href);
       url.searchParams.set('_', String(Date.now()));
       return _orig(url.toString())
         .then(function (r) {
@@ -211,7 +212,8 @@
         });
     },
     'GET /api/client-html-content': function () {
-      var url = new URL('index.html', window.location.href);
+      /* Luôn lấy index.html ở ROOT để tránh lỗi khi admin.html nằm trong thư mục con */
+      var url = new URL('/index.html', window.location.origin);
       url.searchParams.set('_', String(Date.now()));
       return _orig(url.toString())
         .then(function (r) {
@@ -261,6 +263,177 @@
   console.info('[THC interceptor v3] active | GAS:', getGasUrl().slice(0, 72) + '…');
 })();
 
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     THC Pricing JSON Tool (bổ sung)
+     Mục tiêu: cho phép sửa "BẢNG GIÁ DỊCH VỤ NIÊM YẾT" đúng schema
+     categories/services giống index.html (yyx), không làm mất field (note/warranty/id…)
+     Chạy độc lập với React bundle hiện tại (chỉ append UI vào <body>).
+     ═══════════════════════════════════════════════════════════════ -->
+<script id="thc-pricing-json-tool">
+(function () {
+  'use strict';
+
+  function h(tag, attrs, children) {
+    var el = document.createElement(tag);
+    attrs = attrs || {};
+    Object.keys(attrs).forEach(function (k) {
+      if (k === 'style') el.style.cssText = attrs[k];
+      else if (k === 'class') el.className = attrs[k];
+      else if (k === 'html') el.innerHTML = attrs[k];
+      else el.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) {
+      if (c == null) return;
+      el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return el;
+  }
+
+  function toast(msg, ok) {
+    try {
+      var t = h('div', {
+        style:
+          'position:fixed;right:16px;top:16px;z-index:999999;' +
+          'background:' + (ok ? '#ecfdf5' : '#fff7ed') + ';' +
+          'border:1px solid ' + (ok ? '#bbf7d0' : '#fed7aa') + ';' +
+          'color:' + (ok ? '#065f46' : '#9a3412') + ';' +
+          'padding:10px 12px;border-radius:10px;font:600 13px/1.4 system-ui,-apple-system,Segoe UI,Roboto;box-shadow:0 10px 30px rgba(0,0,0,.12)'
+      }, [msg]);
+      document.body.appendChild(t);
+      setTimeout(function () { try { t.remove(); } catch (e) {} }, 2600);
+    } catch (e) {}
+  }
+
+  function safeJsonParse(s) {
+    try { return { ok: true, value: JSON.parse(s) }; } catch (e) { return { ok: false, error: e }; }
+  }
+
+  function normalizeCats(v) {
+    if (!v) return [];
+    if (Array.isArray(v)) return v;
+    if (v.categories && Array.isArray(v.categories)) return v.categories;
+    return [];
+  }
+
+  function buildUI() {
+    var btn = h('button', {
+      type: 'button',
+      style:
+        'position:fixed;right:16px;bottom:16px;z-index:999998;' +
+        'background:#2563eb;color:#fff;border:none;border-radius:999px;' +
+        'padding:10px 14px;font:800 12.5px/1 system-ui,-apple-system,Segoe UI,Roboto;cursor:pointer;' +
+        'box-shadow:0 10px 30px rgba(37,99,235,.35)'
+    }, ['Bảng giá (JSON)']);
+
+    var overlay = h('div', {
+      style:
+        'position:fixed;inset:0;z-index:999999;background:rgba(15,23,42,.55);' +
+        'backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px'
+    });
+
+    var ta = h('textarea', {
+      style:
+        'width:100%;min-height:340px;resize:vertical;border:1px solid #e2e8f0;border-radius:12px;' +
+        'padding:12px 12px;font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;outline:none'
+    });
+
+    var status = h('div', { style: 'margin-top:8px;font:600 12px/1.4 system-ui;color:#64748b' }, [
+      'Nhập JSON theo dạng: ',
+      h('code', { style: 'background:#f1f5f9;padding:2px 6px;border-radius:6px' }, ['{ "categories": [...] }']),
+      ' (giữ nguyên các field như `note`, `warranty`, `id`...)'
+    ]);
+
+    var card = h('div', {
+      style:
+        'width:min(1100px,100%);background:#fff;border-radius:16px;border:1px solid #e2e8f0;' +
+        'box-shadow:0 25px 70px rgba(0,0,0,.25);padding:16px 16px 14px'
+    });
+
+    var title = h('div', { style: 'font:900 14px/1.2 system-ui;color:#0f172a;margin-bottom:10px' }, [
+      'BẢNG GIÁ DỊCH VỤ NIÊM YẾT (JSON)'
+    ]);
+
+    function close() { overlay.style.display = 'none'; }
+    function open() { overlay.style.display = 'flex'; }
+
+    var btnLoad = h('button', {
+      type: 'button',
+      style: 'background:#0ea5e9;color:#fff;border:none;border-radius:10px;padding:9px 12px;font:800 12px system-ui;cursor:pointer'
+    }, ['Tải từ GAS']);
+
+    var btnSave = h('button', {
+      type: 'button',
+      style: 'background:#10b981;color:#fff;border:none;border-radius:10px;padding:9px 12px;font:800 12px system-ui;cursor:pointer'
+    }, ['Lưu lên GAS']);
+
+    var btnClose = h('button', {
+      type: 'button',
+      style: 'background:#334155;color:#fff;border:none;border-radius:10px;padding:9px 12px;font:800 12px system-ui;cursor:pointer'
+    }, ['Đóng']);
+
+    function load() {
+      btnLoad.disabled = true;
+      return fetch('/api/pricing-config')
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!d || d.success !== true) throw new Error((d && d.error) || 'Không tải được pricing-config');
+          var cats = normalizeCats(d.data);
+          ta.value = JSON.stringify({ categories: cats }, null, 2);
+          toast('Đã tải bảng giá từ GAS.', true);
+        })
+        .catch(function (e) {
+          toast('Lỗi tải: ' + (e && e.message ? e.message : e), false);
+        })
+        .finally(function () { btnLoad.disabled = false; });
+    }
+
+    function save() {
+      var parsed = safeJsonParse(ta.value || '');
+      if (!parsed.ok) { toast('JSON không hợp lệ: ' + parsed.error, false); return; }
+      var cats = normalizeCats(parsed.value);
+      if (!Array.isArray(cats)) { toast('Thiếu field categories.', false); return; }
+      btnSave.disabled = true;
+      return fetch('/api/pricing-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categories: cats })
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (d) {
+          if (!d || d.success !== true) throw new Error((d && d.error) || 'Lưu thất bại');
+          toast('Đã lưu bảng giá lên GAS.', true);
+        })
+        .catch(function (e) {
+          toast('Lỗi lưu: ' + (e && e.message ? e.message : e), false);
+        })
+        .finally(function () { btnSave.disabled = false; });
+    }
+
+    btnLoad.addEventListener('click', load);
+    btnSave.addEventListener('click', save);
+    btnClose.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    btn.addEventListener('click', function () { open(); if (!ta.value) load(); });
+
+    var row = h('div', { style: 'display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;margin-bottom:10px' },
+      [btnLoad, btnSave, btnClose]
+    );
+
+    card.appendChild(title);
+    card.appendChild(row);
+    card.appendChild(ta);
+    card.appendChild(status);
+    overlay.appendChild(card);
+
+    document.body.appendChild(btn);
+    document.body.appendChild(overlay);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildUI);
+  else buildUI();
+})();
 </script>
 
     <meta charset="UTF-8" />

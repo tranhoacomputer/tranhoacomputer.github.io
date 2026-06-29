@@ -3864,7 +3864,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var tabBtns = cats.map(function(cat, i){
       var id = cat.id || ('cat_'+i);
       return '<button class="tab-btn'+(i===0?' active':'')+'" id="tabBtn-'+id+'" '
-        +'role="tab" onclick="switchTab(\''+id+'\',this)">'+
+        +'role="tab" onclick="switchTab('\''+id+'\'',this)">'+
         (cat.icon||'')+ ' ' +(cat.name||('Nhóm '+(i+1)))+'</button>';
     }).join('\n');
 
@@ -4362,7 +4362,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
             return p === phoneNorm || p === phoneWith0.replace(/\D/g,'');
         }
 
-        // Lookup trực tiếp qua GAS (không cache / không localStorage / không sessionStorage)
+        // Lookup trực tiếp qua GAS (không cache / không fallback localStorage)
         var _lookupFetch = fetch(
           GAS_URL + '?action=searchByPhone&phone=' + encodeURIComponent(phoneNorm) + '&phone0=' + encodeURIComponent(phoneWith0) + '&_=' + Date.now(),
           { cache: 'no-store' }
@@ -4960,7 +4960,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                 if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
 
                 /* ── Không lưu booking vào localStorage/sessionStorage:
-                   dữ liệu nguồn chính là Google Apps Script (GAS) ── */
+                   nguồn dữ liệu chính là Google Apps Script (GAS) ── */
                 var _lsBookingId = 'cust_' + Date.now() + '_' + Math.random().toString(36).substr(2,5);
 
                 /* ── Đẩy booking lên SheetDB & Google Apps Script NGAY LẬP TỨC
@@ -8289,7 +8289,7 @@ if (!window._AI_CONFIG_LOADED) {
           if (_v) THC_CFG_VERSION = _v;
           /* Không auto-switch endpoint theo cfg.gasUrl để đảm bảo admin/index đồng nhất */
         } else {
-          /* GAS chưa có config */
+          /* GAS chưa có config → fallback localStorage */
           console.warn('[THC] GAS config empty');
         }
       })
