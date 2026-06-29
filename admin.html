@@ -1,38 +1,45 @@
 <!doctype html>
 <html lang="vi">
   <head>
-<script src="sync.js"></script>
 <script id="thc-interceptor">
 /* ═══════════════════════════════════════════════════════════════
-   THC GitHub Pages — Fetch Interceptor v2
+   THC GitHub Pages — Fetch Interceptor v3
    Redirect mọi /api/* → GAS (không cần server backend)
-   Đã kiểm tra từng GAS action thực tế 2026-06-28
+   Fix: bắt cả Request object/absolute URL + tôn trọng body.url ở /api/gas-proxy
    ═══════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  /* ── Lấy GAS URL ── */
-  function getGAS() {
-    /* IMPORTANT:
-       Không cache cố định GAS URL để đảm bảo đồng bộ realtime với index.html
-       khi admin thay đổi localStorage key "thc_gasUrl". */
-    if (window.THC_CONFIG && window.THC_CONFIG.GAS_URL) return window.THC_CONFIG.GAS_URL;
-    if (window.GAS_URL && String(window.GAS_URL).startsWith('https://')) return window.GAS_URL;
-    /* Fallback: sync.js phải được load trước để cung cấp GAS URL */
-    throw new Error('[THC] Missing GAS URL. Hãy đảm bảo file sync.js nằm cùng thư mục và được load trước admin.html');
+  function isValidGasUrl(u) {
+    return typeof u === 'string'
+      && u.startsWith('https://script.google.com/macros/s/')
+      && u.indexOf('/exec') !== -1;
+  }
+
+  /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
+  function getGasUrl(override) {
+    if (isValidGasUrl(override)) return override;
+    try {
+      var s = localStorage.getItem('thc_gasUrl');
+      if (isValidGasUrl(s)) return s;
+    } catch (e) {}
+    if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return window.THC_CONFIG.GAS_URL;
+    return 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
   }
 
   /* ── helpers ── */
-  function gasGET(params) {
+  function gasGET(params, overrideUrl) {
+    var GAS = getGasUrl(overrideUrl);
     var qs = Object.keys(params).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(params[k] == null ? '' : params[k]);
     }).join('&');
-    return fetch(getGAS() + '?' + qs);
+    return fetch(GAS + '?' + qs);
   }
-  function gasPOST(bodyObj) {
+  function gasPOST(bodyObj, overrideUrl) {
+    var GAS = getGasUrl(overrideUrl);
     /* GAS không hỗ trợ real POST trên doGet → gửi body qua query string */
     var encoded = encodeURIComponent(JSON.stringify(bodyObj));
-    return fetch(getGAS() + '?method=POST&body=' + encoded);
+    return fetch(GAS + '?method=POST&body=' + encoded);
   }
   function jsonResp(obj) {
     return new Response(JSON.stringify(obj), {
@@ -164,11 +171,20 @@
     /* ─── GAS PROXY pass-through ─── */
     'POST /api/gas-proxy': function (body) {
       var params = body.params || {};
-      if (body.method === 'POST' || (params && params.method === 'POST')) {
-        var innerBody = params.body ? (typeof params.body === 'string' ? JSON.parse(params.body) : params.body) : params;
-        return gasPOST(innerBody).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
+      var targetUrl = body.url || params.url;
+      var GAS = getGasUrl(targetUrl);
+
+      var method = String(body.method || params.method || 'GET').toUpperCase();
+      var cleanParams = Object.assign({}, params);
+      delete cleanParams.method;
+      delete cleanParams.body;
+      delete cleanParams.url;
+
+      if (method === 'POST') {
+        var innerBody = params.body ? (typeof params.body === 'string' ? JSON.parse(params.body) : params.body) : cleanParams;
+        return gasPOST(innerBody, GAS).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
       }
-      return gasGET(params).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
+      return gasGET(cleanParams, GAS).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); });
     },
 
     /* ─── ZALO (cần server riêng, không chạy được trên GitHub Pages) ─── */
@@ -194,14 +210,16 @@
     var url    = typeof input === 'string' ? input : (input && input.url) || String(input);
     var method = ((init && init.method) || (input && input.method) || 'GET').toUpperCase();
 
-    /* Chỉ intercept relative /api/* path */
-    var m = url.match(/^(\/api\/[^?#]*)/);
-    if (!m) return _orig(input, init);
+    /* Intercept /api/* (cả string "/api/.." và Request object có url tuyệt đối) */
+    var u;
+    try { u = new URL(url, window.location.href); } catch (e) { return _orig(input, init); }
+    if (u.origin !== window.location.origin) return _orig(input, init);
+    if (!u.pathname || u.pathname.indexOf('/api/') !== 0) return _orig(input, init);
 
-    var routeKey = method + ' ' + m[1];
+    var routeKey = method + ' ' + u.pathname;
     var handler  = handlers[routeKey];
     /* fallback: POST không có handler → thử GET */
-    if (!handler && method !== 'GET') handler = handlers['GET ' + m[1]];
+    if (!handler && method !== 'GET') handler = handlers['GET ' + u.pathname];
 
     if (!handler) {
       console.warn('[THC interceptor] No handler for:', routeKey);
@@ -213,7 +231,7 @@
     });
   };
 
-  console.info('[THC interceptor v2] active | GAS:', GAS.slice(0, 72) + '…');
+  console.info('[THC interceptor v3] active | GAS:', getGasUrl().slice(0, 72) + '…');
 })();
 
 </script>
