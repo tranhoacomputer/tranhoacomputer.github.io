@@ -10,57 +10,17 @@
 (function () {
   'use strict';
 
-  /* ── Sanitize helpers (Sheet hay bọc ""url"" hoặc """url""") ── */
-  function unquoteString(s) {
-    if (typeof s !== 'string') return s;
-    var t = s.trim();
-    if (!t) return t;
-    /* bóc nhiều lớp "..." hoặc '...' */
-    var guard = 0;
-    while (guard++ < 5) {
-      if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
-        t = t.slice(1, -1).trim();
-        continue;
-      }
-      break;
-    }
-    /* nếu vẫn còn kiểu """https://...""" */
-    t = t.replace(/^"+/, '').replace(/"+$/, '');
-    return t.trim();
-  }
-
-  function parseMaybeJson(v) {
-    if (v == null) return v;
-    if (typeof v !== 'string') return v;
-    var t = v.trim();
-    if (!t) return v;
-
-    /* case: "{""a"":1}" (Sheet escape) */
-    var candidate = t;
-    if ((candidate.startsWith('"') && candidate.endsWith('"')) || (candidate.startsWith("'") && candidate.endsWith("'"))) {
-      candidate = candidate.slice(1, -1).trim();
-    }
-    if (candidate.indexOf('""') !== -1) {
-      candidate = candidate.replace(/""/g, '"');
-    }
-    if ((candidate.startsWith('{') && candidate.endsWith('}')) || (candidate.startsWith('[') && candidate.endsWith(']'))) {
-      try { return JSON.parse(candidate); } catch (e) { /* ignore */ }
-    }
-    return v;
-  }
-
   function isValidGasUrl(u) {
-    var t = unquoteString(u);
-    return typeof t === 'string'
-      && t.startsWith('https://script.google.com/macros/s/')
-      && t.indexOf('/exec') !== -1;
+    return typeof u === 'string'
+      && u.startsWith('https://script.google.com/macros/s/')
+      && u.indexOf('/exec') !== -1;
   }
 
   /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
   function getGasUrl(override) {
-    if (isValidGasUrl(override)) return unquoteString(override);
-    if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return unquoteString(window.THC_CONFIG.GAS_URL);
-    if (window.GAS_URL && isValidGasUrl(window.GAS_URL)) return unquoteString(window.GAS_URL);
+    if (isValidGasUrl(override)) return override;
+    if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return window.THC_CONFIG.GAS_URL;
+    if (window.GAS_URL && isValidGasUrl(window.GAS_URL)) return window.GAS_URL;
     /* Default: cố định theo GAS URL hiện tại (không dùng localStorage/sessionStorage) */
     return 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
   }
@@ -91,8 +51,7 @@
   }
 
   function normalizeClientCfg(cfg) {
-    cfg = parseMaybeJson(cfg);
-    cfg = (cfg && typeof cfg === 'object') ? cfg : {};
+    cfg = cfg || {};
     function pickText() {
       for (var i = 0; i < arguments.length; i++) {
         var v = arguments[i];
@@ -124,7 +83,7 @@
       statsSatisfaction: pickNum(cfg.statsSatisfaction, cfg.satisfactionRate, cfg.customerSatisfaction, 99),
       forceStatus: pickText(cfg.forceStatus) || 'auto',
       closedReason: pickText(cfg.closedReason, cfg.closeReason),
-      gasUrl: unquoteString(pickText(cfg.gasUrl, cfg.GAS_URL))
+      gasUrl: pickText(cfg.gasUrl, cfg.GAS_URL)
     };
   }
 
