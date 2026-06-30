@@ -3863,9 +3863,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     // Build tab buttons
     var tabBtns = cats.map(function(cat, i){
       var id = cat.id || ('cat_'+i);
-      return '<button class="tab-btn'+(i===0?' active':'')+'" id="tabBtn-'+id+'" '
-        +'role="tab" onclick="switchTab('\''+id+'\'',this)">'+
-        (cat.icon||'')+ ' ' +(cat.name||('Nhóm '+(i+1)))+'</button>';
+      return `<button class="tab-btn${(i===0?' active':'')}" id="tabBtn-${id}" role="tab" onclick="switchTab('${id}',this)">${(cat.icon||'')} ${(cat.name||('Nhóm '+(i+1)))}</button>`;
     }).join('\n');
 
     // Build tab contents
@@ -4192,6 +4190,10 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var hostId = 'dynamicPricingAppendSection';
     var oldHost = document.getElementById(hostId);
     if (oldHost) oldHost.remove();
+    /* Xóa các tab bổ sung đã inject từ lần load trước */
+    try {
+      document.querySelectorAll('[data-thc-extra="1"]').forEach(function (el) { el.remove(); });
+    } catch (e) {}
 
     var incoming = normalizeCategories(cfg);
     if (!incoming.length) return;
@@ -4209,27 +4211,43 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
     if (!extras.length) return;
 
-    var block = document.createElement('div');
-    block.id = hostId;
-    block.style.cssText = 'margin-top:24px;';
-    block.innerHTML =
-      '<div class="pricing-note-box" style="margin-bottom:18px;background:linear-gradient(135deg,#eff6ff,#f8fafc);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">' +
-      '<div class="note-title" style="font-weight:800;font-size:15px;color:#1d4ed8;margin-bottom:6px;">Hạng mục bổ sung</div>' +
-      '<p style="margin:0;color:#475569;">Các mục dưới đây được thêm mới từ trang quản trị, còn bảng giá dịch vụ niêm yết gốc phía trên vẫn được giữ nguyên.</p>' +
-      '</div>';
+    var tabContainer = document.getElementById('priceTabContainer');
+    var tabsWrapper = document.getElementById('priceTabsWrapper');
+    if (!tabContainer || !tabsWrapper) return;
 
-    extras.forEach(function (cat) {
-      var section = document.createElement('div');
-      section.className = 'price-table-section active reveal';
-      section.style.display = 'block';
-      section.style.marginBottom = '18px';
-      section.innerHTML =
-        '<div style="font-weight:900;font-size:18px;color:var(--primary);margin:0 0 12px 0;">' + esc(cat.name) + '</div>';
-      section.appendChild(buildTable(cat));
-      block.appendChild(section);
+    function insertAfter(ref, node) {
+      if (!ref || !ref.parentNode) return;
+      if (ref.nextSibling) ref.parentNode.insertBefore(node, ref.nextSibling);
+      else ref.parentNode.appendChild(node);
+    }
+
+    /* Chèn sau tab Phụ kiện */
+    var afterBtn = document.getElementById('tabBtn-accessory') || tabContainer.lastElementChild;
+    var afterPane = document.getElementById('tab-accessory') || tabsWrapper.lastElementChild;
+
+    extras.forEach(function (cat, idx) {
+      var key = slugify(cat.id || cat.name || ('extra_' + idx));
+
+      var btn = document.createElement('button');
+      btn.className = 'tab-btn';
+      btn.id = 'tabBtn-' + key;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-label', cat.name);
+      btn.setAttribute('aria-controls', 'tab-' + key);
+      btn.setAttribute('data-thc-extra', '1');
+      btn.setAttribute('onclick', "switchTab('" + key + "',this)");
+      btn.textContent = cat.name;
+      insertAfter(afterBtn, btn);
+      afterBtn = btn;
+
+      var pane = document.createElement('div');
+      pane.id = 'tab-' + key;
+      pane.className = 'price-table-section reveal';
+      pane.setAttribute('data-thc-extra', '1');
+      pane.appendChild(buildTable(cat));
+      insertAfter(afterPane, pane);
+      afterPane = pane;
     });
-
-    container.appendChild(block);
   }
 
   function load() {
@@ -5364,24 +5382,18 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
             const totalMin = h * 60 + m;
             const openMin  = Number.isFinite(window.__thcOpenMin) ? window.__thcOpenMin : 7 * 60;
             const closeMin = Number.isFinite(window.__thcCloseMin) ? window.__thcCloseMin : 22 * 60;
-            const forceStatus = String(window.__thcForceStatus || 'auto').toLowerCase();
-            const isOpen = forceStatus === 'open'
-              ? true
-              : forceStatus === 'closed'
-                ? false
-                : (openMin <= closeMin
-                    ? (totalMin >= openMin && totalMin < closeMin)
-                    : (totalMin >= openMin || totalMin < closeMin));
+            const rawForce = String(window.__thcForceStatus || 'auto').toLowerCase().trim();
+            const forceStatus =
+              (rawForce === 'open' || rawForce === 'mo' || rawForce === 'mocua' || rawForce === 'on' || rawForce === 'true')
+                ? 'open'
+                : (rawForce === 'closed' || rawForce === 'dong' || rawForce === 'tam dong' || rawForce === 'off' || rawForce === 'false')
+                  ? 'closed'
+                  : 'auto';
 
             function fmtMin(min) {
                 var hh = Math.floor((min % 1440) / 60);
                 var mm = min % 60;
                 return String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
-            }
-            function nextOpenStr() {
-                if (forceStatus === 'closed' && window.__thcClosedReason) return window.__thcClosedReason;
-                if (totalMin < openMin) return 'Mở cửa lúc ' + fmtMin(openMin) + ' hôm nay';
-                return 'Mở cửa lúc ' + fmtMin(openMin) + ' ngày mai';
             }
             function minsUntilClose() {
                 var mins = closeMin - totalMin;
@@ -5392,6 +5404,30 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
             const dot2 = document.getElementById('shopDot2');
             const txt2 = document.getElementById('shopStatusText2');
+
+            /* ── FORCE MODE (ghi đè từ admin) ── */
+            if (forceStatus === 'open') {
+                if (dot2) { dot2.style.background = '#22c55e'; dot2.style.animation = 'pulseDot 2s infinite'; }
+                if (txt2) txt2.textContent = 'Đang mở cửa';
+                return;
+            }
+            if (forceStatus === 'closed') {
+                if (dot2) { dot2.style.background = '#ef4444'; dot2.style.animation = 'none'; }
+                var reason = (window.__thcClosedReason || '').trim();
+                if (txt2) txt2.textContent = reason ? ('Tạm đóng · ' + reason) : 'Tạm đóng';
+                return;
+            }
+
+            /* ── AUTO MODE ── */
+            const isOpen = (openMin <= closeMin)
+              ? (totalMin >= openMin && totalMin < closeMin)
+              : (totalMin >= openMin || totalMin < closeMin);
+
+            function nextOpenStr() {
+                if (totalMin < openMin) return 'Mở cửa lúc ' + fmtMin(openMin) + ' hôm nay';
+                return 'Mở cửa lúc ' + fmtMin(openMin) + ' ngày mai';
+            }
+
             if (isOpen) {
                 if (dot2) { dot2.style.background = '#22c55e'; dot2.style.animation = 'pulseDot 2s infinite'; }
                 if (txt2) txt2.textContent = 'Đang mở cửa' + minsUntilClose();
@@ -8496,6 +8532,9 @@ if (!window._AI_CONFIG_LOADED) {
       if (n) n.style.display = 'none';
     }
 
+    /* Sau khi apply config, refresh lại badge trạng thái để đồng bộ đúng */
+    try { if (typeof window.updateShopStatus === 'function') window.updateShopStatus(); } catch (e) {}
+
     /* ── Patch openMin/closeMin trong updateShopStatus (auto mode) ──
        Ghi đè hàm sau khi DOM load để giờ auto theo config          */
     if (cfg.forceStatus === 'auto' || !cfg.forceStatus) {
@@ -8560,17 +8599,41 @@ if (!window._AI_CONFIG_LOADED) {
         .replace(/đ/g,'d').trim();
     }
 
-    cfg.categories = (cfg.categories || []).slice().sort(function(a, b){
-      var an = normText(a && (a.name || a.title));
-      var bn = normText(b && (b.name || b.title));
-      var aExtra = /bo sung|hang muc bo sung/.test(an);
-      var bExtra = /bo sung|hang muc bo sung/.test(bn);
-      var aAccessory = /phu kien|accessory/.test(an);
-      var bAccessory = /phu kien|accessory/.test(bn);
-      if (aExtra && bAccessory) return 1;
-      if (aAccessory && bExtra) return -1;
-      return 0;
-    });
+    function isAccessoryCat(cat) {
+      var n = normText(cat && (cat.name || cat.title || cat.id));
+      return /phu kien|accessory/.test(n);
+    }
+    function isExtraCat(cat) {
+      var n = normText(cat && (cat.name || cat.title || cat.id));
+      return /hang muc bo sung|bo sung|extra/.test(n);
+    }
+    function moveExtrasAfterAccessory(cats) {
+      cats = (cats || []).slice();
+      var accIdx = -1;
+      for (var i = 0; i < cats.length; i++) {
+        if (isAccessoryCat(cats[i])) { accIdx = i; break; }
+      }
+      if (accIdx < 0) return cats; // không có phụ kiện → giữ nguyên
+
+      var extras = [];
+      var rest = [];
+      cats.forEach(function (c, idx) {
+        if (isExtraCat(c)) extras.push(c);
+        else rest.push(c);
+      });
+      if (!extras.length) return cats;
+
+      // tìm lại vị trí phụ kiện trong mảng rest sau khi lọc
+      var accIdx2 = -1;
+      for (var j = 0; j < rest.length; j++) {
+        if (isAccessoryCat(rest[j])) { accIdx2 = j; break; }
+      }
+      if (accIdx2 < 0) return cats;
+      rest.splice.apply(rest, [accIdx2 + 1, 0].concat(extras));
+      return rest;
+    }
+
+    cfg.categories = moveExtrasAfterAccessory(cfg.categories);
 
     /* Render tab buttons */
     var tabWrap = section.querySelector('.pricing-tabs') || section.querySelector('[class*="tab"]');
@@ -8677,9 +8740,13 @@ if (!window._AI_CONFIG_LOADED) {
     if (cfg.promo)   { THC_LAST_CFG.promo   = cfg.promo;   applyPromo(cfg.promo); }
     if (cfg.client)  { THC_LAST_CFG.client  = cfg.client;  applyClient(cfg.client); }
     if (cfg.pricing) { THC_LAST_CFG.pricing = cfg.pricing; applyPricing(cfg.pricing); }
-    /* IMPORTANT:
-       Không tự động override GAS_URL theo cfg.gasUrl để tránh lệch endpoint giữa admin/index.
-       Nếu cần đổi endpoint, hãy đổi trực tiếp localStorage key "thc_gasUrl" (chủ động). */
+    /* Nếu config có gasUrl và trang đang thiếu endpoint → tự gán để đồng bộ được config */
+    try {
+      if ((!window.GAS_URL || !String(window.GAS_URL).startsWith('https://')) &&
+          cfg.gasUrl && String(cfg.gasUrl).startsWith('https://script.google.com/macros/s/')) {
+        window.GAS_URL = String(cfg.gasUrl);
+      }
+    } catch (e) {}
   };
 
   /* ── GAS CONFIG SYNC v5.0 – Long-polling (mạnh hơn polling định kỳ) ── */
