@@ -8142,6 +8142,9 @@ if (!window._AI_CONFIG_LOADED) {
 (function(){
   var SNOOZE_KEY = 'thc_promo_snooze';
   var DELAY_MS   = 1200;
+  var _timerId   = null;
+  /* Đóng popup chỉ áp dụng cho "lần load hiện tại" (reload trang sẽ reset) */
+  window.__thcPromoClosedOnce = false;
 
   function getRuntimeCfg() {
     return window.__thcPromoRuntime || {};
@@ -8154,6 +8157,7 @@ if (!window._AI_CONFIG_LOADED) {
 
   function promoShouldShow() {
     var cfg = getRuntimeCfg();
+    if (window.__thcPromoClosedOnce) return false;
     if (cfg.show === false) return false;
     var snooze = localStorage.getItem(getSnoozeKey());
     if (!snooze) return true;
@@ -8169,6 +8173,8 @@ if (!window._AI_CONFIG_LOADED) {
   }
 
   window.promoClose = function() {
+    window.__thcPromoClosedOnce = true;
+    if (_timerId) { try { clearTimeout(_timerId); } catch (e) {} _timerId = null; }
     var el = document.getElementById('promoOverlay');
     if (el) {
       el.style.animation = 'promoFadeIn .2s ease reverse';
@@ -8194,7 +8200,8 @@ if (!window._AI_CONFIG_LOADED) {
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (promoShouldShow()) setTimeout(_show, DELAY_MS);
+    /* Chỉ mở khi vừa load trang (không tự bật lại sau khi user tắt) */
+    if (promoShouldShow()) _timerId = setTimeout(_show, DELAY_MS);
   });
 
   window.__thcShowPromoOverlay = _show;
@@ -8317,19 +8324,16 @@ if (!window._AI_CONFIG_LOADED) {
       targetId: 'san-pham-section'
     };
 
+    /* Tránh "2 bảng thông báo": nếu popup bật thì ẩn banner trong trang */
+    try {
+      var banner = document.querySelector('.promo-banner');
+      if (banner) banner.style.display = show ? 'none' : '';
+    } catch (e) {}
+
     if (!show) {
       overlay.classList.add('hidden');
       return;
     }
-
-    try {
-      var snooze = localStorage.getItem(window.__thcPromoRuntime.snoozeKey);
-      if (!snooze || Date.now() > Number(snooze)) {
-        if (typeof window.__thcShowPromoOverlay === 'function') {
-          setTimeout(window.__thcShowPromoOverlay, 250);
-        }
-      }
-    } catch (e) {}
   }
 
   /* ══════════════════════════════════════════════════════════════════

@@ -572,9 +572,41 @@
       url = typeof input === 'string' ? input : (input && input.url) || '';
     } catch (e) {}
 
-    if (/\/api\/pricing-config\b/.test(url)) {
-      var method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+    var method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
+    var isConfigApi = /\/api\/(pricing|promo|client)-config\b/.test(url);
 
+    /* Timeout nhẹ cho các request cấu hình để admin không bị "đơ" khi mạng chậm */
+    if (isConfigApi && (!init || !init.signal)) {
+      try {
+        var ctl = new AbortController();
+        var t = setTimeout(function(){ try { ctl.abort(); } catch(e) {} }, 15000);
+        init = Object.assign({}, init || {}, { signal: ctl.signal });
+        var _oldFinally = init._thcFinally;
+        init._thcFinally = function(){ try { clearTimeout(t); } catch(e) {} if (typeof _oldFinally === 'function') _oldFinally(); };
+      } catch (e) {}
+    }
+
+    /* Chuẩn hoá payload promo-config để index.html đọc ổn định */
+    if (/\/api\/promo-config\b/.test(url) && method !== 'GET' && init && init.body) {
+      try {
+        var b1 = JSON.parse(init.body);
+        var show = b1 && b1.show;
+        if (typeof show === 'string') show = !/^(false|0|off|no)$/i.test(show.trim());
+        if (show === undefined || show === null) show = true;
+        var snoozeHours = Number(b1 && b1.snoozeHours);
+        if (!isFinite(snoozeHours) || snoozeHours <= 0) snoozeHours = 1;
+        var items = b1 && b1.items;
+        if (typeof items === 'string') items = items.split(/\r?\n|\|/);
+        if (!Array.isArray(items)) items = [];
+        items = items.map(function (x) { return String(x || '').trim(); }).filter(Boolean);
+        b1.show = !!show;
+        b1.snoozeHours = snoozeHours;
+        b1.items = items;
+        init = Object.assign({}, init, { body: JSON.stringify(b1) });
+      } catch (e) {}
+    }
+
+    if (/\/api\/pricing-config\b/.test(url)) {
       if (method !== 'GET' && init && init.body) {
         try {
           var body = JSON.parse(init.body);
@@ -602,10 +634,14 @@
         } catch (e) {
           return res;
         }
+      }).finally(function(){
+        try { if (init && typeof init._thcFinally === 'function') init._thcFinally(); } catch(e) {}
       });
     }
 
-    return _fetch(input, init);
+    return _fetch(input, init).finally(function(){
+      try { if (init && typeof init._thcFinally === 'function') init._thcFinally(); } catch(e) {}
+    });
   };
 })();
 </script>
