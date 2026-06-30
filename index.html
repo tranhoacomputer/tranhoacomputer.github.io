@@ -5433,7 +5433,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                 if (txt2) txt2.textContent = 'Đang mở cửa' + minsUntilClose();
             } else {
                 if (dot2) { dot2.style.background = '#ef4444'; dot2.style.animation = 'none'; }
-                if (txt2) txt2.textContent = 'Đã đóng · ' + nextOpenStr();
+                /* ngoài giờ: hiển thị “Tạm đóng” cho dễ hiểu */
+                if (txt2) txt2.textContent = 'Tạm đóng · ' + nextOpenStr();
             }
         }
         updateShopStatus(); // Run immediately
@@ -8382,6 +8383,26 @@ if (!window._AI_CONFIG_LOADED) {
   function applyClient(cfg) {
     if (!cfg) return;
 
+    /* Sheet có thể lưu JSON dạng chuỗi: "{""shopName"":...}" → cần parse */
+    function parseMaybeJson(v) {
+      if (v == null) return v;
+      if (typeof v !== 'string') return v;
+      var t = v.trim();
+      if (!t) return v;
+      var candidate = t;
+      if ((candidate.startsWith('"') && candidate.endsWith('"')) || (candidate.startsWith("'") && candidate.endsWith("'"))) {
+        candidate = candidate.slice(1, -1).trim();
+      }
+      if (candidate.indexOf('""') !== -1) candidate = candidate.replace(/""/g, '"');
+      if ((candidate.startsWith('{') && candidate.endsWith('}')) || (candidate.startsWith('[') && candidate.endsWith(']'))) {
+        try { return JSON.parse(candidate); } catch (e) {}
+      }
+      return v;
+    }
+
+    cfg = parseMaybeJson(cfg);
+    if (!cfg || typeof cfg !== 'object') return;
+
     function pickText() {
       for (var i = 0; i < arguments.length; i++) {
         var v = arguments[i];
@@ -8737,14 +8758,53 @@ if (!window._AI_CONFIG_LOADED) {
   /* Import config từ JSON file (index.html tự fetch nếu có thc-config.json) */
   window.thcImportConfig = function (cfg) {
     if (!cfg) return;
+
+    function unquoteString(s) {
+      if (typeof s !== 'string') return s;
+      var t = s.trim();
+      if (!t) return t;
+      var guard = 0;
+      while (guard++ < 5) {
+        if ((t.startsWith('"') && t.endsWith('"')) || (t.startsWith("'") && t.endsWith("'"))) {
+          t = t.slice(1, -1).trim();
+          continue;
+        }
+        break;
+      }
+      t = t.replace(/^"+/, '').replace(/"+$/, '');
+      return t.trim();
+    }
+
+    function parseMaybeJson(v) {
+      if (v == null) return v;
+      if (typeof v !== 'string') return v;
+      var t = v.trim();
+      if (!t) return v;
+      var candidate = t;
+      if ((candidate.startsWith('"') && candidate.endsWith('"')) || (candidate.startsWith("'") && candidate.endsWith("'"))) {
+        candidate = candidate.slice(1, -1).trim();
+      }
+      if (candidate.indexOf('""') !== -1) candidate = candidate.replace(/""/g, '"');
+      if ((candidate.startsWith('{') && candidate.endsWith('}')) || (candidate.startsWith('[') && candidate.endsWith(']'))) {
+        try { return JSON.parse(candidate); } catch (e) {}
+      }
+      return v;
+    }
+
+    /* parse chuỗi JSON nếu GAS/Sheet trả về dạng string */
+    if (cfg.promo)   cfg.promo = parseMaybeJson(cfg.promo);
+    if (cfg.client)  cfg.client = parseMaybeJson(cfg.client);
+    if (cfg.pricing) cfg.pricing = parseMaybeJson(cfg.pricing);
+
     if (cfg.promo)   { THC_LAST_CFG.promo   = cfg.promo;   applyPromo(cfg.promo); }
     if (cfg.client)  { THC_LAST_CFG.client  = cfg.client;  applyClient(cfg.client); }
     if (cfg.pricing) { THC_LAST_CFG.pricing = cfg.pricing; applyPricing(cfg.pricing); }
     /* Nếu config có gasUrl và trang đang thiếu endpoint → tự gán để đồng bộ được config */
     try {
+      var cleanGasUrl = unquoteString(cfg.gasUrl || '');
       if ((!window.GAS_URL || !String(window.GAS_URL).startsWith('https://')) &&
-          cfg.gasUrl && String(cfg.gasUrl).startsWith('https://script.google.com/macros/s/')) {
-        window.GAS_URL = String(cfg.gasUrl);
+          cleanGasUrl && String(cleanGasUrl).startsWith('https://script.google.com/macros/s/')) {
+        window.GAS_URL = String(cleanGasUrl);
       }
     } catch (e) {}
   };
