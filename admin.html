@@ -252,7 +252,7 @@
 
     /* ─── PRODUCTS ─── */
     'GET /api/products': function () {
-      return gasGET({ action: 'getProducts' })
+      return gasGET({ action: 'getProducts', status: 'all' })
         .then(function (r) { return r.json(); })
         .then(function (d) {
           return jsonResp(d.success
@@ -1606,4 +1606,3 @@ Hành động này sẽ xóa dữ liệu cả offline và trên Google Sheets.`)
     <div id="root"></div>
   </body>
 </html>
-
