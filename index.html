@@ -3998,11 +3998,14 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
           name: (s && (s.name || s.title)) ? String(s.name || s.title) : ('Mục ' + (j + 1)),
           price: (s && (s.price || s.cost)) ? String(s.price || s.cost) : '',
           note: (s && (s.note || s.description || s.detail)) ? String(s.note || s.description || s.detail) : '',
-          warranty: (s && s.warranty) ? String(s.warranty) : ''
+          warranty: (s && s.warranty) ? String(s.warranty) : '',
+          isActive: (s && s.isActive === false) ? false : true
         };
       }).filter(function (svc) {
         var joined = [svc.id, svc.name, svc.price, svc.note].join(' ');
         return !/svc\.|r\.price|'\s*\+|\+\s*'|\(svc\.name\|\|''\)/i.test(joined);
+      }).filter(function (svc) {
+        return svc.isActive !== false;
       });
       return { id: id, key: key, name: name, services: services };
     });
@@ -4019,7 +4022,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
           name: svc.name,
           price: svc.price,
           note: svc.note,
-          warranty: svc.warranty
+          warranty: svc.warranty,
+          isActive: svc.isActive !== false
         };
       })
     };
@@ -4058,7 +4062,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
             name: svc.name,
             price: svc.price,
             note: svc.note,
-            warranty: svc.warranty
+            warranty: svc.warranty,
+            isActive: svc.isActive !== false
           });
           svcSeen[svcKey] = svc;
         } else {
