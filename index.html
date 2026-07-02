@@ -4039,10 +4039,17 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var merged = [];
     var catMap = {};
 
+    /* Khớp nhóm theo TÊN (không phải theo id nội bộ) — vì nhóm tạo trong admin
+       luôn có id ngẫu nhiên khác với id tĩnh có sẵn (hardware/software/install/
+       laptop/accessory), dù tên hiển thị (vd "Lắp đặt PC") có thể trùng nhau. */
+    function nameKey(cat) {
+      return slugify(cat.name || cat.key || cat.id);
+    }
+
     base.forEach(function (cat) {
-      var catKey = slugify(cat.key || cat.id || cat.name);
+      var k = nameKey(cat);
       var cloned = cloneCategory(cat);
-      catMap[catKey] = cloned;
+      catMap[k] = cloned;
       merged.push(cloned);
     });
 
@@ -4051,15 +4058,17 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
        nội dung tĩnh mặc định — đảm bảo mọi chỉnh sửa/thêm/xóa/ẩn ở admin đều
        phản ánh đúng ra trang khách hàng, không chỉ merge từng phần. */
     extra.forEach(function (cat) {
-      var catKey = slugify(cat.key || cat.id || cat.name);
-      var existing = catMap[catKey];
+      var k = nameKey(cat);
+      var existing = catMap[k];
       if (!existing) {
         existing = cloneCategory(cat);
-        catMap[catKey] = existing;
+        catMap[k] = existing;
         merged.push(existing);
         return;
       }
       if (cat.services && cat.services.length) {
+        existing.id = cat.id || existing.id;
+        existing.key = cat.key || existing.key;
         existing.name = cat.name || existing.name;
         existing.services = cat.services.map(function (svc) {
           return {
