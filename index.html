@@ -3954,8 +3954,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       .then(function(res){
         var d = (res && res.success && res.data) ? res.data : null;
         if(d && d.pricing && d.pricing.categories && d.pricing.categories.length >= 1){
-          renderDynamicPricing(d.pricing);
-          /* Đồng nhất cấu hình cho toàn trang (promo/client/pricing) */
+          /* FIX (race condition): KHÔNG gọi renderDynamicPricing(d.pricing) nữa —
+             hàm này ghi đè TOÀN BỘ #dynamicPricingSection bằng DUY NHẤT dữ liệu thô
+             từ GAS (không merge với 5 nhóm mặc định), gây mất nhóm khi fetch này
+             hoàn tất SAU renderer v2. Renderer v2 (bên dưới) đã tự fetch + merge +
+             render đúng toàn bộ danh mục, nên ở đây chỉ đồng bộ config khác. */
           if (typeof window.thcImportConfig === 'function') window.thcImportConfig(d);
         }
       })
