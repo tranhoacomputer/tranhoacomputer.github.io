@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="Sửa chữa lắp ráp máy tính, laptop uy tín tại Thái Nguyên - Tran Hoa Computer. Cài Windows, thay linh kiện, cứu dữ liệu, mua laptop/iPad/Macbook chính hãng tại Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:title" content="Tran Hoa Computer - Sửa Chữa Lắp Ráp Máy Tính Uy Tín Thái Nguyên">
-    <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên. Hotline: 0963.284.044">
+    <meta property="og:description" content="Sửa chữa lắp ráp máy tính nhanh chóng tại Phú Thịnh, Thái Nguyên. Hotline: 0963.284.044">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tranhoacomputer.github.io/">
     <meta property="og:image" content="https://tranhoacomputer.github.io/logo.png">
@@ -38,8 +38,7 @@
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Phú Thịnh",
-        "addressLocality": "Đại Từ",
-        "addressRegion": "Thái Nguyên",
+                "addressRegion": "Thái Nguyên",
         "addressCountry": "VN"
       },
       "geo": {
@@ -1451,7 +1450,30 @@
         }
     }
     
-    /* ══════════════════════════════════════════════════
+    
+    /* ── Mobile pricing table fix (v2 renderer) ── */
+    @media(max-width:767px){
+        #priceTabsWrapper .price-table-section .table-responsive{
+            overflow-x:hidden !important;
+            -webkit-overflow-scrolling:auto;
+        }
+        #priceTabsWrapper .price-table-section table{
+            width:100% !important;
+            table-layout:auto !important;
+        }
+        #priceTabsWrapper .price-table-section th,
+        #priceTabsWrapper .price-table-section td{
+            white-space:normal !important;
+            word-break:break-word !important;
+            overflow-wrap:break-word !important;
+        }
+        /* Ensure mobile-row layout works in v2 renderer */
+        #priceTabsWrapper .mobile-row{ display:flex !important; align-items:flex-start !important; }
+        #priceTabsWrapper .mobile-label{ display:inline-flex !important; align-items:baseline; flex:0 0 110px; min-width:100px; font-weight:700; color:var(--text-light); font-size:12px; text-transform:uppercase; }
+        #priceTabsWrapper .mobile-value{ flex:1; color:var(--text-main); }
+    }
+
+/* ══════════════════════════════════════════════════
        TOUCH OPTIMIZATIONS — faster tap, no highlight
        ══════════════════════════════════════════════════ */
     /* Remove 300ms tap delay on all buttons and links */
@@ -2596,7 +2618,7 @@ body {
         <div class="particle" style="left:88%; bottom:0; width:3px;  height:3px;  background:#6ee7b7; animation-duration:9s;  animation-delay:5.5s;"></div>
         <div class="particle" style="left:43%; bottom:0; width:6px;  height:6px;  background:#38bdf8; animation-duration:8s;  animation-delay:7s;"></div>
     </div>
-        <div class="hero-tag">Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Đại Từ, Thái Nguyên</div>
+        <div class="hero-tag">Trung Tâm Sửa Chữa Lắp Ráp Máy Tính Uy Tín · Phú Thịnh, Thái Nguyên</div>
         <h2 style="background:linear-gradient(135deg,#ffffff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">TRAN HOA COMPUTER</h2>
         <p style="max-width:560px;margin:0 auto 8px;">Sửa Laptop &amp; PC · Lắp ráp máy tính theo yêu cầu · Mua laptop/iPad/Macbook, phụ kiện chính hãng<br>
         <span style="display:inline-flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-top:10px;font-size:13px;font-weight:700;color:#94a3b8;">
@@ -3920,8 +3942,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var _embedded = window._thcDefaultPricing;
     /* 1. Source of truth là GAS: render embedded defaults trước, sau đó nâng cấp từ GAS */
     var _best = _embedded;
-    /* Render best available immediately */
-    renderDynamicPricing(_best);
+    /* Legacy renderer DISABLED — v2 renderer handles all pricing rendering */
+    // renderDynamicPricing(_best);
     /* 2. Async: load trực tiếp từ GAS */
     var gasUrl = (typeof GAS_URL !== 'undefined' && GAS_URL && String(GAS_URL).startsWith('https://'))
       ? GAS_URL
@@ -3942,7 +3964,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
   // Legacy renderer (v32) gây lỗi khi schema thay đổi (thêm nhóm/mục mới).
   // Giữ lại hàm để debug thủ công, nhưng KHÔNG auto-run nữa.
-  window._thcLegacyReloadPricing = loadPricing;
+  window._thcLegacyReloadPricing = loadPricing; /* Legacy: NOT auto-loaded, v2 renderer handles pricing */
 })();
 </script>
 
@@ -4180,6 +4202,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       btn.type = 'button';
       btn.setAttribute('role', 'tab');
       btn.setAttribute('data-key', cat.key);
+      btn.setAttribute('aria-controls', 'tab-' + cat.key);
+      btn.id = 'tabBtn-' + cat.key;
       btn.textContent = cat.name;
       btn.addEventListener('click', function () { setActive(cat.key); });
       tabContainer.appendChild(btn);
@@ -4267,6 +4291,12 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
   }
 
   function load() {
+    /* Render embedded defaults IMMEDIATELY (no flash of empty content) */
+    var _embedded = window._thcDefaultPricing;
+    if (_embedded && _embedded.categories && _embedded.categories.length) {
+      render(_embedded);
+    }
+
     var gasUrl =
       (typeof GAS_URL !== 'undefined' && GAS_URL && String(GAS_URL).startsWith('https://'))
         ? GAS_URL
@@ -4465,7 +4495,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         <span>Mang máy đến hay gọi kỹ thuật viên đến nhà?</span>
                         <span class="faq-icon">＋</span>
                     </button>
-                    <div class="faq-a">Hiện tại cửa hàng phục vụ chủ yếu tại địa chỉ <strong>Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</strong>. Bạn có thể đặt lịch trước qua form trên web hoặc gọi trực tiếp số <strong>0963.284.044</strong> để không phải chờ lâu.</div>
+                    <div class="faq-a">Hiện tại cửa hàng phục vụ chủ yếu tại địa chỉ <strong>Phú Thịnh, Thái Nguyên</strong>. Bạn có thể đặt lịch trước qua form trên web hoặc gọi trực tiếp số <strong>0963.284.044</strong> để không phải chờ lâu.</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-q" onclick="toggleFaq(this)">
@@ -4551,18 +4581,18 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         <div style="max-width: 1152px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 35px; font-size:13.5px;">           
             <div>
                 <h3 style="font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom:12px;">TRAN HOA COMPUTER</h3>
-                <p>Chuyên sửa chữa laptop, máy tính bàn, lắp ráp PC Gaming theo yêu cầu. Bảo hành rõ ràng, linh kiện chính hãng, giá công khai minh bạch tại Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên.</p>
+                <p>Chuyên sửa chữa laptop, máy tính bàn, lắp ráp PC Gaming theo yêu cầu. Bảo hành rõ ràng, linh kiện chính hãng, giá công khai minh bạch tại Phú Thịnh, Thái Nguyên.</p>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">BẢN ĐỒ CỬA HÀNG</h4>
-                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:8px; font-size:13px;">Phú Thịnh, Thái Nguyên</p>
                 <div class="map-wrapper">
                     <iframe src="https://maps.google.com/maps?q=Phú+Thịnh,+Đại+Từ,+Thái+Nguyên&output=embed&z=14" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
             <div>
                 <h4 style="color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom:12px;">THÔNG TIN CHI TIẾT</h4>
-                <p style="margin-bottom:6px;">Địa chỉ: Phú Thịnh, Đại Từ, Thái Nguyên</p>
+                <p style="margin-bottom:6px;">Địa chỉ: Phú Thịnh, Thái Nguyên</p>
                 <p style="margin-bottom:6px;">Điện thoại: <a href="tel:0963284044" style="color: #facc15; font-weight: bold; text-decoration: none;">0963.284.044</a></p>
                 <p style="margin-bottom:6px;">Email: <a href="mailto:thienkim29903@gmail.com" style="color:#7dd3fc;font-weight:600;text-decoration:none;">thienkim29903@gmail.com</a></p>
 
@@ -6233,7 +6263,7 @@ var KB=[
   q:['Kiểm tra miễn phí','Đặt lịch sửa','Liên hệ ngay']},
 
  {k:['địa chỉ','ở đâu','chỗ nào','vị trí','đường','thái nguyên','đại từ'],
-  a:'📍 Cửa hàng tại <b>Phú Thịnh, Đại Từ, Thái Nguyên</b>.<br>Xem bản đồ ngay trên trang hoặc gọi hotline để được hướng dẫn đường đi!',
+  a:'📍 Cửa hàng tại <b>Phú Thịnh, Thái Nguyên</b>.<br>Xem bản đồ ngay trên trang hoặc gọi hotline để được hướng dẫn đường đi!',
   q:['Hotline gọi ngay','Zalo tư vấn','Giờ làm việc']},
 
  {k:['giờ','mở cửa','đóng cửa','thời gian','mấy giờ','khi nào mở'],
@@ -6520,7 +6550,7 @@ var KB=[
   /* ── FAQ: Tại nhà / Onsite ── */
   {k:['đến nhà','thợ đến nhà','tại nhà','onsite','lên nhà','đến tận nơi','kỹ thuật viên đến'],
    q:['Đặt lịch sửa','Hotline gọi ngay','Địa chỉ'],
-   a:'🏠 Hiện tại cửa hàng chủ yếu phục vụ tại địa chỉ:<br><b>Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</b><br><br>Đặt lịch trước qua form hoặc gọi trực tiếp để trao đổi thêm.<br>Một số trường hợp đặc biệt có thể hỗ trợ onsite — liên hệ hỏi trực tiếp nhé!'},
+   a:'🏠 Hiện tại cửa hàng chủ yếu phục vụ tại địa chỉ:<br><b>Phú Thịnh, Thái Nguyên</b><br><br>Đặt lịch trước qua form hoặc gọi trực tiếp để trao đổi thêm.<br>Một số trường hợp đặc biệt có thể hỗ trợ onsite — liên hệ hỏi trực tiếp nhé!'},
 
   /* ── FAQ: Xem sửa trực tiếp ── */
   {k:['xem trực tiếp','xem sửa','giám sát','sửa trước mặt','xem kỹ thuật viên','minh bạch'],
@@ -6710,7 +6740,7 @@ var KB=[
 
  /* ĐỊA CHỈ CHI TIẾT */
  {k:['địa chỉ chính xác','đường đi','hướng dẫn đường','cách đi','phú thịnh ở đâu','đại từ thái nguyên','tìm cửa hàng'],
-  a:'📍 <b>Địa chỉ cửa hàng:</b><br><br><b>Xóm 6, Phú Thịnh, Đại Từ, Thái Nguyên</b><br><br>🗺️ Xem bản đồ tại cuối trang web (Google Maps tích hợp sẵn)<br><br>📞 Gọi <b>0963.284.044</b> để được hướng dẫn đường đi chi tiết từ vị trí của bạn<br><br>⏰ Giờ mở cửa: <b>07:00 – 22:00 mỗi ngày</b>',
+  a:'📍 <b>Địa chỉ cửa hàng:</b><br><br><b>Phú Thịnh, Thái Nguyên</b><br><br>🗺️ Xem bản đồ tại cuối trang web (Google Maps tích hợp sẵn)<br><br>📞 Gọi <b>0963.284.044</b> để được hướng dẫn đường đi chi tiết từ vị trí của bạn<br><br>⏰ Giờ mở cửa: <b>07:00 – 22:00 mỗi ngày</b>',
   q:['Hotline gọi ngay','Đặt lịch sửa','Zalo tư vấn']},
 
  /* LIÊN HỆ TỔNG HỢP */
