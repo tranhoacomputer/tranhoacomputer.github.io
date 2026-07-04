@@ -4148,7 +4148,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     container.innerHTML = '';
 
     var tabContainer = document.createElement('div');
-    tabContainer.className = 'tab-container reveal';
+    tabContainer.className = 'tab-container';
     tabContainer.id = 'priceTabContainer';
 
     var swipeHint = document.createElement('div');
@@ -4171,6 +4171,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       if (window._initSwipeHint) window._initSwipeHint();
       if (window._initDragScroll) window._initDragScroll();
     }
+    /* Expose setActive so global swipe handler can switch tabs */
+    window._thcPricingSetActive = setActive;
 
     categories.forEach(function (cat, idx) {
       var btn = document.createElement('button');
@@ -4196,6 +4198,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
     // Ensure correct initial state
     setActive(categories[0].key);
+    // Re-bind swipe listeners on the new DOM elements
+    if (window._initPricingSwipe) window._initPricingSwipe();
   }
 
   function renderAppendOnly(cfg) {
@@ -5067,53 +5071,95 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         if(hint){hint.style.opacity='0';setTimeout(function(){hint.style.display='none';},1000);}
     }
 
-    /* ── Touch Swipe for price tabs ── */
-    (function(){
-        /* ── Price table swipe (tab order must match HTML tab-* IDs) ── */
-      var _tabOrder = ['hardware','software','install','laptop','accessory'];
-      var el=document.getElementById('priceTabsWrapper');
-        var el2=document.getElementById('priceTabContainer');
-        if(!el) return;
-        var startX=0, startY=0;
-        function _onTouchStart(e){ startX=e.touches[0].clientX; startY=e.touches[0].clientY; }
-        el.addEventListener('touchstart',_onTouchStart,{passive:true});
-        if(el2) el2.addEventListener('touchstart',_onTouchStart,{passive:true});
-        var _swipeLocked=false;
-        el.addEventListener('touchmove',function(e){
-            var dx=e.touches[0].clientX-startX;
-            var dy=e.touches[0].clientY-startY;
-            if(!_swipeLocked && Math.abs(dx)>10 && Math.abs(dx)>Math.abs(dy)){_swipeLocked=true;}
-        },{passive:true});
-        el.addEventListener('touchend',function(e){
-            var dx=e.changedTouches[0].clientX-startX;
-            var dy=e.changedTouches[0].clientY-startY;
-            var wasLocked=_swipeLocked; _swipeLocked=false;
-            if(Math.abs(dx)<20 || (!wasLocked && Math.abs(dx)<Math.abs(dy)*1.5)) return;
-            var cur=document.querySelector('.price-table-section.active');
-            var curId=cur?cur.id.replace('tab-',''):'hardware';
-            var idx=_tabOrder.indexOf(curId);
-            var next=dx<0 ? Math.min(idx+1,_tabOrder.length-1) : Math.max(idx-1,0);
-            if(next!==idx){
-              var goingLeft=dx>0;
-              document.querySelectorAll('.price-table-section').forEach(function(s){s.classList.remove('slide-left');});
-              if(goingLeft){ var ns=document.getElementById('tab-'+_tabOrder[next]); if(ns) ns.classList.add('slide-left'); }
-              switchTab(_tabOrder[next]);
-            }
-        },{passive:true});
-        /* Also register touchend on tab buttons bar */
-        if(el2){
-            el2.addEventListener('touchend',function(e){
-                var dx=e.changedTouches[0].clientX-startX;
-                var dy=e.changedTouches[0].clientY-startY;
-                if(Math.abs(dx)<20||Math.abs(dx)<Math.abs(dy)*1.5) return;
-                var cur=document.querySelector('.price-table-section.active');
-                var curId=cur?cur.id.replace('tab-',''):'hardware';
-                var idx=_tabOrder.indexOf(curId);
-                var next=dx<0?Math.min(idx+1,_tabOrder.length-1):Math.max(idx-1,0);
-                if(next!==idx) switchTab(_tabOrder[next]);
-            },{passive:true});
+    /* ── Touch Swipe for price tabs (re-bindable, dynamic tab order) ── */
+    window._initPricingSwipe = function(){
+      var el = document.getElementById('priceTabsWrapper');
+      var el2 = document.getElementById('priceTabContainer');
+      if(!el) return;
+      /* Prevent double-binding on the same element */
+      if(el._thcSwipeBound) return;
+      el._thcSwipeBound = true;
+      if(el2) el2._thcSwipeBound = true;
+
+      /* Dynamically read tab order from DOM (works for both static & dynamic tabs) */
+      function _getTabOrder(){
+        var btns = document.querySelectorAll('#priceTabContainer .tab-btn');
+        var order = [];
+        btns.forEach(function(btn){
+          /* Dynamic tabs use data-key, static tabs use id=tabBtn-<key> */
+          var key = btn.getAttribute('data-key');
+          if(!key && btn.id && btn.id.indexOf('tabBtn-') === 0) key = btn.id.replace('tabBtn-','');
+          if(key) order.push(key);
+        });
+        return order.length ? order : ['hardware','software','install','laptop','accessory'];
+      }
+
+      /* Unified tab switcher — works with both dynamic (data-key) and static (id) tabs */
+      function _switchTo(key){
+        if(window._thcPricingSetActive){
+          window._thcPricingSetActive(key);
+          return;
         }
-    })();
+        /* Fallback: use global switchTab (static HTML mode) */
+        var btn = document.getElementById('tabBtn-' + key);
+        if(window.switchTab) switchTab(key, btn);
+      }
+
+      var startX=0, startY=0;
+      function _onTouchStart(e){ startX=e.touches[0].clientX; startY=e.touches[0].clientY; }
+      el.addEventListener('touchstart',_onTouchStart,{passive:true});
+      if(el2) el2.addEventListener('touchstart',_onTouchStart,{passive:true});
+
+      var _swipeLocked=false;
+      el.addEventListener('touchmove',function(e){
+        var dx=e.touches[0].clientX-startX;
+        var dy=e.touches[0].clientY-startY;
+        if(!_swipeLocked && Math.abs(dx)>10 && Math.abs(dx)>Math.abs(dy)){_swipeLocked=true;}
+      },{passive:true});
+
+      function _handleSwipe(dx, dy, wasLocked){
+        if(Math.abs(dx)<20 || (!wasLocked && Math.abs(dx)<Math.abs(dy)*1.5)) return;
+        var tabOrder = _getTabOrder();
+        var cur = document.querySelector('.price-table-section.active');
+        var curKey = '';
+        if(cur){
+          curKey = cur.getAttribute('data-key') || (cur.id ? cur.id.replace('tab-','') : '');
+        }
+        if(!curKey) curKey = tabOrder[0] || 'hardware';
+        var idx = tabOrder.indexOf(curKey);
+        if(idx < 0) idx = 0;
+        var next = dx<0 ? Math.min(idx+1, tabOrder.length-1) : Math.max(idx-1, 0);
+        if(next !== idx){
+          var goingLeft = dx>0;
+          document.querySelectorAll('.price-table-section').forEach(function(s){s.classList.remove('slide-left');});
+          if(goingLeft){
+            var ns = document.getElementById('tab-' + tabOrder[next]);
+            if(ns) ns.classList.add('slide-left');
+          }
+          _switchTo(tabOrder[next]);
+          /* Hide swipe hint after first use */
+          var hint = document.getElementById('swipeHint');
+          if(hint){hint.style.opacity='0';setTimeout(function(){hint.style.display='none';},1000);}
+        }
+      }
+
+      el.addEventListener('touchend',function(e){
+        var dx=e.changedTouches[0].clientX-startX;
+        var dy=e.changedTouches[0].clientY-startY;
+        var wasLocked=_swipeLocked; _swipeLocked=false;
+        _handleSwipe(dx, dy, wasLocked);
+      },{passive:true});
+
+      if(el2){
+        el2.addEventListener('touchend',function(e){
+          var dx=e.changedTouches[0].clientX-startX;
+          var dy=e.changedTouches[0].clientY-startY;
+          _handleSwipe(dx, dy, false);
+        },{passive:true});
+      }
+    };
+    /* Initial bind for static HTML tabs */
+    window._initPricingSwipe();
 
     function openModal() { document.getElementById('successModal').classList.add('open'); }
     function closeModal() { document.getElementById('successModal').classList.remove('open'); }
