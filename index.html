@@ -1356,6 +1356,11 @@
         #tab-laptop .table-responsive,
         #tab-accessory .table-responsive,
         #tab-install .table-responsive { display: none !important; }
+        /* v2 renderer chỉ tạo table (không có mobile-price-cards) → luôn hiện table */
+        .thc-v2-rendered #tab-install .table-responsive,
+        .thc-v2-rendered #tab-laptop .table-responsive,
+        .thc-v2-rendered #tab-accessory .table-responsive { display: block !important; }
+        .thc-v2-rendered .mobile-price-cards { display: none !important; }
 @media(min-width:768px){
         .mobile-price-cards{display:none!important;}
         #installTableDesktop{display:table!important;}
@@ -4145,6 +4150,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     }
 
     // Rebuild pricing UI
+    container.classList.add('thc-v2-rendered');
     container.innerHTML = '';
 
     var tabContainer = document.createElement('div');
@@ -4174,6 +4180,29 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     /* Expose setActive so global swipe handler can switch tabs */
     window._thcPricingSetActive = setActive;
 
+
+    /* ── Lưu ý cho các nhóm tham khảo ── */
+    var catNotes = {
+      'install': '<div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">'
+        + '<div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="font-size:17px;">❗</span> Lưu ý</div>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#dc2626;font-weight:700;">⚠️</span> <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường. Mang đến cửa hàng hoặc liên hệ trực tiếp để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!</p>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#16a34a;font-weight:700;">✅</span> <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.</p>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#2563eb;font-weight:700;">🛡️</span> <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.</p>'
+        + '<p style="margin:0;color:#92400e;background:#fef3c7;border-radius:8px;padding:9px 12px;font-weight:600;"><span style="font-size:15px;">📦</span> Giá trên <b>chưa bao gồm</b> các phụ kiện đi kèm gồm: màn hình, chuột, bàn phím, loa...</p>'
+        + '</div>',
+      'laptop': '<div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">'
+        + '<div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="font-size:17px;">❗</span> Lưu ý</div>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#dc2626;font-weight:700;">⚠️</span> <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường. Mang đến cửa hàng hoặc liên hệ trực tiếp để được tư vấn cấu hình chi tiết và báo giá thực tế ngay!</p>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#16a34a;font-weight:700;">✅</span> <b>Bao gồm:</b> Lắp ráp, cài Windows bản quyền, driver, test stress 30 phút, hướng dẫn sử dụng.</p>'
+        + '<p style="margin:0;color:#374151;"><span style="color:#2563eb;font-weight:700;">🛡️</span> <b>Bảo hành:</b> Theo hãng linh kiện, hỗ trợ kỹ thuật trọn đời cho máy lắp tại tiệm.</p>'
+        + '</div>',
+      'accessory': '<div class="pricing-note-box" style="margin-top:20px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:1.5px solid #bfdbfe;border-radius:14px;padding:16px 18px;font-size:13.5px;line-height:1.75;">'
+        + '<div style="font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:10px;display:flex;align-items:center;gap:8px;"><span style="font-size:17px;">❗</span> Lưu ý</div>'
+        + '<p style="margin:0 0 8px 0;color:#374151;"><span style="color:#dc2626;font-weight:700;">⚠️</span> <b>Giá trên là ước tính tham khảo</b>, có thể thay đổi theo thị trường. Mang đến cửa hàng hoặc liên hệ trực tiếp để được tư vấn chi tiết và báo giá thực tế ngay!</p>'
+        + '<p style="margin:0;color:#374151;"><span style="color:#2563eb;font-weight:700;">🛡️</span> <b>Bảo hành:</b> Theo hãng sản xuất, hỗ trợ kỹ thuật trọn đời cho phụ kiện mua tại tiệm.</p>'
+        + '</div>'
+    };
+
     categories.forEach(function (cat, idx) {
       var btn = document.createElement('button');
       btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
@@ -4189,6 +4218,12 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       sec.id = 'tab-' + cat.key;
       sec.setAttribute('data-key', cat.key);
       sec.appendChild(buildTable(cat));
+      /* Thêm Lưu ý cho các nhóm có giá tham khảo */
+      if (catNotes[cat.key]) {
+        var noteDiv = document.createElement('div');
+        noteDiv.innerHTML = catNotes[cat.key];
+        sec.appendChild(noteDiv.firstChild);
+      }
       wrapper.appendChild(sec);
     });
 
