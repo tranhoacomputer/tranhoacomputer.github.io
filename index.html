@@ -2662,6 +2662,10 @@ body {
                     <input type="tel" name="phone" autocomplete="tel" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
                 </div>
                 <div class="form-group">
+                    <label>Địa chỉ email (nếu có)</label>
+                    <input type="email" name="email" autocomplete="email" id="inputEmail" class="form-control" placeholder="Nhập email để nhận thông báo (không bắt buộc)">
+                </div>
+                <div class="form-group">
                     <label>Loại dịch vụ cần sử dụng *</label>
                     <select name="service" id="selectService" class="form-control" required onchange="updateServiceNote(this.value)">
                         <option value="">-- Chọn dịch vụ --</option>
@@ -5058,6 +5062,8 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
         // Fill text fields
         document.getElementById('inputFullname').value = "Trần Văn A";
         document.getElementById('inputPhone').value = "0987654321";
+        var demoEmailEl = document.getElementById('inputEmail');
+        if (demoEmailEl) demoEmailEl.value = "tranvana@gmail.com";
         document.getElementById('selectService').value = "cai-win";
         updateServiceNote('cai-win');
         // Auto-fill date: tomorrow (Vietnam time)
@@ -5374,6 +5380,22 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         phoneInput.focus(); return;
                     }
                 }
+
+                // Email validation (optional field — only validate format if user typed something)
+                var emailInput = document.getElementById('inputEmail');
+                if (emailInput && emailInput.value.trim()) {
+                    var eVal = emailInput.value.trim();
+                    var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(eVal);
+                    if (!emailOk) {
+                        emailInput.style.borderColor = '#ef4444';
+                        emailInput.style.boxShadow = '0 0 0 3px rgba(239,68,68,.15)';
+                        var ee = emailInput.parentNode.querySelector('.email-err');
+                        if (!ee) { ee = document.createElement('p'); ee.className='email-err'; ee.style.cssText='color:#ef4444;font-size:12px;margin-top:4px;margin-bottom:0;'; emailInput.after(ee); }
+                        ee.textContent = '⚠️ Email chưa đúng định dạng (VD: ten@gmail.com)';
+                        emailInput.addEventListener('input', function(){ emailInput.style.borderColor=''; emailInput.style.boxShadow=''; if(ee) ee.textContent=''; },{once:true});
+                        emailInput.focus(); return;
+                    }
+                }
                 sBtn.disabled = true;
                 if (bTxt) bTxt.innerText = "Đang gửi yêu cầu...";
                 if (bSpin) bSpin.style.display = "inline-block";
@@ -5389,9 +5411,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                 var ctrl = new AbortController();
                 var tOut = setTimeout(function(){ ctrl.abort(); }, 18000);
 
-                /* Sync phone to _replyto */
+                /* Sync email (if provided) or phone to _replyto */
                 var ph = document.getElementById('inputPhone');
-                if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
+                var em = document.getElementById('inputEmail');
+                var rt = document.getElementById('fsReplyTo');
+                if (rt) { rt.value = (em && em.value.trim()) ? em.value.trim() : (ph ? ph.value : ''); }
 
                 /* ── Không lưu booking vào localStorage/sessionStorage:
                    nguồn dữ liệu chính là Google Apps Script (GAS) ── */
@@ -5407,6 +5431,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         id:           _lsBookingId,
                         customerName: obj['fullname'] || '',
                         phone:        obj['phone'] || '',
+                        email:        obj['email'] || '',
                         deviceType:   obj['service'] || '',
                         scheduledAt:  obj['date'] || '',
                         timeSlot:     obj['time-slot'] || '',
