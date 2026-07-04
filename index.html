@@ -1351,17 +1351,10 @@
 .bottom-nav{transition:background-color 0.3s ease,border-color 0.3s ease;}
     /* Show desktop table on lg screens */
             /* ── Hide desktop tables by default (shown on ≥768px) ── */
+        /* ── Legacy desktop tables (no longer used by v2 renderer) ── */
         #laptopTableDesktop, #accessoryTableDesktop, #installTableDesktop { display: none; }
-        #tab-laptop .table-responsive,
-        #tab-accessory .table-responsive,
-        #tab-install .table-responsive { display: none !important; }
-@media(min-width:768px){
-        .mobile-price-cards{display:none!important;}
-        #installTableDesktop{display:table!important;}
-        #laptopTableDesktop{display:table!important;}
-        #accessoryTableDesktop{display:table!important;}
-        #tab-laptop .table-responsive, #tab-accessory .table-responsive, #tab-install .table-responsive{display:block!important;}
-    }
+        /* v2 renderer uses .table-responsive for ALL tabs — visible on all screens */
+        /* Old rule that hid table-responsive on mobile for tabs 3/4/5 has been REMOVED */
 
 
     /* ── Promo Banner ── */
