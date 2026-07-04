@@ -2652,6 +2652,10 @@ body {
                     <input type="tel" name="phone" autocomplete="tel" id="inputPhone" class="form-control" placeholder="Nhập số điện thoại di động" required pattern="[0-9]{9,11}">
                 </div>
                 <div class="form-group">
+                    <label>Email <span style="font-weight:400;color:var(--text-light);font-size:12px;">(không bắt buộc)</span></label>
+                    <input type="email" name="email" autocomplete="email" id="inputEmail" class="form-control" placeholder="Nhập email của bạn (nếu có)">
+                </div>
+                <div class="form-group">
                     <label>Loại dịch vụ cần sử dụng *</label>
                     <select name="service" id="selectService" class="form-control" required onchange="updateServiceNote(this.value)">
                         <option value="">-- Chọn dịch vụ --</option>
@@ -5398,9 +5402,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                 var ctrl = new AbortController();
                 var tOut = setTimeout(function(){ ctrl.abort(); }, 18000);
 
-                /* Sync phone to _replyto */
-                var ph = document.getElementById('inputPhone');
-                if (ph) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = ph.value; }
+                /* Sync email (or phone) to _replyto */
+                var em = document.getElementById('inputEmail');
+                var ph2 = document.getElementById('inputPhone');
+                if (em && em.value.trim()) { var rt = document.getElementById('fsReplyTo'); if(rt) rt.value = em.value.trim(); }
+                else if (ph2) { var rt2 = document.getElementById('fsReplyTo'); if(rt2) rt2.value = ph2.value; }
 
                 /* ── Không lưu booking vào localStorage/sessionStorage:
                    nguồn dữ liệu chính là Google Apps Script (GAS) ── */
@@ -5416,6 +5422,7 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
                         id:           _lsBookingId,
                         customerName: obj['fullname'] || '',
                         phone:        obj['phone'] || '',
+                        email:        obj['email'] || '',
                         deviceType:   obj['service'] || '',
                         scheduledAt:  obj['date'] || '',
                         timeSlot:     obj['time-slot'] || '',
