@@ -1432,7 +1432,7 @@
         }
 
         
-    /* ═══ Mobile Pricing Card Redesign — khoa học, dễ nhìn, giá đỏ ═══ */
+    /* ═══ Mobile Pricing Card Redesign v2 — style sàn TMĐT lớn (Shopee/Tiki) ═══ */
     @media(max-width:767px){
         /* Container */
         #priceTabsWrapper .price-table-section .table-responsive{
@@ -1450,100 +1450,137 @@
         }
         #priceTabsWrapper .price-table-section thead{ display:none; }
 
-        /* Each <tr> = một card dịch vụ */
+        /* Each <tr> = một card dịch vụ, dùng CSS Grid để sắp xếp khoa học */
         #priceTabsWrapper .price-table-section tr{
-            display:flex;
-            flex-direction:column;
+            display:grid;
+            grid-template-columns: 30px 1fr;
+            grid-template-areas:
+                "badge title"
+                "gap   detail"
+                "gap   footer";
+            column-gap:10px;
             width:100%;
             background:#fff;
-            border:1px solid #e8ecf1;
-            border-radius:14px;
-            margin-bottom:14px;
-            padding:0;
-            box-shadow:0 2px 10px rgba(0,0,0,0.05);
-            overflow:hidden;
+            border:1px solid #eceef2;
+            border-radius:16px;
+            margin-bottom:12px;
+            padding:14px 14px 12px;
+            box-shadow:0 1px 3px rgba(16,24,40,0.04), 0 1px 2px rgba(16,24,40,0.06);
+            position:relative;
+            counter-increment: priceCardNum;
         }
+        #priceTabsWrapper .price-table-section tbody{ counter-reset: priceCardNum; }
 
-        /* Ẩn cột STT trên mobile */
+        /* STT → huy hiệu tròn số thứ tự bên trái header, thay vì cột ẩn */
         #priceTabsWrapper .price-table-section tr td:first-child:not([colspan]){
-            display:none !important;
+            display:flex !important;
+            grid-area: badge;
+            align-items:center;
+            justify-content:center;
+        }
+        #priceTabsWrapper .price-table-section tr td:first-child .mobile-row{ display:none !important; }
+        #priceTabsWrapper .price-table-section tr td:first-child::before{
+            content: counter(priceCardNum);
+            width:26px;
+            height:26px;
+            border-radius:50%;
+            background:linear-gradient(135deg, var(--primary), #1d4ed8);
+            color:#fff;
+            font-size:12px;
+            font-weight:800;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
         }
 
         /* Row trống "Chưa có dữ liệu" */
         #priceTabsWrapper .price-table-section tr td[colspan]{
             display:block !important;
+            grid-column: 1 / -1;
             text-align:center !important;
             padding:24px 16px !important;
             font-size:14px !important;
             color:var(--text-light) !important;
         }
 
-        /* ── Card header: tên dịch vụ ── */
+        /* ── Header: tên dịch vụ (căn giữa theo chiều dọc với badge) ── */
         #priceTabsWrapper .price-table-section tr td:nth-child(2){
-            display:block;
-            padding:14px 16px 10px !important;
-            border-bottom:1px solid #f0f0f0;
-            border-left:4px solid var(--primary);
+            display:flex;
+            grid-area: title;
+            align-items:center;
+            padding:0 !important;
+            min-height:26px;
         }
-        #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-row{
-            display:block !important;
-        }
-        #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-label{
-            display:none !important;
-        }
+        #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-row{ display:block !important; width:100%; }
+        #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-label{ display:none !important; }
         #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-value{
             display:block;
-            font-size:15px;
-            font-weight:700;
-            line-height:1.4;
+            font-size:14.5px;
+            font-weight:800;
+            line-height:1.35;
+            color:#0f172a;
+            letter-spacing:.1px;
         }
 
-        /* ── Card body: chi tiết + thời gian ── */
+        /* ── Detail: chi tiết dịch vụ + badge thời gian/BH ── */
         #priceTabsWrapper .price-table-section tr td:nth-child(3){
             display:block;
-            padding:10px 16px !important;
+            grid-area: detail;
+            padding:6px 0 0 !important;
         }
-        #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-row{
-            display:block !important;
-        }
-        #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-label{
-            display:none !important;
-        }
+        #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-row{ display:block !important; }
+        #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-label{ display:none !important; }
         #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-value{
             display:block;
-            font-size:13.5px;
-            line-height:1.6;
-            color:#555;
+            font-size:12.5px;
+            line-height:1.55;
+            color:#64748b;
         }
 
-        /* ── Card footer: GIÁ — luôn màu ĐỎ ── */
+        /* ── Footer: đường kẻ phân cách + GIÁ nổi bật màu đỏ bên phải ── */
         #priceTabsWrapper .price-table-section tr td:nth-child(4){
-            display:block;
-            padding:12px 16px 14px !important;
-            border-top:1px dashed #eee;
-            background:#fef5f5;
+            display:flex;
+            grid-area: footer;
+            padding:10px 0 0 !important;
+            margin-top:8px;
+            border-top:1px dashed #e5e9f0;
         }
         #priceTabsWrapper .price-table-section tr td:nth-child(4) .mobile-row{
             display:flex !important;
             align-items:center;
-            justify-content:flex-end;
+            justify-content:space-between;
+            width:100%;
         }
         #priceTabsWrapper .price-table-section tr td:nth-child(4) .mobile-label{
-            display:none !important;
+            display:inline-block !important;
+            font-size:10.5px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:.4px;
+            color:#94a3b8;
         }
         #priceTabsWrapper .price-table-section tr td:nth-child(4) .mobile-value{
-            font-size:17px;
-            font-weight:800;
+            font-size:16.5px;
+            font-weight:900;
             color:#dc2626 !important;
             text-align:right;
-            line-height:1.5;
+            line-height:1.4;
+            flex:1;
         }
 
-        /* Badge thời gian */
+        /* Badge thời gian — dạng pill nhỏ gọn kiểu app thương mại */
         #priceTabsWrapper .price-table-section .badge-time{
-            display:inline-block;
-            margin-top:6px;
-            font-size:11px;
+            display:inline-flex;
+            align-items:center;
+            gap:4px;
+            margin-top:8px;
+            font-size:10.5px;
+            font-weight:700;
+        }
+        #priceTabsWrapper .price-table-section .badge-time::before{
+            content:"⏱";
+            font-size:10px;
         }
 
         /* word wrap cho mọi cell */
@@ -1555,21 +1592,23 @@
         }
     }
 
-    /* ── Dark mode cho pricing card mobile ── */
+    /* ── Dark mode cho pricing card mobile v2 ── */
     [data-theme="dark"] #priceTabsWrapper .price-table-section tr{
         background:#1e293b !important;
         border-color:#334155 !important;
-        box-shadow:0 2px 10px rgba(0,0,0,0.25) !important;
+        box-shadow:0 1px 3px rgba(0,0,0,0.3) !important;
     }
-    [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(2){
-        border-bottom-color:#334155 !important;
+    [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(2) .mobile-value{
+        color:#f1f5f9 !important;
     }
     [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(3) .mobile-value{
-        color:#cbd5e1 !important;
+        color:#94a3b8 !important;
     }
     [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(4){
-        background:#1a1520 !important;
         border-top-color:#334155 !important;
+    }
+    [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(4) .mobile-label{
+        color:#64748b !important;
     }
     /* Giá LUÔN đỏ — kể cả dark mode */
     [data-theme="dark"] #priceTabsWrapper .price-table-section tr td:nth-child(4) .mobile-value,
@@ -1577,7 +1616,7 @@
         color:#f87171 !important;
     }
 
-/* ══════════════════════════════════════════════════
+    /* ══════════════════════════════════════════════════
        TOUCH OPTIMIZATIONS — faster tap, no highlight
        ══════════════════════════════════════════════════ */
     /* Remove 300ms tap delay on all buttons and links */
