@@ -3,6 +3,7 @@
  * ════════════════════════════════════════════════════════════════
  * File cấu hình AI — KHÔNG chứa API key trực tiếp.
  * API key được bảo mật trong backend (Base44 server-side).
+ * Dùng chung cho cả trang khách (index.html) và trang quản trị (admin.html).
  *
  * AN TOÀN ĐỂ ĐẨY LÊN GITHUB — chỉ chứa URL endpoint, không lộ key.
  * ════════════════════════════════════════════════════════════════
@@ -10,10 +11,13 @@
 
 window.AI_CONFIG = {
 
-  /* ── Endpoint backend AI (Gemini qua Base44) ── */
+  /* ── Endpoint chat AI (Gemini qua Base44) — dùng cho chatbot khách & Hỏi Đáp AI admin ── */
   endpoint: 'https://superagent-47f29609.base44.app/functions/aiChat',
 
-  /* ── Chế độ "Ai ơi" — bypass KB, gọi AI không giới hạn ── */
+  /* ── Endpoint chẩn đoán lỗi kỹ thuật (Gemini qua Base44) — dùng cho Trợ lý AI sửa lỗi admin ── */
+  diagnoseEndpoint: 'https://superagent-47f29609.base44.app/functions/aiDiagnose',
+
+  /* ── Chế độ "Ai ơi" — bypass KB, gọi AI không giới hạn (chatbot khách) ── */
   freePassEnabled: true,
   freePassTrigger: 'ai oi',
   freePassConfirm: '🤖✨ Chế độ AI tự do đã bật!\nHỏi gì tôi cũng trả lời — không giới hạn chủ đề.\nBạn muốn hỏi gì nào?',
