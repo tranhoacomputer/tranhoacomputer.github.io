@@ -17,6 +17,9 @@ window.AI_CONFIG = {
   /* ── Endpoint chẩn đoán lỗi kỹ thuật (Gemini qua Base44) — dùng cho Trợ lý AI sửa lỗi admin ── */
   diagnoseEndpoint: 'https://superagent-47f29609.base44.app/functions/aiDiagnose',
 
+  /* ── Endpoint gửi email SMTP thật (xác nhận lịch hẹn & cập nhật trạng thái) ── */
+  sendEmailEndpoint: 'https://superagent-47f29609.base44.app/functions/sendEmail',
+
   /* ── Chế độ "Ai ơi" — bypass KB, gọi AI không giới hạn (chatbot khách) ── */
   freePassEnabled: true,
   freePassTrigger: 'ai oi',
@@ -29,4 +32,5 @@ window.AI_CONFIG = {
 
 /* Áp dụng endpoint vào chatbot */
 window._AI_ENDPOINT = window.AI_CONFIG.endpoint;
+window._SEND_EMAIL_ENDPOINT = window.AI_CONFIG.sendEmailEndpoint;
 window._AI_CONFIG_LOADED = true;
