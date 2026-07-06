@@ -2219,6 +2219,20 @@ body {
         border-color: #334155 !important;
     }
 
+    /* Pricing notice box (warranty + notes) — dark mode */
+    [data-theme="dark"] #pricingNoticeBox {
+        background: linear-gradient(135deg, #2a1f0d, #1f2410) !important;
+        border-color: #57430f !important;
+    }
+    [data-theme="dark"] #pricingNoticeBox span,
+    [data-theme="dark"] #pricingNoticeBox li,
+    [data-theme="dark"] #pricingNoticeBox ul {
+        color: #fde68a !important;
+    }
+    [data-theme="dark"] #pricingNoticeBox li b {
+        color: #fef3c7 !important;
+    }
+
     /* ── policy-card inline text (CHÍNH SÁCH BẢO HÀNH) ── */
     [data-theme="dark"] .policy-card h4 { color: var(--text-main) !important; }
     [data-theme="dark"] .policy-card p { color: var(--text-light) !important; }
@@ -2968,206 +2982,6 @@ body {
 
 
 
-        <!-- ══ AI CHẨN ĐOÁN LỖI ══ -->
-        <section id="ai-diagnose-section" class="reveal" style="padding: 40px 0 20px;">
-          <div class="section-title-wrap"><span class="section-badge" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;">AI CHẨN ĐOÁN</span></div>
-          <div class="section-title">AI CHẨN ĐOÁN LỖI MÁY TÍNH</div>
-          <p class="section-subtitle">Mô tả lỗi — AI phân tích và đưa ra chẩn đoán ngay lập tức</p>
-
-          <div class="container" style="max-width:680px;margin-top:30px;">
-            <div id="aiDiagBox" style="background:var(--bg-card);border:1.5px solid var(--border-color);border-radius:20px;padding:clamp(16px,4vw,28px);box-shadow:0 8px 28px rgba(124,58,237,0.08);">
-
-              <!-- Device type selector -->
-              <div style="margin-bottom:16px;">
-                <label style="font-size:13px;font-weight:700;color:var(--text-main);display:block;margin-bottom:8px;">📱 Loại thiết bị</label>
-                <div id="diagDeviceTypes" style="display:flex;gap:8px;flex-wrap:wrap;">
-                  <button class="diag-device-btn active" data-device="Laptop" onclick="diagSelectDevice(this)" style="padding:8px 16px;border-radius:20px;border:1.5px solid var(--border-color);background:var(--primary);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;">💻 Laptop</button>
-                  <button class="diag-device-btn" data-device="PC Desktop" onclick="diagSelectDevice(this)" style="padding:8px 16px;border-radius:20px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;">🖥️ PC</button>
-                  <button class="diag-device-btn" data-device="MacBook" onclick="diagSelectDevice(this)" style="padding:8px 16px;border-radius:20px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;">🍎 MacBook</button>
-                  <button class="diag-device-btn" data-device="iPad" onclick="diagSelectDevice(this)" style="padding:8px 16px;border-radius:20px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;">📱 iPad</button>
-                </div>
-              </div>
-
-              <!-- Quick symptoms -->
-              <div style="margin-bottom:16px;">
-                <label style="font-size:13px;font-weight:700;color:var(--text-main);display:block;margin-bottom:8px;">⚡ Triệu chứng thường gặp (chọn nhanh)</label>
-                <div id="diagSymptoms" style="display:flex;gap:6px;flex-wrap:wrap;">
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🔴 Không lên nguồn</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">⬛ Màn hình đen</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🔵 Màn hình xanh</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🐌 Máy chạy chậm</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🔥 Máy nóng/quạt kêu</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🔋 Pin không sạc</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">⌨️ Bàn phím hỏng</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">📶 Mất Wifi</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">💾 Ổ cứng lỗi</button>
-                  <button class="diag-symptom-btn" onclick="diagToggleSymptom(this)" style="padding:6px 12px;border-radius:16px;border:1.5px solid var(--border-color);background:#fff;color:var(--text-main);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;">🔊 Không có âm thanh</button>
-                </div>
-              </div>
-
-              <!-- Description textarea -->
-              <div style="margin-bottom:16px;">
-                <label style="font-size:13px;font-weight:700;color:var(--text-main);display:block;margin-bottom:8px;">📝 Mô tả chi tiết lỗi của bạn</label>
-                <textarea id="diagDescInput" rows="4" placeholder="VD: Laptop Dell Inspiron 15 của mình开机nhưng màn hình đen không hiển thị gì, quạt vẫn quay. Tình trạng này bắt đầu từ hôm qua sau khi update Windows..." style="width:100%;padding:12px 16px;border:1.5px solid var(--border-color);border-radius:12px;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;background:var(--bg-card);color:var(--text-main);transition:border-color .2s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-color)'"></textarea>
-                <div style="text-align:right;font-size:11px;color:var(--text-light);margin-top:4px;"><span id="diagCharCount">0</span>/2000</div>
-              </div>
-
-              <!-- Submit button -->
-              <button id="diagSubmitBtn" onclick="diagSubmit()" style="width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;box-shadow:0 4px 16px rgba(124,58,237,0.3);">
-                🔍 Chẩn đoán ngay
-              </button>
-
-              <!-- Results area -->
-              <div id="diagResult" style="display:none;margin-top:24px;"></div>
-
-            </div>
-          </div>
-        </section>
-
-        <style>
-          @media(max-width:767px){
-            #aiDiagBox{padding:16px!important;}
-            .diag-device-btn,.diag-symptom-btn{font-size:11px!important;padding:6px 10px!important;}
-            #diagDescInput{font-size:13px!important;}
-          }
-          .diag-symptom-btn.active{background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important;}
-          .diag-device-btn.active{background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important;}
-          .diag-result-card{background:linear-gradient(135deg,#faf5ff,#f5f3ff);border:1.5px solid #e9d5ff;border-radius:16px;padding:20px;margin-top:8px;}
-          [data-theme="dark"] .diag-result-card{background:#1e1b3a;border-color:#4c2a85;}
-          .diag-loading{display:flex;align-items:center;gap:10px;justify-content:center;padding:30px;color:#7c3aed;font-weight:600;}
-          .diag-loading .spinner{width:20px;height:20px;border:3px solid #e9d5ff;border-top-color:#7c3aed;border-radius:50%;animation:diagSpin 0.8s linear infinite;}
-          @keyframes diagSpin{to{transform:rotate(360deg);}}
-          .diag-cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
-          .diag-cta-btn{flex:1;min-width:120px;padding:12px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;}
-          .diag-cta-primary{background:var(--primary);color:#fff;}
-          .diag-cta-primary:hover{opacity:0.9;}
-          .diag-cta-secondary{background:#fff;color:var(--primary);border:1.5px solid var(--primary);}
-          [data-theme="dark"] .diag-cta-secondary{background:var(--bg-card);color:var(--primary);border-color:var(--primary);}
-        </style>
-
-        <script>
-        /* ══ AI CHẨN ĐOÁN ENGINE ══ */
-        (function(){
-          window._diagDevice = 'Laptop';
-          window._diagSymptoms = [];
-
-          window.diagSelectDevice = function(btn) {
-            document.querySelectorAll('.diag-device-btn').forEach(function(b){ b.classList.remove('active'); b.style.background = '#fff'; b.style.color = 'var(--text-main)'; });
-            btn.classList.add('active');
-            btn.style.background = 'var(--primary)';
-            btn.style.color = '#fff';
-            window._diagDevice = btn.dataset.device;
-          };
-
-          window.diagToggleSymptom = function(btn) {
-            var isActive = btn.classList.toggle('active');
-            var symptom = btn.textContent.trim().replace(/^[^\s]+\s/, '');
-            if (isActive) {
-              btn.style.background = 'var(--primary)';
-              btn.style.color = '#fff';
-              if (window._diagSymptoms.indexOf(symptom) === -1) window._diagSymptoms.push(symptom);
-            } else {
-              btn.style.background = '#fff';
-              btn.style.color = 'var(--text-main)';
-              var idx = window._diagSymptoms.indexOf(symptom);
-              if (idx > -1) window._diagSymptoms.splice(idx, 1);
-            }
-          };
-
-          // Character counter
-          var _diagInput = document.getElementById('diagDescInput');
-          if (_diagInput) {
-            _diagInput.addEventListener('input', function() {
-              var len = this.value.length;
-              document.getElementById('diagCharCount').textContent = len;
-              if (len > 2000) this.value = this.value.substring(0, 2000);
-            });
-          }
-
-          window.diagSubmit = function() {
-            var desc = (_diagInput ? _diagInput.value : '').trim();
-            if (!desc || desc.length < 5) {
-              if (_diagInput) {
-                _diagInput.style.borderColor = '#ef4444';
-                _diagInput.focus();
-                setTimeout(function(){ _diagInput.style.borderColor = 'var(--border-color)'; }, 2000);
-              }
-              showToast && showToast('Vui lòng mô tả lỗi chi tiết hơn!');
-              return;
-            }
-
-            var resultDiv = document.getElementById('diagResult');
-            var submitBtn = document.getElementById('diagSubmitBtn');
-
-            // Show loading
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<div class="diag-loading"><div class="spinner"></div> AI đang phân tích lỗi của bạn...</div>';
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.6';
-            submitBtn.innerText = '⏳ Đang chẩn đoán...';
-
-            // Call AI diagnose backend
-            var _diagEndpoint = 'https://superagent-47f29609.base44.app/functions/aiDiagnose';
-
-            fetch(_diagEndpoint, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                description: desc,
-                deviceType: window._diagDevice,
-                symptoms: window._diagSymptoms
-              })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-              submitBtn.disabled = false;
-              submitBtn.style.opacity = '1';
-              submitBtn.innerText = '🔍 Chẩn đoán lại';
-
-              if (data.error) {
-                resultDiv.innerHTML = '<div class="diag-result-card" style="border-color:#fecaca;background:#fef2f2;"><p style="color:#dc2626;font-weight:600;">⚠️ ' + data.error + '</p></div>';
-                return;
-              }
-
-              var reply = data.reply || 'Không có kết quả. Vui lòng thử lại.';
-
-              // Format markdown to HTML
-              var html = reply
-                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g,'<em>$1</em>')
-                .replace(/`(.*?)`/g,'<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:12px;">$1</code>')
-                .replace(/^---$/gm,'<hr style="border:none;border-top:1px solid var(--border-color);margin:12px 0;">')
-                .split('\n').join('<br>');
-
-              resultDiv.innerHTML =
-                '<div class="diag-result-card">' +
-                '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">' +
-                '<span style="font-size:20px;">🤖</span>' +
-                '<span style="font-weight:800;font-size:15px;color:#7c3aed;">Kết quả chẩn đoán AI</span>' +
-                '</div>' +
-                '<div style="font-size:14px;line-height:1.7;color:var(--text-main);">' + html + '</div>' +
-                '<div class="diag-cta-row">' +
-                '<a href="#dat-lich-section" onclick="var el=document.getElementById(\'dat-lich-section\')||document.getElementById(\'booking-section\');if(el){event.preventDefault();var h=document.getElementById(\'headerNav\');var o=h?h.offsetHeight+4:72;window.scrollTo({top:el.getBoundingClientRect().top+window.pageYOffset-o,behavior:\'smooth\'});}" class="diag-cta-btn diag-cta-primary">📅 Đặt lịch sửa</a>' +
-                '<a href="tel:0963284044" class="diag-cta-btn diag-cta-secondary">📞 Gọi 0963.284.044</a>' +
-                '<a href="https://zalo.me/0963284044" target="_blank" class="diag-cta-btn diag-cta-secondary">💬 Chat Zalo</a>' +
-                '</div>' +
-                '</div>';
-
-              // Scroll to result
-              resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            })
-            .catch(function() {
-              submitBtn.disabled = false;
-              submitBtn.style.opacity = '1';
-              submitBtn.innerText = '🔍 Chẩn đoán lại';
-              resultDiv.innerHTML = '<div class="diag-result-card" style="border-color:#fecaca;background:#fef2f2;"><p style="color:#dc2626;font-weight:600;">⚠️ Kết nối AI gián đoạn. Vui lòng gọi <a href="tel:0963284044" style="color:#dc2626;font-weight:700">0963.284.044</a> để được tư vấn trực tiếp!</p></div>';
-            });
-          };
-        })();
-        </script>
-
-        <!-- ══ END AI CHẨN ĐOÁN ══ -->
 
                 <!-- ══ SẢN PHẨM NỔI BẬT ══ -->
         <section id="san-pham-section" class="reveal">
@@ -3200,6 +3014,23 @@ body {
         <!-- ══ END SẢN PHẨM ══ -->
 
         <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai minh bạch</p>
+
+        <!-- ══ THÔNG TIN BẢO HÀNH & LƯU Ý — hiển thị đồng nhất mobile & desktop ══ -->
+        <div class="container" style="max-width:900px;margin:0 auto 24px;">
+          <div id="pricingNoticeBox" style="background:linear-gradient(135deg,#fff7ed,#fefce8);border:1.5px solid #fde68a;border-radius:16px;padding:clamp(14px,3vw,22px) clamp(16px,4vw,26px);display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:18px;">🛡️</span>
+              <span style="font-weight:800;font-size:14.5px;color:#92400e;">Chính sách bảo hành & Lưu ý quan trọng</span>
+            </div>
+            <ul style="margin:0;padding-left:20px;font-size:13px;line-height:1.75;color:#78350f;">
+              <li><b>Bảo hành:</b> Thời gian bảo hành áp dụng theo từng dịch vụ (xem chi tiết "BH:" ở mỗi dòng trong bảng) — từ <b>1–36 tháng</b> tùy loại linh kiện/dịch vụ. Một số hạng mục sửa chữa linh tinh (câu, hàn chip...) không áp dụng bảo hành.</li>
+              <li><b>Giá tham khảo:</b> Bảng giá trên mang tính niêm yết công khai, giá thực tế có thể thay đổi tùy tình trạng máy, đời máy và linh kiện thay thế — sẽ được báo giá chính xác trước khi sửa.</li>
+              <li><b>Kiểm tra & chẩn đoán:</b> Miễn phí kiểm tra, chẩn đoán trước khi báo giá. Khách hàng đồng ý giá mới tiến hành sửa chữa.</li>
+              <li><b>Điều kiện bảo hành:</b> Không áp dụng với các trường hợp: tự ý tháo máy, vào nước, rơi vỡ, cháy nổ do nguồn điện không ổn định sau khi đã bàn giao.</li>
+            </ul>
+          </div>
+        </div>
+
         <div id="dynamicPricingSection">
         <div class="tab-container reveal" id="priceTabContainer">
             <button class="tab-btn active" id="tabBtn-hardware" role="tab" aria-label="Sửa Phần Cứng" aria-controls="tab-hardware" onclick="switchTab('hardware',this)">Sửa Phần Cứng</button>
