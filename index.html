@@ -5208,7 +5208,99 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       });
   }
 
+  /* ══ AUTO-SLIDE: tự động lướt sản phẩm sau 1-3s khi cuộn tới, dừng khi khách tự thao tác ══ */
+  var _apStopped = false;      /* khách đã tự thao tác -> dừng vĩnh viễn */
+  var _apRunning = false;
+  var _apTimer = null;
+  var _apStartTimer = null;
+  var AP_START_DELAY = 2000;   /* chờ 2s (trong khoảng 1-3s) trước khi tự lướt */
+  var AP_INTERVAL = 3500;      /* khoảng cách giữa mỗi lần tự lướt */
+
+  function _apStopForever() {
+    if (_apStopped) return;
+    _apStopped = true;
+    clearTimeout(_apStartTimer);
+    clearInterval(_apTimer);
+    _apRunning = false;
+  }
+
+  function _apTick() {
+    if (_apStopped) return;
+    var grid = document.getElementById('productGrid');
+    if (!grid || !_filteredCache.length) return;
+    var isDesktop = window.innerWidth >= 900;
+    if (isDesktop) {
+      var totalPages = Math.ceil(_filteredCache.length / _desktopPerPage);
+      if (totalPages <= 1) return;
+      var next = _desktopPage + 1;
+      if (next >= totalPages) next = 0; /* quay lại trang đầu, tạo vòng lặp */
+      _desktopPage = next;
+      renderProducts(_allProducts);
+    } else {
+      var total = _filteredCache.length;
+      if (total <= 2) return;
+      var cardW = grid.scrollWidth / total;
+      var step = cardW * 2; /* mỗi lần lướt 2 sản phẩm (1 cặp) */
+      var maxScroll = grid.scrollWidth - grid.clientWidth;
+      var nextLeft = grid.scrollLeft + step;
+      if (nextLeft >= maxScroll - 4) nextLeft = 0; /* hết danh sách -> quay lại đầu */
+      grid.scrollTo({ left: nextLeft, behavior: 'smooth' });
+    }
+  }
+
+  function _apStart() {
+    if (_apStopped || _apRunning) return;
+    _apRunning = true;
+    clearInterval(_apTimer);
+    _apTimer = setInterval(_apTick, AP_INTERVAL);
+  }
+
+  function _apPause() {
+    clearInterval(_apTimer);
+    _apRunning = false;
+  }
+
+  function _apBindManualStop() {
+    var grid = document.getElementById('productGrid');
+    if (grid && !grid._apBound) {
+      grid._apBound = true;
+      ['touchstart', 'wheel', 'mousedown', 'pointerdown'].forEach(function (evt) {
+        grid.addEventListener(evt, _apStopForever, { passive: true });
+      });
+    }
+    ['productSliderPrev', 'productSliderNext', 'productSliderDots'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && !el._apBound) {
+        el._apBound = true;
+        el.addEventListener('click', _apStopForever);
+      }
+    });
+  }
+
+  function _initAutoSlide() {
+    var section = document.getElementById('san-pham-section');
+    if (!section || !('IntersectionObserver' in window)) return;
+    _apBindManualStop();
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (_apStopped) return;
+        if (entry.isIntersecting) {
+          clearTimeout(_apStartTimer);
+          _apStartTimer = setTimeout(_apStart, AP_START_DELAY);
+        } else {
+          clearTimeout(_apStartTimer);
+          _apPause();
+        }
+      });
+    }, { threshold: 0.35 });
+    observer.observe(section);
+  }
+
   document.addEventListener('DOMContentLoaded', loadProducts);
+  document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(_initAutoSlide, 800); /* chờ sản phẩm render lần đầu */
+  });
 })();
 /* ══════════════ END PRODUCTS LOADER ══════════════ */
 
