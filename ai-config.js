@@ -34,3 +34,7 @@ window.AI_CONFIG = {
 window._AI_ENDPOINT = window.AI_CONFIG.endpoint;
 window._SEND_EMAIL_ENDPOINT = window.AI_CONFIG.sendEmailEndpoint;
 window._AI_CONFIG_LOADED = true;
+
+/* ── Endpoint upload ảnh lên CDN (thay thế /api/upload-image trên GitHub Pages) ── */
+window.AI_CONFIG.uploadImageEndpoint = 'https://superagent-47f29609.base44.app/functions/uploadImage';
+window._CDN_UPLOAD_ENDPOINT = window.AI_CONFIG.uploadImageEndpoint;
