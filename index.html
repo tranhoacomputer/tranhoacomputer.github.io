@@ -1322,6 +1322,239 @@
 [data-theme="dark"] .product-card-img { background:#0f172a; }
 [data-theme="dark"] .product-card-name { color:#f1f5f9; }
 [data-theme="dark"] .product-card-zalo { background: linear-gradient(135deg,#1a7aff,#0052cc); }
+
+/* ══ PRODUCT FILTER BAR ══ */
+.product-filter-bar {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  margin: 14px 0 10px; padding: 10px 14px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+}
+.product-search-input {
+  flex: 1; min-width: 180px;
+  padding: 8px 12px; font-size: 13px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px; background: var(--surface, #fff);
+  color: var(--text-main, #1e293b);
+  font-family: inherit;
+}
+.product-search-input:focus {
+  outline: none; border-color: var(--primary, #3b82f6);
+  box-shadow: 0 0 0 2px rgba(59,130,235,.15);
+}
+.product-sort-select {
+  padding: 8px 10px; font-size: 13px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px; background: var(--surface, #fff);
+  color: var(--text-main, #1e293b);
+  font-family: inherit; cursor: pointer;
+}
+.product-price-range {
+  display: flex; gap: 6px; align-items: center;
+}
+.product-price-range input {
+  width: 90px; padding: 7px 8px; font-size: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px; background: var(--surface, #fff);
+  color: var(--text-main, #1e293b);
+  font-family: inherit;
+}
+.product-filter-btn {
+  padding: 7px 14px; font-size: 12px; font-weight: 700;
+  border: none; border-radius: 8px; cursor: pointer;
+  background: var(--primary, #3b82f6); color: #fff;
+  font-family: inherit;
+}
+.product-filter-btn:hover { opacity: .9; }
+.product-filter-clear {
+  padding: 7px 10px; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px; cursor: pointer;
+  background: transparent; color: var(--text-main, #1e293b);
+  font-family: inherit;
+}
+.product-filter-clear:hover { background: var(--bg-hover, #f1f5f9); }
+
+@media(max-width:899px) {
+  .product-filter-bar { gap: 8px; padding: 8px 10px; }
+  .product-search-input { min-width: 140px; font-size: 12px; }
+  .product-price-range input { width: 70px; }
+}
+
+/* Dark mode filter */
+[data-theme="dark"] .product-filter-bar { background:#1e293b; border-color:#334155; }
+[data-theme="dark"] .product-search-input,
+[data-theme="dark"] .product-sort-select,
+[data-theme="dark"] .product-price-range input { background:#0f172a; border-color:#334155; color:#f1f5f9; }
+
+/* ══ DISCOUNT BADGE ══ */
+.product-badge-discount {
+  position: absolute; top: 8px; left: 8px; z-index: 5;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff; font-size: 11px; font-weight: 800;
+  padding: 3px 8px; border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(220,38,38,.4);
+  letter-spacing: .3px;
+}
+.product-badge-discount .badge-icon {
+  font-size: 10px; margin-right: 1px;
+}
+
+/* ══ ADD TO CART BUTTON ══ */
+.product-card-cart-btn {
+  border: 1px solid var(--border-color, #e2e8f0);
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  width: 100%; padding: 7px 10px; margin-top: 6px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 12px; font-weight: 700;
+  transition: all .2s;
+}
+.product-card-cart-btn:hover { transform: scale(1.02); opacity: .92; }
+.product-card-cart-btn.in-cart { background: linear-gradient(135deg, #16a34a, #15803d); }
+
+/* ══ FLOATING CART ══ */
+.cart-float-btn {
+  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #fff; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(234,88,12,.4);
+  transition: transform .2s;
+}
+.cart-float-btn:hover { transform: scale(1.08); }
+.cart-float-btn svg { width: 26px; height: 26px; }
+.cart-count-badge {
+  position: absolute; top: -4px; right: -4px;
+  background: #dc2626; color: #fff;
+  font-size: 11px; font-weight: 800;
+  min-width: 20px; height: 20px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 5px; border: 2px solid var(--bg-main, #f8fafc);
+}
+.cart-count-badge.hidden { display: none; }
+
+/* ══ CART DRAWER ══ */
+.cart-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,.5);
+  opacity: 0; visibility: hidden;
+  transition: opacity .3s, visibility .3s;
+}
+.cart-overlay.open { opacity: 1; visibility: visible; }
+.cart-drawer {
+  position: fixed; top: 0; right: 0; z-index: 1001;
+  width: 380px; max-width: 90vw; height: 100vh;
+  background: var(--surface, #fff);
+  box-shadow: -4px 0 24px rgba(0,0,0,.15);
+  transform: translateX(100%);
+  transition: transform .3s ease;
+  display: flex; flex-direction: column;
+}
+.cart-drawer.open { transform: translateX(0); }
+.cart-drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+.cart-drawer-title { font-size: 18px; font-weight: 800; color: var(--text-main, #1e293b); }
+.cart-drawer-close {
+  background: none; border: none; cursor: pointer; font-size: 22px;
+  color: var(--text-muted, #94a3b8); padding: 4px 8px;
+  border-radius: 8px; transition: background .2s;
+}
+.cart-drawer-close:hover { background: var(--bg-hover, #f1f5f9); }
+.cart-drawer-body {
+  flex: 1; overflow-y: auto; padding: 12px 16px;
+}
+.cart-empty-msg {
+  text-align: center; padding: 60px 20px;
+  color: var(--text-muted, #94a3b8); font-size: 14px;
+}
+.cart-empty-msg .cart-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.cart-item {
+  display: flex; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+.cart-item-img {
+  width: 64px; height: 64px; flex-shrink: 0;
+  border-radius: 8px; overflow: hidden;
+  background: #f1f5f9;
+}
+.cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+.cart-item-img.no-img {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
+  font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
+  margin-bottom: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cart-item-price { font-size: 13px; font-weight: 800; color: #dc2626; }
+.cart-item-orig { font-size: 11px; color: #94a3b8; text-decoration: line-through; }
+.cart-item-controls {
+  display: flex; align-items: center; gap: 8px; margin-top: 6px;
+}
+.cart-qty-btn {
+  width: 26px; height: 26px; border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px; background: var(--surface, #fff); cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--text-main, #1e293b);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s;
+}
+.cart-qty-btn:hover { background: var(--bg-hover, #f1f5f9); }
+.cart-qty-val {
+  font-size: 13px; font-weight: 700; min-width: 24px; text-align: center;
+  color: var(--text-main, #1e293b);
+}
+.cart-item-remove {
+  margin-left: auto; background: none; border: none; cursor: pointer;
+  color: #ef4444; font-size: 18px; padding: 2px 6px;
+}
+.cart-item-remove:hover { opacity: .7; }
+.cart-drawer-footer {
+  padding: 16px 20px; border-top: 1px solid var(--border-color, #e2e8f0);
+  background: var(--surface, #fff);
+}
+.cart-total-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.cart-total-label { font-size: 15px; font-weight: 700; color: var(--text-main, #1e293b); }
+.cart-total-val { font-size: 20px; font-weight: 900; color: #dc2626; }
+.cart-checkout-btn {
+  width: 100%; padding: 12px; font-size: 15px; font-weight: 700;
+  border: none; border-radius: 12px; cursor: pointer;
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  color: #fff; font-family: inherit;
+  transition: opacity .2s;
+}
+.cart-checkout-btn:hover { opacity: .92; }
+.cart-checkout-btn:disabled { opacity: .5; cursor: not-allowed; }
+.cart-clear-btn {
+  width: 100%; padding: 8px; margin-top: 8px; font-size: 12px;
+  border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px;
+  background: transparent; cursor: pointer; color: var(--text-muted, #94a3b8);
+  font-family: inherit;
+}
+.cart-clear-btn:hover { color: #ef4444; }
+
+[data-theme="dark"] .cart-drawer { background:#1e293b; }
+[data-theme="dark"] .cart-drawer-header { border-color:#334155; }
+[data-theme="dark"] .cart-drawer-title { color:#f1f5f9; }
+[data-theme="dark"] .cart-item { border-color:#334155; }
+[data-theme="dark"] .cart-item-name { color:#f1f5f9; }
+[data-theme="dark"] .cart-qty-btn { background:#0f172a; border-color:#334155; color:#f1f5f9; }
+[data-theme="dark"] .cart-drawer-footer { background:#1e293b; border-color:#334155; }
+[data-theme="dark"] .cart-total-label { color:#f1f5f9; }
+[data-theme="dark"] .cart-clear-btn { border-color:#334155; }
+
+
 [data-theme="dark"] .product-slider-btn { background: #1e293b; color: #f1f5f9; box-shadow: 0 2px 12px rgba(0,0,0,.4); }
 
 /* Lưu ý info boxes (inline-style boxes in pricing tabs) */
@@ -2992,6 +3225,24 @@ body {
           <div class="product-section-tabs" id="productTabBar">
             <button class="product-tab-btn active" data-cat="all" onclick="filterProducts('all',this)">Tất cả</button>
           </div>
+          <!-- ══ FILTER BAR ══ -->
+          <div class="product-filter-bar" id="productFilterBar">
+            <input type="text" class="product-search-input" id="productSearchInput" placeholder="🔍 Tìm theo tên sản phẩm..." oninput="filterAndRenderProducts()">
+            <select class="product-sort-select" id="productSortSelect" onchange="filterAndRenderProducts()">
+              <option value="default">Sắp xếp: Mặc định</option>
+              <option value="price-asc">Giá: Thấp → Cao</option>
+              <option value="price-desc">Giá: Cao → Thấp</option>
+              <option value="name-asc">Tên: A → Z</option>
+              <option value="discount">Giảm giá nhiều nhất</option>
+            </select>
+            <div class="product-price-range">
+              <input type="number" class="product-price-min" id="productPriceMin" placeholder="Giá từ" min="0" onchange="filterAndRenderProducts()">
+              <span>—</span>
+              <input type="number" class="product-price-max" id="productPriceMax" placeholder="Giá đến" min="0" onchange="filterAndRenderProducts()">
+            </div>
+            <button class="product-filter-clear" onclick="clearFilters()">✕ Xóa lọc</button>
+          </div>
+
           <div class="product-slider-wrap" id="productSliderWrap">
             <button class="product-slider-btn prev hidden" id="productSliderPrev" onclick="productSliderNav(-1)" aria-label="Trước">&#8249;</button>
             <div class="product-grid" id="productGrid">
@@ -3012,7 +3263,40 @@ body {
             <span class="swipe-arrow-right">→</span>
           </div>
         </section>
-        <!-- ══ END SẢN PHẨM ══ -->
+        
+        <!-- ══ CART DRAWER ══ -->
+        <div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+        <div class="cart-drawer" id="cartDrawer">
+          <div class="cart-drawer-header">
+            <span class="cart-drawer-title">🛒 Giỏ hàng</span>
+            <button class="cart-drawer-close" onclick="toggleCart(false)">✕</button>
+          </div>
+          <div class="cart-drawer-body" id="cartDrawerBody">
+            <div class="cart-empty-msg" id="cartEmptyMsg">
+              <div class="cart-empty-icon">🛒</div>
+              <div>Chưa có sản phẩm trong giỏ</div>
+            </div>
+          </div>
+          <div class="cart-drawer-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total-row">
+              <span class="cart-total-label">Tổng cộng:</span>
+              <span class="cart-total-val" id="cartTotalVal">0đ</span>
+            </div>
+            <button class="cart-checkout-btn" onclick="cartCheckout()">Gửi đơn hàng qua Zalo</button>
+            <button class="cart-clear-btn" onclick="clearCart()">Xóa toàn bộ giỏ hàng</button>
+          </div>
+        </div>
+        <!-- ══ FLOATING CART BUTTON ══ -->
+        <button class="cart-float-btn" id="cartFloatBtn" onclick="toggleCart(true)" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3h2l2.5 12.5a2 2 0 0 0 2 1.5h8.5a2 2 0 0 0 2-1.5L23 7H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
+            <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+          </svg>
+          <span class="cart-count-badge hidden" id="cartCountBadge">0</span>
+        </button>
+
+<!-- ══ END SẢN PHẨM ══ -->
 
         <div class="section-title-wrap"><span class="section-badge">BẢNG GIÁ</span></div><div id="muc-bang-gia" class="section-title reveal">BẢNG GIÁ DỊCH VỤ NIÊM YẾT</div><p class="section-subtitle">Giá niêm yết công khai minh bạch</p>
 
@@ -4993,15 +5277,32 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
 
   /* ── Build card HTML ── */
   function _buildCard(p) {
+    /* ── Calculate discount % ── */
+    function _parsePriceNum(s) {
+      if (!s) return null;
+      s = String(s).trim();
+      s = s.replace(/[đĐ₫]/g, '').replace(/[.,\s]/g, '');
+      var m = s.match(/(\d+)/);
+      return m ? parseInt(m[1], 10) : null;
+    }
+    var _discountPct = 0;
+    var origNum = _parsePriceNum(p.originalPrice);
+    var priceNum = _parsePriceNum(p.price);
+    if (origNum && priceNum && origNum > priceNum) {
+      _discountPct = Math.round((origNum - priceNum) / origNum * 100);
+    }
+    var badgeHtml = _discountPct > 0
+      ? '<span class="product-badge-discount"><span class="badge-icon">🔻</span>-' + _discountPct + '%</span>'
+      : '';
+
     var imgHtml = p.imageUrl
-      ? '<div class="product-card-img"><img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.style.cssText=\'\';this.remove()"></div>'
-      : '<div class="product-card-img no-img"></div>';
+      ? '<div class="product-card-img">' + badgeHtml + '<img src="' + p.imageUrl + '" alt="' + p.name + '" loading="lazy" onerror="this.parentElement.classList.add(\'no-img\');this.style.cssText=\'\';this.remove()"></div>'
+      : '<div class="product-card-img no-img">' + badgeHtml + '</div>';
+
     function _fmtPrice(s) {
       if (!s) return s;
       s = String(s).trim();
-      // Đã có ký hiệu giá → giữ nguyên
       if (/[đĐ₫]/.test(s) || /[kK]\s*$/.test(s) || /[kK]\s*[-–]/.test(s)) return s;
-      // Chỉ là số thuần → thêm đ
       var clean = s.replace(/[.,\s]/g,'');
       if (/^\d+$/.test(clean)) return Number(clean).toLocaleString('vi-VN') + 'đ';
       return s;
@@ -5013,11 +5314,15 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var catHtml   = p.category ? '<div class="product-card-cat">' + p.category + '</div>' : '';
     var _name  = String(p.name||'').replace(/'/g, "\\'");
     var _price = String(p.price||'').replace(/'/g, "\\'");
+    var _imgUrl = String(p.imageUrl||'').replace(/'/g, "\\'");
+    var _id = p.id || _name;
+    var _orig = String(p.originalPrice||'').replace(/'/g, "\\'");
     var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
-    return '<div class="product-card">' + imgHtml +
+    var cartBtn = '<button class="product-card-cart-btn" type="button" onclick="event.stopPropagation();addToCart(\'' + _id + '\',\'' + _name + '\',\'' + _price + '\',\'' + _orig + '\',\'' + _imgUrl + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Thêm vào giỏ</button>';
+    return '<div class="product-card" data-pid="' + _id + '">' + imgHtml +
       '<div class="product-card-body">' + catHtml +
       '<div class="product-card-name">' + p.name + '</div>' +
-      origHtml + priceHtml + noteHtml + descHtml + zaloBtn + '</div></div>';
+      origHtml + priceHtml + noteHtml + descHtml + zaloBtn + cartBtn + '</div></div>';
   }
 
   /* ── Update desktop nav buttons + dots ── */
@@ -5173,8 +5478,260 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     _desktopPage = 0;
     document.querySelectorAll('#productTabBar .product-tab-btn').forEach(function(b){ b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
+    filterAndRenderProducts();
+  };
+
+  /* ══ FILTER + SORT LOGIC ══ */
+  function _parsePriceNum(s) {
+    if (!s) return null;
+    s = String(s).trim().replace(/[đĐ₫]/g, '').replace(/[.,\s]/g, '');
+    var m = s.match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  window.filterAndRenderProducts = function() {
+    var searchEl = document.getElementById('productSearchInput');
+    var sortEl = document.getElementById('productSortSelect');
+    var minEl = document.getElementById('productPriceMin');
+    var maxEl = document.getElementById('productPriceMax');
+    if (!searchEl || !sortEl) { renderProducts(_allProducts); return; }
+
+    var q = searchEl.value.trim().toLowerCase();
+    var sortBy = sortEl.value;
+    var minP = minEl && minEl.value ? parseInt(minEl.value, 10) : null;
+    var maxP = maxEl && maxEl.value ? parseInt(maxEl.value, 10) : null;
+
+    var filtered = _allProducts.filter(function(p) {
+      /* Category filter */
+      if (_activeTab !== 'all' && p.category !== _activeTab) return false;
+      /* Search by name */
+      if (q) {
+        var name = String(p.name || '').toLowerCase();
+        if (name.indexOf(q) < 0) return false;
+      }
+      /* Price filter */
+      if (minP != null || maxP != null) {
+        var price = _parsePriceNum(p.price);
+        if (price == null) return false;
+        if (minP != null && price < minP) return false;
+        if (maxP != null && price > maxP) return false;
+      }
+      return true;
+    });
+
+    /* Sort */
+    if (sortBy === 'price-asc') {
+      filtered.sort(function(a, b) { return (_parsePriceNum(a.price) || 0) - (_parsePriceNum(b.price) || 0); });
+    } else if (sortBy === 'price-desc') {
+      filtered.sort(function(a, b) { return (_parsePriceNum(b.price) || 0) - (_parsePriceNum(a.price) || 0); });
+    } else if (sortBy === 'name-asc') {
+      filtered.sort(function(a, b) { return String(a.name||'').localeCompare(String(b.name||''), 'vi'); });
+    } else if (sortBy === 'discount') {
+      filtered.sort(function(a, b) {
+        var da = 0, db = 0;
+        var oa = _parsePriceNum(a.originalPrice), pa = _parsePriceNum(a.price);
+        var ob = _parsePriceNum(b.originalPrice), pb = _parsePriceNum(b.price);
+        if (oa && pa && oa > pa) da = (oa - pa) / oa;
+        if (ob && pb && ob > pb) db = (ob - pb) / ob;
+        return db - da;
+      });
+    }
+
+    _filteredCache = filtered;
+    _desktopPage = 0;
+    renderProducts(filtered);
+  };
+
+  window.clearFilters = function() {
+    var searchEl = document.getElementById('productSearchInput');
+    var sortEl = document.getElementById('productSortSelect');
+    var minEl = document.getElementById('productPriceMin');
+    var maxEl = document.getElementById('productPriceMax');
+    if (searchEl) searchEl.value = '';
+    if (sortEl) sortEl.value = 'default';
+    if (minEl) minEl.value = '';
+    if (maxEl) maxEl.value = '';
     renderProducts(_allProducts);
   };
+
+  /* ══ CART LOGIC ══ */
+  var _cart = [];
+  try { _cart = JSON.parse(localStorage.getItem('thc_cart') || '[]'); } catch(e) { _cart = []; }
+
+  function _saveCart() {
+    try { localStorage.setItem('thc_cart', JSON.stringify(_cart)); } catch(e) {}
+  }
+
+  function _fmtPriceNum(n) {
+    if (!n) return '0đ';
+    return Number(n).toLocaleString('vi-VN') + 'đ';
+  }
+
+  window.addToCart = function(id, name, price, originalPrice, imageUrl) {
+    var existing = _cart.find(function(item) { return item.id === id; });
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      _cart.push({ id: id, name: name, price: price, originalPrice: originalPrice, imageUrl: imageUrl, qty: 1 });
+    }
+    _saveCart();
+    _updateCartUI();
+    /* Show toast */
+    if (typeof showToast === 'function') {
+      showToast('✅ Đã thêm "' + name + '" vào giỏ hàng');
+    } else {
+      _showMiniToast('✅ Đã thêm "' + name + '" vào giỏ');
+    }
+  };
+
+  window.removeFromCart = function(id) {
+    _cart = _cart.filter(function(item) { return item.id !== id; });
+    _saveCart();
+    _updateCartUI();
+  };
+
+  window.changeCartQty = function(id, delta) {
+    var item = _cart.find(function(it) { return it.id === id; });
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      _cart = _cart.filter(function(it) { return it.id !== id; });
+    }
+    _saveCart();
+    _updateCartUI();
+  };
+
+  window.clearCart = function() {
+    if (!_cart.length) return;
+    if (!confirm('Xóa toàn bộ sản phẩm trong giỏ hàng?')) return;
+    _cart = [];
+    _saveCart();
+    _updateCartUI();
+  };
+
+  window.toggleCart = function(open) {
+    var drawer = document.getElementById('cartDrawer');
+    var overlay = document.getElementById('cartOverlay');
+    if (open) {
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      _renderCartItems();
+    } else {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+  };
+
+  function _updateCartUI() {
+    var btn = document.getElementById('cartFloatBtn');
+    var badge = document.getElementById('cartCountBadge');
+    if (!btn || !badge) return;
+    var count = _cart.reduce(function(s, it) { return s + it.qty; }, 0);
+    if (count > 0) {
+      btn.style.display = 'flex';
+      badge.classList.remove('hidden');
+      badge.textContent = count;
+    } else {
+      btn.style.display = 'none';
+      badge.classList.add('hidden');
+    }
+    _renderCartItems();
+  }
+
+  function _renderCartItems() {
+    var body = document.getElementById('cartDrawerBody');
+    var footer = document.getElementById('cartFooter');
+    var emptyMsg = document.getElementById('cartEmptyMsg');
+    if (!body) return;
+
+    if (!_cart.length) {
+      body.innerHTML = '<div class="cart-empty-msg"><div class="cart-empty-icon">🛒</div><div>Chưa có sản phẩm trong giỏ</div></div>';
+      if (footer) footer.style.display = 'none';
+      return;
+    }
+
+    var html = _cart.map(function(item) {
+      var imgHtml = item.imageUrl
+        ? '<div class="cart-item-img"><img src="' + item.imageUrl + '" alt="' + item.name + '"></div>'
+        : '<div class="cart-item-img no-img">🖥️</div>';
+      var origHtml = item.originalPrice
+        ? '<span class="cart-item-orig">' + _fmtPrice(String(item.originalPrice)) + '</span>'
+        : '';
+      return '<div class="cart-item">' + imgHtml +
+        '<div class="cart-item-info">' +
+        '<div class="cart-item-name">' + item.name + '</div>' +
+        '<div><span class="cart-item-price">' + _fmtPrice(String(item.price)) + '</span> ' + origHtml + '</div>' +
+        '<div class="cart-item-controls">' +
+        '<button class="cart-qty-btn" onclick="changeCartQty(\'' + item.id + '\',-1)">−</button>' +
+        '<span class="cart-qty-val">' + item.qty + '</span>' +
+        '<button class="cart-qty-btn" onclick="changeCartQty(\'' + item.id + '\',1)">+</button>' +
+        '<button class="cart-item-remove" onclick="removeFromCart(\'' + item.id + '\')">×</button>' +
+        '</div></div></div>';
+    }).join('');
+    body.innerHTML = html;
+
+    /* Calculate total */
+    var total = _cart.reduce(function(s, it) {
+      var p = _parsePriceNum(it.price) || 0;
+      return s + p * it.qty;
+    }, 0);
+    var totalEl = document.getElementById('cartTotalVal');
+    if (totalEl) totalEl.textContent = _fmtPriceNum(total);
+    if (footer) footer.style.display = 'block';
+  }
+
+  function _fmtPrice(s) {
+    if (!s) return s;
+    s = String(s).trim();
+    if (/[đĐ₫]/.test(s) || /[kK]\s*$/.test(s) || /[kK]\s*[-–]/.test(s)) return s;
+    var clean = s.replace(/[.,\s]/g, '');
+    if (/^\d+$/.test(clean)) return Number(clean).toLocaleString('vi-VN') + 'đ';
+    return s;
+  }
+
+  window.cartCheckout = function() {
+    if (!_cart.length) return;
+    var msg = '🛒 ĐƠN HÀNG - Trần Hoa Computer\\n\\n';
+    var total = 0;
+    _cart.forEach(function(it, i) {
+      var p = _parsePriceNum(it.price) || 0;
+      var lineTotal = p * it.qty;
+      total += lineTotal;
+      msg += (i+1) + '. ' + it.name + '\\n';
+      msg += '   Giá: ' + _fmtPrice(String(it.price)) + ' x ' + it.qty + ' = ' + _fmtPriceNum(lineTotal) + '\\n\\n';
+    });
+    msg += '═══════════\\n';
+    msg += 'TỔNG CỘNG: ' + _fmtPriceNum(total) + '\\n\\n';
+    msg += 'Vui lòng tư vấn giúp tôi!\\n';
+    msg += 'Xem thêm: https://tranhoacomputer.github.io/#san-pham-section';
+
+    function doOpen() {
+      window.open('https://zalo.me/0963284044', '_blank', 'noopener');
+      showToast('📋 Đã copy đơn hàng! Paste vào chat Zalo nhé 👇');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(doOpen).catch(doOpen);
+    } else {
+      doOpen();
+    }
+  };
+
+  function _showMiniToast(msg) {
+    var t = document.getElementById('thc-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'thc-toast';
+      t.style.cssText = 'position:fixed;bottom:90px;right:20px;z-index:9999;background:#16a34a;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);opacity:0;transition:opacity .3s;pointer-events:none;';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.opacity = '1';
+    setTimeout(function() { t.style.opacity = '0'; }, 2500);
+  }
+
+  /* Init cart UI on load */
+  document.addEventListener('DOMContentLoaded', function() { _updateCartUI(); });
+
 
   function loadProducts() {
     var url = GAS_URL + '?action=getProducts';
