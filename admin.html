@@ -57,12 +57,14 @@
   }
 
   /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
+  /* v36: thứ tự ưu tiên: override → THC_CONFIG (config.js) → window.GAS_URL → localStorage → '' */
   function getGasUrl(override) {
     if (isValidGasUrl(override)) return unquoteString(override);
     if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return unquoteString(window.THC_CONFIG.GAS_URL);
     if (window.GAS_URL && isValidGasUrl(window.GAS_URL)) return unquoteString(window.GAS_URL);
-    /* Default: cố định theo GAS URL hiện tại (không dùng localStorage/sessionStorage) */
-    return 'https://script.google.com/macros/s/AKfycbwQGNLmOPQy31xJdiTDR2p1B9OjO9NBYHHxj2zbYadytLhiFa2MQBZfXFnJz5fq8njh/exec';
+    /* v36: không còn URL cứng — đọc từ localStorage (admin đặt tay) hoặc trả '' */
+    try { var _ls = localStorage.getItem('thc_gasUrl'); if (isValidGasUrl(_ls)) return _ls; } catch(e){}
+    return '';
   }
 
   /* ── helpers ── */

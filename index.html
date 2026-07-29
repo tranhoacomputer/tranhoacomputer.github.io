@@ -5081,13 +5081,15 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     <button id="backToTop">↑</button>
         <script>
     /* ── GAS Backend URL (Google Apps Script) ── */
-    /* Đồng nhất endpoint qua sync.js (chỉ 1 nơi cấu hình). */
-    var GAS_URL_DEFAULT = (window.THC_CONFIG && window.THC_CONFIG.GAS_URL)
-      ? window.THC_CONFIG.GAS_URL
-      : (window.GAS_URL || '');
+    /* v36: dùng THC_GAS.getUrl() nếu có (config.js đã load), fallback về pattern cũ */
+    var GAS_URL_DEFAULT = (window.THC_GAS && typeof window.THC_GAS.getUrl === 'function')
+      ? window.THC_GAS.getUrl()
+      : ((window.THC_CONFIG && window.THC_CONFIG.GAS_URL)
+          ? window.THC_CONFIG.GAS_URL
+          : (window.GAS_URL || ''));
     (function(){
       if (!GAS_URL_DEFAULT || !String(GAS_URL_DEFAULT).startsWith('https://')) {
-        console.warn('[THC] Missing GAS URL. Hãy đảm bảo file sync.js được load trong <head>.');
+        console.warn('[THC] Missing GAS URL. Hãy đảm bảo config.js được load trong <head> TRƯỚC sync.js.');
       } else {
         window.GAS_URL = GAS_URL_DEFAULT;
       }
@@ -9657,7 +9659,13 @@ if (!window._AI_CONFIG_LOADED) {
     /* Chỉ lắng nghe thay đổi endpoint GAS URL (không sync config bằng localStorage) */
     if (!e || e.key !== 'thc_gasUrl') return;
     if (e.newValue && e.newValue.startsWith('https://')) {
-      window.GAS_URL = e.newValue;
+      /* v36: dùng THC_GAS.setUrl để cập nhật đồng bộ tất cả references */
+      if (window.THC_GAS && typeof window.THC_GAS.setUrl === 'function') {
+        window.THC_GAS.setUrl(e.newValue);
+      } else {
+        window.GAS_URL = e.newValue;
+        if (window.THC_CONFIG) window.THC_CONFIG.GAS_URL = e.newValue;
+      }
       if (typeof THC_GAS_CONFIG_URL !== 'undefined') THC_GAS_CONFIG_URL = e.newValue;
       if (typeof _thcStopLongPoll === 'function') _thcStopLongPoll();
       if (typeof autoLoadFromGAS === 'function') autoLoadFromGAS().finally(function(){

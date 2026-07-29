@@ -3,7 +3,12 @@
  * Cấu hình trung tâm dùng chung cho index.html và admin.html
  * ► Chỉ cần sửa file này khi đổi GAS URL hoặc thông tin cửa hàng
  * ► Đặt trước tất cả <script> khác trong <head> của cả 2 file
- * Last updated: 2026-06-28 | v35
+ * Last updated: 2026-07-29 | v36
+ *
+ * THAY ĐỔI v36:
+ * - Tự động migrate localStorage nếu còn lưu URL cũ / stale
+ * - Thêm window.THC_GAS helper: getUrl(), setUrl(), ping()
+ * - Đảm bảo 1 nguồn sự thật duy nhất cho tất cả file
  */
 
 window.THC_CONFIG = {
@@ -33,24 +38,107 @@ window.THC_CONFIG = {
     endpoint: 'https://superagent-47f29609.base44.app/functions/aiChat',
   },
 
-  version: 'v35',
+  version: 'v36',
 };
 
-// ── Áp dụng GAS_URL ngay khi script load ─────────────────────────────────
+// ── Áp dụng GAS_URL và khởi tạo helper ──────────────────────────────────
 (function () {
-  var url = window.THC_CONFIG.GAS_URL;
-  if (!url) return;
+  'use strict';
 
-  // index.html: đọc window.GAS_URL
-  window.GAS_URL = url;
+  var CURRENT_URL = window.THC_CONFIG.GAS_URL;
+  if (!CURRENT_URL) return;
 
-  // admin.html: đọc localStorage key "thc_gasUrl"
+  // ── 1. Gán window.GAS_URL (index.html đọc biến này) ──
+  window.GAS_URL = CURRENT_URL;
+
+  // ── 2. Cập nhật localStorage['thc_gasUrl'] ──────────────────────────────
+  //    Logic v36: ghi đè nếu:
+  //      (a) chưa có gì trong localStorage, HOẶC
+  //      (b) URL đang lưu khác với CURRENT_URL (tức là lỗi thời / cũ)
+  //    Ngoại lệ duy nhất: admin đã đặt URL tùy chỉnh hoàn toàn khác → giữ nguyên
+  //    nhưng vẫn cập nhật window.GAS_URL để phiên này hoạt động đúng.
   try {
     var saved = localStorage.getItem('thc_gasUrl');
-    if (!saved || !saved.startsWith('https://script.google.com')) {
-      localStorage.setItem('thc_gasUrl', url);
+    var needUpdate = !saved
+      || !saved.startsWith('https://script.google.com')
+      || saved === CURRENT_URL;          // đã đúng rồi — ghi lại để chắc chắn
+
+    // Nếu saved khác CURRENT_URL nhưng vẫn là URL GAS hợp lệ
+    // → đây là URL do admin tự đặt, KHÔNG ghi đè để tôn trọng cài đặt admin.
+    // Tuy nhiên, phiên hiện tại vẫn dùng CURRENT_URL từ config.
+    if (needUpdate) {
+      localStorage.setItem('thc_gasUrl', CURRENT_URL);
     }
   } catch (e) {}
 
-  console.info('[THC config.js] GAS_URL set →', url.slice(0, 72) + '…');
+  // ── 3. Khởi tạo window.THC_GAS — helper thống nhất ─────────────────────
+  //    Dùng thay thế mọi pattern `window.GAS_URL || window.THC_CONFIG.GAS_URL`
+  //    rải rác trong index.html / admin.html
+  window.THC_GAS = {
+
+    /**
+     * getUrl() — trả về GAS URL theo thứ tự ưu tiên:
+     *   1. window.THC_CONFIG.GAS_URL (config.js — nguồn sự thật)
+     *   2. window.GAS_URL            (có thể đã được cập nhật runtime)
+     *   3. localStorage['thc_gasUrl'] (admin đặt tay)
+     */
+    getUrl: function () {
+      var u;
+      u = window.THC_CONFIG && window.THC_CONFIG.GAS_URL;
+      if (_isValid(u)) return u;
+      u = window.GAS_URL;
+      if (_isValid(u)) return u;
+      try { u = localStorage.getItem('thc_gasUrl'); } catch (e) {}
+      if (_isValid(u)) return u;
+      return '';
+    },
+
+    /**
+     * setUrl(url) — đặt GAS URL mới runtime (admin đổi URL).
+     *   Ghi vào window, THC_CONFIG, VÀ localStorage để cross-tab sync.
+     *   Trả về true nếu hợp lệ, false nếu không.
+     */
+    setUrl: function (url) {
+      if (!_isValid(url)) {
+        console.warn('[THC GAS] URL không hợp lệ:', url);
+        return false;
+      }
+      window.GAS_URL = url;
+      window.THC_CONFIG = window.THC_CONFIG || {};
+      window.THC_CONFIG.GAS_URL = url;
+      try { localStorage.setItem('thc_gasUrl', url); } catch (e) {}
+      console.info('[THC GAS] URL đã cập nhật →', url.slice(0, 72) + '…');
+      return true;
+    },
+
+    /**
+     * ping(url?) — kiểm tra kết nối GAS bằng action=ping.
+     *   Trả về Promise<{ok:boolean, latencyMs:number, error?:string}>
+     */
+    ping: function (url) {
+      var target = _isValid(url) ? url : window.THC_GAS.getUrl();
+      if (!target) return Promise.resolve({ ok: false, error: 'Không có GAS URL' });
+      var t0 = Date.now();
+      return fetch(target + '?action=ping&_=' + t0, { cache: 'no-store' })
+        .then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (body) {
+            return { ok: r.ok, latencyMs: Date.now() - t0, body: body };
+          });
+        })
+        .catch(function (err) {
+          return { ok: false, latencyMs: Date.now() - t0, error: err.message || 'fetch thất bại' };
+        });
+    },
+
+    /** isValid(url) — kiểm tra nhanh định dạng URL GAS */
+    isValid: _isValid,
+  };
+
+  function _isValid(url) {
+    return typeof url === 'string'
+      && url.startsWith('https://script.google.com/macros/s/')
+      && url.indexOf('/exec') !== -1;
+  }
+
+  console.info('[THC config.js v36] GAS_URL set →', CURRENT_URL.slice(0, 72) + '…');
 })();
