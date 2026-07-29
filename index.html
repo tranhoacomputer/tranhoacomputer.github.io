@@ -1443,6 +1443,58 @@
 }
 .cart-count-badge.hidden { display: none; }
 
+/* ══ PRODUCT DETAIL MODAL ══ */
+.pdm-overlay { position: fixed; inset: 0; z-index: 20000; background: rgba(15,23,42,.65); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s ease; padding: 16px; }
+.pdm-overlay.open { opacity: 1; visibility: visible; }
+.pdm-card { background: #fff; border-radius: 20px; width: 100%; max-width: 720px; max-height: 92vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,.3); transform: scale(.92) translateY(10px); transition: transform .25s ease; }
+.pdm-overlay.open .pdm-card { transform: scale(1) translateY(0); }
+[data-theme="dark"] .pdm-card { background: #1e293b; }
+.pdm-head { display: flex; justify-content: flex-end; padding: 10px 14px 0; }
+.pdm-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-hover, #f1f5f9); color: var(--text-main, #1e293b); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+[data-theme="dark"] .pdm-close { background: #334155; color: #f1f5f9; }
+.pdm-body { padding: 4px 20px 24px; }
+.pdm-main-img { width: 100%; aspect-ratio: 4/3; border-radius: 14px; overflow: hidden; background: var(--bg-hover, #f1f5f9); display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
+.pdm-main-img img { width: 100%; height: 100%; object-fit: cover; }
+.pdm-thumbs { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 2px; }
+.pdm-thumb { width: 56px; height: 56px; border-radius: 10px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: var(--bg-hover, #f1f5f9); }
+.pdm-thumb.active { border-color: var(--primary); }
+.pdm-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pdm-cat { display: inline-block; font-size: 11px; font-weight: 700; color: var(--primary); background: rgba(37,99,235,.1); padding: 3px 10px; border-radius: 20px; margin-top: 16px; }
+.pdm-name { font-size: 19px; font-weight: 800; color: var(--dark); margin-top: 8px; line-height: 1.35; }
+[data-theme="dark"] .pdm-name { color: #f1f5f9; }
+.pdm-price-row { display: flex; align-items: baseline; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.pdm-price { font-size: 22px; font-weight: 900; color: #dc2626; }
+.pdm-orig-price { font-size: 14px; color: #94a3b8; text-decoration: line-through; }
+.pdm-note { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.pdm-desc { font-size: 13.5px; color: var(--text-light); line-height: 1.6; margin-top: 12px; }
+.pdm-specs-title { font-size: 13px; font-weight: 800; color: var(--dark); margin-top: 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+[data-theme="dark"] .pdm-specs-title { color: #f1f5f9; }
+.pdm-specs-table { display: flex; flex-direction: column; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
+.pdm-spec-row { display: flex; font-size: 13px; }
+.pdm-spec-row:nth-child(odd) { background: var(--bg-hover, #f8fafc); }
+[data-theme="dark"] .pdm-spec-row:nth-child(odd) { background: #0f172a; }
+.pdm-spec-k { width: 38%; flex-shrink: 0; padding: 8px 10px; font-weight: 700; color: var(--text-light); border-right: 1px solid var(--border-color); }
+.pdm-spec-v { padding: 8px 10px; color: var(--dark); flex: 1; word-break: break-word; }
+[data-theme="dark"] .pdm-spec-v { color: #e2e8f0; }
+.pdm-spec-plain { font-size: 13.5px; color: var(--dark); line-height: 1.7; white-space: pre-line; }
+[data-theme="dark"] .pdm-spec-plain { color: #e2e8f0; }
+.pdm-actions { display: flex; gap: 10px; margin-top: 20px; }
+.pdm-actions button { flex: 1; }
+.pdm-detail-btn { display: inline-flex; align-items: center; justify-content: center; gap: 5px; width: 100%; margin-top: 6px; padding: 8px 10px; background: transparent; border: 1.5px solid var(--primary); color: var(--primary); font-size: 12px; font-weight: 700; border-radius: 10px; cursor: pointer; transition: background .2s; }
+.pdm-detail-btn:hover { background: rgba(37,99,235,.08); }
+.product-card-img { cursor: pointer; }
+/* ── Lightbox (full-size image view) ── */
+.pdm-lightbox { position: fixed; inset: 0; z-index: 21000; background: rgba(0,0,0,.88); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility .2s ease; padding: 20px; }
+.pdm-lightbox.open { opacity: 1; visibility: visible; }
+.pdm-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+.pdm-lightbox-close { position: absolute; top: 18px; right: 18px; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,.15); color: #fff; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+@media (max-width: 480px) {
+  .pdm-card { border-radius: 16px; }
+  .pdm-name { font-size: 16px; }
+  .pdm-price { font-size: 19px; }
+}
+
+
 /* ══ CART DRAWER ══ */
 .cart-overlay {
   position: fixed; inset: 0; z-index: 1000;
@@ -2942,6 +2994,17 @@ body {
             <p style="font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 24px;">Hệ thống của <strong>Tran Hoa Computer</strong> đã ghi nhận thông tin đặt lịch của bạn. Chúng tôi sẽ nhanh chóng liên hệ lại qua số điện thoại để xác nhận lịch hẹn sớm nhất!</p>
             <button onclick="closeModal()" style="background: var(--primary); color:#fff; border:none; padding:12px 30px; border-radius:30px; font-weight:700; cursor:pointer; width:100%;">Đồng Ý & Đóng</button>
         </div>
+    </div>
+
+    <div class="pdm-overlay" id="productDetailModal" onclick="if(event.target===this)closeProductDetail()">
+        <div class="pdm-card">
+            <div class="pdm-head"><button type="button" class="pdm-close" onclick="closeProductDetail()">×</button></div>
+            <div class="pdm-body" id="pdmBody"></div>
+        </div>
+    </div>
+    <div class="pdm-lightbox" id="pdmLightbox" onclick="if(event.target===this)closePdmLightbox()">
+        <button type="button" class="pdm-lightbox-close" onclick="closePdmLightbox()">×</button>
+        <img id="pdmLightboxImg" src="" alt="Ảnh sản phẩm kích thước đầy đủ">
     </div>
 
 
@@ -5326,10 +5389,11 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     var _orig = String(p.originalPrice||'').replace(/'/g, "\\'");
     var zaloBtn = '<button class="product-card-zalo" type="button" onclick="event.stopPropagation();productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>';
     var cartBtn = '<button class="product-card-cart-btn" type="button" onclick="event.stopPropagation();addToCart(\'' + _id + '\',\'' + _name + '\',\'' + _price + '\',\'' + _orig + '\',\'' + _imgUrl + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Thêm vào giỏ</button>';
-    return '<div class="product-card" data-pid="' + _id + '">' + imgHtml +
+    var detailBtn = '<button class="pdm-detail-btn" type="button" onclick="event.stopPropagation();openProductDetail(\'' + _id + '\')">🔍 Xem chi tiết & Ảnh đầy đủ</button>';
+    return '<div class="product-card" data-pid="' + _id + '" onclick="openProductDetail(\'' + _id + '\')">' + imgHtml +
       '<div class="product-card-body">' + catHtml +
       '<div class="product-card-name">' + p.name + '</div>' +
-      origHtml + priceHtml + noteHtml + descHtml + zaloBtn + cartBtn + '</div></div>';
+      origHtml + priceHtml + noteHtml + descHtml + zaloBtn + cartBtn + detailBtn + '</div></div>';
   }
 
   /* ── Update desktop nav buttons + dots ── */
@@ -5420,6 +5484,136 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
       el.scrollLeft = scrollLeft - walk;
     });
   }
+
+  /* ══ PRODUCT DETAIL MODAL ══ */
+  var _pdmCurrentImgs = [];
+  var _pdmCurrentIdx = 0;
+
+  function _pdmFmtPrice(s) {
+    if (!s) return s;
+    s = String(s).trim();
+    if (/[đĐ₫]/.test(s) || /[kK]\s*$/.test(s) || /[kK]\s*[-–]/.test(s)) return s;
+    var clean = s.replace(/[.,\s]/g,'');
+    if (/^\d+$/.test(clean)) return Number(clean).toLocaleString('vi-VN') + 'đ';
+    return s;
+  }
+
+  function _pdmEscapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* Chuẩn hoá mảng ảnh sản phẩm: hỗ trợ p.images là Array hoặc chuỗi JSON, fallback về p.imageUrl */
+  function _pdmGetImages(p) {
+    var imgs = [];
+    if (Array.isArray(p.images)) {
+      imgs = p.images;
+    } else if (typeof p.images === 'string' && p.images) {
+      try { var parsed = JSON.parse(p.images); if (Array.isArray(parsed)) imgs = parsed; } catch (e) {}
+    }
+    imgs = imgs.filter(function(u) { return u && String(u).trim(); });
+    if (imgs.length === 0 && p.imageUrl) imgs = [p.imageUrl];
+    return imgs;
+  }
+
+  /* Render bảng thông số: mỗi dòng "Tên: Giá trị" -> 1 hàng, dòng không có ":" -> hiển thị full-width */
+  function _pdmRenderSpecs(specsText) {
+    if (!specsText || !String(specsText).trim()) return '';
+    var lines = String(specsText).split(/\r?\n/).map(function(l) { return l.trim(); }).filter(function(l) { return l; });
+    var rows = lines.map(function(line) {
+      var idx = line.indexOf(':');
+      if (idx > 0) {
+        var k = line.slice(0, idx).trim();
+        var v = line.slice(idx + 1).trim();
+        return '<div class="pdm-spec-row"><div class="pdm-spec-k">' + _pdmEscapeHtml(k) + '</div><div class="pdm-spec-v">' + _pdmEscapeHtml(v) + '</div></div>';
+      }
+      return '<div class="pdm-spec-row"><div class="pdm-spec-v" style="width:100%;border-right:none;">' + _pdmEscapeHtml(line) + '</div></div>';
+    }).join('');
+    return '<div class="pdm-specs-title">📋 Thông số kỹ thuật chi tiết</div><div class="pdm-specs-table">' + rows + '</div>';
+  }
+
+  function _pdmSelectImg(idx) {
+    if (!_pdmCurrentImgs.length) return;
+    _pdmCurrentIdx = Math.max(0, Math.min(_pdmCurrentImgs.length - 1, idx));
+    var mainImg = document.getElementById('pdmMainImg');
+    if (mainImg) mainImg.src = _pdmCurrentImgs[_pdmCurrentIdx];
+    var thumbs = document.querySelectorAll('#pdmThumbs .pdm-thumb');
+    thumbs.forEach(function(t, i) { t.classList.toggle('active', i === _pdmCurrentIdx); });
+  }
+  window.pdmSelectImg = _pdmSelectImg;
+
+  window.openProductDetail = function(id) {
+    var list = window._allProducts || [];
+    var p = null;
+    for (var i = 0; i < list.length; i++) {
+      if (String(list[i].id || list[i].name) === String(id)) { p = list[i]; break; }
+    }
+    if (!p) return;
+    _pdmCurrentImgs = _pdmGetImages(p);
+    _pdmCurrentIdx = 0;
+
+    var mainImgHtml = _pdmCurrentImgs.length
+      ? '<img id="pdmMainImg" src="' + _pdmCurrentImgs[0] + '" alt="' + _pdmEscapeHtml(p.name) + '" onclick="openPdmLightbox()">'
+      : '<span style="font-size:48px;">🖥️</span>';
+    var thumbsHtml = _pdmCurrentImgs.length > 1
+      ? '<div class="pdm-thumbs" id="pdmThumbs">' + _pdmCurrentImgs.map(function(url, i) {
+          return '<div class="pdm-thumb' + (i === 0 ? ' active' : '') + '" onclick="pdmSelectImg(' + i + ')"><img src="' + url + '" alt="Ảnh ' + (i + 1) + '"></div>';
+        }).join('') + '</div>'
+      : '';
+
+    var origHtml = p.originalPrice ? '<span class="pdm-orig-price">' + _pdmFmtPrice(String(p.originalPrice)) + '</span>' : '';
+    var priceHtml = p.price ? '<span class="pdm-price">' + _pdmFmtPrice(String(p.price)) + '</span>' : '';
+    var noteHtml = p.priceNote ? '<div class="pdm-note">' + _pdmEscapeHtml(p.priceNote) + '</div>' : '';
+    var descHtml = p.description ? '<div class="pdm-desc">' + _pdmEscapeHtml(p.description) + '</div>' : '';
+    var specsHtml = _pdmRenderSpecs(p.specs);
+
+    var _name = String(p.name || '').replace(/'/g, "\\'");
+    var _price = String(p.price || '').replace(/'/g, "\\'");
+    var _orig = String(p.originalPrice || '').replace(/'/g, "\\'");
+    var _imgUrl = String(_pdmCurrentImgs[0] || '').replace(/'/g, "\\'");
+    var _id = p.id || _name;
+
+    var html = '<div class="pdm-main-img" id="pdmMainImgWrap">' + mainImgHtml + '</div>' + thumbsHtml +
+      (p.category ? '<span class="pdm-cat">' + _pdmEscapeHtml(p.category) + '</span>' : '') +
+      '<div class="pdm-name">' + _pdmEscapeHtml(p.name) + '</div>' +
+      '<div class="pdm-price-row">' + priceHtml + origHtml + '</div>' + noteHtml + descHtml + specsHtml +
+      '<div class="pdm-actions">' +
+        '<button type="button" class="product-card-zalo" style="border-radius:10px;" onclick="productZaloInquiry(this,\'' + _name + '\',\'' + _price + '\')"><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'15\' height=\'15\' viewBox=\'0 0 32 32\' fill=\'none\'><ellipse cx=\'16\' cy=\'16\' rx=\'16\' ry=\'16\' fill=\'#fff\' opacity=\'.18\'/><path d=\'M8 11c0-1.66 1.34-3 3-3h10c1.66 0 3 1.34 3 3v5c0 1.66-1.34 3-3 3h-2l-3 3v-3H11c-1.66 0-3-1.34-3-3V11z\' fill=\'#fff\'/></svg>Hỏi mua qua Zalo</button>' +
+        '<button type="button" class="product-card-cart-btn" style="border-radius:10px;" onclick="addToCart(\'' + _id + '\',\'' + _name + '\',\'' + _price + '\',\'' + _orig + '\',\'' + _imgUrl + '\');closeProductDetail()"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Thêm vào giỏ</button>' +
+      '</div>';
+
+    var body = document.getElementById('pdmBody');
+    if (body) body.innerHTML = html;
+    var overlay = document.getElementById('productDetailModal');
+    if (overlay) { overlay.classList.add('open'); if (body) body.scrollTop = 0; }
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeProductDetail = function() {
+    var overlay = document.getElementById('productDetailModal');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.openPdmLightbox = function() {
+    if (!_pdmCurrentImgs.length) return;
+    var lb = document.getElementById('pdmLightbox');
+    var img = document.getElementById('pdmLightboxImg');
+    if (img) img.src = _pdmCurrentImgs[_pdmCurrentIdx];
+    if (lb) lb.classList.add('open');
+  };
+  window.closePdmLightbox = function() {
+    var lb = document.getElementById('pdmLightbox');
+    if (lb) lb.classList.remove('open');
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+    var lb = document.getElementById('pdmLightbox');
+    if (lb && lb.classList.contains('open')) { closePdmLightbox(); return; }
+    var overlay = document.getElementById('productDetailModal');
+    if (overlay && overlay.classList.contains('open')) closeProductDetail();
+  });
 
   /* ── Render products ── */
   function renderProducts(list) {
