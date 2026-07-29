@@ -1497,119 +1497,213 @@
 
 /* ══ CART DRAWER ══ */
 .cart-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,.5);
+  position: fixed; inset: 0;
+  z-index: 10500;           /* trên bottom-nav (9999) & pdm (20000 chỉ khi mở) */
+  background: rgba(0,0,0,.55);
   opacity: 0; visibility: hidden;
   transition: opacity .3s, visibility .3s;
+  -webkit-overflow-scrolling: touch;
 }
 .cart-overlay.open { opacity: 1; visibility: visible; }
+
 .cart-drawer {
-  position: fixed; top: 0; right: 0; z-index: 1001;
-  width: 380px; max-width: 90vw; height: 100vh;
+  position: fixed; top: 0; right: 0;
+  z-index: 10501;
+  width: min(400px, 92vw);
+  height: 100%;
+  height: 100dvh;           /* dynamic viewport height — tránh browser chrome cắt */
   background: var(--surface, #fff);
-  box-shadow: -4px 0 24px rgba(0,0,0,.15);
+  box-shadow: -4px 0 32px rgba(0,0,0,.2);
   transform: translateX(100%);
-  transition: transform .3s ease;
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
   display: flex; flex-direction: column;
+  overflow: hidden;
 }
 .cart-drawer.open { transform: translateX(0); }
+
+/* ── Header ── */
 .cart-drawer-header {
+  flex-shrink: 0;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px; border-bottom: 1px solid var(--border-color, #e2e8f0);
-}
-.cart-drawer-title { font-size: 18px; font-weight: 800; color: var(--text-main, #1e293b); }
-.cart-drawer-close {
-  background: none; border: none; cursor: pointer; font-size: 22px;
-  color: var(--text-muted, #94a3b8); padding: 4px 8px;
-  border-radius: 8px; transition: background .2s;
-}
-.cart-drawer-close:hover { background: var(--bg-hover, #f1f5f9); }
-.cart-drawer-body {
-  flex: 1; overflow-y: auto; padding: 12px 16px;
-}
-.cart-empty-msg {
-  text-align: center; padding: 60px 20px;
-  color: var(--text-muted, #94a3b8); font-size: 14px;
-}
-.cart-empty-msg .cart-empty-icon { font-size: 48px; margin-bottom: 12px; }
-.cart-item {
-  display: flex; gap: 10px; padding: 10px 0;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border-color, #e2e8f0);
+  background: var(--surface, #fff);
 }
-.cart-item-img {
-  width: 64px; height: 64px; flex-shrink: 0;
-  border-radius: 8px; overflow: hidden;
-  background: #f1f5f9;
+.cart-drawer-title {
+  font-size: 17px; font-weight: 800;
+  color: var(--text-main, #1e293b);
+  display: flex; align-items: center; gap: 8px;
 }
-.cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
-.cart-item-img.no-img {
+.cart-item-count-label {
+  font-size: 12px; font-weight: 600;
+  background: #f97316; color: #fff;
+  padding: 2px 8px; border-radius: 20px;
+  margin-left: 4px;
+}
+.cart-drawer-close {
+  width: 34px; height: 34px;
+  background: var(--bg-hover, #f1f5f9); border: none;
+  cursor: pointer; font-size: 18px;
+  color: var(--text-muted, #64748b);
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px;
+  transition: background .2s;
+  flex-shrink: 0;
 }
+.cart-drawer-close:hover { background: #fee2e2; color: #ef4444; }
+
+/* ── Body (scrollable) ── */
+.cart-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 8px 14px 4px;
+  min-height: 0;            /* critical: allows flex child to shrink */
+}
+
+/* ── Empty state ── */
+.cart-empty-msg {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center;
+  padding: 60px 20px 40px;
+  color: var(--text-muted, #94a3b8); font-size: 14px; text-align: center;
+}
+.cart-empty-icon { font-size: 52px; margin-bottom: 12px; line-height: 1; }
+.cart-empty-msg p { margin: 0; line-height: 1.5; }
+
+/* ── Cart items ── */
+.cart-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color, #f1f5f9);
+}
+.cart-item:last-child { border-bottom: none; }
+
+.cart-item-img {
+  width: 68px; height: 68px; flex-shrink: 0;
+  border-radius: 10px; overflow: hidden;
+  background: var(--bg-hover, #f1f5f9);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+.cart-item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cart-item-img.no-img {
+  display: flex; align-items: center; justify-content: center; font-size: 28px;
+}
+
 .cart-item-info { flex: 1; min-width: 0; }
 .cart-item-name {
   font-size: 13px; font-weight: 700; color: var(--text-main, #1e293b);
-  margin-bottom: 3px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-bottom: 4px; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;      /* allow 2 lines instead of 1 */
 }
-.cart-item-price { font-size: 13px; font-weight: 800; color: #dc2626; }
+.cart-item-price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.cart-item-price { font-size: 14px; font-weight: 900; color: #dc2626; }
 .cart-item-orig { font-size: 11px; color: #94a3b8; text-decoration: line-through; }
+
 .cart-item-controls {
-  display: flex; align-items: center; gap: 8px; margin-top: 6px;
+  display: flex; align-items: center; gap: 6px;
 }
 .cart-qty-btn {
-  width: 26px; height: 26px; border: 1px solid var(--border-color, #e2e8f0);
-  border-radius: 6px; background: var(--surface, #fff); cursor: pointer;
-  font-size: 14px; font-weight: 700; color: var(--text-main, #1e293b);
+  width: 30px; height: 30px;
+  border: 1.5px solid var(--border-color, #e2e8f0);
+  border-radius: 8px; background: var(--surface, #fff);
+  cursor: pointer; font-size: 16px; font-weight: 700;
+  color: var(--text-main, #1e293b);
   display: flex; align-items: center; justify-content: center;
-  transition: background .2s;
+  transition: background .15s, border-color .15s;
+  flex-shrink: 0;
 }
-.cart-qty-btn:hover { background: var(--bg-hover, #f1f5f9); }
+.cart-qty-btn:hover { background: var(--bg-hover, #f1f5f9); border-color: #94a3b8; }
 .cart-qty-val {
-  font-size: 13px; font-weight: 700; min-width: 24px; text-align: center;
+  font-size: 14px; font-weight: 800; min-width: 28px; text-align: center;
   color: var(--text-main, #1e293b);
 }
 .cart-item-remove {
   margin-left: auto; background: none; border: none; cursor: pointer;
-  color: #ef4444; font-size: 18px; padding: 2px 6px;
+  color: #cbd5e1; font-size: 20px; padding: 4px 6px; line-height: 1;
+  border-radius: 6px; transition: color .15s, background .15s;
 }
-.cart-item-remove:hover { opacity: .7; }
+.cart-item-remove:hover { color: #ef4444; background: #fee2e2; }
+
+/* ── Footer (total + checkout) ── */
 .cart-drawer-footer {
-  padding: 16px 20px; border-top: 1px solid var(--border-color, #e2e8f0);
+  flex-shrink: 0;
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+  border-top: 2px solid var(--border-color, #e2e8f0);
   background: var(--surface, #fff);
 }
 .cart-total-row {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 12px;
 }
-.cart-total-label { font-size: 15px; font-weight: 700; color: var(--text-main, #1e293b); }
-.cart-total-val { font-size: 20px; font-weight: 900; color: #dc2626; }
-.cart-checkout-btn {
-  width: 100%; padding: 12px; font-size: 15px; font-weight: 700;
-  border: none; border-radius: 12px; cursor: pointer;
-  background: linear-gradient(135deg, #16a34a, #15803d);
-  color: #fff; font-family: inherit;
-  transition: opacity .2s;
-}
-.cart-checkout-btn:hover { opacity: .92; }
-.cart-checkout-btn:disabled { opacity: .5; cursor: not-allowed; }
-.cart-clear-btn {
-  width: 100%; padding: 8px; margin-top: 8px; font-size: 12px;
-  border: 1px solid var(--border-color, #e2e8f0); border-radius: 8px;
-  background: transparent; cursor: pointer; color: var(--text-muted, #94a3b8);
-  font-family: inherit;
-}
-.cart-clear-btn:hover { color: #ef4444; }
+.cart-total-label { font-size: 14px; font-weight: 700; color: var(--text-muted, #64748b); }
+.cart-total-val { font-size: 22px; font-weight: 900; color: #dc2626; }
+.cart-total-items { font-size: 11px; color: var(--text-muted, #94a3b8); text-align: right; margin-top: -8px; margin-bottom: 10px; }
 
-[data-theme="dark"] .cart-drawer { background:#1e293b; }
-[data-theme="dark"] .cart-drawer-header { border-color:#334155; }
-[data-theme="dark"] .cart-drawer-title { color:#f1f5f9; }
-[data-theme="dark"] .cart-item { border-color:#334155; }
-[data-theme="dark"] .cart-item-name { color:#f1f5f9; }
-[data-theme="dark"] .cart-qty-btn { background:#0f172a; border-color:#334155; color:#f1f5f9; }
-[data-theme="dark"] .cart-drawer-footer { background:#1e293b; border-color:#334155; }
-[data-theme="dark"] .cart-total-label { color:#f1f5f9; }
-[data-theme="dark"] .cart-clear-btn { border-color:#334155; }
+.cart-checkout-btn {
+  width: 100%; padding: 14px; font-size: 15px; font-weight: 800;
+  border: none; border-radius: 14px; cursor: pointer;
+  background: linear-gradient(135deg, #16a34a, #059669);
+  color: #fff; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(22,163,74,.35);
+  transition: opacity .2s, transform .1s;
+  -webkit-tap-highlight-color: transparent;
+}
+.cart-checkout-btn:hover { opacity: .93; }
+.cart-checkout-btn:active { transform: scale(.98); }
+.cart-checkout-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.cart-action-row { display: flex; gap: 8px; margin-top: 10px; }
+.cart-continue-btn {
+  flex: 1; padding: 10px; font-size: 13px; font-weight: 600;
+  border: 1.5px solid var(--border-color, #e2e8f0); border-radius: 10px;
+  background: transparent; cursor: pointer;
+  color: var(--text-main, #1e293b); font-family: inherit;
+  transition: background .2s;
+}
+.cart-continue-btn:hover { background: var(--bg-hover, #f1f5f9); }
+.cart-clear-btn {
+  flex: 1; padding: 10px; font-size: 13px; font-weight: 600;
+  border: 1.5px solid #fee2e2; border-radius: 10px;
+  background: transparent; cursor: pointer;
+  color: #ef4444; font-family: inherit;
+  transition: background .2s;
+}
+.cart-clear-btn:hover { background: #fee2e2; }
+
+/* ── Mobile: drawer takes full width, avoids bottom nav ── */
+@media (max-width: 600px) {
+  .cart-drawer {
+    width: 100%;
+    max-width: 100%;
+    top: 0;
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] .cart-drawer { background: #1e293b; }
+[data-theme="dark"] .cart-drawer-header { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .cart-drawer-title { color: #f1f5f9; }
+[data-theme="dark"] .cart-item { border-color: #334155; }
+[data-theme="dark"] .cart-item-name { color: #f1f5f9; }
+[data-theme="dark"] .cart-item-img { background: #0f172a; border-color: #334155; }
+[data-theme="dark"] .cart-qty-btn { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+[data-theme="dark"] .cart-qty-val { color: #f1f5f9; }
+[data-theme="dark"] .cart-drawer-footer { background: #1e293b; border-color: #334155; }
+[data-theme="dark"] .cart-total-label { color: #94a3b8; }
+[data-theme="dark"] .cart-item-remove { color: #475569; }
+[data-theme="dark"] .cart-item-remove:hover { background: rgba(239,68,68,.15); }
+[data-theme="dark"] .cart-continue-btn { border-color: #334155; color: #f1f5f9; }
+[data-theme="dark"] .cart-continue-btn:hover { background: #334155; }
+[data-theme="dark"] .cart-clear-btn { border-color: #7f1d1d; color: #fca5a5; }
+[data-theme="dark"] .cart-clear-btn:hover { background: rgba(239,68,68,.12); }
 
 
 [data-theme="dark"] .product-slider-btn { background: #1e293b; color: #f1f5f9; box-shadow: 0 2px 12px rgba(0,0,0,.4); }
@@ -3334,24 +3428,38 @@ body {
         
         <!-- ══ CART DRAWER ══ -->
         <div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
-        <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer" id="cartDrawer" role="dialog" aria-label="Giỏ hàng" aria-modal="true">
+          <!-- Header -->
           <div class="cart-drawer-header">
-            <span class="cart-drawer-title">🛒 Giỏ hàng</span>
-            <button class="cart-drawer-close" onclick="toggleCart(false)">✕</button>
+            <span class="cart-drawer-title">
+              🛒 Giỏ hàng
+              <span class="cart-item-count-label" id="cartHeaderCount" style="display:none;"></span>
+            </span>
+            <button class="cart-drawer-close" onclick="toggleCart(false)" aria-label="Đóng giỏ hàng">✕</button>
           </div>
+          <!-- Body (scrollable) -->
           <div class="cart-drawer-body" id="cartDrawerBody">
-            <div class="cart-empty-msg" id="cartEmptyMsg">
+            <div class="cart-empty-msg">
               <div class="cart-empty-icon">🛒</div>
-              <div>Chưa có sản phẩm trong giỏ</div>
+              <p>Chưa có sản phẩm trong giỏ hàng</p>
+              <p style="font-size:12px;margin-top:6px;">Thêm sản phẩm từ danh sách bên dưới</p>
             </div>
           </div>
+          <!-- Footer -->
           <div class="cart-drawer-footer" id="cartFooter" style="display:none;">
             <div class="cart-total-row">
               <span class="cart-total-label">Tổng cộng:</span>
               <span class="cart-total-val" id="cartTotalVal">0đ</span>
             </div>
-            <button class="cart-checkout-btn" onclick="cartCheckout()">Gửi đơn hàng qua Zalo</button>
-            <button class="cart-clear-btn" onclick="clearCart()">Xóa toàn bộ giỏ hàng</button>
+            <div class="cart-total-items" id="cartTotalItems"></div>
+            <button class="cart-checkout-btn" onclick="cartCheckout()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.49 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Gửi đơn hàng qua Zalo
+            </button>
+            <div class="cart-action-row">
+              <button class="cart-continue-btn" onclick="toggleCart(false)">← Tiếp tục mua</button>
+              <button class="cart-clear-btn" onclick="clearCart()">🗑 Xóa giỏ</button>
+            </div>
           </div>
         </div>
         <!-- ══ FLOATING CART BUTTON ══ -->
@@ -5813,13 +5921,17 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
   window.toggleCart = function(open) {
     var drawer = document.getElementById('cartDrawer');
     var overlay = document.getElementById('cartOverlay');
+    if (!drawer || !overlay) return;
     if (open) {
       drawer.classList.add('open');
       overlay.classList.add('open');
       _renderCartItems();
+      /* Prevent body scroll behind drawer */
+      document.body.style.overflow = 'hidden';
     } else {
       drawer.classList.remove('open');
       overlay.classList.remove('open');
+      document.body.style.overflow = '';
     }
   };
 
@@ -5831,53 +5943,72 @@ window._thcDefaultPricing={"categories":[{"id":"hardware","name":"Sửa Phần C
     if (count > 0) {
       btn.style.display = 'flex';
       badge.classList.remove('hidden');
-      badge.textContent = count;
+      badge.textContent = count > 99 ? '99+' : count;
     } else {
       btn.style.display = 'none';
       badge.classList.add('hidden');
     }
-    _renderCartItems();
+    /* If drawer is open, re-render live */
+    var drawer = document.getElementById('cartDrawer');
+    if (drawer && drawer.classList.contains('open')) {
+      _renderCartItems();
+    }
   }
 
   function _renderCartItems() {
     var body = document.getElementById('cartDrawerBody');
     var footer = document.getElementById('cartFooter');
-    var emptyMsg = document.getElementById('cartEmptyMsg');
+    var headerCount = document.getElementById('cartHeaderCount');
     if (!body) return;
 
+    var totalCount = _cart.reduce(function(s, it) { return s + it.qty; }, 0);
+
+    if (headerCount) {
+      if (totalCount > 0) { headerCount.textContent = totalCount + ' sp'; headerCount.style.display = 'inline'; }
+      else { headerCount.style.display = 'none'; }
+    }
+
     if (!_cart.length) {
-      body.innerHTML = '<div class="cart-empty-msg"><div class="cart-empty-icon">🛒</div><div>Chưa có sản phẩm trong giỏ</div></div>';
+      body.innerHTML = '<div class="cart-empty-msg"><div class="cart-empty-icon">🛒</div><p>Chưa có sản phẩm trong giỏ hàng</p><p style="font-size:12px;margin-top:6px;color:inherit;">Thêm sản phẩm từ danh sách bên dưới</p></div>';
       if (footer) footer.style.display = 'none';
       return;
     }
 
     var html = _cart.map(function(item) {
+      var safeId = String(item.id).replace(/'/g, "\'");
       var imgHtml = item.imageUrl
-        ? '<div class="cart-item-img"><img src="' + item.imageUrl + '" alt="' + item.name + '"></div>'
+        ? '<div class="cart-item-img"><img src="' + item.imageUrl + '" alt="' + item.name + '" loading="lazy"></div>'
         : '<div class="cart-item-img no-img">🖥️</div>';
       var origHtml = item.originalPrice
         ? '<span class="cart-item-orig">' + _fmtPrice(String(item.originalPrice)) + '</span>'
         : '';
+      var lineTotal = (_parsePriceNum(item.price) || 0) * item.qty;
       return '<div class="cart-item">' + imgHtml +
         '<div class="cart-item-info">' +
-        '<div class="cart-item-name">' + item.name + '</div>' +
-        '<div><span class="cart-item-price">' + _fmtPrice(String(item.price)) + '</span> ' + origHtml + '</div>' +
-        '<div class="cart-item-controls">' +
-        '<button class="cart-qty-btn" onclick="changeCartQty(\'' + item.id + '\',-1)">−</button>' +
-        '<span class="cart-qty-val">' + item.qty + '</span>' +
-        '<button class="cart-qty-btn" onclick="changeCartQty(\'' + item.id + '\',1)">+</button>' +
-        '<button class="cart-item-remove" onclick="removeFromCart(\'' + item.id + '\')">×</button>' +
-        '</div></div></div>';
+          '<div class="cart-item-name">' + item.name + '</div>' +
+          '<div class="cart-item-price-row">' +
+            '<span class="cart-item-price">' + _fmtPrice(String(item.price)) + '</span>' +
+            (origHtml || '') +
+          '</div>' +
+          '<div class="cart-item-controls">' +
+            '<button class="cart-qty-btn" onclick="changeCartQty(\'' + safeId + '\',-1)">\u2212</button>' +
+            '<span class="cart-qty-val">' + item.qty + '</span>' +
+            '<button class="cart-qty-btn" onclick="changeCartQty(\'' + safeId + '\',1)">+</button>' +
+            (item.qty > 1 ? '<span style="font-size:11px;color:#94a3b8;margin-left:4px;">= ' + _fmtPriceNum(lineTotal) + '</span>' : '') +
+            '<button class="cart-item-remove" onclick="removeFromCart(\'' + safeId + '\')" title="Xóa">\u00d7</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
     }).join('');
     body.innerHTML = html;
 
-    /* Calculate total */
     var total = _cart.reduce(function(s, it) {
-      var p = _parsePriceNum(it.price) || 0;
-      return s + p * it.qty;
+      return s + (_parsePriceNum(it.price) || 0) * it.qty;
     }, 0);
     var totalEl = document.getElementById('cartTotalVal');
     if (totalEl) totalEl.textContent = _fmtPriceNum(total);
+    var itemsEl = document.getElementById('cartTotalItems');
+    if (itemsEl) itemsEl.textContent = _cart.length + ' loại • ' + totalCount + ' món';
     if (footer) footer.style.display = 'block';
   }
 
