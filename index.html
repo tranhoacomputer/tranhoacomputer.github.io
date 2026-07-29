@@ -1418,15 +1418,18 @@
 
 /* ══ FLOATING CART ══ */
 .cart-float-btn {
-  position: fixed; bottom: 20px; right: 20px; z-index: 999;
+  position: fixed; bottom: 310px; right: 20px; z-index: 9500;
   width: 56px; height: 56px; border-radius: 50%;
   background: linear-gradient(135deg, #f97316, #ea580c);
   color: #fff; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 16px rgba(234,88,12,.4);
-  transition: transform .2s;
+  transition: transform .2s, bottom .2s;
 }
 .cart-float-btn:hover { transform: scale(1.08); }
+@media (max-width: 480px) {
+  .cart-float-btn { bottom: 150px; right: 14px; }
+}
 .cart-float-btn svg { width: 26px; height: 26px; }
 .cart-count-badge {
   position: absolute; top: -4px; right: -4px;
