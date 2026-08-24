@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
   <head>
+    <script src="config.js"></script>
     <script id="thc-interceptor">
 /* ═══════════════════════════════════════════════════════════════
    THC GitHub Pages — Fetch Interceptor v3
@@ -61,7 +62,7 @@
      getGasUrl() trả '' → fetch('' + '?action=...') → request tương đối tới chính admin.html
      → GitHub Pages trả về HTML của admin.html → .json() báo lỗi "Unexpected token '<', <!DOCTYPE"
      (đây chính là lỗi "Gặp lỗi kết nối máy chủ" mà admin gặp phải). */
-  var DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
+  var DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec';
 
   /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
   /* v37: thứ tự ưu tiên: override → THC_CONFIG (config.js) → window.GAS_URL → localStorage → DEFAULT_GAS_URL */
