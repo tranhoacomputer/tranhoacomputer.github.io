@@ -56,15 +56,26 @@
       && t.indexOf('/exec') !== -1;
   }
 
+  /* v37 fix: interceptor cần CÙNG fallback DEFAULT_GAS_URL như bundle chính,
+     nếu không khi localStorage.thc_gasUrl trống (trình duyệt mới / bị xoá cache / webview riêng)
+     getGasUrl() trả '' → fetch('' + '?action=...') → request tương đối tới chính admin.html
+     → GitHub Pages trả về HTML của admin.html → .json() báo lỗi "Unexpected token '<', <!DOCTYPE"
+     (đây chính là lỗi "Gặp lỗi kết nối máy chủ" mà admin gặp phải). */
+  var DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec';
+
   /* ── Lấy GAS URL (đọc lại mỗi request để nhận URL mới vừa lưu) ── */
-  /* v36: thứ tự ưu tiên: override → THC_CONFIG (config.js) → window.GAS_URL → localStorage → '' */
+  /* v37: thứ tự ưu tiên: override → THC_CONFIG (config.js) → window.GAS_URL → localStorage → DEFAULT_GAS_URL */
   function getGasUrl(override) {
     if (isValidGasUrl(override)) return unquoteString(override);
     if (window.THC_CONFIG && isValidGasUrl(window.THC_CONFIG.GAS_URL)) return unquoteString(window.THC_CONFIG.GAS_URL);
     if (window.GAS_URL && isValidGasUrl(window.GAS_URL)) return unquoteString(window.GAS_URL);
-    /* v36: không còn URL cứng — đọc từ localStorage (admin đặt tay) hoặc trả '' */
-    try { var _ls = localStorage.getItem('thc_gasUrl'); if (isValidGasUrl(_ls)) return _ls; } catch(e){}
-    return '';
+    try {
+      var _ls = localStorage.getItem('thc_gasUrl');
+      if (isValidGasUrl(_ls)) return _ls;
+      /* localStorage trống → tự bù bằng URL mặc định VÀ lưu lại để lần sau nhất quán với bundle chính */
+      try { localStorage.setItem('thc_gasUrl', DEFAULT_GAS_URL); } catch(e2){}
+    } catch(e){}
+    return DEFAULT_GAS_URL;
   }
 
   /* ── helpers ── */
@@ -196,6 +207,9 @@
         .then(function (d) {
           var cfg = normalizeClientCfg((d.data && d.data.client) ? d.data.client : (d.data || {}));
           return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+        })
+        .catch(function (e) {
+          return jsonResp({ success: false, error: 'Không thể tải cấu hình trang khách từ Google Sheets: ' + (e && e.message || e) });
         });
     },
 
@@ -206,6 +220,9 @@
           return jsonResp(d.success
             ? { success: true, message: 'Đã lưu cấu hình trang khách' }
             : { success: false, error: d.error || 'Lỗi lưu client config' });
+        })
+        .catch(function (e) {
+          return jsonResp({ success: false, error: 'Không thể lưu cấu hình trang khách lên Google Sheets: ' + (e && e.message || e) });
         });
     },
 
@@ -216,6 +233,9 @@
         .then(function (d) {
           var cfg = (d.data && d.data.promo) ? d.data.promo : (d.data || {});
           return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+        })
+        .catch(function (e) {
+          return jsonResp({ success: false, error: 'Không thể tải cấu hình popup từ Google Sheets: ' + (e && e.message || e) });
         });
     },
 
@@ -226,6 +246,9 @@
           return jsonResp(d.success
             ? { success: true, message: 'Đã lưu cấu hình thông báo popup' }
             : { success: false, error: d.error || 'Lỗi lưu promo config' });
+        })
+        .catch(function (e) {
+          return jsonResp({ success: false, error: 'Không thể lưu cấu hình popup lên Google Sheets: ' + (e && e.message || e) });
         });
     },
 
