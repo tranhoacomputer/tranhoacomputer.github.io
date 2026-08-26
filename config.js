@@ -3,9 +3,9 @@
  * Cấu hình trung tâm dùng chung cho index.html và admin.html
  * ► Chỉ cần sửa file này khi đổi GAS URL hoặc thông tin cửa hàng
  * ► Đặt trước tất cả <script> khác trong <head> của cả 2 file
- * Last updated: 2026-07-29 | v36
+ * Last updated: 2026-08-26 | v37
  *
- * THAY ĐỔI v36:
+ * THAY ĐỔI v37:
  * - Tự động migrate localStorage nếu còn lưu URL cũ / stale
  * - Thêm window.THC_GAS helper: getUrl(), setUrl(), ping()
  * - Đảm bảo 1 nguồn sự thật duy nhất cho tất cả file
@@ -38,7 +38,7 @@ window.THC_CONFIG = {
     endpoint: 'https://superagent-47f29609.base44.app/functions/aiChat',
   },
 
-  version: 'v36',
+  version: 'v37',
 };
 
 // ── Áp dụng GAS_URL và khởi tạo helper ──────────────────────────────────
@@ -52,21 +52,22 @@ window.THC_CONFIG = {
   window.GAS_URL = CURRENT_URL;
 
   // ── 2. Cập nhật localStorage['thc_gasUrl'] ──────────────────────────────
-  //    Logic v36: ghi đè nếu:
-  //      (a) chưa có gì trong localStorage, HOẶC
-  //      (b) URL đang lưu khác với CURRENT_URL (tức là lỗi thời / cũ)
-  //    Ngoại lệ duy nhất: admin đã đặt URL tùy chỉnh hoàn toàn khác → giữ nguyên
-  //    nhưng vẫn cập nhật window.GAS_URL để phiên này hoạt động đúng.
+  //    Logic v37: LUÔN force-overwrite — config.js là nguồn sự thật duy nhất
+  //    (xem giải thích chi tiết trong khối try/catch bên dưới)
   try {
     var saved = localStorage.getItem('thc_gasUrl');
-    var needUpdate = !saved
-      || !saved.startsWith('https://script.google.com')
-      || saved === CURRENT_URL;          // đã đúng rồi — ghi lại để chắc chắn
 
-    // Nếu saved khác CURRENT_URL nhưng vẫn là URL GAS hợp lệ
-    // → đây là URL do admin tự đặt, KHÔNG ghi đè để tôn trọng cài đặt admin.
-    // Tuy nhiên, phiên hiện tại vẫn dùng CURRENT_URL từ config.
-    if (needUpdate) {
+    // ═══ MIGRATION v37: LUÔN force-overwrite localStorage ═══
+    // Lý do: từng có bug hardcode URL GAS sai vào admin.html bundle,
+    // URL sai đó cũng là định dạng GAS hợp lệ → logic cũ "tôn trọng URL
+    // admin tự đặt" đã bảo vệ URL sai, khiến nó kẹt mãi trong localStorage.
+    // Giải pháp: config.js là NGUỒN SỰ THẬT duy nhất → luôn ghi đè.
+    // Admin vẫn có thể đổi URL runtime qua setGasUrl() trong admin UI
+    // (setGasUrl ghi cả window + localStorage), nhưng mỗi lần tải lại
+    // config.js sẽ lại reset về giá trị đúng từ file.
+    if (saved !== CURRENT_URL) {
+      console.info('[THC config.js v37] Migrate localStorage gasUrl:',
+        saved ? saved.slice(0, 60) + '…' : '(empty)', '→', CURRENT_URL.slice(0, 60) + '…');
       localStorage.setItem('thc_gasUrl', CURRENT_URL);
     }
   } catch (e) {}
@@ -140,5 +141,5 @@ window.THC_CONFIG = {
       && url.indexOf('/exec') !== -1;
   }
 
-  console.info('[THC config.js v36] GAS_URL set →', CURRENT_URL.slice(0, 72) + '…');
+  console.info('[THC config.js v37] GAS_URL set →', CURRENT_URL.slice(0, 72) + '…');
 })();
