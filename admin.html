@@ -4,7 +4,7 @@
     <script src="config.js"></script>
     <script id="thc-interceptor">
 /* ═══════════════════════════════════════════════════════════════
-   THC GitHub Pages — Fetch Interceptor v3
+   THC GitHub Pages — Fetch Interceptor v4 (timeout + retry cho mạng yếu)
    Redirect mọi /api/* → GAS (không cần server backend)
    Fix: bắt cả Request object/absolute URL + tôn trọng body.url ở /api/gas-proxy
    ═══════════════════════════════════════════════════════════════ */
@@ -80,19 +80,53 @@
   }
 
   /* ── helpers ── */
+  /* v38 fix: mạng chập chờn (Edge/2G/Wifi yếu — vd 40KB/s) khiến fetch() reject
+     ngay (TypeError: Failed to fetch / NetworkError) → admin thấy lỗi "Gặp lỗi
+     kết nối máy chủ" dù GAS server hoàn toàn bình thường. Thêm timeout (AbortController)
+     + tự động retry với backoff để chịu được mạng yếu, chỉ báo lỗi thật sau khi
+     đã thử hết số lần cho phép. */
+  var GAS_FETCH_TIMEOUT_MS = 20000;   /* 20s mỗi lần thử — đồng bộ với chuẩn timeout CDN của dự án */
+  var GAS_FETCH_MAX_RETRIES = 3;      /* tổng cộng tối đa 3 lần thử */
+  var GAS_FETCH_RETRY_DELAY_MS = 1500; /* nghỉ giữa các lần thử, tăng dần (1.5s, 3s) */
+
+  function fetchWithTimeout(url, timeoutMs) {
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = controller ? setTimeout(function () { controller.abort(); }, timeoutMs) : null;
+    return fetch(url, { cache: 'no-store', signal: controller ? controller.signal : undefined })
+      .finally(function () { if (timer) clearTimeout(timer); });
+  }
+
+  function fetchWithRetry(url, attempt) {
+    attempt = attempt || 1;
+    return fetchWithTimeout(url, GAS_FETCH_TIMEOUT_MS).catch(function (err) {
+      var isAbort = err && (err.name === 'AbortError');
+      var friendlyErr = isAbort
+        ? new Error('Hết thời gian chờ phản hồi máy chủ (mạng quá chậm/yếu, đã đợi ' + (GAS_FETCH_TIMEOUT_MS/1000) + 's)')
+        : err;
+      if (attempt >= GAS_FETCH_MAX_RETRIES) {
+        console.warn('[THC gasFetch] Thất bại sau ' + attempt + ' lần thử:', friendlyErr.message || friendlyErr);
+        throw friendlyErr;
+      }
+      var delay = GAS_FETCH_RETRY_DELAY_MS * attempt;
+      console.warn('[THC gasFetch] Lần thử ' + attempt + ' thất bại (' + (friendlyErr.message||friendlyErr) + ') — thử lại sau ' + delay + 'ms...');
+      return new Promise(function (resolve) { setTimeout(resolve, delay); })
+        .then(function () { return fetchWithRetry(url, attempt + 1); });
+    });
+  }
+
   function gasGET(params, overrideUrl) {
     var GAS = getGasUrl(overrideUrl);
     var merged = Object.assign({}, params, { _: Date.now() });
     var qs = Object.keys(merged).map(function (k) {
       return encodeURIComponent(k) + '=' + encodeURIComponent(merged[k] == null ? '' : merged[k]);
     }).join('&');
-    return fetch(GAS + '?' + qs, { cache: 'no-store' });
+    return fetchWithRetry(GAS + '?' + qs);
   }
   function gasPOST(bodyObj, overrideUrl) {
     var GAS = getGasUrl(overrideUrl);
     /* GAS không hỗ trợ real POST trên doGet → gửi body qua query string */
     var encoded = encodeURIComponent(JSON.stringify(bodyObj));
-    return fetch(GAS + '?method=POST&body=' + encoded + '&_=' + Date.now(), { cache: 'no-store' });
+    return fetchWithRetry(GAS + '?method=POST&body=' + encoded + '&_=' + Date.now());
   }
   function jsonResp(obj) {
     return new Response(JSON.stringify(obj), {
