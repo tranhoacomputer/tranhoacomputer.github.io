@@ -265,12 +265,27 @@
     },
 
     'POST /api/client-config': function (body) {
-      return gasPOST({ action: 'saveConfig', type: 'client', data: normalizeClientCfg(body) })
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          return jsonResp(d.success
-            ? { success: true, message: 'Đã lưu cấu hình trang khách' }
-            : { success: false, error: d.error || 'Lỗi lưu client config' });
+      var clientData = normalizeClientCfg(body);
+      /* v38: Lưu client config + ĐỒNG THỜI gửi top-level fields (shopName/address/phone/email)
+         qua type=shop để GAS cập nhật cả top-level (nếu GAS đã có fix saveConfig) */
+      var shopData = {
+        shopName: clientData.shopName || '',
+        address: clientData.address || '',
+        phone: clientData.phone || '',
+        email: clientData.email || '',
+        gasUrl: body.gasUrl || getGasUrl()
+      };
+      return Promise.all([
+        gasPOST({ action: 'saveConfig', type: 'client', data: clientData }),
+        gasPOST({ action: 'saveConfig', type: 'shop', data: shopData })
+      ])
+        .then(function (rs) { return Promise.all(rs.map(function (r) { return r.json(); })); })
+        .then(function (ds) {
+          var clientOk = ds[0] && ds[0].success;
+          var shopOk = ds[1] && ds[1].success;
+          return jsonResp(clientOk
+            ? { success: true, message: 'Đã lưu cấu hình trang khách' + (shopOk ? ' (top-level đã đồng bộ)' : '') }
+            : { success: false, error: (ds[0] && ds[0].error) || 'Lỗi lưu client config' });
         })
         .catch(function (e) {
           return jsonResp({ success: false, error: 'Không thể lưu cấu hình trang khách lên Google Sheets: ' + (e && e.message || e) });
