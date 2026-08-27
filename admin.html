@@ -180,6 +180,22 @@
     };
   }
 
+  /* v38: dọn sạch response GAS — sync top-level từ client.* + bỏ quote thỡ ở gasUrl */
+  function sanitizeGasConfig(d) {
+    if (!d || !d.success || !d.data) return d;
+    var data = d.data;
+    var client = data.client || {};
+    /* Sync top-level shopName/address/phone từ client.* */
+    if (client.shopName) data.shopName = client.shopName;
+    if (client.address) data.address = client.address;
+    if (client.phone) data.phone = client.phone;
+    /* Bỏ quote thỡ ở gasUrl */
+    if (data.gasUrl && typeof data.gasUrl === 'string') {
+      data.gasUrl = unquoteString(data.gasUrl);
+    }
+    return d;
+  }
+
   /* ── Route handlers ── */
   var handlers = {
 
@@ -241,7 +257,7 @@
         .then(function (r) { return r.json(); })
         .then(function (d) {
           var cfg = normalizeClientCfg((d.data && d.data.client) ? d.data.client : (d.data || {}));
-          return jsonResp(d.success ? { success: true, data: cfg } : { success: false, error: d.error });
+          var _d = sanitizeGasConfig(d); return jsonResp(_d.success ? { success: true, data: cfg } : { success: false, error: _d.error });
         })
         .catch(function (e) {
           return jsonResp({ success: false, error: 'Không thể tải cấu hình trang khách từ Google Sheets: ' + (e && e.message || e) });
@@ -374,9 +390,9 @@
 
       if (method === 'POST') {
         var innerBody = params.body ? (typeof params.body === 'string' ? JSON.parse(params.body) : params.body) : cleanParams;
-        return gasPOST(innerBody, GAS).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); }).catch(function(e){ return jsonResp({success:false, error: e.message||'Lỗi kết nối GAS'}); });
+        return gasPOST(innerBody, GAS).then(function (r) { return r.json(); }).then(function (d) { if (d && d.data && d.data.client) d = sanitizeGasConfig(d); return jsonResp(d); }).catch(function(e){ return jsonResp({success:false, error: e.message||'Lỗi kết nối GAS'}); });
       }
-      return gasGET(cleanParams, GAS).then(function (r) { return r.json(); }).then(function (d) { return jsonResp(d); }).catch(function(e){ return jsonResp({success:false, error: e.message||'Lỗi kết nối GAS'}); });
+      return gasGET(cleanParams, GAS).then(function (r) { return r.json(); }).then(function (d) { if (d && d.data && d.data.client) d = sanitizeGasConfig(d); return jsonResp(d); }).catch(function(e){ return jsonResp({success:false, error: e.message||'Lỗi kết nối GAS'}); });
     },
 
     /* ─── ZALO (cần server riêng, không chạy được trên GitHub Pages) ─── */
