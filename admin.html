@@ -266,6 +266,9 @@
 
     'POST /api/client-config': function (body) {
       var clientData = normalizeClientCfg(body);
+      /* v41 fix: GAS saveConfig khi thấy gasUrl trong data → chỉ lưu gasUrl, bỏ qua client blob!
+         Strip gasUrl khỏi clientData trước khi gửi lên GAS. gasUrl chỉ lưu qua syncTopLevelConfig. */
+      delete clientData.gasUrl;
       var topLevelFields = {
         shopName: clientData.shopName || '',
         address: clientData.address || '',
