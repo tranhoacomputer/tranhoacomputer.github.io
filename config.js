@@ -51,7 +51,8 @@ window.THC_CONFIG = {
 
   // ── Danh sách URL cũ/stale cần migrate về mặc định ──
   var STALE_URLS = [
-    'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNE5Nqo5Hvyxw/exec',
+    'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNEHPjBQFoiPbSkm9CvYCv9AYqAbv6FHejvsfhDQ/exec',
+    'https://script.google.com/macros/s/AKfycbIcEewka4C9njoprAE3U_2aDfBhfOzIjeFA_EEvvpeOF0oq5tgLNylUEREVsMgSHlwHQ/exec',
     'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec',
   ];
 
