@@ -3,19 +3,20 @@
  * Cấu hình trung tâm dùng chung cho index.html và admin.html
  * ► Chỉ cần sửa file này khi đổi GAS URL hoặc thông tin cửa hàng
  * ► Đặt trước tất cả <script> khác trong <head> của cả 2 file
- * Last updated: 2026-08-26 | v37
+ * Last updated: 2026-08-28 | v38
  *
- * THAY ĐỔI v37:
- * - Tự động migrate localStorage nếu còn lưu URL cũ / stale
- * - Thêm window.THC_GAS helper: getUrl(), setUrl(), ping()
- * - Đảm bảo 1 nguồn sự thật duy nhất cho tất cả file
+ * THAY ĐỔI v38:
+ * - TÔN TRỎNG URL admin đã đặt: nếu localStorage có URL GAS hợp lệ,
+ *   dùng URL đó thay vì ghi đè (khác v37 luôn force-overwrite)
+ * - Vẫn migrate các URL cũ/stale đã biết về URL mặc định
+ * - Admin đổi URL qua "Lưu liên kết" → persist qua page reload
  */
 
 window.THC_CONFIG = {
 
   // ═══════════════════════════════════════════
-  //  GOOGLE APPS SCRIPT — endpoint duy nhất
-  //  Đổi URL tại ĐÂY, sẽ áp dụng cho CẢ 2 file
+  //  GOOGLE APPS SCRIPT — endpoint mặc định
+  //  Admin có thể override runtime qua UI "Lưu liên kết"
   // ═══════════════════════════════════════════
   GAS_URL: 'https://script.google.com/macros/s/AKfycbyDCaMSu4aeWUzKsKieTNW40Jb2IGcXH5zLNNXmqgo3fCbD5Uf5YQv_ldjZuKmebZHMoA/exec',
 
@@ -38,50 +39,59 @@ window.THC_CONFIG = {
     endpoint: 'https://superagent-47f29609.base44.app/functions/aiChat',
   },
 
-  version: 'v37',
+  version: 'v38',
 };
 
 // ── Áp dụng GAS_URL và khởi tạo helper ──────────────────────────────────
 (function () {
   'use strict';
 
-  var CURRENT_URL = window.THC_CONFIG.GAS_URL;
-  if (!CURRENT_URL) return;
+  var DEFAULT_URL = window.THC_CONFIG.GAS_URL;
+  if (!DEFAULT_URL) return;
 
-  // ── 1. Gán window.GAS_URL (index.html đọc biến này) ──
-  window.GAS_URL = CURRENT_URL;
+  // ── Danh sách URL cũ/stale cần migrate về mặc định ──
+  var STALE_URLS = [
+    'https://script.google.com/macros/s/AKfycbz4oTtTRyybG2W7s3L6G6PjFJPk-XYNE5Nqo5Hvyxw/exec',
+    'https://script.google.com/macros/s/AKfycbyU8qYONkF9mXYDW3dzmDqq7kX36fGzLpUYQf3day-HH9TT_-s72Sw3i3MJ5Nqo5Hvyxw/exec',
+  ];
 
-  // ── 2. Cập nhật localStorage['thc_gasUrl'] ──────────────────────────────
-  //    Logic v37: LUÔN force-overwrite — config.js là nguồn sự thật duy nhất
-  //    (xem giải thích chi tiết trong khối try/catch bên dưới)
+  function _isValid(url) {
+    return typeof url === 'string'
+      && url.startsWith('https://script.google.com/macros/s/')
+      && url.indexOf('/exec') !== -1;
+  }
+
+  function _isStale(url) {
+    return STALE_URLS.indexOf(url) !== -1;
+  }
+
+  // ── 1. Quyết định URL runtime: localStorage (admin đặt) > default ──
+  var runtimeUrl = DEFAULT_URL;
   try {
     var saved = localStorage.getItem('thc_gasUrl');
-
-    // ═══ MIGRATION v37: LUÔN force-overwrite localStorage ═══
-    // Lý do: từng có bug hardcode URL GAS sai vào admin.html bundle,
-    // URL sai đó cũng là định dạng GAS hợp lệ → logic cũ "tôn trọng URL
-    // admin tự đặt" đã bảo vệ URL sai, khiến nó kẹt mãi trong localStorage.
-    // Giải pháp: config.js là NGUỒN SỰ THẬT duy nhất → luôn ghi đè.
-    // Admin vẫn có thể đổi URL runtime qua setGasUrl() trong admin UI
-    // (setGasUrl ghi cả window + localStorage), nhưng mỗi lần tải lại
-    // config.js sẽ lại reset về giá trị đúng từ file.
-    if (saved !== CURRENT_URL) {
-      console.info('[THC config.js v37] Migrate localStorage gasUrl:',
-        saved ? saved.slice(0, 60) + '…' : '(empty)', '→', CURRENT_URL.slice(0, 60) + '…');
-      localStorage.setItem('thc_gasUrl', CURRENT_URL);
+    if (saved && _isValid(saved) && !_isStale(saved)) {
+      // Admin đã đặt URL hợp lệ → tôn trọng
+      runtimeUrl = saved;
+    } else if (saved && _isStale(saved)) {
+      // URL stale → migrate về mặc định
+      console.info('[THC config.js v38] Migrate stale URL → default');
+      localStorage.setItem('thc_gasUrl', DEFAULT_URL);
+      runtimeUrl = DEFAULT_URL;
+    } else if (!saved || !_isValid(saved)) {
+      // localStorage trống/invalid → dùng mặc định + lưu lại
+      localStorage.setItem('thc_gasUrl', DEFAULT_URL);
     }
   } catch (e) {}
 
+  // ── 2. Gán window.GAS_URL + THC_CONFIG.GAS_URL (tất cả dùng 1 URL) ──
+  window.GAS_URL = runtimeUrl;
+  window.THC_CONFIG.GAS_URL = runtimeUrl;
+
   // ── 3. Khởi tạo window.THC_GAS — helper thống nhất ─────────────────────
-  //    Dùng thay thế mọi pattern `window.GAS_URL || window.THC_CONFIG.GAS_URL`
-  //    rải rác trong index.html / admin.html
   window.THC_GAS = {
 
     /**
-     * getUrl() — trả về GAS URL theo thứ tự ưu tiên:
-     *   1. window.THC_CONFIG.GAS_URL (config.js — nguồn sự thật)
-     *   2. window.GAS_URL            (có thể đã được cập nhật runtime)
-     *   3. localStorage['thc_gasUrl'] (admin đặt tay)
+     * getUrl() — trả về GAS URL hiện tại
      */
     getUrl: function () {
       var u;
@@ -113,8 +123,18 @@ window.THC_CONFIG = {
     },
 
     /**
+     * resetUrl() — reset về URL mặc định từ config.js
+     */
+    resetUrl: function () {
+      window.GAS_URL = DEFAULT_URL;
+      window.THC_CONFIG.GAS_URL = DEFAULT_URL;
+      try { localStorage.setItem('thc_gasUrl', DEFAULT_URL); } catch (e) {}
+      console.info('[THC GAS] URL đã reset về mặc định');
+      return true;
+    },
+
+    /**
      * ping(url?) — kiểm tra kết nối GAS bằng action=ping.
-     *   Trả về Promise<{ok:boolean, latencyMs:number, error?:string}>
      */
     ping: function (url) {
       var target = _isValid(url) ? url : window.THC_GAS.getUrl();
@@ -131,15 +151,8 @@ window.THC_CONFIG = {
         });
     },
 
-    /** isValid(url) — kiểm tra nhanh định dạng URL GAS */
     isValid: _isValid,
   };
 
-  function _isValid(url) {
-    return typeof url === 'string'
-      && url.startsWith('https://script.google.com/macros/s/')
-      && url.indexOf('/exec') !== -1;
-  }
-
-  console.info('[THC config.js v37] GAS_URL set →', CURRENT_URL.slice(0, 72) + '…');
+  console.info('[THC config.js v38] GAS_URL →', runtimeUrl.slice(0, 72) + '…');
 })();
