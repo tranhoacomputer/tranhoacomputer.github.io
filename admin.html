@@ -282,14 +282,16 @@
       var SYNC_URL = 'https://superagent-47f29609.base44.app/functions/syncTopLevelConfig';
       return Promise.all([
         gasPOST({ action: 'saveConfig', type: 'client', data: clientData }),
+        gasPOST({ action: 'saveConfig', type: 'client', data: { gasUrl: topLevelFields.gasUrl } }),
         fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: topLevelFields }) }).then(function(r){return r.json();}).catch(function(e){return{success:false,error:e.message};})
       ])
         .then(function (rs) { return Promise.all(rs.map(function (r) { return r.json ? r.json() : r; })); })
         .then(function (ds) {
           var clientOk = ds[0] && ds[0].success;
-          var syncOk = ds[1] && ds[1].success;
+          var gasUrlOk = ds[1] && ds[1].success;
+          var syncOk = ds[2] && ds[2].success;
           return jsonResp(clientOk
-            ? { success: true, message: 'Đã lưu cấu hình trang khách' + (syncOk ? ' (top-level đã đồng bộ qua Sheet API)' : '') }
+            ? { success: true, message: 'Đã lưu cấu hình trang khách' + (syncOk ? ' (top-level đã đồng bộ qua Sheet API)' : (gasUrlOk ? ' (gasUrl đã lưu qua GAS)' : '')) }
             : { success: false, error: (ds[0] && ds[0].error) || 'Lỗi lưu client config' });
         })
         .catch(function (e) {
