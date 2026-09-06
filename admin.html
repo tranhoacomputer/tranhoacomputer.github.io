@@ -266,8 +266,10 @@
 
     'POST /api/client-config': function (body) {
       var clientData = normalizeClientCfg(body);
-      /* v41 fix: GAS saveConfig khi thấy gasUrl trong data → chỉ lưu gasUrl, bỏ qua client blob!
-         Strip gasUrl khỏi clientData trước khi gửi lên GAS. gasUrl chỉ lưu qua syncTopLevelConfig. */
+      /* v42: dùng action 'saveClient' → GAS gọi saveConfigKey('client') trực tiếp,
+         BYPASS hoàn toàn saveConfigMulti (hàm bug: thấy gasUrl trong data → chỉ lưu gasUrl,
+         bỏ qua client blob). Đã test trên bản GAS đang deploy: saveClient + savePromo đều OK.
+         Giữ v41: strip gasUrl khỏi clientData; gasUrl lưu riêng ở bước 2 + syncTopLevelConfig. */
       delete clientData.gasUrl;
       var topLevelFields = {
         shopName: clientData.shopName || '',
@@ -281,7 +283,7 @@
             qua Google Sheets API (shopName/address/phone/gasUrl) — không cần sửa code GAS */
       var SYNC_URL = 'https://superagent-47f29609.base44.app/functions/syncTopLevelConfig';
       return Promise.all([
-        gasPOST({ action: 'saveConfig', type: 'client', data: clientData }),
+        gasPOST({ action: 'saveClient', data: clientData }),
         gasPOST({ action: 'saveConfig', type: 'client', data: { gasUrl: topLevelFields.gasUrl } }),
         fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields: topLevelFields }) }).then(function(r){return r.json();}).catch(function(e){return{success:false,error:e.message};})
       ])
@@ -313,7 +315,7 @@
     },
 
     'POST /api/promo-config': function (body) {
-      return gasPOST({ action: 'saveConfig', type: 'promo', data: body })
+      return gasPOST({ action: 'savePromo', data: body })
         .then(function (r) { return r.json(); })
         .then(function (d) {
           return jsonResp(d.success
