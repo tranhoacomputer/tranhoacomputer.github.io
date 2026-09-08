@@ -154,6 +154,19 @@ footer{padding:26px 14px 16px!important;margin-top:28px!important}
 .bottom-nav{padding:8px 0 calc(8px + env(safe-area-inset-bottom))!important}
 }
 </style>
+<style id="thcHeroStatsOneLine">
+/* ═══ Ép 4 ô hero-stats vào đúng 1 dòng trên mobile ═══ */
+@media(max-width:600px){
+.hero-stats{flex-wrap:nowrap!important;gap:5px!important;justify-content:space-between!important;margin-top:12px!important}
+.hero-stat{flex:1 1 0!important;min-width:0!important;padding:6px 3px!important;border-radius:9px!important}
+.hero-stat .stat-num{font-size:clamp(12px,4vw,16px)!important;white-space:nowrap!important;line-height:1.1!important}
+.hero-stat .stat-label{font-size:7px!important;line-height:1.15!important;margin-top:2px!important;letter-spacing:0!important;white-space:normal!important;word-break:keep-all}
+}
+@media(max-width:360px){
+.hero-stat .stat-label{font-size:5.8px!important}
+.hero-stat .stat-num{font-size:clamp(11px,3.6vw,14px)!important}
+}
+</style>
 </head>
 <body>
 
