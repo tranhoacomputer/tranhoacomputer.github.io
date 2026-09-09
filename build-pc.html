@@ -74,6 +74,22 @@ header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px
 select{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:11px;font-size:13.5px;font-weight:600;background:var(--input);color:var(--text);outline:none;font-family:inherit;cursor:pointer}
 select:focus{border-color:var(--primary)}
 .spec-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;min-height:22px}
+.periph-toggle{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(14,165,233,.10),rgba(245,158,11,.10));border:1.5px dashed var(--primary2);border-radius:16px;padding:14px 18px;margin:14px 0 0;cursor:pointer;transition:.2s;user-select:none}
+.periph-toggle:hover{border-color:var(--primary2);transform:translateY(-1px)}
+.periph-toggle.open{border-style:solid;background:var(--card)}
+.pt-ico{font-size:26px}
+.pt-mid{flex:1}
+.pt-mid b{font-size:15px}
+.pt-sub{display:block;font-size:12.5px;color:var(--text2);margin-top:2px}
+.pt-arrow{font-size:18px;color:var(--primary2);transition:.25s}
+.periph-toggle.open .pt-arrow{transform:rotate(180deg)}
+.periph-bundles{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}
+.pb-btn{border:1.5px solid var(--primary2);background:transparent;color:var(--primary2);font-weight:700;font-size:13px;border-radius:20px;padding:8px 16px;cursor:pointer;transition:.2s}
+.pb-btn:hover{background:var(--primary2);color:#fff}
+.periph-grid .comp-card{padding:13px 15px}
+.p-sec-tag{display:inline-block;font-size:10.5px;font-weight:800;color:#fff;background:linear-gradient(120deg,var(--primary2),#22c55e);border-radius:20px;padding:3px 10px;margin-left:8px;vertical-align:middle}
+.sum-break{font-size:12.5px;color:var(--text2);margin-top:12px;text-align:right}
+.periph-sep td{border-top:1.5px dashed var(--primary2);padding-top:10px!important;color:var(--primary2);font-weight:800;font-size:12.5px;background:none}
 .spec-chip{font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text2);background:var(--input)}
 .item-price{margin-top:7px;font-size:14.5px;font-weight:900;color:var(--primary)}
 /* ── Status + summary ── */
@@ -206,6 +222,19 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
   <div class="sec-sub">Chọn theo thứ tự 1 → 8. Hệ thống tự kiểm tra và cảnh báo ngay khi bạn chọn.</div>
   <div class="grid" id="compGrid"></div>
 
+  <div class="periph-toggle" id="periphToggle" role="button" tabindex="0">
+    <span class="pt-ico">🎧</span>
+    <div class="pt-mid">
+      <b>Cần thêm màn hình, bàn phím, chuột…?</b>
+      <span class="pt-sub">Phụ kiện tùy chọn — tính tiền riêng, chỉ thêm những món bạn cần</span>
+    </div>
+    <span class="pt-arrow" id="periphArrow">▾</span>
+  </div>
+  <div class="periph-zone" id="periphZone" style="display:none">
+    <div class="periph-bundles" id="periphBundles"></div>
+    <div class="grid periph-grid" id="periphGrid"></div>
+  </div>
+
   <div class="sec-title"><span class="bar"></span>Kiểm tra &amp; Tổng kết</div>
   <div class="duo">
     <div class="panel">
@@ -216,8 +245,9 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
     <div class="panel">
       <h3>📋 Bảng linh kiện đã chọn</h3>
       <table class="sum-table" id="sumTable"></table>
+      <div class="sum-break" id="sumBreak" style="display:none"></div>
       <div class="sum-total">
-        <span class="lbl">TỔNG TIỀN DỰ KIẾN</span>
+        <span class="lbl">TỔNG CẢ BỘ DỰ KIẾN</span>
         <span class="val" id="sumTotal">0 đ</span>
       </div>
       <div class="note-box" style="margin-top:14px">
@@ -236,7 +266,7 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
   </div>
 
   <div class="sec-title"><span class="bar"></span>Câu hỏi thường gặp</div>
-  <details class="faq"><summary>Giá trên trang đã gồm gì? Có phát sinh thêm không?</summary><div class="faq-body">Giá là <b>giá dự kiến từng linh kiện</b>, chưa gồm màn hình, chuột, bàn phím. Khi bạn gửi cấu hình qua Zalo, shop sẽ báo giá chốt theo thời điểm (giá linh kiện có thể dao động nhẹ theo thị trường). Không có chi phí ẩn: phí lắp ráp, test, cài Win cơ bản đều được miễn khi mua trọn cấu hình tại shop.</div></details>
+  <details class="faq"><summary>Giá trên trang đã gồm gì? Có phát sinh thêm không?</summary><div class="faq-body">Giá là <b>giá dự kiến từng linh kiện</b>, chưa gồm màn hình, chuột, bàn phím — nếu cần, thêm ngay ở mục <b>“Cần thêm màn hình, bàn phím, chuột…?”</b> phía trên (tính tiền riêng, tổng tự cộng). Khi bạn gửi cấu hình qua Zalo, shop sẽ báo giá chốt theo thời điểm (giá linh kiện có thể dao động nhẹ theo thị trường). Không có chi phí ẩn: phí lắp ráp, test, cài Win cơ bản đều được miễn khi mua trọn cấu hình tại shop.</div></details>
   <details class="faq"><summary>Tôi không rành phần cứng — chọn sai thì sao?</summary><div class="faq-body">Yên tâm! Hệ thống đã chặn trước các lỗi cơ bản (sai socket, sai loại RAM, thiếu công suất nguồn). Nếu vẫn còn băn khoăn, cứ bấm <b>Gửi cấu hình qua Zalo</b> — kỹ thuật viên sẽ xem lại từng món, chỉnh chỗ chưa hợp lý và tư vấn miễn phí.</div></details>
   <details class="faq"><summary>Sau khi gửi Zalo thì diễn tiến thế nào?</summary><div class="faq-body">Shop sẽ: (1) kiểm tra &amp; tối ưu cấu hình theo ngân sách của bạn, (2) báo giá chốt + thời gian có máy, (3) nhận cọc nếu bạn chốt build (thường xong trong 2–4 tiếng, máy được test kỹ trước khi bàn giao).</div></details>
   <details class="faq"><summary>Bảo hành thế nào khi ráp cả bộ máy?</summary><div class="faq-body">Mỗi linh kiện bảo hành chính hãng theo hãng sản xuất (VD: main 3 năm, RAM lifetime, SSD 3–5 năm...). Ngoài ra shop hỗ trợ kiểm tra, xử lý lỗi kẹt xung đột, cài lại Win trong 1 tháng đầu hoàn toàn miễn phí.</div></details>
@@ -284,11 +314,11 @@ var COMPONENTS = [
     {name:"MSI PRO H610M-E (LGA1700, DDR4)", price:1650000, socket:"LGA1700", ram:"DDR4"},
     {name:"ASRock B660M-HDV (LGA1700, DDR4)", price:2250000, socket:"LGA1700", ram:"DDR4"},
     {name:"ASUS TUF B760M-PLUS (LGA1700, DDR4)", price:3490000, socket:"LGA1700", ram:"DDR4"},
-    {name:"MSI PRO B760M-A WIFI DDR5 (LGA1700, DDR5)", price:3300000, socket:"LGA1700", ram:"DDR5"},
+    {name:"MSI PRO B760M-A WIFI DDR5 (LGA1700, DDR5)", price:3300000, socket:"LGA1700", ram:"DDR5", wifi:true},
     {name:"GIGABYTE A520M-K (AM4, DDR4)", price:1150000, socket:"AM4", ram:"DDR4"},
     {name:"GIGABYTE B550M DS3H (AM4, DDR4)", price:2500000, socket:"AM4", ram:"DDR4"},
     {name:"ASRock B650M-HDV/M.2 (AM5, DDR5)", price:2750000, socket:"AM5", ram:"DDR5"},
-    {name:"MSI B650 Gaming Plus WiFi (AM5, DDR5)", price:3900000, socket:"AM5", ram:"DDR5"}
+    {name:"MSI B650 Gaming Plus WiFi (AM5, DDR5)", price:3900000, socket:"AM5", ram:"DDR5", wifi:true}
   ]},
   {id:"ram", label:"3. Bộ nhớ (RAM)", hint:"Càng nhiều càng mượt", ico:"🧱", items:[
     {name:"-- Chọn RAM --", price:0, placeholder:true},
@@ -345,6 +375,52 @@ var COMPONENTS = [
     {name:"Tản nhiệt khí tháp 6 ống đồng (khí gió mạnh)", price:750000},
     {name:"Tản nhiệt nước AIO 240mm", price:1500000}
   ]}
+];
+
+/* ═══════════ PHỤ KIỆN TÙY CHỌN (không bắt buộc — tính tiền riêng) ═══════════ */
+var PERIPHERALS = [
+  {id:"monitor", label:"Màn hình", hint:"Cần 1 chiếc để dùng được máy bàn", ico:"🖥️", items:[
+    {name:"Không cần — bỏ qua", price:0, placeholder:true},
+    {name:"Màn hình 21.5\u2033 IPS văn phòng (HDMI)", price:1450000, hz:60},
+    {name:"Màn hình 24\u2033 IPS 100Hz dịu mắt", price:2150000, hz:100},
+    {name:"Màn hình 24.5\u2033 Gaming 180Hz (Gigabyte / MSI)", price:3650000, hz:180},
+    {name:"Màn hình 27\u2033 2K 165Hz — game & \u0111\u1ed3 ho\u1ea1 \u0111\u1eb9p", price:6200000, hz:165}
+  ]},
+  {id:"keyboard", label:"B\u00e0n ph\u00edm", hint:"G\u00f5 \u00eam tay hay \u0111\u1eb9p \u0111\u00e8n", ico:"\u2328\ufe0f", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"B\u00e0n ph\u00edm membrane v\u0103n ph\u00f2ng, l\u1eb7ng ph\u00edm", price:250000},
+    {name:"B\u00e0n ph\u00edm c\u01a1 switch \u0111\u1ecf LED RGB — g\u00f5 ph\u00ea", price:750000},
+    {name:"B\u00e0n ph\u00edm c\u01a1 kh\u00f4ng d\u00e2y s\u1ea1c pin, n\u1ed1i 3 thi\u1ebft b\u1ecb", price:1250000}
+  ]},
+  {id:"mouse", label:"Chu\u1ed9t", hint:"C\u00f3 d\u00e2y ho\u1ea1c kh\u00f4ng d\u00e2y", ico:"\ud83d\uddb1\ufe0f", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Chu\u1ed9t v\u0103n ph\u00f2ng c\u00f3 d\u00e2y", price:150000},
+    {name:"Chu\u1ed9t kh\u00f4ng d\u00e2y \u00eam, d\u00f9ng pin AA", price:350000},
+    {name:"Chu\u1ed9t gaming 12400 DPI, \u0111\u00e8n RGB", price:450000}
+  ]},
+  {id:"headset", label:"Tai nghe", hint:"H\u1ecdc online / game c\u00f3 mic", ico:"\ud83c\udfa7", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Tai nghe c\u00f3 mic cho h\u1ecdc online / h\u1ecdp tr\u1ef1c tuy\u1ebfn", price:220000},
+    {name:"Tai nghe gaming 7.1 surround, mic ch\u1ed1ng \u1ed3n", price:650000},
+    {name:"Tai nghe gaming kh\u00f4ng d\u00e2y pin ~30h", price:1150000}
+  ]},
+  {id:"speaker", label:"Loa", hint:"Xem phim nghe nh\u1ea1c hay hơn", ico:"\ud83d\udd0a", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Loa 2.0 g\u1ecdn cho b\u00e0n l\u00e0m vi\u1ec7c", price:350000},
+    {name:"Loa 2.1 sub tr\u1ea7m m\u1ea1nh cho phim/nh\u1ea1c", price:750000}
+  ]},
+  {id:"wifi", label:"Wi-Fi / Bluetooth", hint:"M\u1ea1ng kh\u00f4ng d\u00e2y cho m\u00e1y b\u00e0n", ico:"\ud83d\udcf6", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"USB Wi-Fi 300Mbps — l\u1eafp l\u00e0 c\u00f3 m\u1ea1ng", price:180000},
+    {name:"USB Wi-Fi AC1200 + Bluetooth 5.0", price:350000},
+    {name:"Main \u0111\u00e3 c\u00f3 s\u1eb5n Wi-Fi (kh\u00f4ng c\u1ea7n mua)", price:0, free:true}
+  ]}
+];
+
+/* Tr\u1ecdn b\u1ed9 ph\u1ee5 ki\u1ec7n 1-click — t\u1ed5ng t\u00ednh t\u1ef1 \u0111\u1ed9ng theo gi\u00e1 d\u1ef1 li\u1ec7u */
+var PERIPH_BUNDLES = [
+  {title:"\ud83d\udcbc Tr\u1ecdn b\u1ed9 v\u0103n ph\u00f2ng", sel:{monitor:1, keyboard:1, mouse:1, headset:0, speaker:0, wifi:1}},
+  {title:"\ud83c\udfae Tr\u1ecdn b\u1ed9 gaming", sel:{monitor:3, keyboard:2, mouse:3, headset:2, speaker:0, wifi:2}}
 ];
 
 /* ═══════════ PRESET 1-CLICK ═══════════ */
@@ -424,6 +500,60 @@ function buildForm(){
     el("sel-"+cat.id).addEventListener("change", function(){ recalc(true) });
   });
 }
+function buildPeriph(){
+  var html = "";
+  PERIPHERALS.forEach(function(cat){
+    html += '<div class="comp-card" id="pcard-'+cat.id+'">'
+      + '<div class="comp-head"><div class="comp-ico">'+cat.ico+'</div>'
+      + '<div><div class="comp-name">'+cat.label+'<span class="p-sec-tag">TÙY CHỌN</span></div><div class="comp-hint">'+cat.hint+'</div></div></div>'
+      + '<select id="psel-'+cat.id+'">';
+    cat.items.forEach(function(it, i){
+      var lbl = it.placeholder ? it.name : (it.name + " — " + (it.free || it.price===0 ? "Miễn phí" : fmt(it.price)));
+      html += '<option value="'+i+'">'+lbl+'</option>';
+    });
+    html += '</select><div class="spec-row" id="pspec-'+cat.id+'"></div>'
+      + '<div class="item-price" id="pprice-'+cat.id+'"></div></div>';
+  });
+  el("periphGrid").innerHTML = html;
+  PERIPHERALS.forEach(function(cat){
+    el("psel-"+cat.id).addEventListener("change", function(){ recalc(true) });
+  });
+  /* nút trọn bộ 1-click — tổng tự tính từ giá dự liệu */
+  var bh = "";
+  PERIPH_BUNDLES.forEach(function(b, bi){
+    var sum = 0;
+    Object.keys(b.sel).forEach(function(pid){
+      var cat = periphCat(pid);
+      if(cat && cat.items[b.sel[pid]]) sum += cat.items[b.sel[pid]].price;
+    });
+    bh += '<button type="button" class="pb-btn" data-pb="'+bi+'">'+b.title+' (~'+fmt(sum)+')</button>';
+  });
+  el("periphBundles").innerHTML = bh;
+  document.querySelectorAll(".pb-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var b = PERIPH_BUNDLES[parseInt(btn.getAttribute("data-pb"),10)];
+      Object.keys(b.sel).forEach(function(pid){ el("psel-"+pid).value = String(b.sel[pid]) });
+      recalc(true);
+      toast("✅ Đã thêm: " + b.title.replace(/^[^ ]+ /,""));
+    });
+  });
+}
+function periphCat(pid){
+  for(var i=0;i<PERIPHERALS.length;i++){ if(PERIPHERALS[i].id===pid) return PERIPHERALS[i] }
+  return null;
+}
+function getPSel(pid){
+  var cat = periphCat(pid);
+  if(!cat) return null;
+  var idx = parseInt(el("psel-"+pid).value, 10);
+  return cat.items[idx] || null;
+}
+function togglePeriph(open){
+  var z = el("periphZone"), t = el("periphToggle");
+  if(open === undefined) open = z.style.display === "none";
+  z.style.display = open ? "block" : "none";
+  if(open) t.classList.add("open"); else t.classList.remove("open");
+}
 function getSel(catId){
   var idx = parseInt(el("sel-"+catId).value, 10);
   var cat = null;
@@ -443,7 +573,25 @@ function recalc(save){
       ssd=getSel("storage"), psu=getSel("psu"), cs=getSel("case"), cl=getSel("cooler");
   SEL = {cpu:cpu,main:main,ram:ram,vga:vga,storage:ssd,psu:psu,case:cs,cooler:cl};
 
-  var total = 0, chosen = 0;
+  var total = 0, chosen = 0, ptotal = 0, pcount = 0;
+  PERIPHERALS.forEach(function(cat){
+    var it = getPSel(cat.id);
+    if(isReal(it)){
+      if(!it.free){ pcount++; ptotal += it.price }
+      el("pcard-"+cat.id).classList.add("chosen");
+    }else{
+      el("pcard-"+cat.id).classList.remove("chosen");
+    }
+    var ps = [];
+    if(isReal(it)){
+      if(it.hz) ps.push(it.hz+"Hz");
+      if(it.free) ps.push("Miễn phí");
+    }
+    var ph = "";
+    ps.forEach(function(s){ ph += '<span class="spec-chip">'+s+'</span>' });
+    el("pspec-"+cat.id).innerHTML = ph;
+    el("pprice-"+cat.id).textContent = (isReal(it) && it.price>0) ? fmt(it.price) : "";
+  });
   COMPONENTS.forEach(function(cat){
     var it = SEL[cat.id];
     var specs = [];
@@ -512,6 +660,16 @@ function recalc(save){
   if(!isReal(ssd)){
     info.push("Nên chọn SSD để máy khởi động Windows trong ~10 giây.");
   }
+  var mon = getPSel("monitor"), wf = getPSel("wifi");
+  if(isReal(main) && !main.wifi && !isReal(wf)){
+    info.push("Main này chưa có Wi-Fi — nếu cần mạng không dây, thêm USB Wi-Fi ở mục Phụ kiện (chưa tới 200k).");
+  }
+  if(chosen === 8 && !isReal(mon)){
+    info.push("Chưa chọn màn hình — bấm \"Cần thêm màn hình, bàn phím, chuột…\" phía trên nếu muốn mua trọn bộ luôn.");
+  }
+  if(isReal(vga) && !vga.placeholder && vga.watt >= 115 && isReal(mon) && mon.hz && mon.hz < 144){
+    info.push("VGA mạnh nên ghép màn hình 144Hz trở lên (mục Phụ kiện có 180Hz/2K 165Hz) để phát huy hết hiệu năng.");
+  }
 
   /* ══ TRẠNG THÁI ══ */
   var st = el("compatStatus");
@@ -542,11 +700,27 @@ function recalc(save){
       rows += "<tr class='placeholder'><td>"+short+"</td><td>—</td></tr>";
     }
   });
+  if(pcount > 0){
+    rows += '<tr class="periph-sep"><td colspan="2">🎧 PHỤ KIỆN TÙY CHỌN ('+pcount+' món)</td></tr>';
+    PERIPHERALS.forEach(function(cat){
+      var it = getPSel(cat.id);
+      if(isReal(it) && !it.free){
+        rows += "<tr><td>"+cat.label+": <b>"+it.name+"</b></td><td>"+fmt(it.price)+"</td></tr>";
+      }
+    });
+  }
   el("sumTable").innerHTML = rows;
-  el("sumTotal").textContent = fmt(total);
-  el("abTotal").textContent = fmt(total);
+  var sb = el("sumBreak");
+  if(pcount > 0){
+    sb.style.display = "block";
+    sb.textContent = "Linh kiện: " + fmt(total) + "  +  Phụ kiện: " + fmt(ptotal);
+  }else{
+    sb.style.display = "none";
+  }
+  el("sumTotal").textContent = fmt(total + ptotal);
+  el("abTotal").textContent = fmt(total + ptotal);
   var prog = el("abProgress");
-  prog.textContent = chosen + "/8 linh kiện";
+  prog.textContent = chosen + "/8 linh kiện" + (pcount > 0 ? " + " + pcount + " phụ kiện" : "");
   prog.className = "ab-progress" + (chosen === 8 ? " done" : "");
 
   if(save) saveState();
@@ -555,6 +729,7 @@ function saveState(){
   try{
     var data = {};
     COMPONENTS.forEach(function(cat){ data[cat.id] = el("sel-"+cat.id).value });
+    PERIPHERALS.forEach(function(cat){ data["p_"+cat.id] = el("psel-"+cat.id).value });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }catch(e){}
 }
@@ -565,6 +740,16 @@ function loadState(){
     COMPONENTS.forEach(function(cat){
       if(data[cat.id] !== undefined) el("sel-"+cat.id).value = data[cat.id];
     });
+    var hasP = false;
+    PERIPHERALS.forEach(function(cat){
+      if(data["p_"+cat.id] !== undefined){
+        var v = data["p_"+cat.id];
+        el("psel-"+cat.id).value = v;
+        var it = cat.items[parseInt(v,10)];
+        if(it && !it.placeholder && !it.free) hasP = true;
+      }
+    });
+    if(hasP) togglePeriph(true);
   }catch(e){}
 }
 function applyPreset(sel, name){
@@ -590,8 +775,24 @@ function currentSummaryText(){
       lines.push("• " + cat.label.replace(/^\d+\.\s/,"") + ": " + it.name + (it.price>0 ? " ("+fmt(it.price)+")" : " (Miễn phí)"));
     }
   });
+  var ptotal = 0, pcount = 0;
+  PERIPHERALS.forEach(function(cat){
+    var it = getPSel(cat.id);
+    if(isReal(it) && !it.free){ pcount++; ptotal += it.price }
+  });
+  if(pcount > 0){
+    lines.push("── PHỤ KIỆN TÙY CHỌN ──");
+    PERIPHERALS.forEach(function(cat){
+      var it = getPSel(cat.id);
+      if(isReal(it) && !it.free){
+        lines.push("• " + cat.label + ": " + it.name + " ("+fmt(it.price)+")");
+      }
+    });
+  }
   lines.push("──────────────");
-  lines.push("TỔNG DỰ KIẾN: " + fmt(total));
+  lines.push("TỔNG LINH KIỆN: " + fmt(total));
+  if(pcount > 0) lines.push("TỔNG PHỤ KIỆN: " + fmt(ptotal));
+  lines.push("TỔNG CẢ BỘ: " + fmt(total + ptotal));
   var msgs = [];
   var warns = document.querySelectorAll("#checkList .check-item.warn span:last-child");
   warns.forEach(function(w){ msgs.push(w.textContent) });
@@ -624,6 +825,7 @@ function fallbackCopy(txt){
 }
 function resetBuild(){
   COMPONENTS.forEach(function(cat){ el("sel-"+cat.id).value = "0" });
+  PERIPHERALS.forEach(function(cat){ el("psel-"+cat.id).value = "0" });
   try{ localStorage.removeItem(STORAGE_KEY) }catch(e){}
   recalc(true);
   toast("↺ Đã chọn lại từ đầu!");
@@ -631,6 +833,8 @@ function resetBuild(){
 
 /* ═══════════ KHỞI TẠO ═══════════ */
 buildForm();
+buildPeriph();
+el("periphToggle").addEventListener("click", function(){ togglePeriph() });
 loadState();
 recalc(false);
 
