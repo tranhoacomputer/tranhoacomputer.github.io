@@ -414,13 +414,40 @@ var PERIPHERALS = [
     {name:"USB Wi-Fi 300Mbps — l\u1eafp l\u00e0 c\u00f3 m\u1ea1ng", price:180000},
     {name:"USB Wi-Fi AC1200 + Bluetooth 5.0", price:350000},
     {name:"Main \u0111\u00e3 c\u00f3 s\u1eb5n Wi-Fi (kh\u00f4ng c\u1ea7n mua)", price:0, free:true}
+  ]},
+  {id:"chair", label:"Gh\u1ebf", hint:"Ng\u1ed3i l\u00e2u m\u1ecfi l\u01b0ng, gh\u1ebf gaming ng\u1ea3y 180\u00b0", ico:"\ud83e\ude91", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Gh\u1ebf l\u01b0\u1edbi v\u0103n ph\u00f2ng tho\u00e1ng m\u00e1t, t\u1ef1a l\u01b0ng", price:1450000},
+    {name:"Gh\u1ebf gaming c\u01a1 b\u1ea3n — t\u1ef1a ng\u1ea3 180\u00b0", price:2150000},
+    {name:"Gh\u1ebf gaming l\u00f3t da cao c\u1ea5p, g\u1ed1i \u0111\u1ea7u + g\u1ed1i l\u01b0ng", price:3650000}
+  ]},
+  {id:"mousepad", label:"B\u00e0n di chu\u1ed9t", hint:"\u0110\u1ec3 chu\u1ed9t m\u01b0\u1ee3t, b\u1ea3n c\u1ee9ng \u0111\u1eb9p", ico:"\ud83d\udcd0", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Mi\u1ebfng l\u00f3t chu\u1ed9t c\u01a1 b\u1ea3n", price:80000},
+    {name:"B\u00e0n di kh\u1ed5 l\u1edbn 800\u00d7300 ch\u1ed1ng tr\u01b0\u1ee3t", price:180000},
+    {name:"B\u00e0n di RGB c\u1eafm USB vi\u1ec1n s\u00e1ng", price:350000}
+  ]},
+  {id:"mic", label:"Micro", hint:"H\u1ecdp online, stream, ghi \u00e2m r\u00f5", ico:"\ud83c\udfa4", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Micro c\u1eafm c\u1ed5 USB cho h\u1ecdp/stream c\u01a1 b\u1ea3n", price:350000},
+    {name:"Micro streaming \u0111\u1ed9 chu\u1ea9n cao, gi\u1ea3m \u1ed3n t\u1ed1t", price:1250000}
+  ]},
+  {id:"webcam", label:"Webcam", hint:"H\u1ecdc online / h\u1ecdp video / stream", ico:"\ud83d\udcf8", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"Webcam Full HD 1080p c\u00f3 mic s\u1eb5n", price:550000},
+    {name:"Webcam 2K g\u00f3c r\u1ed9ng, khung \u1ea3nh m\u01b0\u1ee3t", price:1150000}
+  ]},
+  {id:"ups", label:"UPS (b\u1ea3o v\u1ec7 m\u1ea5t \u0111i\u1ec7n)", hint:"M\u1ea5t \u0111i\u1ec7n c\u0169ng kh\u00f4ng s\u1ee3 m\u1ea5t d\u1ef1 li\u1ec7u", ico:"\ud83d\udd0b", items:[
+    {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
+    {name:"UPS 650VA — gi\u1eef m\u00e1y ch\u1ea1y 5-10 ph\u00fat \u0111\u1ec3 t\u1eaft \u0111\u00fang c\u00e1ch", price:1550000},
+    {name:"UPS 1000VA — c\u1eafm th\u00eam \u0111\u01b0\u1ee3c m\u00e0n h\u00ecnh", price:2450000}
   ]}
 ];
 
 /* Tr\u1ecdn b\u1ed9 ph\u1ee5 ki\u1ec7n 1-click — t\u1ed5ng t\u00ednh t\u1ef1 \u0111\u1ed9ng theo gi\u00e1 d\u1ef1 li\u1ec7u */
 var PERIPH_BUNDLES = [
-  {title:"\ud83d\udcbc Tr\u1ecdn b\u1ed9 v\u0103n ph\u00f2ng", sel:{monitor:1, keyboard:1, mouse:1, headset:0, speaker:0, wifi:1}},
-  {title:"\ud83c\udfae Tr\u1ecdn b\u1ed9 gaming", sel:{monitor:3, keyboard:2, mouse:3, headset:2, speaker:0, wifi:2}}
+  {title:"\ud83d\udcbc Tr\u1ecdn b\u1ed9 v\u0103n ph\u00f2ng", sel:{monitor:1, keyboard:1, mouse:1, headset:0, speaker:0, wifi:1, mousepad:1}},
+  {title:"\ud83c\udfae Tr\u1ecdn b\u1ed9 gaming", sel:{monitor:3, keyboard:2, mouse:3, headset:2, speaker:0, wifi:2, mousepad:3}}
 ];
 
 /* ═══════════ PRESET 1-CLICK ═══════════ */
