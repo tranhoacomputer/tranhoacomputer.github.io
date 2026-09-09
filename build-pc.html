@@ -24,7 +24,7 @@ a{color:inherit}
 /* ── Header ── */
 header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px solid var(--border);padding:12px clamp(14px,4vw,28px);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none}
-.brand .logo{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:900;flex:none}
+.brand .logo{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:900;flex:none}.brand .logo-img{width:46px;height:46px;border-radius:50%;flex:none;object-fit:cover;background:var(--card)}
 .brand .name{font-weight:900;font-size:16px;letter-spacing:.3px}
 .brand .slogan{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700}
 .head-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -35,10 +35,10 @@ header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px
 .hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#172554 100%);color:#fff;text-align:center;padding:clamp(30px,6vw,52px) 18px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
 .hero>*{position:relative;z-index:1}
-.hero h1{font-size:clamp(22px,5vw,34px);font-weight:900;letter-spacing:.5px;background:linear-gradient(135deg,#fff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1{font-size:clamp(22px,5vw,34px);font-weight:900;letter-spacing:.5px;background:linear-gradient(135deg,#fff 30%,#93c5fd 70%,#38bdf8 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;justify-content:center;gap:10px}.hero h1 svg{display:block;flex:none;-webkit-text-fill-color:currentColor}
 .hero p{max-width:640px;margin:10px auto 0;font-size:clamp(13px,2.5vw,15px);color:#cbd5e1}
 .hero-chips{display:flex;justify-content:center;gap:8px 14px;flex-wrap:wrap;margin-top:16px}
-.hero-chips span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:6px 14px;border-radius:30px;font-size:12.5px;font-weight:600;color:#e2e8f0}
+.hero-chips span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);padding:6px 14px;border-radius:30px;font-size:12.5px;font-weight:600;color:#e2e8f0;display:inline-flex;align-items:center;gap:6px}.hero-chips svg{width:14px;height:14px;display:block}
 /* ── Layout ── */
 .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(12px,3vw,24px)}
 .sec-title{display:flex;align-items:center;gap:10px;font-size:clamp(16px,3.5vw,21px);font-weight:900;margin:clamp(24px,5vw,40px) 0 14px;text-transform:uppercase;letter-spacing:.4px}
@@ -49,7 +49,7 @@ header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px
 .suggest-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
 .suggest-row label{display:block;font-size:12.5px;font-weight:700;color:var(--text2);margin-bottom:6px}
 .pill-group{display:flex;gap:6px;flex-wrap:wrap}
-.pill{border:1.5px solid var(--border);background:var(--input);color:var(--text2);padding:9px 16px;border-radius:30px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit}
+.pill{border:1.5px solid var(--border);background:var(--input);color:var(--text2);padding:9px 16px;border-radius:30px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit;display:inline-flex;align-items:center;gap:6px}.pill svg{width:15px;height:15px;display:block}
 .pill.active{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(37,99,235,.3)}
 .budget-input{padding:9px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14.5px;font-weight:700;background:var(--input);color:var(--text);width:170px;outline:none;font-family:inherit}
 .budget-input:focus{border-color:var(--primary)}
@@ -59,7 +59,7 @@ header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px
 .presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:18px}
 .preset-card{border:1.5px dashed var(--border);border-radius:16px;padding:16px 16px 14px;background:var(--input);cursor:pointer;transition:.2s;text-align:left;font-family:inherit}
 .preset-card:hover{border-color:var(--primary2);transform:translateY(-3px);box-shadow:0 8px 22px rgba(14,165,233,.15)}
-.preset-card .p-ico{font-size:26px}
+.preset-card .p-ico{color:var(--primary2)}.preset-card .p-ico svg{display:block}
 .preset-card .p-name{font-size:15.5px;font-weight:900;margin-top:6px}
 .preset-card .p-desc{font-size:12.5px;color:var(--text2);margin-top:4px}
 .preset-card .p-price{display:inline-block;margin-top:9px;font-size:13px;font-weight:800;color:var(--accent);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);border-radius:20px;padding:3px 12px}
@@ -68,16 +68,23 @@ header{position:sticky;top:0;z-index:50;background:var(--card);border-bottom:1px
 .comp-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);transition:.2s}
 .comp-card.chosen{border-color:var(--primary2);box-shadow:0 8px 24px rgba(14,165,233,.16)}
 .comp-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.comp-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(14,165,233,.12));display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.comp-ico{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(14,165,233,.12));display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}.comp-ico{color:var(--primary2)}.comp-ico svg{width:20px;height:20px;display:block}
 .comp-name{font-weight:800;font-size:14.5px}
 .comp-hint{font-size:11.5px;color:var(--muted);font-weight:600}
 select{width:100%;padding:11px 12px;border:1.5px solid var(--border);border-radius:11px;font-size:13.5px;font-weight:600;background:var(--input);color:var(--text);outline:none;font-family:inherit;cursor:pointer}
 select:focus{border-color:var(--primary)}
 .spec-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;min-height:22px}
+.booking-cta{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(37,99,235,.08),rgba(249,115,22,.08));border:1.5px solid var(--border);border-radius:16px;padding:14px 18px;margin-top:16px;text-decoration:none;transition:.2s}
+.booking-cta:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 8px 20px rgba(249,115,22,.12)}
+.bk-ico{flex:none;color:var(--accent);display:flex;align-items:center}
+.bk-mid{flex:1;display:flex;flex-direction:column}
+.bk-mid b{font-size:14.5px;color:var(--text)}
+.bk-sub{font-size:12.5px;color:var(--text2);margin-top:2px}
+.bk-arrow{flex:none;font-size:18px;font-weight:800;color:var(--accent)}
 .periph-toggle{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(14,165,233,.10),rgba(245,158,11,.10));border:1.5px dashed var(--primary2);border-radius:16px;padding:14px 18px;margin:14px 0 0;cursor:pointer;transition:.2s;user-select:none}
 .periph-toggle:hover{border-color:var(--primary2);transform:translateY(-1px)}
 .periph-toggle.open{border-style:solid;background:var(--card)}
-.pt-ico{font-size:26px}
+.pt-ico{color:var(--primary2);display:flex;align-items:center}
 .pt-mid{flex:1}
 .pt-mid b{font-size:15px}
 .pt-sub{display:block;font-size:12.5px;color:var(--text2);margin-top:2px}
@@ -103,7 +110,7 @@ select:focus{border-color:var(--primary)}
 .compat-status.empty{background:var(--input);color:var(--muted);border:1px dashed var(--border)}
 .check-list{display:flex;flex-direction:column;gap:8px}
 .check-item{display:flex;gap:9px;font-size:13px;color:var(--text2);align-items:flex-start}
-.check-item .ci{flex:none;font-size:14px;line-height:1.4}
+.check-item .ci{flex:none;font-size:14px;line-height:1.4}.ci svg{width:15px;height:15px;display:block}
 .check-item.ok .ci{color:var(--green)}.check-item.warn .ci{color:var(--amber)}.check-item.info .ci{color:var(--primary2)}
 .sum-table{width:100%;border-collapse:collapse}
 .sum-table td{padding:8px 4px;font-size:13px;border-bottom:1px dashed var(--border);color:var(--text2)}
@@ -115,7 +122,7 @@ select:focus{border-color:var(--primary)}
 /* ── Benefits / FAQ / footer ── */
 .benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .benefit{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow)}
-.benefit .b-ico{font-size:24px}
+.benefit .b-ico{color:var(--primary2);display:flex;align-items:center;justify-content:center}
 .benefit .b-t{font-weight:800;font-size:13.5px;margin-top:6px}
 .benefit .b-d{font-size:12px;color:var(--text2);margin-top:3px}
 details.faq{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:9px;box-shadow:var(--shadow)}
@@ -154,7 +161,7 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
 
 <header>
   <a class="brand" href="index.html">
-    <div class="logo">T</div>
+    <img src="logo.png" alt="Logo Tran Hoa Computer" class="logo-img" width="46" height="46" loading="lazy" decoding="async" onerror="this.style.display='none'">
     <div>
       <div class="name">Tran Hoa Computer</div>
       <div class="slogan">Uy Tín Tạo Nên Thương Hiệu</div>
@@ -167,17 +174,26 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
 </header>
 
 <section class="hero">
-  <h1>🛠️ TỰ BUILD PC THEO YÊU CẦU</h1>
+  <h1><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5a4 4 0 0 0-5.6 5.2L3 17.6l2.4 2.4 5.9-5.9a4 4 0 0 0 5.2-5.6l-2.9 2.9-2.1-2.1z"/></svg> TỰ BUILD PC THEO YÊU CẦU</h1>
   <p>Chọn từng linh kiện — hệ thống tự kiểm tra tương thích, ước tính công suất nguồn, tính giá dự kiến và gửi cấu hình qua Zalo để shop chốt giá tốt nhất.</p>
   <div class="hero-chips">
-    <span>✅ Tự kiểm tra tương thích</span>
-    <span>⚡ Ước tính nguồn phù hợp</span>
-    <span>💰 Tổng giá tức thì</span>
-    <span>💬 Gửi Zalo chốt giá nhanh</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8 12.3l2.7 2.7L16 9.5"/></svg> Tự kiểm tra tương thích</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5 5 13.5h5.5L10 21.5l8-11H12.5z"/></svg> Ước tính nguồn phù hợp</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="13" rx="2"/><path d="M2.5 10.5h19"/><circle cx="17" cy="15" r="1"/></svg> Tổng giá tức thì</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5C4 7.8 7.8 4 12.5 4S21 7.8 21 12.5 17.2 21 12.5 21c-1.2 0-2.4-.2-3.4-.7L4 21l1.3-4.3c-.8-1.2-1.3-2.6-1.3-4.2Z"/></svg> Gửi Zalo chốt giá nhanh</span>
   </div>
 </section>
 
 <div class="wrap">
+
+  <a href="index.html#datlich-sua-chua" class="booking-cta">
+    <span class="bk-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v4M16 3v4"/><circle cx="8" cy="14" r="1"/><circle cx="12" cy="14" r="1"/><circle cx="16" cy="14" r="1"/></svg></span>
+    <span class="bk-mid">
+      <b>Không muốn tự chọn cấu hình?</b>
+      <span class="bk-sub">Đặt lịch để kỹ thuật viên tư vấn &amp; lắp ráp trực tiếp tại shop</span>
+    </span>
+    <span class="bk-arrow">→</span>
+  </a>
 
   <div class="sec-title"><span class="bar"></span>Gợi ý nhanh</div>
   <div class="suggest-box">
@@ -185,32 +201,32 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
       <div>
         <label>Nhu cầu sử dụng</label>
         <div class="pill-group" id="usagePills">
-          <button type="button" class="pill active" data-usage="office">🏢 Văn phòng</button>
-          <button type="button" class="pill" data-usage="gaming">🎮 Gaming</button>
-          <button type="button" class="pill" data-usage="design">🎨 Đồ hoạ / Render</button>
+          <button type="button" class="pill active" data-usage="office"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7.5" width="19" height="12.5" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M2.5 13h19"/></svg> Văn phòng</button>
+          <button type="button" class="pill" data-usage="gaming"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h3.5M8.7 6.3v3.4"/><circle cx="15.2" cy="7.8" r=".6" fill="currentColor" stroke="none"/><circle cx="17.2" cy="9.8" r=".6" fill="currentColor" stroke="none"/><path d="M6.5 8C3.8 8 2 10.3 2 13.2c0 2.6 1.3 4.3 3 4.3 1.4 0 1.8-1 3-2.7.9-1.3 1.7-1.8 4-1.8s3.1.5 4 1.8c1.2 1.7 1.6 2.7 3 2.7 1.7 0 3-1.7 3-4.3C22 10.3 20.2 8 17.5 8z"/></svg> Gaming</button>
+          <button type="button" class="pill" data-usage="design"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 6.5-2.7 6.5-6.3 0-2.6-1.4-4-2.4-5.5.2 1.6-.6 2.6-1.5 2.8.6-3.3-.7-6.3-3.4-8-.4 2.5-1.6 4-3 5.3C6.5 11.7 5.5 13.3 5.5 15.7 5.5 19.3 8 22 12 22Z"/></svg> Đồ hoạ / Render</button>
         </div>
       </div>
       <div>
         <label for="budgetInput">Ngân sách (triệu đồng)</label>
         <input type="number" class="budget-input" id="budgetInput" min="4" max="100" step="0.5" placeholder="VD: 20" inputmode="decimal">
       </div>
-      <button type="button" class="btn btn-suggest" id="btnSuggest">✨ Gợi ý cho tôi</button>
+      <button type="button" class="btn btn-suggest" id="btnSuggest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5c.5 3 1.8 4.3 4.8 4.8-3 .5-4.3 1.8-4.8 4.8-.5-3-1.8-4.3-4.8-4.8 3-.5 4.3-1.8 4.8-4.8Z"/><path d="M19 14.5c.3 1.6 1 2.3 2.6 2.6-1.6.3-2.3 1-2.6 2.6-.3-1.6-1-2.3-2.6-2.6 1.6-.3 2.3-1 2.6-2.6Z"/></svg> Gợi ý cho tôi</button>
     </div>
     <div class="presets">
       <button type="button" class="preset-card" data-preset="office">
-        <div class="p-ico">💼</div>
+        <div class="p-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7.5" width="19" height="12.5" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M2.5 13h19"/></svg></div>
         <div class="p-name">Văn phòng tiết kiệm</div>
         <div class="p-desc">Lướt web, văn bản, phim ảnh, học online</div>
         <span class="p-price">~5,5 triệu</span>
       </button>
       <button type="button" class="preset-card" data-preset="gaming">
-        <div class="p-ico">🎮</div>
+        <div class="p-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8h3.5M8.7 6.3v3.4"/><circle cx="15.2" cy="7.8" r=".6" fill="currentColor" stroke="none"/><circle cx="17.2" cy="9.8" r=".6" fill="currentColor" stroke="none"/><path d="M6.5 8C3.8 8 2 10.3 2 13.2c0 2.6 1.3 4.3 3 4.3 1.4 0 1.8-1 3-2.7.9-1.3 1.7-1.8 4-1.8s3.1.5 4 1.8c1.2 1.7 1.6 2.7 3 2.7 1.7 0 3-1.7 3-4.3C22 10.3 20.2 8 17.5 8z"/></svg></div>
         <div class="p-name">Gaming cân bằng</div>
         <div class="p-desc">Chiến mượt game online &amp; AAA ở 1080p</div>
         <span class="p-price">~20,4 triệu</span>
       </button>
       <button type="button" class="preset-card" data-preset="premium">
-        <div class="p-ico">🔥</div>
+        <div class="p-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 6.5-2.7 6.5-6.3 0-2.6-1.4-4-2.4-5.5.2 1.6-.6 2.6-1.5 2.8.6-3.3-.7-6.3-3.4-8-.4 2.5-1.6 4-3 5.3C6.5 11.7 5.5 13.3 5.5 15.7 5.5 19.3 8 22 12 22Z"/></svg></div>
         <div class="p-name">Gaming cao cấp</div>
         <div class="p-desc">2K/4K cao setting, stream mượt</div>
         <span class="p-price">~37,8 triệu</span>
@@ -223,7 +239,7 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
   <div class="grid" id="compGrid"></div>
 
   <div class="periph-toggle" id="periphToggle" role="button" tabindex="0">
-    <span class="pt-ico">🎧</span>
+    <span class="pt-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13.5v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="12.5" width="4" height="6" rx="1.5"/><rect x="17.5" y="12.5" width="4" height="6" rx="1.5"/><path d="M20 18.5v.5a3 3 0 0 1-3 3h-2.5"/></svg></span>
     <div class="pt-mid">
       <b>Cần thêm màn hình, bàn phím, chuột…?</b>
       <span class="pt-sub">Phụ kiện tùy chọn — tính tiền riêng, chỉ thêm những món bạn cần</span>
@@ -238,12 +254,12 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
   <div class="sec-title"><span class="bar"></span>Kiểm tra &amp; Tổng kết</div>
   <div class="duo">
     <div class="panel">
-      <h3>🔍 Trạng thái cấu hình</h3>
+      <h3><svg width="17" height="17" style="vertical-align:-3px;margin-right:4px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5"/><circle cx="12" cy="7.7" r=".6" fill="currentColor" stroke="none"/></svg>Trạng thái cấu hình</h3>
       <div class="compat-status empty" id="compatStatus">Chưa chọn linh kiện nào — hãy bắt đầu từ CPU!</div>
       <div class="check-list" id="checkList"></div>
     </div>
     <div class="panel">
-      <h3>📋 Bảng linh kiện đã chọn</h3>
+      <h3><svg width="17" height="17" style="vertical-align:-3px;margin-right:4px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Bảng linh kiện đã chọn</h3>
       <table class="sum-table" id="sumTable"></table>
       <div class="sum-break" id="sumBreak" style="display:none"></div>
       <div class="sum-total">
@@ -252,17 +268,17 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
       </div>
       <div class="note-box" style="margin-top:14px">
         💰 <b>Gợi ý nhanh theo ngân sách:</b> dưới 8 triệu → "Văn phòng tiết kiệm" · 15–25 triệu → "Gaming cân bằng" · trên 30 triệu → "Gaming cao cấp".<br>
-        💡 <b>Mẹo tương thích:</b> CPU Intel socket <b>LGA1700</b> ghép main H610/B660/B760; AMD Ryzen 5000 dùng <b>AM4</b>, Ryzen 7000 dùng <b>AM5</b>. Không chắc cứ gửi Zalo — kỹ thuật viên của shop kiểm tra &amp; tư vấn miễn phí!
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5"/><circle cx="12" cy="7.7" r=".6" fill="currentColor" stroke="none"/></svg> <b>Mẹo tương thích:</b> CPU Intel socket <b>LGA1700</b> ghép main H610/B660/B760; AMD Ryzen 5000 dùng <b>AM4</b>, Ryzen 7000 dùng <b>AM5</b>. Không chắc cứ gửi Zalo — kỹ thuật viên của shop kiểm tra &amp; tư vấn miễn phí!
       </div>
     </div>
   </div>
 
   <div class="sec-title"><span class="bar"></span>Vì sao build PC tại Tran Hoa?</div>
   <div class="benefits">
-    <div class="benefit"><div class="b-ico">🏅</div><div class="b-t">Linh kiện chính hãng 100%</div><div class="b-d">Bảo hành theo hãng từng linh kiện</div></div>
-    <div class="benefit"><div class="b-ico">🔬</div><div class="b-t">Test stress 30 phút</div><div class="b-d">Ráp xong test nhiệt + hiệu năng trước giao</div></div>
-    <div class="benefit"><div class="b-ico">🧰</div><div class="b-t">Cài đặt trọn gói</div><div class="b-d">Windows bản quyền + driver đầy đủ</div></div>
-    <div class="benefit"><div class="b-ico">🤝</div><div class="b-t">Hỗ trợ kỹ thuật trọn đời</div><div class="b-d">Tư vấn nâng cấp miễn phí mãi mãi</div></div>
+    <div class="benefit"><div class="b-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="5.5"/><path d="M9 13.3 7.5 21l4.5-2.5 4.5 2.5-1.5-7.7"/></svg></div><div class="b-t">Linh kiện chính hãng 100%</div><div class="b-d">Bảo hành theo hãng từng linh kiện</div></div>
+    <div class="benefit"><div class="b-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5h4M10 2.5v6.3L4.8 18.6A2 2 0 0 0 6.6 21.5h10.8a2 2 0 0 0 1.8-2.9L14 8.8V2.5"/><path d="M8 15.5h8"/></svg></div><div class="b-t">Test stress 30 phút</div><div class="b-d">Ráp xong test nhiệt + hiệu năng trước giao</div></div>
+    <div class="benefit"><div class="b-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8.5" width="19" height="11" rx="2"/><path d="M8 8.5V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2.5M2.5 13.5h19"/><path d="M10.5 13.5v2M13.5 13.5v2"/></svg></div><div class="b-t">Cài đặt trọn gói</div><div class="b-d">Windows bản quyền + driver đầy đủ</div></div>
+    <div class="benefit"><div class="b-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 20 6v6c0 5-3.5 8-8 9.5-4.5-1.5-8-4.5-8-9.5V6z"/><path d="M8.5 12.3l2.3 2.3 4.5-4.6"/></svg></div><div class="b-t">Hỗ trợ kỹ thuật trọn đời</div><div class="b-d">Tư vấn nâng cấp miễn phí mãi mãi</div></div>
   </div>
 
   <div class="sec-title"><span class="bar"></span>Câu hỏi thường gặp</div>
@@ -286,17 +302,19 @@ footer a{color:var(--primary);font-weight:700;text-decoration:none}
     </div>
   </div>
   <div class="ab-btns">
-    <button type="button" class="btn btn-zalo" id="btnZalo">💬 Gửi cấu hình qua Zalo</button>
-    <button type="button" class="btn btn-ghost" id="btnCopy">📋 Sao chép</button>
-    <button type="button" class="btn btn-ghost" id="btnReset">↺ Chọn lại</button>
+    <button type="button" class="btn btn-zalo" id="btnZalo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5C4 7.8 7.8 4 12.5 4S21 7.8 21 12.5 17.2 21 12.5 21c-1.2 0-2.4-.2-3.4-.7L4 21l1.3-4.3c-.8-1.2-1.3-2.6-1.3-4.2Z"/></svg> Gửi cấu hình qua Zalo</button>
+    <button type="button" class="btn btn-ghost" id="btnCopy"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="8.5" y="8.5" width="12" height="12" rx="2"/><path d="M15.5 8.5V5.5a2 2 0 0 0-2-2h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg> Sao chép</button>
+    <button type="button" class="btn btn-ghost" id="btnReset"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.5v3.5h-3.5M6 21.5V18h3.5"/></svg> Chọn lại</button>
   </div>
 </div>
 <div id="toast"></div>
 
 <script>
+var ICONS = {"cpu": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6\" y=\"6\" width=\"12\" height=\"12\" rx=\"1.5\"/><rect x=\"9\" y=\"9\" width=\"6\" height=\"6\" rx=\"1\"/><path d=\"M9 2v3M12 2v3M15 2v3M9 19v3M12 19v3M15 19v3M2 9h3M2 12h3M2 15h3M19 9h3M19 12h3M19 15h3\"/></svg>", "mainboard": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><rect x=\"6\" y=\"6\" width=\"5\" height=\"5\" rx=\".8\"/><path d=\"M14 6h4M14 9h4M6 14h3v4H6zM13 14h6M13 17h6\"/><circle cx=\"17.5\" cy=\"17.5\" r=\"1\"/></svg>", "ram": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"7\" width=\"18\" height=\"9\" rx=\"1.2\"/><path d=\"M6 16v3M9 16v3M12 16v3M15 16v3M18 16v3M6 7v-.5M10 7v-.5M14 7v-.5M18 7v-.5\"/></svg>", "vga": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"7\" width=\"19\" height=\"9\" rx=\"1.5\"/><circle cx=\"8\" cy=\"11.5\" r=\"2\"/><circle cx=\"14\" cy=\"11.5\" r=\"2\"/><path d=\"M2.5 19h6M18 4v3M21 4v3\"/></svg>", "storage": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 14h18\"/><circle cx=\"8\" cy=\"17\" r=\"1\"/><path d=\"M13 17h5\"/></svg>", "psu": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"4\" y=\"6\" width=\"16\" height=\"12\" rx=\"2\"/><circle cx=\"9.5\" cy=\"12\" r=\"2.2\"/><path d=\"M15 9.5v5M13.5 12h3\"/></svg>", "case": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"2\"/><circle cx=\"12\" cy=\"6\" r=\"1\"/><path d=\"M9 10h6M9 12.5h6M9 15h6\"/></svg>", "cooler": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M12 10c0-3 1.5-5 3.5-5.5C17 4 17 6.5 15 8c1.8-.7 4-.2 5 1.5.9 1.5-.5 3-2.5 2.7 1.6 1 2 3.3.8 4.7-1 1.2-3 .5-3.3-1.4.4 1.9-1.1 3.6-2.8 3.3-1.7-.3-2-2.4-.7-3.8-1.6.9-3.7.2-4.3-1.7-.5-1.6.8-2.9 2.5-2.6-1.8-.8-2.6-2.9-1.5-4.5.9-1.4 2.8-1.3 3.3.3-.3-1-.2-2 .3-2.9\"/></svg>", "monitor": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"4\" width=\"19\" height=\"13\" rx=\"1.5\"/><path d=\"M8 20.5h8M12 17v3.5\"/></svg>", "keyboard": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"6\" width=\"19\" height=\"12\" rx=\"1.8\"/><path d=\"M6 10h1M10 10h1M14 10h1M18 10h1M6 13h1M10 13h1M14 13h1M18 13h1M8 16.3h8\"/></svg>", "mouse": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2.5c4 0 6.5 3 6.5 8v3c0 4.5-2.7 8-6.5 8s-6.5-3.5-6.5-8v-3c0-5 2.5-8 6.5-8Z\"/><path d=\"M12 2.5v7\"/></svg>", "headset": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 13.5v-2a8 8 0 0 1 16 0v2\"/><rect x=\"2.5\" y=\"12.5\" width=\"4\" height=\"6\" rx=\"1.5\"/><rect x=\"17.5\" y=\"12.5\" width=\"4\" height=\"6\" rx=\"1.5\"/><path d=\"M20 18.5v.5a3 3 0 0 1-3 3h-2.5\"/></svg>", "speaker": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6\" y=\"2.5\" width=\"12\" height=\"19\" rx=\"2.5\"/><circle cx=\"12\" cy=\"8\" r=\"2\"/><circle cx=\"12\" cy=\"15.5\" r=\"3\"/></svg>", "wifi": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 8.5c5.5-5 14.5-5 20 0\"/><path d=\"M5.5 12.5c3.8-3.3 9.2-3.3 13 0\"/><path d=\"M9 16.5c1.8-1.6 4.2-1.6 6 0\"/><circle cx=\"12\" cy=\"20\" r=\"1\"/></svg>", "chair": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 3.5h9.5L18 12H6z\"/><path d=\"M6 12v5.5M18 12l1.5 5.5M7 21l-1-3.5h11.5L18 21\"/></svg>", "mousepad": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"7\" width=\"19\" height=\"10\" rx=\"2.5\"/><path d=\"M2.5 13.5h19\"/></svg>", "mic": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 4.5a3 3 0 0 1 6 0v6a3 3 0 0 1-6 0z\"/><path d=\"M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5v3.5M9 21h6\"/></svg>", "webcam": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"10\" r=\"6\"/><circle cx=\"12\" cy=\"10\" r=\"2\"/><path d=\"M7 20.5h10M9 17l-1.2 3.5M15 17l1.2 3.5\"/></svg>", "ups": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"5\" y=\"4\" width=\"14\" height=\"16\" rx=\"2\"/><path d=\"M13 8l-4 5h3l-1 5 5-6h-3z\"/></svg>", "briefcase": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"7.5\" width=\"19\" height=\"12.5\" rx=\"2\"/><path d=\"M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M2.5 13h19\"/></svg>", "gamepad": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M7 8h3.5M8.7 6.3v3.4\"/><circle cx=\"15.2\" cy=\"7.8\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/><circle cx=\"17.2\" cy=\"9.8\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/><path d=\"M6.5 8C3.8 8 2 10.3 2 13.2c0 2.6 1.3 4.3 3 4.3 1.4 0 1.8-1 3-2.7.9-1.3 1.7-1.8 4-1.8s3.1.5 4 1.8c1.2 1.7 1.6 2.7 3 2.7 1.7 0 3-1.7 3-4.3C22 10.3 20.2 8 17.5 8z\"/></svg>", "flame": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 22c4 0 6.5-2.7 6.5-6.3 0-2.6-1.4-4-2.4-5.5.2 1.6-.6 2.6-1.5 2.8.6-3.3-.7-6.3-3.4-8-.4 2.5-1.6 4-3 5.3C6.5 11.7 5.5 13.3 5.5 15.7 5.5 19.3 8 22 12 22Z\"/></svg>", "checkCircle": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"M8 12.3l2.7 2.7L16 9.5\"/></svg>", "alertTriangle": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5 22 20H2z\"/><path d=\"M12 9.5v4.5\"/><circle cx=\"12\" cy=\"17\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/></svg>", "info": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"M12 11v5.5\"/><circle cx=\"12\" cy=\"7.7\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/></svg>", "sparkle": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5c.5 3 1.8 4.3 4.8 4.8-3 .5-4.3 1.8-4.8 4.8-.5-3-1.8-4.3-4.8-4.8 3-.5 4.3-1.8 4.8-4.8Z\"/><path d=\"M19 14.5c.3 1.6 1 2.3 2.6 2.6-1.6.3-2.3 1-2.6 2.6-.3-1.6-1-2.3-2.6-2.6 1.6-.3 2.3-1 2.6-2.6Z\"/></svg>", "chat": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 12.5C4 7.8 7.8 4 12.5 4S21 7.8 21 12.5 17.2 21 12.5 21c-1.2 0-2.4-.2-3.4-.7L4 21l1.3-4.3c-.8-1.2-1.3-2.6-1.3-4.2Z\"/></svg>", "copy": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8.5\" y=\"8.5\" width=\"12\" height=\"12\" rx=\"2\"/><path d=\"M15.5 8.5V5.5a2 2 0 0 0-2-2h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3\"/></svg>", "refresh": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3.5 12a8.5 8.5 0 0 1 14.6-6M20.5 12a8.5 8.5 0 0 1-14.6 6\"/><path d=\"M18 2.5v3.5h-3.5M6 21.5V18h3.5\"/></svg>", "award": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8.5\" r=\"5.5\"/><path d=\"M9 13.3 7.5 21l4.5-2.5 4.5 2.5-1.5-7.7\"/></svg>", "flask": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 2.5h4M10 2.5v6.3L4.8 18.6A2 2 0 0 0 6.6 21.5h10.8a2 2 0 0 0 1.8-2.9L14 8.8V2.5\"/><path d=\"M8 15.5h8\"/></svg>", "toolbox": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"8.5\" width=\"19\" height=\"11\" rx=\"2\"/><path d=\"M8 8.5V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2.5M2.5 13.5h19\"/><path d=\"M10.5 13.5v2M13.5 13.5v2\"/></svg>", "shieldCheck": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2.5 20 6v6c0 5-3.5 8-8 9.5-4.5-1.5-8-4.5-8-9.5V6z\"/><path d=\"M8.5 12.3l2.3 2.3 4.5-4.6\"/></svg>", "wrench": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14.5 6.5a4 4 0 0 0-5.6 5.2L3 17.6l2.4 2.4 5.9-5.9a4 4 0 0 0 5.2-5.6l-2.9 2.9-2.1-2.1z\"/></svg>", "bolt": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M13 2.5 5 13.5h5.5L10 21.5l8-11H12.5z\"/></svg>", "wallet": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"6.5\" width=\"19\" height=\"13\" rx=\"2\"/><path d=\"M2.5 10.5h19\"/><circle cx=\"17\" cy=\"15\" r=\"1\"/></svg>", "calendar": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 9.5h18M8 3v4M16 3v4\"/><circle cx=\"8\" cy=\"14\" r=\"1\"/><circle cx=\"12\" cy=\"14\" r=\"1\"/><circle cx=\"16\" cy=\"14\" r=\"1\"/></svg>"};
+
 /* ═══════════ DỮ LIỆU LINH KIỆN (shop chỉnh giá / thêm bớt tại đây) ═══════════ */
 var COMPONENTS = [
-  {id:"cpu", label:"1. Vi xử lý (CPU)", hint:"Bộ não của máy tính", ico:"🧠", items:[
+  {id:"cpu", label:"1. Vi xử lý (CPU)", hint:"Bộ não của máy tính", ico:ICONS.cpu, items:[
     {name:"-- Chọn CPU --", price:0, placeholder:true},
     {name:"Intel Core i3-12100F (4 nhân/8 luồng)", price:1950000, socket:"LGA1700", watt:60},
     {name:"Intel Core i5-12400F (6 nhân/12 luồng)", price:3500000, socket:"LGA1700", watt:65},
@@ -309,7 +327,7 @@ var COMPONENTS = [
     {name:"AMD Ryzen 5 7600 (6 nhân, có iGPU)", price:4800000, socket:"AM5", watt:65, igpu:true},
     {name:"AMD Ryzen 7 7800X3D (8 nhân, cho game cực mạnh)", price:9800000, socket:"AM5", watt:120}
   ]},
-  {id:"main", label:"2. Bo mạch chủ (Mainboard)", hint:"Kết nối tất cả linh kiện", ico:"🔌", items:[
+  {id:"main", label:"2. Bo mạch chủ (Mainboard)", hint:"Kết nối tất cả linh kiện", ico:ICONS.mainboard, items:[
     {name:"-- Chọn Mainboard --", price:0, placeholder:true},
     {name:"MSI PRO H610M-E (LGA1700, DDR4)", price:1650000, socket:"LGA1700", ram:"DDR4"},
     {name:"ASRock B660M-HDV (LGA1700, DDR4)", price:2250000, socket:"LGA1700", ram:"DDR4"},
@@ -320,7 +338,7 @@ var COMPONENTS = [
     {name:"ASRock B650M-HDV/M.2 (AM5, DDR5)", price:2750000, socket:"AM5", ram:"DDR5"},
     {name:"MSI B650 Gaming Plus WiFi (AM5, DDR5)", price:3900000, socket:"AM5", ram:"DDR5", wifi:true}
   ]},
-  {id:"ram", label:"3. Bộ nhớ (RAM)", hint:"Càng nhiều càng mượt", ico:"🧱", items:[
+  {id:"ram", label:"3. Bộ nhớ (RAM)", hint:"Càng nhiều càng mượt", ico:ICONS.ram, items:[
     {name:"-- Chọn RAM --", price:0, placeholder:true},
     {name:"8GB DDR4 3200MHz", price:500000, ram:"DDR4"},
     {name:"16GB (8x2) DDR4 3200MHz", price:950000, ram:"DDR4"},
@@ -330,7 +348,7 @@ var COMPONENTS = [
     {name:"32GB (16x2) DDR5 5200MHz", price:3200000, ram:"DDR5"},
     {name:"64GB (32x2) DDR5 5600MHz", price:6500000, ram:"DDR5"}
   ]},
-  {id:"vga", label:"4. Card màn hình (VGA)", hint:"Quyết định sức mạnh đồ hoạ", ico:"🎮", items:[
+  {id:"vga", label:"4. Card màn hình (VGA)", hint:"Quyết định sức mạnh đồ hoạ", ico:ICONS.vga, items:[
     {name:"-- Chọn VGA --", price:0, placeholder:true},
     {name:"Dùng card onboard (đủ cho văn phòng, phim, web)", price:0, free:true},
     {name:"NVIDIA GTX 1650 4GB (75W)", price:3500000, watt:75},
@@ -341,7 +359,7 @@ var COMPONENTS = [
     {name:"NVIDIA RTX 4070 12GB (200W)", price:15900000, watt:200},
     {name:"NVIDIA RTX 4070 Ti Super 16GB (285W)", price:22500000, watt:285}
   ]},
-  {id:"storage", label:"5. Ổ cứng (SSD/HDD)", hint:"Nơi chứa hệ điều hành & dữ liệu", ico:"💾", items:[
+  {id:"storage", label:"5. Ổ cứng (SSD/HDD)", hint:"Nơi chứa hệ điều hành & dữ liệu", ico:ICONS.storage, items:[
     {name:"-- Chọn Ổ cứng --", price:0, placeholder:true},
     {name:"SSD 256GB NVMe (chạy Win nhẹ)", price:550000},
     {name:"SSD 512GB NVMe", price:950000},
@@ -351,7 +369,7 @@ var COMPONENTS = [
     {name:"HDD 1TB WD Blue (lưu trữ thêm)", price:1000000},
     {name:"HDD 2TB WD Blue (lưu trữ thêm)", price:1500000}
   ]},
-  {id:"psu", label:"6. Nguồn (PSU)", hint:"Tim máu của cả hệ thống", ico:"⚡", items:[
+  {id:"psu", label:"6. Nguồn (PSU)", hint:"Tim máu của cả hệ thống", ico:ICONS.psu, items:[
     {name:"-- Chọn Nguồn --", price:0, placeholder:true},
     {name:"Nguồn 450W công suất thực (450W)", price:550000, watt:450},
     {name:"Nguồn 500W công suất thực (500W)", price:700000, watt:500},
@@ -360,7 +378,7 @@ var COMPONENTS = [
     {name:"Nguồn 850W 80 Plus Gold (850W)", price:2500000, watt:850},
     {name:"Nguồn 1000W 80 Plus Gold (1000W)", price:3600000, watt:1000}
   ]},
-  {id:"case", label:"7. Vỏ máy (Case)", hint:"Case văn phòng đã kèm nguồn", ico:"🖥️", items:[
+  {id:"case", label:"7. Vỏ máy (Case)", hint:"Case văn phòng đã kèm nguồn", ico:ICONS.case, items:[
     {name:"-- Chọn Vỏ Case --", price:0, placeholder:true},
     {name:"Case văn phòng cơ bản (kèm sẵn nguồn)", price:350000, hasPsu:true},
     {name:"Case Gaming cơ bản (chưa kèm nguồn)", price:450000},
@@ -368,7 +386,7 @@ var COMPONENTS = [
     {name:"Case Bể Cá Panoramic (2 mặt kính)", price:1200000},
     {name:"Case Mesh full-size, thoáng gió (chưa kèm nguồn)", price:1500000}
   ]},
-  {id:"cooler", label:"8. Tản nhiệt (Cooler)", hint:"Tản zin đã kèm theo CPU", ico:"❄️", items:[
+  {id:"cooler", label:"8. Tản nhiệt (Cooler)", hint:"Tản zin đã kèm theo CPU", ico:ICONS.cooler, items:[
     {name:"-- Chọn Tản nhiệt (dùng tản zin theo CPU) --", price:0, placeholder:true},
     {name:"Tản nhiệt zin theo CPU (Miễn phí)", price:0, free:true},
     {name:"Tản nhiệt khí tháp LED RGB (4 ống đồng)", price:400000},
@@ -379,65 +397,65 @@ var COMPONENTS = [
 
 /* ═══════════ PHỤ KIỆN TÙY CHỌN (không bắt buộc — tính tiền riêng) ═══════════ */
 var PERIPHERALS = [
-  {id:"monitor", label:"Màn hình", hint:"Cần 1 chiếc để dùng được máy bàn", ico:"🖥️", items:[
+  {id:"monitor", label:"Màn hình", hint:"Cần 1 chiếc để dùng được máy bàn", ico:ICONS.monitor, items:[
     {name:"Không cần — bỏ qua", price:0, placeholder:true},
     {name:"Màn hình 21.5\u2033 IPS văn phòng (HDMI)", price:1450000, hz:60},
     {name:"Màn hình 24\u2033 IPS 100Hz dịu mắt", price:2150000, hz:100},
     {name:"Màn hình 24.5\u2033 Gaming 180Hz (Gigabyte / MSI)", price:3650000, hz:180},
     {name:"Màn hình 27\u2033 2K 165Hz — game & \u0111\u1ed3 ho\u1ea1 \u0111\u1eb9p", price:6200000, hz:165}
   ]},
-  {id:"keyboard", label:"B\u00e0n ph\u00edm", hint:"G\u00f5 \u00eam tay hay \u0111\u1eb9p \u0111\u00e8n", ico:"\u2328\ufe0f", items:[
+  {id:"keyboard", label:"B\u00e0n ph\u00edm", hint:"G\u00f5 \u00eam tay hay \u0111\u1eb9p \u0111\u00e8n", ico:ICONS.keyboard, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"B\u00e0n ph\u00edm membrane v\u0103n ph\u00f2ng, l\u1eb7ng ph\u00edm", price:250000},
     {name:"B\u00e0n ph\u00edm c\u01a1 switch \u0111\u1ecf LED RGB — g\u00f5 ph\u00ea", price:750000},
     {name:"B\u00e0n ph\u00edm c\u01a1 kh\u00f4ng d\u00e2y s\u1ea1c pin, n\u1ed1i 3 thi\u1ebft b\u1ecb", price:1250000}
   ]},
-  {id:"mouse", label:"Chu\u1ed9t", hint:"C\u00f3 d\u00e2y ho\u1ea1c kh\u00f4ng d\u00e2y", ico:"\ud83d\uddb1\ufe0f", items:[
+  {id:"mouse", label:"Chu\u1ed9t", hint:"C\u00f3 d\u00e2y ho\u1ea1c kh\u00f4ng d\u00e2y", ico:ICONS.mouse, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Chu\u1ed9t v\u0103n ph\u00f2ng c\u00f3 d\u00e2y", price:150000},
     {name:"Chu\u1ed9t kh\u00f4ng d\u00e2y \u00eam, d\u00f9ng pin AA", price:350000},
     {name:"Chu\u1ed9t gaming 12400 DPI, \u0111\u00e8n RGB", price:450000}
   ]},
-  {id:"headset", label:"Tai nghe", hint:"H\u1ecdc online / game c\u00f3 mic", ico:"\ud83c\udfa7", items:[
+  {id:"headset", label:"Tai nghe", hint:"H\u1ecdc online / game c\u00f3 mic", ico:ICONS.headset, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Tai nghe c\u00f3 mic cho h\u1ecdc online / h\u1ecdp tr\u1ef1c tuy\u1ebfn", price:220000},
     {name:"Tai nghe gaming 7.1 surround, mic ch\u1ed1ng \u1ed3n", price:650000},
     {name:"Tai nghe gaming kh\u00f4ng d\u00e2y pin ~30h", price:1150000}
   ]},
-  {id:"speaker", label:"Loa", hint:"Xem phim nghe nh\u1ea1c hay hơn", ico:"\ud83d\udd0a", items:[
+  {id:"speaker", label:"Loa", hint:"Xem phim nghe nh\u1ea1c hay hơn", ico:ICONS.speaker, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Loa 2.0 g\u1ecdn cho b\u00e0n l\u00e0m vi\u1ec7c", price:350000},
     {name:"Loa 2.1 sub tr\u1ea7m m\u1ea1nh cho phim/nh\u1ea1c", price:750000}
   ]},
-  {id:"wifi", label:"Wi-Fi / Bluetooth", hint:"M\u1ea1ng kh\u00f4ng d\u00e2y cho m\u00e1y b\u00e0n", ico:"\ud83d\udcf6", items:[
+  {id:"wifi", label:"Wi-Fi / Bluetooth", hint:"M\u1ea1ng kh\u00f4ng d\u00e2y cho m\u00e1y b\u00e0n", ico:ICONS.wifi, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"USB Wi-Fi 300Mbps — l\u1eafp l\u00e0 c\u00f3 m\u1ea1ng", price:180000},
     {name:"USB Wi-Fi AC1200 + Bluetooth 5.0", price:350000},
     {name:"Main \u0111\u00e3 c\u00f3 s\u1eb5n Wi-Fi (kh\u00f4ng c\u1ea7n mua)", price:0, free:true}
   ]},
-  {id:"chair", label:"Gh\u1ebf", hint:"Ng\u1ed3i l\u00e2u m\u1ecfi l\u01b0ng, gh\u1ebf gaming ng\u1ea3 180\u00b0", ico:"\ud83e\ude91", items:[
+  {id:"chair", label:"Gh\u1ebf", hint:"Ng\u1ed3i l\u00e2u m\u1ecfi l\u01b0ng, gh\u1ebf gaming ng\u1ea3 180\u00b0", ico:ICONS.chair, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Gh\u1ebf l\u01b0\u1edbi v\u0103n ph\u00f2ng tho\u00e1ng m\u00e1t, t\u1ef1a l\u01b0ng", price:1450000},
     {name:"Gh\u1ebf gaming c\u01a1 b\u1ea3n — t\u1ef1a ng\u1ea3 180\u00b0", price:2150000},
     {name:"Gh\u1ebf gaming l\u00f3t da cao c\u1ea5p, g\u1ed1i \u0111\u1ea7u + g\u1ed1i l\u01b0ng", price:3650000}
   ]},
-  {id:"mousepad", label:"B\u00e0n di chu\u1ed9t", hint:"\u0110\u1ec3 chu\u1ed9t m\u01b0\u1ee3t, b\u1ea3n c\u1ee9ng \u0111\u1eb9p", ico:"\ud83d\udcd0", items:[
+  {id:"mousepad", label:"B\u00e0n di chu\u1ed9t", hint:"\u0110\u1ec3 chu\u1ed9t m\u01b0\u1ee3t, b\u1ea3n c\u1ee9ng \u0111\u1eb9p", ico:ICONS.mousepad, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Mi\u1ebfng l\u00f3t chu\u1ed9t c\u01a1 b\u1ea3n", price:80000},
     {name:"B\u00e0n di kh\u1ed5 l\u1edbn 800\u00d7300 ch\u1ed1ng tr\u01b0\u1ee3t", price:180000},
     {name:"B\u00e0n di RGB c\u1eafm USB vi\u1ec1n s\u00e1ng", price:350000}
   ]},
-  {id:"mic", label:"Micro", hint:"H\u1ecdp online, stream, ghi \u00e2m r\u00f5", ico:"\ud83c\udfa4", items:[
+  {id:"mic", label:"Micro", hint:"H\u1ecdp online, stream, ghi \u00e2m r\u00f5", ico:ICONS.mic, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Micro c\u1eafm c\u1ed5 USB cho h\u1ecdp/stream c\u01a1 b\u1ea3n", price:350000},
     {name:"Micro streaming \u0111\u1ed9 chu\u1ea9n cao, gi\u1ea3m \u1ed3n t\u1ed1t", price:1250000}
   ]},
-  {id:"webcam", label:"Webcam", hint:"H\u1ecdc online / h\u1ecdp video / stream", ico:"\ud83d\udcf8", items:[
+  {id:"webcam", label:"Webcam", hint:"H\u1ecdc online / h\u1ecdp video / stream", ico:ICONS.webcam, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"Webcam Full HD 1080p c\u00f3 mic s\u1eb5n", price:550000},
     {name:"Webcam 2K g\u00f3c r\u1ed9ng, khung \u1ea3nh m\u01b0\u1ee3t", price:1150000}
   ]},
-  {id:"ups", label:"UPS (b\u1ea3o v\u1ec7 m\u1ea5t \u0111i\u1ec7n)", hint:"M\u1ea5t \u0111i\u1ec7n c\u0169ng kh\u00f4ng s\u1ee3 m\u1ea5t d\u1ef1 li\u1ec7u", ico:"\ud83d\udd0b", items:[
+  {id:"ups", label:"UPS (b\u1ea3o v\u1ec7 m\u1ea5t \u0111i\u1ec7n)", hint:"M\u1ea5t \u0111i\u1ec7n c\u0169ng kh\u00f4ng s\u1ee3 m\u1ea5t d\u1ef1 li\u1ec7u", ico:ICONS.ups, items:[
     {name:"Kh\u00f4ng c\u1ea7n — b\u1ecf qua", price:0, placeholder:true},
     {name:"UPS 650VA — gi\u1eef m\u00e1y ch\u1ea1y 5-10 ph\u00fat \u0111\u1ec3 t\u1eaft \u0111\u00fang c\u00e1ch", price:1550000},
     {name:"UPS 1000VA — c\u1eafm th\u00eam \u0111\u01b0\u1ee3c m\u00e0n h\u00ecnh", price:2450000}
@@ -705,15 +723,15 @@ function recalc(save){
     st.textContent = "Chưa chọn linh kiện nào — hãy bắt đầu từ CPU!";
   }else if(warn.length){
     st.className = "compat-status warn";
-    st.innerHTML = "⚠️ Cấu hình cần xem lại — " + warn.length + " điểm cảnh báo bên dưới. Gửi Zalo để shop hỗ trợ chỉnh!";
+    st.innerHTML = "<svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3.5 22 20H2z\"/><path d=\"M12 9.5v4.5\"/><circle cx=\"12\" cy=\"17\" r=\".6\" fill=\"currentColor\" stroke=\"none\"/></svg> Cấu hình cần xem lại — " + warn.length + " điểm cảnh báo bên dưới. Gửi Zalo để shop hỗ trợ chỉnh!";
   }else{
     st.className = "compat-status ok";
-    st.innerHTML = "✓ Cấu hình tương thích hợp lệ! Gửi qua Zalo để shop xác nhận &amp; chốt giá tốt nhất!";
+    st.innerHTML = "<svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9.5\"/><path d=\"M8 12.3l2.7 2.7L16 9.5\"/></svg> Cấu hình tương thích hợp lệ! Gửi qua Zalo để shop xác nhận &amp; chốt giá tốt nhất!";
   }
   var cl2 = "";
-  ok.forEach(function(s){ cl2 += '<div class="check-item ok"><span class="ci">✅</span><span>'+s+'</span></div>' });
-  warn.forEach(function(s){ cl2 += '<div class="check-item warn"><span class="ci">⚠️</span><span>'+s+'</span></div>' });
-  info.forEach(function(s){ cl2 += '<div class="check-item info"><span class="ci">💡</span><span>'+s+'</span></div>' });
+  ok.forEach(function(s){ cl2 += '<div class="check-item ok"><span class="ci">'+ICONS.checkCircle+'</span><span>'+s+'</span></div>' });
+  warn.forEach(function(s){ cl2 += '<div class="check-item warn"><span class="ci">'+ICONS.alertTriangle+'</span><span>'+s+'</span></div>' });
+  info.forEach(function(s){ cl2 += '<div class="check-item info"><span class="ci">'+ICONS.info+'</span><span>'+s+'</span></div>' });
   el("checkList").innerHTML = cl2;
 
   /* ══ BẢNG TỔNG HỢP ══ */
