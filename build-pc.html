@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tự Build PC - Tran Hoa Computer</title>
+<meta name="description" content="Tự chọn linh kiện lắp ráp PC hoàn chỉnh: CPU, Mainboard, RAM, VGA, SSD, Nguồn, Case, Tản nhiệt. Kiểm tra tương thích tự động, báo giá dự kiến và gửi cấu hình qua Zalo để được tư vấn.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root{
+    --primary:#2563eb;--primary-hover:#1d4ed8;--dark:#0f172a;
+    --text-main:#1e293b;--text-light:#64748b;--bg-body:#f8fafc;
+    --bg-card:#ffffff;--border-color:#e2e8f0;--danger:#ef4444;
+    --warn-bg:#fffbeb;--warn-border:#fcd34d;--warn-text:#92400e;
+    --ok-bg:#ecfdf5;--ok-border:#34d399;--ok-text:#065f46;
+    --total-bg:#eff6ff;--total-border:#93c5fd;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --text-main:#e2e8f0;--text-light:#94a3b8;--bg-body:#0b1220;
+      --bg-card:#131c2e;--border-color:#2a3a55;--primary:#3b82f6;
+      --warn-bg:#3a2c08;--warn-border:#b45309;--warn-text:#fbbf24;
+      --ok-bg:#06301f;--ok-border:#059669;--ok-text:#34d399;
+      --total-bg:#0c1e3a;--total-border:#1e4f91;
+    }
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg-body);color:var(--text-main);line-height:1.5}
+  .site-header{background:var(--bg-card);border-bottom:1px solid var(--border-color);padding:12px 16px;position:sticky;top:0;z-index:50}
+  .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .brand-wrap{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+  .brand-wrap img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+  .brand-wrap h1{font-size:19px;color:var(--primary)}
+  .brand-wrap p{font-size:12px;color:var(--text-light)}
+  .header-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .btn-home{padding:9px 16px;border-radius:8px;background:var(--bg-body);border:1px solid var(--border-color);color:var(--text-main);text-decoration:none;font-weight:600;font-size:14px;transition:.2s}
+  .btn-home:hover{border-color:var(--primary);color:var(--primary)}
+  .hotline{font-weight:800;color:#ea580c;text-decoration:none;font-size:15px}
+  .page-hero{max-width:800px;margin:26px auto 8px;padding:0 16px;text-align:center}
+  .page-hero h2{font-size:26px;text-transform:uppercase;color:var(--text-main);margin-bottom:8px}
+  .page-hero h2 span{color:var(--primary)}
+  .page-hero p{color:var(--text-light);font-size:15px}
+  .pc-builder-container{max-width:760px;margin:18px auto 30px;padding:25px;background:var(--bg-card);border-radius:14px;box-shadow:0 4px 18px rgba(15,23,42,.08);border:1px solid var(--border-color)}
+  .presets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+  .preset-btn{flex:1;min-width:150px;padding:12px 10px;border-radius:10px;border:1.5px dashed var(--border-color);background:transparent;cursor:pointer;transition:.2s;font-size:13.5px;color:var(--text-main)}
+  .preset-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(37,99,235,.05)}
+  .preset-btn b{display:block;font-size:14px;margin-bottom:3px}
+  .preset-btn small{color:var(--text-light)}
+  .form-group{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border-color)}
+  .form-group label{font-weight:700;color:var(--text-main);width:33%;font-size:15px}
+  .form-group label small{display:block;font-weight:400;color:var(--text-light);font-size:12px}
+  .form-group select{width:67%;padding:10px 12px;border:1px solid var(--border-color);border-radius:8px;font-size:15px;outline:none;transition:border-color .3s;background:var(--bg-card);color:var(--text-main)}
+  .form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+  .compat-box{margin:16px 0 0;padding:12px 14px;border-radius:8px;font-size:14px;display:none}
+  .compat-box.show{display:block}
+  .compat-box.bad{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text)}
+  .compat-box.good{background:var(--ok-bg);border:1px solid var(--ok-border);color:var(--ok-text)}
+  .compat-box ul{margin:6px 0 0 18px}
+  .total-section{text-align:right;margin:18px 0;padding:14px 18px;background:var(--total-bg);border-radius:10px;border:1px solid var(--total-border)}
+  .total-section h3{color:#d90429;font-size:22px}
+  .total-section small{color:var(--text-light)}
+  .btn-zalo{display:block;width:100%;padding:15px;background:#0068ff;color:#fff;font-size:17px;font-weight:800;text-align:center;border:none;border-radius:10px;cursor:pointer;transition:background-color .3s}
+  .btn-zalo:hover{background:#0056d6}
+  .btn-row{display:flex;gap:10px;margin-top:10px}
+  .btn-secondary{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border-color);background:transparent;color:var(--text-main);font-size:14.5px;font-weight:700;cursor:pointer;transition:.2s}
+  .btn-secondary:hover{border-color:var(--primary);color:var(--primary)}
+  .note-box{margin-top:18px;padding:12px 14px;background:var(--bg-body);border:1px solid var(--border-color);border-radius:8px;font-size:13px;color:var(--text-light)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--dark);color:#fff;padding:11px 20px;border-radius:9px;font-size:14px;opacity:0;transition:.3s;z-index:99;pointer-events:none;max-width:90vw}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .site-footer{background:var(--dark);color:#94a3b8;text-align:center;padding:22px 16px;font-size:13.5px;margin-top:20px}
+  .site-footer a{color:#60a5fa;text-decoration:none}
+  @media (max-width:600px){
+    .form-group{flex-direction:column;align-items:stretch}
+    .form-group label,.form-group select{width:100%}
+    .form-group label{margin-bottom:6px}
+    .presets{flex-direction:column}
+    .brand-wrap h1{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand-wrap" href="index.html">
+      <img src="logo.png" alt="Logo Tran Hoa Computer" onerror="this.style.display='none'">
+      <div>
+        <h1>Tran Hoa Computer</h1>
+        <p>Uy Tín Tạo Nên Thương Hiệu</p>
+      </div>
+    </a>
+    <div class="header-actions">
+      <a class="hotline" href="tel:0963284044">📞 0963.284.044</a>
+      <a class="btn-home" href="index.html">← Về trang chủ</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h2>Tự <span>Build PC</span> Theo Yêu Cầu</h2>
+  <p>Chọn linh kiện — hệ thống tự kiểm tra tương thích &amp; cảnh báo nguồn — gửi cấu hình qua Zalo để được tư vấn &amp; báo giá chính xác.</p>
+</div>
+
+<div class="pc-builder-container">
+  <div class="presets">
+    <button type="button" class="preset-btn" onclick="applyPreset('office')"><b>💼 Văn phòng tiết kiệm</b><small>~5,5 triệu</small></button>
+    <button type="button" class="preset-btn" onclick="applyPreset('gaming')"><b>🎮 Gaming cân bằng</b><small>~20 triệu</small></button>
+    <button type="button" class="preset-btn" onclick="applyPreset('premium')"><b>🔥 Gaming cao cấp</b><small>~35 triệu</small></button>
+  </div>
+
+  <form id="pc-builder-form" onsubmit="return false"></form>
+
+  <div class="compat-box" id="compatBox"></div>
+
+  <div class="total-section">
+    <h3>Tổng tiền dự kiến: <span id="total-price">0</span> đ</h3>
+    <small>* Giá linh kiện dự kiến tại thời điểm đăng, có thể thay đổi theo thị trường. Liên hệ shop để được giá tốt nhất.</small>
+  </div>
+
+  <button type="button" class="btn-zalo" onclick="sendToZalo()">💬 Gửi cấu hình qua Zalo để nhận tư vấn</button>
+  <div class="btn-row">
+    <button type="button" class="btn-secondary" onclick="copyConfig()">📋 Sao chép cấu hình</button>
+    <button type="button" class="btn-secondary" onclick="resetAll()">↺ Chọn lại từ đầu</button>
+  </div>
+
+  <div class="note-box">
+    💡 <b>Mẹo:</b> CPU Intel socket <b>LGA1700</b> chỉ ghép được main LGA1700 (H610/B760...), CPU AMD Ryzen 7000 dùng socket <b>AM5</b>, Ryzen 5000 dùng <b>AM4</b>. Nếu bạn không chắc, cứ gửi cấu hình qua Zalo — kỹ thuật viên của shop sẽ kiểm tra và tư vấn miễn phí!
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p><b>Tran Hoa Computer</b> — Phú Thịnh, Đại Từ, Thái Nguyên</p>
+  <p style="margin-top:5px">Hotline/Zalo: <a href="tel:0963284044">0963.284.044</a> — Làm việc 8:00–20:00 kể cả thứ 7 &amp; Chủ nhật</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══ DANH SÁCH LINH KIỆN — shop chỉnh sửa giá / thêm bớt tại đây ═══
+   Thuộc tính: price (đ), socket (CPU/Main), ram (loại RAM của Main),
+               watt (công suất CPU/VGA/Nguồn), placeholder (mục "Chưa chọn") */
+var COMPONENTS = [
+  {id:"cpu", label:"1. Vi xử lý (CPU)", hint:"Bộ não của máy tính", items:[
+    {name:"-- Chọn CPU --", price:0, placeholder:true},
+    {name:"Intel Core i3-12100F (4 nhân/8 luồng)", price:1950000, socket:"LGA1700", watt:60},
+    {name:"Intel Core i5-12400F (6 nhân/12 luồng)", price:3500000, socket:"LGA1700", watt:65},
+    {name:"Intel Core i5-13600K (14 nhân/20 luồng)", price:7200000, socket:"LGA1700", watt:125},
+    {name:"AMD Ryzen 5 5600X (6 nhân/12 luồng)", price:3800000, socket:"AM4", watt:65},
+    {name:"AMD Ryzen 5 7500F (6 nhân/12 luồng)", price:3900000, socket:"AM5", watt:65},
+    {name:"AMD Ryzen 7 7800X3D (8 nhân, cho game cực mạnh)", price:9800000, socket:"AM5", watt:120}
+  ]},
+  {id:"main", label:"2. Bo mạch chủ (Mainboard)", hint:"Kết nối tất cả linh kiện", items:[
+    {name:"-- Chọn Mainboard --", price:0, placeholder:true},
+    {name:"MSI PRO H610M-E (LGA1700, DDR4)", price:1650000, socket:"LGA1700", ram:"DDR4"},
+    {name:"ASUS TUF B760M-PLUS (LGA1700, DDR4)", price:3490000, socket:"LGA1700", ram:"DDR4"},
+    {name:"GIGABYTE B550M DS3H (AM4, DDR4)", price:2500000, socket:"AM4", ram:"DDR4"},
+    {name:"ASRock B650M-HDV/M.2 (AM5, DDR5)", price:2750000, socket:"AM5", ram:"DDR5"}
+  ]},
+  {id:"ram", label:"3. Bộ nhớ (RAM)", hint:"Càng nhiều càng mượt", items:[
+    {name:"-- Chọn RAM --", price:0, placeholder:true},
+    {name:"8GB DDR4 3200MHz", price:500000, ram:"DDR4"},
+    {name:"16GB (8x2) DDR4 3200MHz", price:950000, ram:"DDR4"},
+    {name:"32GB (16x2) DDR4 3200MHz", price:2200000, ram:"DDR4"},
+    {name:"16GB DDR5 5200MHz", price:1500000, ram:"DDR5"},
+    {name:"32GB (16x2) DDR5 5200MHz", price:3200000, ram:"DDR5"}
+  ]},
+  {id:"vga", label:"4. Card màn hình (VGA)", hint:"Quyết định sức mạnh đồ hoạ", items:[
+    {name:"-- Chọn VGA --", price:0, placeholder:true},
+    {name:"Dùng card onboard (đủ cho văn phòng, phim, web)", price:0, free:true},
+    {name:"NVIDIA GTX 1650 4GB (75W)", price:3500000, watt:75},
+    {name:"NVIDIA RTX 3060 12GB (170W)", price:7500000, watt:170},
+    {name:"NVIDIA RTX 4060 8GB (115W)", price:8500000, watt:115},
+    {name:"NVIDIA RTX 4070 12GB (200W)", price:15900000, watt:200}
+  ]},
+  {id:"storage", label:"5. Ổ cứng (SSD/HDD)", hint:"Nơi chứa hệ điều hành & dữ liệu", items:[
+    {name:"-- Chọn Ổ cứng --", price:0, placeholder:true},
+    {name:"SSD 256GB NVMe (chạy Win nhẹ)", price:550000},
+    {name:"SSD 512GB NVMe", price:950000},
+    {name:"SSD 1TB NVMe (khuyên dùng cho game)", price:1600000},
+    {name:"SSD 2TB NVMe", price:3100000},
+    {name:"HDD 1TB WD Blue (lưu trữ thêm)", price:1000000}
+  ]},
+  {id:"psu", label:"6. Nguồn (PSU)", hint:"Case văn phòng đã kèm nguồn", items:[
+    {name:"-- Chọn Nguồn --", price:0, placeholder:true},
+    {name:"Nguồn 500W công suất thực (500W)", price:700000, watt:500},
+    {name:"Nguồn 650W 80 Plus Bronze (650W)", price:1200000, watt:650},
+    {name:"Nguồn 750W 80 Plus Gold (750W)", price:1800000, watt:750},
+    {name:"Nguồn 850W 80 Plus Gold (850W)", price:2500000, watt:850}
+  ]},
+  {id:"case", label:"7. Vỏ máy (Case)", hint:"", items:[
+    {name:"-- Chọn Vỏ Case --", price:0, placeholder:true},
+    {name:"Case văn phòng cơ bản (kèm sẵn nguồn)", price:350000, hasPsu:true},
+    {name:"Case Gaming kính cường lực 3 Fan LED", price:750000},
+    {name:"Case Bể Cá Panoramic (2 mặt kính)", price:1200000}
+  ]},
+  {id:"cooler", label:"8. Tản nhiệt (Cooler)", hint:"Tản zin đã kèm theo CPU", items:[
+    {name:"-- Chọn Tản nhiệt (dùng tản zin theo CPU) --", price:0, placeholder:true},
+    {name:"Tản nhiệt zin theo CPU (Miễn phí)", price:0, free:true},
+    {name:"Tản nhiệt khí tháp LED RGB (4 ống đồng)", price:400000},
+    {name:"Tản nhiệt nước AIO 240mm", price:1500000}
+  ]}
+];
+
+function buildForm(){
+  var form = document.getElementById("pc-builder-form");
+  var html = "";
+  COMPONENTS.forEach(function(g){
+    html += '<div class="form-group"><label>' + g.label + (g.hint ? '<small>' + g.hint + '</small>' : '') + '</label><select data-group="' + g.id + '" onchange="recalc()">';
+    g.items.forEach(function(it, idx){
+      html += '<option value="' + idx + '" data-name="' + it.name.replace(/"/g,'&quot;') + '">' + it.name + (it.price > 0 ? ' — ' + fmt(it.price) + 'đ' : '') + '</option>';
+    });
+    html += '</select></div>';
+  });
+  form.innerHTML = html;
+}
+
+function fmt(n){ return new Intl.NumberFormat('vi-VN').format(n); }
+
+function getSel(groupId){
+  var s = document.querySelector('#pc-builder-form select[data-group="' + groupId + '"]');
+  if(!s) return null;
+  var g = null;
+  for(var i=0;i<COMPONENTS.length;i++){ if(COMPONENTS[i].id===groupId){ g = COMPONENTS[i]; break; } }
+  return g ? g.items[parseInt(s.value,10)] : null;
+}
+function setSel(groupId, itemName){
+  var s = document.querySelector('#pc-builder-form select[data-group="' + groupId + '"]');
+  if(!s) return;
+  for(var i=0;i<s.options.length;i++){
+    if(s.options[i].getAttribute('data-name') === itemName){ s.value = i; return; }
+  }
+}
+
+function recalc(){
+  var total = 0, chosen = {};
+  COMPONENTS.forEach(function(g){
+    var it = getSel(g.id);
+    chosen[g.id] = it;
+    if(it && !it.placeholder) total += it.price;
+  });
+  document.getElementById("total-price").innerText = fmt(total);
+
+  var warns = [];
+  var cpu = chosen.cpu, main = chosen.main, ram = chosen.ram,
+      vga = chosen.vga, psu = chosen.psu, cs = chosen.case;
+
+  if(cpu && main && !cpu.placeholder && !main.placeholder && cpu.socket && main.socket && cpu.socket !== main.socket){
+    warns.push("⚠️ <b>CPU " + cpu.socket + "</b> không lắp được lên main <b>" + main.socket + "</b> (" + main.name + "). Vui lòng chọn lại cặp CPU + Main cùng socket.");
+  }
+  if(main && ram && !main.placeholder && !ram.placeholder && main.ram && ram.ram && main.ram !== ram.ram){
+    warns.push("⚠️ Main <b>" + main.name + "</b> chỉ hỗ trợ RAM <b>" + main.ram + "</b>, nhưng bạn chọn <b>" + ram.ram + "</b>. Vui lòng chọn lại RAM.");
+  }
+  if(psu && !psu.placeholder && psu.watt){
+    var need = 80;
+    if(cpu && !cpu.placeholder && cpu.watt) need += cpu.watt;
+    if(vga && !vga.placeholder && vga.watt) need += vga.watt;
+    need = Math.ceil(need * 1.25 / 50) * 50;
+    if(psu.watt < need){
+      warns.push("⚡ Nguồn <b>" + psu.watt + "W</b> chưa đủ cho cấu hình này (ước tính cần ≥ <b>" + need + "W</b>). Nên chọn nguồn lớn hơn để máy chạy ổn định.");
+    }
+  }
+  if(cs && !cs.placeholder && cs.hasPsu && psu && !psu.placeholder){
+    warns.push("ℹ️ Case văn phòng đã kèm sẵn nguồn — có thể bỏ chọn nguồn rời để tiết kiệm chi phí.");
+  }
+  if(cpu && vga && !cpu.placeholder && !vga.placeholder && vga.watt >= 170 && cpu.price <= 2000000){
+    warns.push("💡 VGA khá mạnh trong khi CPU còn yếu — có thể xảy ra tình trạng kẹt CPU (bottleneck). Cân nhắc nâng CPU để phát huy hết sức mạnh card.");
+  }
+
+  var box = document.getElementById("compatBox");
+  if(warns.length === 0){
+    if(total > 0){
+      box.className = "compat-box show good";
+      box.innerHTML = "✓ Cấu hình <b>tương thích hợp lệ</b>. Gửi qua Zalo để shop xác nhận &amp; chốt giá tốt nhất!";
+    } else {
+      box.className = "compat-box"; box.innerHTML = "";
+    }
+  } else {
+    box.className = "compat-box show bad";
+    box.innerHTML = "<b>Kiểm tra cấu hình:</b><ul><li>" + warns.join("</li><li>") + "</li></ul>";
+  }
+}
+
+var PRESETS = {
+  office:{ cpu:"Intel Core i3-12100F (4 nhân/8 luồng)", main:"MSI PRO H610M-E (LGA1700, DDR4)",
+    ram:"8GB DDR4 3200MHz", vga:"Dùng card onboard (đủ cho văn phòng, phim, web)",
+    storage:"SSD 512GB NVMe", psu:"-- Chọn Nguồn --", case:"Case văn phòng cơ bản (kèm sẵn nguồn)",
+    cooler:"Tản nhiệt zin theo CPU (Miễn phí)" },
+  gaming:{ cpu:"Intel Core i5-12400F (6 nhân/12 luồng)", main:"ASUS TUF B760M-PLUS (LGA1700, DDR4)",
+    ram:"16GB (8x2) DDR4 3200MHz", vga:"NVIDIA RTX 4060 8GB (115W)",
+    storage:"SSD 1TB NVMe (khuyên dùng cho game)", psu:"Nguồn 650W 80 Plus Bronze (650W)",
+    case:"Case Gaming kính cường lực 3 Fan LED", cooler:"Tản nhiệt khí tháp LED RGB (4 ống đồng)" },
+  premium:{ cpu:"AMD Ryzen 7 7800X3D (8 nhân, cho game cực mạnh)", main:"ASRock B650M-HDV/M.2 (AM5, DDR5)",
+    ram:"32GB (16x2) DDR5 5200MHz", vga:"NVIDIA RTX 4070 12GB (200W)",
+    storage:"SSD 1TB NVMe (khuyên dùng cho game)", psu:"Nguồn 750W 80 Plus Gold (750W)",
+    case:"Case Bể Cá Panoramic (2 mặt kính)", cooler:"Tản nhiệt nước AIO 240mm" }
+};
+function applyPreset(key){
+  var p = PRESETS[key]; if(!p) return;
+  Object.keys(p).forEach(function(gid){ setSel(gid, p[gid]); });
+  recalc();
+  showToast(key === "office" ? "Đã áp dụng cấu hình Văn phòng — tổng ~5,5 triệu" :
+            key === "gaming" ? "Đã áp dụng cấu hình Gaming — tổng ~20 triệu" :
+            "Đã áp dụng cấu hình Cao cấp — tổng ~35 triệu");
+}
+function resetAll(){
+  document.querySelectorAll('#pc-builder-form select').forEach(function(s){ s.value = 0; });
+  recalc();
+  showToast("Đã làm mới toàn bộ lựa chọn");
+}
+
+function buildMessage(){
+  var lines = [], total = 0, hasItem = false;
+  COMPONENTS.forEach(function(g){
+    var it = getSel(g.id);
+    if(!it || it.placeholder) return;
+    hasItem = true;
+    var label = g.label.replace(/^\d+\.\s*/, "");
+    if(it.price > 0){ lines.push("- " + label + ": " + it.name + " (" + fmt(it.price) + "đ)"); total += it.price; }
+    else { lines.push("- " + label + ": " + it.name + " (Miễn phí)"); }
+  });
+  if(!hasItem) return null;
+  var box = document.getElementById("compatBox");
+  var msg = "Chào Tran Hoa Computer, mình đã chọn cấu hình PC trên trang Tự Build PC của shop. Nhờ shop kiểm tra và tư vấn giúp mình nhé:\n\n";
+  msg += lines.join("\n");
+  msg += "\n\nTổng tiền dự kiến: " + fmt(total) + " đ";
+  if(box && box.classList.contains("bad")){
+    msg += "\n(Lưu ý: hệ thống cảnh báo cấu hình cần kiểm tra lại, nhờ shop tư vấn thêm)";
+  }
+  msg += "\n\nXin cảm ơn!";
+  return msg;
+}
+function sendToZalo(){
+  var msg = buildMessage();
+  if(!msg){ showToast("Bạn hãy chọn ít nhất một linh kiện trước khi gửi nhé!"); return; }
+  window.open("https://zalo.me/0963284044?text=" + encodeURIComponent(msg), "_blank");
+}
+function copyConfig(){
+  var msg = buildMessage();
+  if(!msg){ showToast("Bạn hãy chọn ít nhất một linh kiện nhé!"); return; }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(msg).then(function(){ showToast("✓ Đã sao chép cấu hình!"); },
+      function(){ fallbackCopy(msg); });
+  } else { fallbackCopy(msg); }
+}
+function fallbackCopy(msg){
+  var ta = document.createElement("textarea");
+  ta.value = msg; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); showToast("✓ Đã sao chép cấu hình!"); }
+  catch(e){ showToast("Không sao chép được, bạn chụp màn hình giúp mình nhé!"); }
+  document.body.removeChild(ta);
+}
+var _toastTimer = null;
+function showToast(text){
+  var t = document.getElementById("toast");
+  t.innerText = text; t.classList.add("show");
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+}
+
+buildForm();
+recalc();
+</script>
+
+</body>
+</html>
