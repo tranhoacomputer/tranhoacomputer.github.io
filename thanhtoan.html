@@ -155,6 +155,14 @@ a{color:inherit}
 .scan-frame::after{right:-2px;bottom:-2px;border-left:none;border-top:none;border-radius:0 0 16px 0}
 .scan-hint{color:#cbd5e1;font-size:12.5px;font-weight:600;text-align:center;padding:16px;background:rgba(15,23,42,.85)}
 
+/* ── modal hướng dẫn quét ảnh QR ── */
+.guide-steps{display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:16px}
+.gs-item{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-main);line-height:1.5}
+[data-theme=dark] .gs-item{color:#cbd5e1}
+.gs-item b{color:var(--primary)}
+.gs-num{flex:none;width:20px;height:20px;border-radius:50%;background:#eef2ff;color:#6d28d9;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+[data-theme=dark] .gs-num{background:rgba(109,40,217,.2);color:#c4b5fd}
+
 /* ── action buttons ── */
 .pay-actions{display:flex;gap:10px;margin-top:16px}
 .pbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 10px;border-radius:12px;font-size:12.5px;font-weight:700;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-main);cursor:pointer;transition:.15s}
@@ -301,7 +309,7 @@ a{color:inherit}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       Chuyển khoản tự động
     </div>
-    <p class="at-sub">Tìm / chọn ngân hàng bạn dùng — bấm nút bên dưới, app ngân hàng sẽ tự mở kèm sẵn <b>số tiền</b> &amp; <b>nội dung</b> đã ghi trên trang.</p>
+    <p class="at-sub">Tìm / chọn ngân hàng bạn dùng rồi bấm nút bên dưới. App hỗ trợ thì tự mở với sẵn <b>số tiền</b> &amp; <b>nội dung</b>; app chưa hỗ trợ thì trang tự lưu <b>ảnh QR có sẵn số tiền</b> để quét 1 phát trong app.</p>
     <div class="bank-search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input id="bankSearch" placeholder="Tìm ngân hàng của bạn... (VD: techcom, tcb, mb)" autocomplete="off">
@@ -329,7 +337,7 @@ a{color:inherit}
         Sao chép nội dung
       </button>
     </div>
-    <p class="at-hint">Chỉ chạy trên điện thoại đã cài app ngân hàng. Nếu app chưa tự điền thông tin, chọn "Quét QR" trong app rồi quét mã bên dưới.</p>
+    <p class="at-hint">Chỉ chạy trên điện thoại đã cài app ngân hàng. App tự điền số tiền khi mở: VietinBank, BIDV, OCB, ACB, MB. App khác: lưu ảnh QR rồi trong app chọn "Quét QR" → "Thư viện ảnh" — vẫn tự điền 100%.</p>
   </div>
 
   <!-- QR chuyển khoản -->
@@ -471,6 +479,24 @@ a{color:inherit}
     </div>
     <button class="pm-btn primary" id="modalZaloBtn">Gửi ảnh xác nhận qua Zalo</button>
     <button class="pm-btn ghost" id="modalCloseBtn">Đóng</button>
+  </div>
+</div>
+
+<div class="pay-modal-overlay" id="guideModal">
+  <div class="pay-modal">
+    <div class="pm-icon" style="background:#eef2ff;color:#6d28d9;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3z"/></svg>
+    </div>
+    <h3 id="guideBankName">Thanh toán bằng ảnh QR</h3>
+    <p>App này chưa hỗ trợ tự điền số tiền khi mở. Ảnh QR dưới đây đã nhúng sẵn <b>số tiền + nội dung</b> — quét từ ảnh là tự điền 100%:</p>
+    <div class="guide-steps">
+      <div class="gs-item"><span class="gs-num">1</span><span>Bấm <b>Lưu Mã QR</b> — ảnh chứa sẵn số tiền &amp; nội dung sẽ lưu vào điện thoại</span></div>
+      <div class="gs-item"><span class="gs-num">2</span><span>Mở app <b id="guideBankShort">ngân hàng</b>, chọn mục <b>Quét QR</b></span></div>
+      <div class="gs-item"><span class="gs-num">3</span><span>Chọn <b>Quét từ thư viện ảnh</b> → chọn ảnh mã QR vừa lưu → số tiền &amp; nội dung tự điền</span></div>
+    </div>
+    <button class="pm-btn primary" id="guideSaveBtn">Lưu Mã QR Vào Điện Thoại</button>
+    <button class="pm-btn ghost" id="guideOpenAppBtn">Mở App Ngân Hàng</button>
+    <button class="pm-btn ghost" id="guideCloseBtn">Đóng</button>
   </div>
 </div>
 
@@ -627,9 +653,10 @@ function updateQr(){
              deaccent(b.code).indexOf(q) !== -1 || String(b.bin).indexOf(q) !== -1;
     }).slice(0, 10);
     results.innerHTML = hits.length ? hits.map(function(b){
-      var badge = b.app
-        ? '<span class="br-badge auto">tự động' + (b.auto ? " điền" : "") + '</span>'
-        : '<span class="br-badge qr">quét QR</span>';
+      var badge = (b.app && b.auto)
+        ? '<span class="br-badge auto">tự điền số tiền</span>'
+        : (b.app ? '<span class="br-badge qr">mở app + quét ảnh</span>'
+                 : '<span class="br-badge qr">quét QR</span>');
       return '<div class="bank-result-item" data-code="' + b.code + '">' +
         '<div><div class="br-name">' + esc(b.name) + '</div><div class="br-full">' + esc(b.full) + '</div></div>' + badge + '</div>';
     }).join("") : '<div class="bank-result-item"><div><div class="br-name">Không tìm thấy ngân hàng</div><div class="br-full">Thử tên khác hoặc dùng mã QR bên dưới</div></div></div>';
@@ -650,7 +677,8 @@ function updateQr(){
 function chooseBank(b, chipEl){
   if(selectedBank && selectedBank.code === b.code){ clearBank(); return; }
   selectedBank = b;
-  $("#bankSelectedText").textContent = "Ngân hàng của bạn: " + b.name + (b.app ? " — hỗ trợ mở tự động" : " — dùng quét QR");
+  var mode = (b.app && b.auto) ? " — tự điền số tiền & nội dung" : (b.app ? " — mở app, quét ảnh QR" : " — dùng quét QR");
+  $("#bankSelectedText").textContent = "Ngân hàng của bạn: " + b.name + mode;
   $("#bankSelected").classList.add("show");
   document.querySelectorAll(".bank-chip").forEach(function(c){
     c.classList.toggle("active", c.dataset.code === b.code);
@@ -695,14 +723,18 @@ $("#autoPayBtn").addEventListener("click", function(){
     return;
   }
   if(!selectedBank.app){
-    showToast(selectedBank.name + " chưa hỗ trợ mở tự động — bấm nút Quét Mã QR hoặc mở app rồi quét mã bên dưới nhé");
+    showToast(selectedBank.name + " chưa có app mở tự động — mở app ngân hàng rồi quét mã QR trên trang nhé");
     return;
   }
   if(!isMobileDevice()){
     showToast("Nút tự động chỉ chạy trên điện thoại — anh/chị quét mã QR bên dưới nhé!");
     return;
   }
-  openDeeplink(selectedBank.app, BANK.accountNo, BANK.bin, amt, currentNote(), selectedBank.name);
+  if(selectedBank.auto){
+    openDeeplink(selectedBank.app, BANK.accountNo, BANK.bin, amt, currentNote(), selectedBank.name);
+  } else {
+    openGuide(selectedBank);
+  }
 });
 
 // ═══ Quét QR bằng camera ngay trên trang ═══
@@ -837,10 +869,17 @@ function handleScanResult(text){
     return;
   }
   if(!useBank){
-    showToast("Ngân hàng của mã QR chưa hỗ trợ mở tự động — chọn app trong điện thoại rồi quét mã QR từ thư viện nhé");
+    showToast("Ngân hàng này chưa hỗ trợ mở tự động — trong app chọn Quét QR rồi quét từ ảnh đã lưu nhé");
+    saveQrImage();
     return;
   }
-  openDeeplink(useBank.app, accNo, bin, amt, note, useBank.name);
+  if(useBank.auto){
+    openDeeplink(useBank.app, accNo, bin, amt, note, useBank.name);
+  } else {
+    showToast("App " + useBank.name + " chưa nhận sẵn số tiền khi mở — em đã chuẩn bị ảnh QR, quét từ ảnh trong app là tự điền nhé");
+    saveQrImage();
+    openGuide(useBank);
+  }
 }
 
 $("#scanQrBtn").addEventListener("click", openScanner);
@@ -877,13 +916,38 @@ function fallbackCopy(text){
   document.body.removeChild(ta);
 }
 
-// ═══ Tải mã QR ═══
-$("#downloadQrBtn").addEventListener("click", function(){
+// ═══ Tải / lưu ảnh QR (blob để tải được trên điện thoại) ═══
+function saveQrImage(){
   var src = $("#qrImg").src;
-  if(!src){ showToast("Vui lòng nhập số tiền trước để tạo mã QR"); return; }
-  var a = document.createElement("a");
-  a.href = src; a.download = "vietqr-tranhoacomputer.png"; a.target = "_blank";
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  if(!src || rawAmount() <= 0){ showToast("Nhập số tiền trước để tạo mã QR nhé"); amountInput.focus(); return false; }
+  fetch(src, { mode: "cors" }).then(function(r){ return r.blob(); }).then(function(blob){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = "vietqr-tranhoacomputer.png";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    showToast("Đã lưu ảnh mã QR — có sẵn số tiền + nội dung chuyển khoản");
+  }).catch(function(){
+    window.open(src, "_blank");
+    showToast("Nhấn GIỮ ảnh mã QR để lưu vào điện thoại nhé");
+  });
+  return true;
+}
+$("#downloadQrBtn").addEventListener("click", saveQrImage);
+
+// ═══ Modal hướng dẫn cho app KHÔNG tự điền ═══
+function openGuide(b){
+  $("#guideBankName").textContent = "Thanh toán qua " + b.name;
+  $("#guideBankShort").textContent = b.name;
+  $("#guideModal").classList.add("open");
+}
+$("#guideCloseBtn").addEventListener("click", function(){ $("#guideModal").classList.remove("open"); });
+$("#guideModal").addEventListener("click", function(e){ if(e.target === $("#guideModal")) $("#guideModal").classList.remove("open"); });
+$("#guideSaveBtn").addEventListener("click", function(){ saveQrImage(); });
+$("#guideOpenAppBtn").addEventListener("click", function(){
+  if(selectedBank && selectedBank.app){
+    openDeeplink(selectedBank.app, BANK.accountNo, BANK.bin, rawAmount(), currentNote(), selectedBank.name);
+  }
 });
 
 // ═══ Chia sẻ ═══
