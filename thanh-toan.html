@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Thanh Toán Trực Tuyến – Tran Hoa Computer</title>
+<meta name="description" content="Chuyển khoản thanh toán nhanh, an toàn qua VietQR/Napas 247 tại Tran Hoa Computer.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://img.vietqr.io">
+<style>
+:root{--primary:#2563eb;--primary-hover:#1d4ed8;--dark:#0f172a;--text-main:#1e293b;--text-light:#64748b;--bg-body:#f8fafc;--bg-card:#ffffff;--border-color:#e2e8f0;--accent-orange:#ea580c;--accent-green:#10b981;--danger:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Be Vietnam Pro',Inter,Roboto,'Noto Sans',-apple-system,BlinkMacSystemFont,sans-serif}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
+body{background:var(--bg-body);color:var(--text-main);padding-bottom:40px;transition:background-color .3s,color .3s}
+[data-theme=dark] body{background:#0b1120;color:#e2e8f0}
+a{color:inherit}
+.container{max-width:520px;margin:0 auto;padding:0 16px}
+
+/* ── header ── */
+.pay-header{background:var(--bg-card);border-bottom:1px solid var(--border-color);position:sticky;top:0;z-index:100;transition:background-color .3s,border-color .3s}
+[data-theme=dark] .pay-header{background:#111827;border-color:#1e293b}
+.pay-header-in{max-width:520px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.back-link{display:flex;align-items:center;gap:6px;color:var(--text-light);text-decoration:none;font-size:13.5px;font-weight:600;flex:none}
+.back-link svg{width:18px;height:18px}
+.pay-header-title{flex:1;text-align:center;font-size:15px;font-weight:800;color:var(--text-main)}
+[data-theme=dark] .pay-header-title{color:#f1f5f9}
+.theme-toggle-pay{background:none;border:none;cursor:pointer;color:var(--text-light);width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:none}
+.theme-toggle-pay svg{width:19px;height:19px}
+
+/* ── hero strip ── */
+.pay-hero{background:linear-gradient(135deg,#4338ca 0,#6d28d9 45%,#9333ea 100%);color:#fff;padding:22px 16px 26px;text-align:center}
+.pay-hero h1{font-size:19px;font-weight:800;margin-bottom:5px}
+.pay-hero p{font-size:12.5px;opacity:.88;font-weight:500}
+.pay-hero-icons{display:flex;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.pay-hero-icons span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700}
+
+/* ── card generic ── */
+.pay-card{background:var(--bg-card);border-radius:18px;border:1px solid var(--border-color);padding:18px;margin-top:16px;box-shadow:0 4px 20px rgba(15,23,42,.04);transition:background-color .3s,border-color .3s}
+[data-theme=dark] .pay-card{background:#111827;border-color:#1e293b}
+.pay-card-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--text-light);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.pay-card-title svg{width:15px;height:15px;color:var(--primary)}
+
+/* ── order summary ── */
+#orderSummary{display:none}
+#orderSummary.show{display:block}
+.os-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:13.5px;border-bottom:1px dashed var(--border-color)}
+.os-row:last-child{border-bottom:none;font-weight:800;font-size:15px;color:var(--primary);padding-top:10px}
+.os-row span:first-child{color:var(--text-light);font-weight:500}
+.os-row span:last-child{font-weight:700;color:var(--text-main);text-align:right}
+[data-theme=dark] .os-row span:last-child{color:#f1f5f9}
+
+/* ── amount picker ── */
+.amount-input-wrap{position:relative;margin-bottom:12px}
+.amount-input-wrap input{width:100%;padding:14px 16px 14px 34px;border:1.5px solid var(--border-color);border-radius:12px;font-size:19px;font-weight:800;color:var(--primary);background:var(--bg-body);outline:0;transition:border-color .2s}
+[data-theme=dark] .amount-input-wrap input{background:#0b1120;color:#93c5fd}
+.amount-input-wrap input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+.amount-input-wrap::before{content:"đ";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:800;font-size:17px;color:var(--text-light)}
+.amount-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.amount-chip{flex:1;min-width:70px;text-align:center;padding:9px 6px;border-radius:10px;border:1.5px solid var(--border-color);background:var(--bg-body);font-size:12.5px;font-weight:700;color:var(--text-main);cursor:pointer;transition:.15s}
+[data-theme=dark] .amount-chip{background:#0b1120;color:#e2e8f0}
+.amount-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.amount-chip:hover:not(.active){border-color:var(--primary)}
+.note-field label{font-size:12.5px;font-weight:700;color:var(--text-light);display:block;margin-bottom:6px}
+.note-field input{width:100%;padding:11px 14px;border:1.5px solid var(--border-color);border-radius:10px;font-size:13.5px;background:var(--bg-body);outline:0;color:var(--text-main)}
+[data-theme=dark] .note-field input{background:#0b1120;color:#e2e8f0;border-color:#1e293b}
+.note-field input:focus{border-color:var(--primary)}
+
+/* ── QR card (dựa theo mẫu VietQR) ── */
+.qr-wrap{background:linear-gradient(160deg,#f3e8ff 0,#fce7f3 60%,#f8fafc 100%);border-radius:20px;padding:18px 16px 22px;margin-top:16px;position:relative;overflow:hidden}
+[data-theme=dark] .qr-wrap{background:linear-gradient(160deg,#1e1b3a 0,#2a1b33 60%,#111827 100%)}
+.qr-acc-card{background:rgba(255,255,255,.75);backdrop-filter:blur(6px);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+[data-theme=dark] .qr-acc-card{background:rgba(255,255,255,.08)}
+.qr-acc-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px}
+.qr-acc-name{font-weight:800;font-size:13.5px;color:#1e1b3a;letter-spacing:.2px}
+[data-theme=dark] .qr-acc-name{color:#f1f5f9}
+.qr-acc-num{font-size:12.5px;color:#4b5563;font-weight:600;letter-spacing:.5px;display:flex;align-items:center;gap:6px;margin-top:2px}
+[data-theme=dark] .qr-acc-num{color:#cbd5e1}
+.copy-mini{background:none;border:none;cursor:pointer;color:var(--primary);display:flex;align-items:center;padding:2px}
+.copy-mini svg{width:14px;height:14px}
+.qr-box{background:#fff;border-radius:16px;padding:16px;text-align:center}
+.qr-box-brands{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:0 2px}
+.qr-brand-bank{display:flex;align-items:center;gap:5px;font-weight:800;font-size:14px;color:#8b1a1a}
+.qr-brand-bank .b-mark{width:18px;height:18px;background:linear-gradient(135deg,#f97316,#8b1a1a);border-radius:4px;display:inline-flex;flex:none}
+.qr-brand-vietqr{font-weight:800;font-size:13px;color:#1d4ed8}
+.qr-img-holder{position:relative;width:100%;max-width:280px;margin:0 auto;aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center}
+.qr-img-holder img{width:100%;height:100%;object-fit:contain;display:block}
+.qr-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#f8fafc;transition:opacity .2s}
+.qr-loading.hide{opacity:0;pointer-events:none}
+.qr-spin{width:26px;height:26px;border:3px solid #dbeafe;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.qr-box-amount{margin-top:12px;font-size:15px;font-weight:800;color:var(--primary)}
+.qr-box-note{font-size:11.5px;color:var(--text-light);margin-top:2px}
+.qr-box-badges{display:flex;justify-content:center;gap:14px;margin-top:14px;align-items:center;flex-wrap:wrap}
+.qr-box-badges span{font-size:10.5px;font-weight:800;color:#9ca3af;letter-spacing:.3px}
+.qr-box-badges .vq{color:#dc2626}
+.qr-box-badges .np{color:#2563eb}
+
+/* ── action buttons ── */
+.pay-actions{display:flex;gap:10px;margin-top:16px}
+.pbtn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 10px;border-radius:12px;font-size:12.5px;font-weight:700;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-main);cursor:pointer;transition:.15s}
+[data-theme=dark] .pbtn{background:#111827;color:#e2e8f0;border-color:#1e293b}
+.pbtn svg{width:16px;height:16px}
+.pbtn:hover{border-color:var(--primary);color:var(--primary)}
+.btn-confirm-paid{width:100%;margin-top:12px;background:linear-gradient(135deg,var(--accent-green),#059669);color:#fff;border:none;padding:15px;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 22px rgba(16,185,129,.28);transition:transform .2s,box-shadow .2s}
+.btn-confirm-paid:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(16,185,129,.36)}
+.btn-confirm-paid svg{width:19px;height:19px}
+
+/* ── steps ── */
+.steps-list{display:flex;flex-direction:column;gap:12px}
+.step-item{display:flex;gap:12px;align-items:flex-start}
+.step-num{flex:none;width:26px;height:26px;border-radius:50%;background:#eef4ff;color:var(--primary);font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center}
+[data-theme=dark] .step-num{background:rgba(59,130,246,.16);color:#93c5fd}
+.step-text{font-size:13px;color:var(--text-main);line-height:1.5;padding-top:2px}
+[data-theme=dark] .step-text{color:#cbd5e1}
+.step-text b{color:var(--text-main)}
+[data-theme=dark] .step-text b{color:#f1f5f9}
+
+/* ── security note ── */
+.sec-note{display:flex;gap:10px;align-items:flex-start;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 14px;margin-top:16px}
+[data-theme=dark] .sec-note{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25)}
+.sec-note svg{width:17px;height:17px;color:var(--accent-green);flex:none;margin-top:1px}
+.sec-note p{font-size:12px;color:#166534;line-height:1.55}
+[data-theme=dark] .sec-note p{color:#86efac}
+
+/* ── support footer ── */
+.support-foot{display:flex;gap:10px;margin-top:16px}
+.sf-btn{flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:7px;padding:13px;border-radius:12px;font-weight:800;font-size:13px}
+.sf-call{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff}
+.sf-zalo{background:linear-gradient(135deg,#0068ff,#0050ee);color:#fff}
+.sf-btn svg{width:17px;height:17px}
+
+/* ── toast ── */
+#payToast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999;max-width:88vw;text-align:center}
+#payToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── modal xác nhận ── */
+.pay-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(3px);z-index:9998;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;padding:20px}
+.pay-modal-overlay.open{opacity:1;visibility:visible}
+.pay-modal{background:var(--bg-card);border-radius:20px;padding:26px 22px;max-width:360px;width:100%;text-align:center;transform:scale(.85);transition:transform .25s}
+[data-theme=dark] .pay-modal{background:#111827}
+.pay-modal-overlay.open .pay-modal{transform:scale(1)}
+.pm-icon{width:56px;height:56px;border-radius:50%;background:#ecfdf5;color:var(--accent-green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px}
+[data-theme=dark] .pm-icon{background:rgba(16,185,129,.14)}
+.pay-modal h3{font-size:16px;font-weight:800;margin-bottom:8px;color:var(--text-main)}
+[data-theme=dark] .pay-modal h3{color:#f1f5f9}
+.pay-modal p{font-size:13px;color:var(--text-light);line-height:1.6;margin-bottom:18px}
+.pm-btn{width:100%;padding:13px;border-radius:12px;border:none;font-weight:800;font-size:13.5px;cursor:pointer;margin-bottom:8px}
+.pm-btn.primary{background:var(--primary);color:#fff}
+.pm-btn.ghost{background:var(--bg-body);color:var(--text-main)}
+[data-theme=dark] .pm-btn.ghost{background:#0b1120;color:#e2e8f0}
+</style>
+</head>
+<body>
+
+<div class="pay-header">
+  <div class="pay-header-in">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Trang chủ
+    </a>
+    <div class="pay-header-title">Thanh Toán</div>
+    <button class="theme-toggle-pay" id="themeTogglePay" aria-label="Đổi giao diện sáng/tối">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="pay-hero">
+  <h1>Chuyển Khoản Thanh Toán</h1>
+  <p>Quét mã QR bằng app ngân hàng bất kỳ — tiền về ngay lập tức</p>
+  <div class="pay-hero-icons">
+    <span>⚡ Nhận tiền tức thì</span>
+    <span>🔒 Chuẩn Napas 247</span>
+    <span>🏦 Mọi ngân hàng</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Tóm tắt đơn hàng (chỉ hiện khi có tham số ?service=&orderId=...) -->
+  <div class="pay-card" id="orderSummary">
+    <div class="pay-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Thông tin đơn hàng
+    </div>
+    <div id="osBody"></div>
+  </div>
+
+  <!-- Chọn số tiền -->
+  <div class="pay-card">
+    <div class="pay-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Số tiền thanh toán
+    </div>
+    <div class="amount-input-wrap">
+      <input type="text" id="amountInput" inputmode="numeric" placeholder="0" autocomplete="off">
+    </div>
+    <div class="amount-chips" id="amountChips">
+      <div class="amount-chip" data-v="200000">200K</div>
+      <div class="amount-chip" data-v="500000">500K</div>
+      <div class="amount-chip" data-v="1000000">1 triệu</div>
+      <div class="amount-chip" data-v="2000000">2 triệu</div>
+    </div>
+    <div class="note-field">
+      <label>Nội dung chuyển khoản</label>
+      <input type="text" id="noteInput" maxlength="60" placeholder="VD: TT sua laptop Nguyen Van A">
+    </div>
+  </div>
+
+  <!-- QR chuyển khoản -->
+  <div class="qr-wrap">
+    <div class="qr-acc-card">
+      <div class="qr-acc-avatar">TH</div>
+      <div>
+        <div class="qr-acc-name" id="bankAccName">TRAN VAN HOA</div>
+        <div class="qr-acc-num">
+          <span id="bankAccNum">3885 5576 789</span>
+          <button class="copy-mini" id="copyAccBtn" aria-label="Sao chép số tài khoản">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-box">
+      <div class="qr-box-brands">
+        <div class="qr-brand-bank"><span class="b-mark"></span>TPBank</div>
+        <div class="qr-brand-vietqr">VietQR</div>
+      </div>
+      <div class="qr-img-holder">
+        <img id="qrImg" alt="Mã QR chuyển khoản VietQR TPBank">
+        <div class="qr-loading" id="qrLoading"><div class="qr-spin"></div></div>
+      </div>
+      <div class="qr-box-amount" id="qrAmountLbl">Nhập số tiền để tạo mã QR</div>
+      <div class="qr-box-note">Mã QR tự cập nhật theo số tiền & nội dung bạn nhập</div>
+      <div class="qr-box-badges">
+        <span class="vq">VietQR</span>
+        <span>VietQR Global</span>
+        <span class="np">napas 247</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pay-actions">
+    <button class="pbtn" id="downloadQrBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      Tải mã QR
+    </button>
+    <button class="pbtn" id="shareQrBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      Chia sẻ
+    </button>
+  </div>
+
+  <button class="btn-confirm-paid" id="confirmPaidBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    Tôi Đã Chuyển Khoản
+  </button>
+
+  <div class="sec-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg>
+    <p>Giao dịch qua VietQR kết nối trực tiếp với ngân hàng của bạn qua chuẩn Napas 247 — không qua bên thứ ba, không lưu thông tin thẻ/tài khoản của bạn.</p>
+  </div>
+
+  <!-- Hướng dẫn -->
+  <div class="pay-card">
+    <div class="pay-card-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Hướng dẫn thanh toán
+    </div>
+    <div class="steps-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-text">Mở app ngân hàng hoặc app hỗ trợ VietQR bất kỳ trên điện thoại</div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-text">Chọn <b>Quét mã QR / QR Pay</b> rồi đưa camera vào mã QR phía trên</div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-text">Kiểm tra đúng <b>số tiền</b> và <b>nội dung chuyển khoản</b> đã tự điền sẵn</div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-text">Xác nhận chuyển khoản, sau đó bấm nút <b>"Tôi Đã Chuyển Khoản"</b> để báo cho shop</div></div>
+    </div>
+  </div>
+
+  <div class="support-foot">
+    <a href="tel:0963284044" class="sf-btn sf-call">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.57.57 1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.57 1 1 0 01-.24 1.01l-2.21 2.21z"/></svg>
+      Gọi hỗ trợ
+    </a>
+    <a href="https://zalo.me/0963284044" target="_blank" rel="noopener" class="sf-btn sf-zalo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.03 2 11c0 2.83 1.44 5.35 3.71 7.03V22l3.4-1.87c.9.25 1.87.38 2.89.38 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+      Chat Zalo
+    </a>
+  </div>
+
+  <p style="text-align:center;font-size:11px;color:var(--text-light);margin-top:16px;">Tran Hoa Computer · Phú Thịnh, Đại Từ, Thái Nguyên</p>
+</div>
+
+<div id="payToast"></div>
+
+<div class="pay-modal-overlay" id="confirmModal">
+  <div class="pay-modal">
+    <div class="pm-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+    </div>
+    <h3>Cảm ơn bạn!</h3>
+    <p>Shop sẽ kiểm tra giao dịch và xác nhận trong ít phút. Bạn có thể gửi thêm ảnh chụp màn hình chuyển khoản qua Zalo để được xác nhận nhanh hơn.</p>
+    <button class="pm-btn primary" id="modalZaloBtn">Gửi ảnh xác nhận qua Zalo</button>
+    <button class="pm-btn ghost" id="modalCloseBtn">Đóng</button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+// ═══ Cấu hình ngân hàng — sửa tại đây nếu shop đổi số tài khoản/ngân hàng ═══
+var BANK = {
+  bankId: "tpbank",        // mã ngân hàng dùng cho VietQR (bin hoặc alias, xem img.vietqr.io)
+  bankLabel: "TPBank",
+  accountNo: "3885576789", // không dấu cách, dùng để tạo QR
+  accountNoDisplay: "3885 5576 789",
+  accountName: "TRAN VAN HOA",
+  template: "compact2"
+};
+
+var $ = function(s){ return document.querySelector(s); };
+
+// ═══ Dark mode — đồng bộ theme đã lưu từ trang chủ ═══
+(function initTheme(){
+  var saved = localStorage.getItem("theme");
+  var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var theme = saved || (prefersDark ? "dark" : "light");
+  if(theme === "dark") document.documentElement.setAttribute("data-theme","dark");
+  $("#themeTogglePay").addEventListener("click", function(){
+    var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    if(isDark){ document.documentElement.removeAttribute("data-theme"); localStorage.setItem("theme","light"); }
+    else { document.documentElement.setAttribute("data-theme","dark"); localStorage.setItem("theme","dark"); }
+  });
+})();
+
+// ═══ Đọc tham số URL để điền sẵn đơn hàng (?service=...&amount=...&orderId=...&customer=...) ═══
+var qs = new URLSearchParams(window.location.search);
+var pService = qs.get("service") || "";
+var pAmount = parseInt((qs.get("amount")||"").replace(/[^\d]/g,""),10) || 0;
+var pOrderId = qs.get("orderId") || "";
+var pCustomer = qs.get("customer") || "";
+
+function renderOrderSummary(){
+  if(!pService && !pOrderId && !pAmount) return;
+  var rows = "";
+  if(pOrderId) rows += '<div class="os-row"><span>Mã đơn</span><span>#'+esc(pOrderId)+'</span></div>';
+  if(pCustomer) rows += '<div class="os-row"><span>Khách hàng</span><span>'+esc(pCustomer)+'</span></div>';
+  if(pService) rows += '<div class="os-row"><span>Dịch vụ</span><span>'+esc(pService)+'</span></div>';
+  if(pAmount) rows += '<div class="os-row"><span>Cần thanh toán</span><span>'+fmt(pAmount)+'đ</span></div>';
+  $("#osBody").innerHTML = rows;
+  $("#orderSummary").classList.add("show");
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function fmt(n){ return Number(n||0).toLocaleString("vi-VN"); }
+
+// ═══ Amount input + chips ═══
+var amountInput = $("#amountInput");
+var noteInput = $("#noteInput");
+var chips = document.querySelectorAll(".amount-chip");
+var qrTimer = null;
+
+function setAmount(v){
+  amountInput.value = v ? fmt(v) : "";
+  syncChipActive(v);
+  scheduleQrUpdate();
+}
+function rawAmount(){
+  return parseInt((amountInput.value||"").replace(/[^\d]/g,""),10) || 0;
+}
+function syncChipActive(v){
+  chips.forEach(function(c){ c.classList.toggle("active", parseInt(c.dataset.v,10) === v); });
+}
+amountInput.addEventListener("input", function(){
+  var digits = amountInput.value.replace(/[^\d]/g,"");
+  amountInput.value = digits ? fmt(parseInt(digits,10)) : "";
+  syncChipActive(parseInt(digits,10)||0);
+  scheduleQrUpdate();
+});
+chips.forEach(function(c){
+  c.addEventListener("click", function(){ setAmount(parseInt(c.dataset.v,10)); });
+});
+noteInput.addEventListener("input", scheduleQrUpdate);
+
+function scheduleQrUpdate(){
+  clearTimeout(qrTimer);
+  $("#qrLoading").classList.remove("hide");
+  qrTimer = setTimeout(updateQr, 420);
+}
+
+function updateQr(){
+  var amt = rawAmount();
+  var note = (noteInput.value||"").trim();
+  var url = "https://img.vietqr.io/image/" + BANK.bankId + "-" + BANK.accountNo + "-" + BANK.template + ".png";
+  var params = [];
+  if(amt > 0) params.push("amount=" + amt);
+  if(note) params.push("addInfo=" + encodeURIComponent(note));
+  params.push("accountName=" + encodeURIComponent(BANK.accountName));
+  url += "?" + params.join("&");
+
+  var img = new Image();
+  img.onload = function(){
+    $("#qrImg").src = url;
+    $("#qrLoading").classList.add("hide");
+  };
+  img.onerror = function(){
+    $("#qrLoading").classList.add("hide");
+    showToast("Không tải được mã QR — vui lòng thử lại hoặc chuyển khoản thủ công theo số TK bên trên.");
+  };
+  img.src = url;
+
+  $("#qrAmountLbl").textContent = amt > 0 ? ("Số tiền: " + fmt(amt) + "đ") : "Nhập số tiền để tạo mã QR";
+}
+
+// ═══ Copy số tài khoản ═══
+$("#bankAccName").textContent = BANK.accountName;
+$("#bankAccNum").textContent = BANK.accountNoDisplay;
+$("#copyAccBtn").addEventListener("click", function(){
+  copyText(BANK.accountNo);
+  showToast("Đã sao chép số tài khoản: " + BANK.accountNoDisplay);
+});
+function copyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(function(){ fallbackCopy(text); });
+  } else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+// ═══ Tải mã QR ═══
+$("#downloadQrBtn").addEventListener("click", function(){
+  var src = $("#qrImg").src;
+  if(!src){ showToast("Vui lòng nhập số tiền trước để tạo mã QR"); return; }
+  var a = document.createElement("a");
+  a.href = src; a.download = "vietqr-tranhoacomputer.png"; a.target = "_blank";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+
+// ═══ Chia sẻ ═══
+$("#shareQrBtn").addEventListener("click", function(){
+  var amt = rawAmount();
+  var text = "Chuyển khoản Tran Hoa Computer\nNgân hàng: " + BANK.bankLabel + "\nSTK: " + BANK.accountNoDisplay + "\nChủ TK: " + BANK.accountName + (amt ? ("\nSố tiền: " + fmt(amt) + "đ") : "");
+  if(navigator.share){
+    navigator.share({ title:"Thông tin chuyển khoản", text: text }).catch(function(){});
+  } else {
+    copyText(text);
+    showToast("Đã sao chép thông tin chuyển khoản để chia sẻ");
+  }
+});
+
+// ═══ Xác nhận đã chuyển khoản ═══
+$("#confirmPaidBtn").addEventListener("click", function(){
+  $("#confirmModal").classList.add("open");
+});
+$("#modalCloseBtn").addEventListener("click", function(){
+  $("#confirmModal").classList.remove("open");
+});
+$("#confirmModal").addEventListener("click", function(e){
+  if(e.target === $("#confirmModal")) $("#confirmModal").classList.remove("open");
+});
+$("#modalZaloBtn").addEventListener("click", function(){
+  var amt = rawAmount();
+  var note = (noteInput.value||"").trim();
+  var msg = "Em vừa chuyển khoản" + (amt ? (" " + fmt(amt) + "đ") : "") + (note ? (" — nội dung: " + note) : "") + (pOrderId ? (" cho đơn #" + pOrderId) : "") + ". Shop kiểm tra giúp em nhé!";
+  window.open("https://zalo.me/0963284044?text=" + encodeURIComponent(msg), "_blank");
+  $("#confirmModal").classList.remove("open");
+});
+
+// ═══ Toast ═══
+var toastTimer = null;
+function showToast(msg){
+  var t = $("#payToast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 3200);
+}
+
+// ═══ Khởi động ═══
+renderOrderSummary();
+if(pAmount > 0){ setAmount(pAmount); }
+if(pOrderId || pCustomer){
+  noteInput.value = ("TT " + (pOrderId ? ("DH"+pOrderId+" ") : "") + (pCustomer||"")).trim();
+}
+updateQr();
+
+})();
+</script>
+</body>
+</html>
